@@ -22,11 +22,14 @@ setTimeout(_bootstrap, 0);
 
 
 async function init() {
+  if (window._log) window._log('INIT_enter');
   setupPinPad();
+  if (window._log) window._log('INIT_pinpad_ok');
   const _btnLock = $('#btn-lock');
   if (_btnLock) _btnLock.addEventListener('click', lock);
 
   const saved = localStorage.getItem(PIN_KEY);
+  if (window._log) window._log('INIT_saved=' + !!saved);
   if (saved) {
     showScreen('loading');
     const ok = await tryUnlock(saved);
@@ -37,7 +40,9 @@ async function init() {
     }
     localStorage.removeItem(PIN_KEY);
   }
+  if (window._log) window._log('INIT_showScreen_pin');
   showScreen('pin');
+  if (window._log) window._log('INIT_done');
 }
 
 function showScreen(name) {
