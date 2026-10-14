@@ -1,58 +1,52 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Worklog DEBUG</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worklog DEBUG</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="error-box" style="position:fixed;top:0;left:0;right:0;background:#f85149;color:#fff;font-size:12px;padding:8px;z-index:9999;max-height:50vh;overflow:auto;font-family:monospace;">INIT</div>
+<div id="error-box" style="position:fixed;top:0;left:0;right:0;background:#f85149;color:#fff;font-size:11px;padding:6px;z-index:9999;max-height:60vh;overflow:auto;font-family:monospace;white-space:pre-wrap;">BOOT</div>
 
-  <div id="pin-screen" class="screen">
-    <div class="pin-box">
-      <img src="icon.svg" alt="" class="pin-logo">
-      <h1>Worklog</h1>
-      <p class="pin-sub">Введи PIN</p>
-      <div id="pin-display" class="pin-display"></div>
-      <div class="pin-pad">
-        <button data-d="1">1</button><button data-d="2">2</button><button data-d="3">3</button>
-        <button data-d="4">4</button><button data-d="5">5</button><button data-d="6">6</button>
-        <button data-d="7">7</button><button data-d="8">8</button><button data-d="9">9</button>
-        <button data-d="clear" class="pin-fn">C</button><button data-d="0">0</button><button data-d="del" class="pin-fn">X</button>
-      </div>
-      <div id="pin-error" class="pin-error"></div>
-    </div>
-  </div>
+<div id="pin-screen" class="screen">
+<div class="pin-box">
+<img src="icon.svg" class="pin-logo">
+<h1>Worklog</h1>
+<p class="pin-sub">Введи PIN</p>
+<div id="pin-display" class="pin-display"></div>
+<div class="pin-pad">
+<button data-d="1">1</button><button data-d="2">2</button><button data-d="3">3</button>
+<button data-d="4">4</button><button data-d="5">5</button><button data-d="6">6</button>
+<button data-d="7">7</button><button data-d="8">8</button><button data-d="9">9</button>
+<button data-d="clear" class="pin-fn">C</button><button data-d="0">0</button><button data-d="del" class="pin-fn">X</button>
+</div>
+<div id="pin-error" class="pin-error"></div>
+</div>
+</div>
 
-  <div id="dashboard" class="screen hidden">
-    <header class="topbar"><div class="logo">Worklog</div></header>
-    <main id="content">LOADED</main>
-  </div>
+<div id="dashboard" class="screen hidden">
+<header class="topbar"><div class="logo">Worklog</div></header>
+<main id="content">DASH</main>
+</div>
 
-  <script>
-    var box = function() { return document.getElementById('error-box'); };
-    window.onerror = function(msg, url, line) {
-      if (box()) box().textContent += ' |ERR: ' + msg + '@' + line;
-    };
-    window.addEventListener('unhandledrejection', function(e) {
-      if (box()) box().textContent += ' |REJ: ' + (e.reason && e.reason.message || e.reason);
-    });
-    if (box()) box().textContent += ' |HTML_OK';
-    // SW отключён
-  </script>
-  <script src="crypto.js" onerror="document.getElementById('error-box').textContent += ' |CRYPTO_FAIL'"></script>
-  <script src="app.js" onerror="document.getElementById('error-box').textContent += ' |APP_FAIL'"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (box()) box().textContent += ' |DOM_READY';
-      setTimeout(function() {
-        if (box()) {
-          var ps = document.getElementById('pin-screen');
-          box().textContent += ' |PIN_VISIBLE:' + (ps && !ps.classList.contains('hidden'));
-        }
-      }, 500);
-    });
-  </script>
+<script>
+function _log(s) { var b = document.getElementById('error-box'); if (b) b.textContent += '\n' + s; }
+window.onerror = function(m,u,l){ _log('ERR:'+m+'@'+l); };
+window.addEventListener('unhandledrejection', function(e){ _log('REJ:'+(e.reason&&e.reason.message||e.reason)); });
+_log('JS_START');
+</script>
+<script src="crypto.js" onerror="_log('CRYPTO_404')"></script>
+<script src="app.js" onerror="_log('APP_404')"></script>
+<script>
+_log('SCRIPTS_LOADED');
+document.addEventListener('DOMContentLoaded', function(){
+  _log('DOM_READY');
+  setTimeout(function(){
+    var ps = document.getElementById('pin-screen');
+    _log('PIN_vis=' + (ps && !ps.classList.contains('hidden')));
+  }, 800);
+});
+</script>
 </body>
 </html>
