@@ -52,7 +52,8 @@ function setupPinPad() {
     btn.addEventListener('click', () => onPinKey(btn.dataset.d));
   });
   document.addEventListener('keydown', (e) => {
-    if ($('#pin-screen').classList.contains('hidden')) return;
+    const _ps = $('#pin-screen');
+    if (!_ps || _ps.classList.contains('hidden')) return;
     if (e.key >= '0' && e.key <= '9') onPinKey(e.key);
     else if (e.key === 'Backspace') onPinKey('del');
     else if (e.key === 'Escape') onPinKey('clear');
