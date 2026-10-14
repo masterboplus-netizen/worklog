@@ -41,7 +41,7 @@ async function init() {
     localStorage.removeItem(PIN_KEY);
   }
   if (window._log) window._log('INIT_showScreen_pin');
-  showScreen('pin');
+  showScreen('pin-screen');
   if (window._log) window._log('INIT_done');
 }
 
@@ -59,7 +59,7 @@ function lock() {
   DATA = null;
   PIN_BUF = '';
   updatePinDisplay();
-  showScreen('pin');
+  showScreen('pin-screen');
 }
 
 // === PIN-пад ===
@@ -114,7 +114,7 @@ async function submitPin(pin) {
     PIN_BUF = '';
     updatePinDisplay();
     $('#pin-error').textContent = 'Неверный PIN';
-    showScreen('pin');
+    showScreen('pin-screen');
   }
 }
 
