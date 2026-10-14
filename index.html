@@ -7,9 +7,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="error-box" style="position:fixed;top:0;left:0;right:0;background:#f85149;color:#fff;font-size:12px;padding:8px;z-index:9999;max-height:50vh;overflow:auto;font-family:monospace;"></div>
+  <div id="error-box" style="position:fixed;top:0;left:0;right:0;background:#f85149;color:#fff;font-size:12px;padding:8px;z-index:9999;max-height:50vh;overflow:auto;font-family:monospace;">INIT</div>
 
-  <div id="app"></div>
   <div id="pin-screen" class="screen">
     <div class="pin-box">
       <img src="icon.svg" alt="" class="pin-logo">
@@ -25,24 +24,35 @@
       <div id="pin-error" class="pin-error"></div>
     </div>
   </div>
+
   <div id="dashboard" class="screen hidden">
     <header class="topbar"><div class="logo">Worklog</div></header>
     <main id="content">LOADED</main>
   </div>
 
   <script>
-    window.onerror = function(msg, url, line, col, err) {
-      var box = document.getElementById('error-box');
-      box.textContent += '[JS ERROR] ' + msg + ' @ ' + (url||'').split('/').pop() + ':' + line + ':' + col + '\n';
+    var box = function() { return document.getElementById('error-box'); };
+    window.onerror = function(msg, url, line) {
+      if (box()) box().textContent += ' |ERR: ' + msg + '@' + line;
     };
     window.addEventListener('unhandledrejection', function(e) {
-      var box = document.getElementById('error-box');
-      box.textContent += '[PROMISE] ' + (e.reason && e.reason.message || e.reason) + '\n';
+      if (box()) box().textContent += ' |REJ: ' + (e.reason && e.reason.message || e.reason);
     });
-    // SW временно отключён для диагностики
-    // if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
+    if (box()) box().textContent += ' |HTML_OK';
+    // SW отключён
   </script>
-  <script src="crypto.js"></script>
-  <script src="app.js"></script>
+  <script src="crypto.js" onerror="document.getElementById('error-box').textContent += ' |CRYPTO_FAIL'"></script>
+  <script src="app.js" onerror="document.getElementById('error-box').textContent += ' |APP_FAIL'"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (box()) box().textContent += ' |DOM_READY';
+      setTimeout(function() {
+        if (box()) {
+          var ps = document.getElementById('pin-screen');
+          box().textContent += ' |PIN_VISIBLE:' + (ps && !ps.classList.contains('hidden'));
+        }
+      }, 500);
+    });
+  </script>
 </body>
 </html>
