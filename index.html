@@ -42,10 +42,12 @@ _log('JS_START');
 _log('SCRIPTS_LOADED');
 document.addEventListener('DOMContentLoaded', function(){
   _log('DOM_READY');
-  setTimeout(function(){
-    var ps = document.getElementById('pin-screen');
-    _log('PIN_vis=' + (ps && !ps.classList.contains('hidden')));
-  }, 800);
+  [100, 500, 2000, 5000].forEach(function(ms){
+    setTimeout(function(){
+      var ps = document.getElementById('pin-screen');
+      _log('T' + ms + ' PIN_vis=' + (ps && !ps.classList.contains('hidden')));
+    }, ms);
+  });
 });
 </script>
 </body>
