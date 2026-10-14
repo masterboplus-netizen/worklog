@@ -22,14 +22,11 @@ setTimeout(_bootstrap, 0);
 
 
 async function init() {
-  if (window._log) window._log('INIT_enter');
   setupPinPad();
-  if (window._log) window._log('INIT_pinpad_ok');
   const _btnLock = $('#btn-lock');
   if (_btnLock) _btnLock.addEventListener('click', lock);
 
   const saved = localStorage.getItem(PIN_KEY);
-  if (window._log) window._log('INIT_saved=' + !!saved);
   if (saved) {
     showScreen('loading');
     const ok = await tryUnlock(saved);
@@ -40,9 +37,7 @@ async function init() {
     }
     localStorage.removeItem(PIN_KEY);
   }
-  if (window._log) window._log('INIT_showScreen_pin');
   showScreen('pin-screen');
-  if (window._log) window._log('INIT_done');
 }
 
 function showScreen(name) {
@@ -120,17 +115,12 @@ async function submitPin(pin) {
 
 async function tryUnlock(pin) {
   try {
-    if (window._log) window._log('UNLOCK_start');
     const resp = await fetch('data.encrypted.json?_=' + Date.now());
-    if (window._log) window._log('UNLOCK_fetch=' + resp.status);
     if (!resp.ok) throw new Error('fetch failed');
     const encrypted = await resp.json();
-    if (window._log) window._log('UNLOCK_json_ok');
     DATA = await decryptData(pin, encrypted);
-    if (window._log) window._log('UNLOCK_decrypt_ok');
     return true;
   } catch (e) {
-    if (window._log) window._log('UNLOCK_FAIL: ' + e.message);
     return false;
   }
 }
