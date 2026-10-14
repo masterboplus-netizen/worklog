@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', init);
 
 async function init() {
   setupPinPad();
-  $('#btn-lock').addEventListener('click', lock);
+  const _btnLock = $('#btn-lock');
+  if (_btnLock) _btnLock.addEventListener('click', lock);
 
   const saved = localStorage.getItem(PIN_KEY);
   if (saved) {
