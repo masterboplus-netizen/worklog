@@ -8,7 +8,18 @@ const PIN_LEN = 6;
 let DATA = null;
 let PIN_BUF = '';
 
-document.addEventListener('DOMContentLoaded', init);
+window.__initCalls = 0;
+function _bootstrap() {
+  window.__initCalls++;
+  if (window.__initCalls === 1) init();
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', _bootstrap);
+} else {
+  _bootstrap();
+}
+setTimeout(_bootstrap, 0);
+
 
 async function init() {
   setupPinPad();
