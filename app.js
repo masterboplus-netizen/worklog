@@ -120,13 +120,17 @@ async function submitPin(pin) {
 
 async function tryUnlock(pin) {
   try {
+    if (window._log) window._log('UNLOCK_start');
     const resp = await fetch('data.encrypted.json?_=' + Date.now());
+    if (window._log) window._log('UNLOCK_fetch=' + resp.status);
     if (!resp.ok) throw new Error('fetch failed');
     const encrypted = await resp.json();
+    if (window._log) window._log('UNLOCK_json_ok');
     DATA = await decryptData(pin, encrypted);
+    if (window._log) window._log('UNLOCK_decrypt_ok');
     return true;
   } catch (e) {
-    console.warn('Unlock failed:', e);
+    if (window._log) window._log('UNLOCK_FAIL: ' + e.message);
     return false;
   }
 }
