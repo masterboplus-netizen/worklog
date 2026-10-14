@@ -32,6 +32,7 @@ async function init() {
 function showScreen(name) {
   ['pin-screen', 'dashboard', 'loading'].forEach(id => {
     const el = document.getElementById(id);
+    if (!el) return;
     if (id === name) el.classList.remove('hidden');
     else el.classList.add('hidden');
   });
