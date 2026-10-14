@@ -2,20 +2,14 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#0d1117">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Worklog</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/svg+xml" href="icon.svg">
-  <link rel="apple-touch-icon" href="icon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Worklog DEBUG</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app"></div>
+  <div id="error-box" style="position:fixed;top:0;left:0;right:0;background:#f85149;color:#fff;font-size:12px;padding:8px;z-index:9999;max-height:50vh;overflow:auto;font-family:monospace;"></div>
 
-  <!-- PIN-экран -->
+  <div id="app"></div>
   <div id="pin-screen" class="screen">
     <div class="pin-box">
       <img src="icon.svg" alt="" class="pin-logo">
@@ -23,45 +17,32 @@
       <p class="pin-sub">Введи PIN</p>
       <div id="pin-display" class="pin-display"></div>
       <div class="pin-pad">
-        <button data-d="1">1</button>
-        <button data-d="2">2</button>
-        <button data-d="3">3</button>
-        <button data-d="4">4</button>
-        <button data-d="5">5</button>
-        <button data-d="6">6</button>
-        <button data-d="7">7</button>
-        <button data-d="8">8</button>
-        <button data-d="9">9</button>
-        <button data-d="clear" class="pin-fn">C</button>
-        <button data-d="0">0</button>
-        <button data-d="del" class="pin-fn">⌫</button>
+        <button data-d="1">1</button><button data-d="2">2</button><button data-d="3">3</button>
+        <button data-d="4">4</button><button data-d="5">5</button><button data-d="6">6</button>
+        <button data-d="7">7</button><button data-d="8">8</button><button data-d="9">9</button>
+        <button data-d="clear" class="pin-fn">C</button><button data-d="0">0</button><button data-d="del" class="pin-fn">X</button>
       </div>
       <div id="pin-error" class="pin-error"></div>
-      <p class="pin-hint">PIN не хранится на сервере.<br>Данные расшифровываются локально.</p>
     </div>
   </div>
-
-  <!-- Дашборд -->
   <div id="dashboard" class="screen hidden">
-    <header class="topbar">
-      <div class="logo">⏳ Worklog</div>
-      <button id="btn-lock" class="btn-icon" title="Заблокировать">🔒</button>
-    </header>
-    <main id="content"></main>
+    <header class="topbar"><div class="logo">Worklog</div></header>
+    <main id="content">LOADED</main>
   </div>
 
-  <!-- Loading -->
-  <div id="loading" class="screen hidden">
-    <div class="spinner"></div>
-    <p>Расшифровка…</p>
-  </div>
-
+  <script>
+    window.onerror = function(msg, url, line, col, err) {
+      var box = document.getElementById('error-box');
+      box.textContent += '[JS ERROR] ' + msg + ' @ ' + (url||'').split('/').pop() + ':' + line + ':' + col + '\n';
+    };
+    window.addEventListener('unhandledrejection', function(e) {
+      var box = document.getElementById('error-box');
+      box.textContent += '[PROMISE] ' + (e.reason && e.reason.message || e.reason) + '\n';
+    });
+    // SW временно отключён для диагностики
+    // if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
+  </script>
   <script src="crypto.js"></script>
   <script src="app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
-    }
-  </script>
 </body>
 </html>
