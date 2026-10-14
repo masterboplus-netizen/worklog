@@ -1,0 +1,13 @@
+# Реальные данные — НЕ публикуем
+worklog.json
+backups/
+*.bak
+
+# venv
+.venv/
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
