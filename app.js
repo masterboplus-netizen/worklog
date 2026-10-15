@@ -108,9 +108,13 @@ function renderDiary() {
       const dur = fmtH(s.duration_min || 0);
       const proj = projName[s.project] || s.project || '—';
       const note = s.note || '';
+      const evs = s.events || 0;
+      const scrs = s.screens || 0;
+      const counters = (evs || scrs) ? ('📨 ' + evs + ' · 📸 ' + scrs) : '';
       item.innerHTML =
         '<div class="diary-time">' + timeRange + ' · <span class="diary-dur">' + dur + '</span></div>' +
         '<div class="diary-proj">' + proj + '</div>' +
+        (counters ? '<div class="diary-counters">' + counters + '</div>' : '') +
         (note ? '<div class="diary-note">' + note + '</div>' : '');
       c.appendChild(item);
     }
@@ -259,6 +263,8 @@ function renderMetrics() {
     ['7 дней',   fmtH(t.week),     true],
     ['30 дней',  fmtH(t.month),    false],
     ['Всего',    fmtH(t.total),    false],
+    ['📨 Сообщений', String(t.msgs),    false],
+    ['📸 Скринов',   String(t.screens), false],
   ];
   div.innerHTML = items.map(([l, v, acc]) =>
     '<div class="metric"><div class="metric-label">' + l + '</div>' +
