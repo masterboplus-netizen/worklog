@@ -363,7 +363,17 @@ function renderProjects() {
 
       phasesDiv.appendChild(phDiv);
     }
+    // Фазы — скрыты по умолчанию, раскрываются кликом
+    phasesDiv.classList.add('hidden');
     card.appendChild(phasesDiv);
+
+    // Клик на карточку — раскрыть/свернуть фазы
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', (e) => {
+      // Игнорируем клики по внутренним фазам (чтобы не конфликтовало)
+      if (e.target.closest('.phase')) return;
+      phasesDiv.classList.toggle('hidden');
+    });
 
     sec.appendChild(card);
   }
