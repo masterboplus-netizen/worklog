@@ -363,3 +363,82 @@ html, body {
   #content { max-width: 720px; margin: 0 auto; }
   .metrics { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* === Вкладки (Дашборд / Дневник) === */
+.tabs {
+  display: flex;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0 8px;
+  gap: 4px;
+}
+.tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--fg-dim);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 8px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab.tab-active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.tab:active {
+  background: var(--bg2);
+}
+
+/* === Дневник === */
+#content-diary {
+  padding: 16px;
+  flex: 1;
+}
+
+.diary-date {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 20px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.diary-date:first-child { margin-top: 0; }
+
+.diary-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.diary-time {
+  font-size: 13px;
+  color: var(--fg-dim);
+  margin-bottom: 4px;
+}
+.diary-dur {
+  color: var(--accent);
+  font-weight: 600;
+}
+.diary-proj {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+.diary-note {
+  font-size: 13px;
+  color: var(--fg-dim);
+  line-height: 1.4;
+}
+
+@media (min-width: 600px) {
+  #content-diary { max-width: 720px; margin: 0 auto; width: 100%; }
+}

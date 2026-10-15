@@ -1,4 +1,4 @@
-// Worklog — основная логика UI
+// Хераборина — основная логика UI
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
@@ -25,6 +25,7 @@ async function init() {
   setupPinPad();
   const _btnLock = $('#btn-lock');
   if (_btnLock) _btnLock.addEventListener('click', lock);
+  setupTabs();
 
   const saved = localStorage.getItem(PIN_KEY);
   if (saved) {
@@ -38,6 +39,90 @@ async function init() {
     localStorage.removeItem(PIN_KEY);
   }
   showScreen('pin-screen');
+}
+
+function setupTabs() {
+  const tabDash = document.getElementById('tab-dashboard');
+  const tabDiary = document.getElementById('tab-diary');
+  if (!tabDash || !tabDiary) return;
+  tabDash.addEventListener('click', () => switchTab('dashboard'));
+  tabDiary.addEventListener('click', () => switchTab('diary'));
+}
+
+function switchTab(name) {
+  const tabDash = document.getElementById('tab-dashboard');
+  const tabDiary = document.getElementById('tab-diary');
+  const cDash = document.getElementById('content');
+  const cDiary = document.getElementById('content-diary');
+  if (!tabDash || !tabDiary || !cDash || !cDiary) return;
+
+  if (name === 'diary') {
+    tabDash.classList.remove('tab-active');
+    tabDiary.classList.add('tab-active');
+    cDash.classList.add('hidden');
+    cDiary.classList.remove('hidden');
+    renderDiary();
+  } else {
+    tabDiary.classList.remove('tab-active');
+    tabDash.classList.add('tab-active');
+    cDiary.classList.add('hidden');
+    cDash.classList.remove('hidden');
+  }
+}
+
+function renderDiary() {
+  const c = document.getElementById('content-diary');
+  if (!c || !DATA) return;
+  c.innerHTML = '';
+
+  const list = (DATA.sessions || []).slice().sort((a, b) =>
+    (b.date + (b.start || '')).localeCompare(a.date + (a.start || ''))
+  );
+
+  if (!list.length) {
+    c.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Нет записей</div>';
+    return;
+  }
+
+  const projName = {};
+  for (const p of DATA.projects || []) projName[p.id] = p.name;
+
+  // Группировка по датам
+  const byDate = {};
+  for (const s of list) {
+    if (!byDate[s.date]) byDate[s.date] = [];
+    byDate[s.date].push(s);
+  }
+
+  const dates = Object.keys(byDate).sort().reverse();
+  for (const d of dates) {
+    const header = document.createElement('div');
+    header.className = 'diary-date';
+    header.textContent = formatDiaryDate(d);
+    c.appendChild(header);
+
+    for (const s of byDate[d]) {
+      const item = document.createElement('div');
+      item.className = 'diary-item';
+      const timeRange = (s.start || '?') + ' → ' + (s.end || '?');
+      const dur = fmtH(s.duration_min || 0);
+      const proj = projName[s.project] || s.project || '—';
+      const note = s.note || '';
+      item.innerHTML =
+        '<div class="diary-time">' + timeRange + ' · <span class="diary-dur">' + dur + '</span></div>' +
+        '<div class="diary-proj">' + proj + '</div>' +
+        (note ? '<div class="diary-note">' + note + '</div>' : '');
+      c.appendChild(item);
+    }
+  }
+}
+
+function formatDiaryDate(iso) {
+  const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  const days = ['вс','пн','вт','ср','чт','пт','сб'];
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d.getTime())) return iso;
+  return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + days[d.getDay()];
 }
 
 function showScreen(name) {
@@ -128,6 +213,10 @@ async function tryUnlock(pin) {
 // === Рендер дашборда ===
 function renderDashboard() {
   if (!DATA) return;
+  const cDash = $('#content-diary');
+  if (cDash) cDash.classList.add('hidden');
+  const cTab = $('#content');
+  if (cTab) cTab.classList.remove('hidden');
   const c = $('#content');
   c.innerHTML = '';
   c.appendChild(renderMetrics());
@@ -291,6 +380,6 @@ function renderFooter() {
   const f = document.createElement('div');
   f.className = 'footer';
   const upd = DATA.updated ? new Date(DATA.updated).toLocaleString('ru-RU') : '—';
-  f.textContent = 'Обновлено: ' + upd + ' · Worklog v1';
+  f.textContent = 'Обновлено: ' + upd + ' · Хераборина v1';
   return f;
 }
