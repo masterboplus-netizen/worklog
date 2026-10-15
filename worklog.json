@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-15T19:45:00",
+  "updated": "2026-10-15T22:40:00",
   "projects": [
     {
       "id": "bo81",
@@ -9,69 +9,89 @@
       "status": "active",
       "plan": [
         {
-          "phase": "Фаза 1: MVP",
+          "phase": "1. MVP",
           "status": "done",
           "items": [
             {
-              "text": "Объекты",
+              "text": "Онбординг, роли (5)",
               "done": true
             },
             {
-              "text": "Задачи",
+              "text": "Объекты, задачи, финансы",
               "done": true
             },
             {
-              "text": "Финансы",
+              "text": "CRM (клиенты, сделки)",
               "done": true
             },
             {
-              "text": "Личные расходы",
+              "text": "Фото объекта",
               "done": true
             },
             {
-              "text": "Отчёты",
+              "text": "Web-дашборд",
               "done": true
             }
           ]
         },
         {
-          "phase": "Фаза 2: Рефакторинг callbacks",
+          "phase": "2. Комнаты, ЭОМ, сметы",
+          "status": "done",
+          "items": [
+            {
+              "text": "Комнаты, обход стен",
+              "done": true
+            },
+            {
+              "text": "Сессии замеров, проёмы, ниши",
+              "done": true
+            },
+            {
+              "text": "ЭОМ: щиты, группы, трассы",
+              "done": true
+            },
+            {
+              "text": "Сантехника: коллекторы, трассы",
+              "done": true
+            },
+            {
+              "text": "Сметы ЭОМ + импорт прайсов",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "3. PDF + компоненты",
+          "status": "done",
+          "items": [
+            {
+              "text": "PDF: щит, ЭОМ, сантехника",
+              "done": true
+            },
+            {
+              "text": "Ручные компоненты щита",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "4. Рефакторинг",
           "status": "active",
           "items": [
             {
-              "text": "callbacks/tasks.py",
+              "text": "callbacks/tasks, estimates, kpi, finance",
               "done": true
             },
             {
-              "text": "callbacks/estimates.py",
+              "text": "callbacks/objects, reports, misc, personal",
               "done": true
             },
             {
-              "text": "callbacks/kpi.py",
+              "text": "text/objects, tasks, finances, personal, crm, misc, rooms",
               "done": true
             },
             {
-              "text": "callbacks/finance.py",
-              "done": true
-            },
-            {
-              "text": "callbacks/objects.py",
-              "done": true
-            },
-            {
-              "text": "callbacks/reports.py",
-              "done": true
-            },
-            {
-              "text": "callbacks/misc.py",
-              "done": true
-            },
-            {
-              "text": "restore menu_reports",
-              "done": true
-            },
-            {
-              "text": "handle_text (975 строк)",
+              "text": "handle_text → text/* (60%)",
               "done": false
             },
             {
@@ -79,28 +99,159 @@
               "done": false
             },
             {
-              "text": "modules/ → core/",
+              "text": "modules/ → core/ (176 импортов)",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "5. UX/Доработки",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Универсальный приёмник файлов",
               "done": false
             },
             {
-              "text": "CRM-домен вынесен",
-              "done": true
+              "text": "Полиш ЭОМ (nav_from)",
+              "done": false
             },
             {
-              "text": "misc-домен вынесен",
-              "done": true
+              "text": "Полиш parser.py, comms.py",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "6. Интеграции",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Google Sheets (синхронизация смет)",
+              "done": false
             },
             {
-              "text": "rooms-домен вынесен (room_name, wall_question)",
-              "done": true
+              "text": "1С / Мой Склад",
+              "done": false
             },
             {
-              "text": "text/* пакет: objects, tasks, finances, personal, crm, misc, rooms",
-              "done": true
+              "text": "Экспорт в Excel/CSV",
+              "done": false
+            },
+            {
+              "text": "Email-отчёты",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "7. Маркетплейсы",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Импорт цен (Leroy Merlin, Petrovich, OBI)",
+              "done": false
+            },
+            {
+              "text": "Парсинг каталогов",
+              "done": false
+            },
+            {
+              "text": "Сравнение цен поставщиков",
+              "done": false
+            },
+            {
+              "text": "Автозаказ материалов",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "8. Масштабирование",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Многопользовательский режим",
+              "done": false
+            },
+            {
+              "text": "Расширенная web-панель",
+              "done": false
+            },
+            {
+              "text": "REST API",
+              "done": false
+            },
+            {
+              "text": "Вебхуки",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "9. Аналитика и AI",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Графики прогресса",
+              "done": false
+            },
+            {
+              "text": "Прогнозы сроков",
+              "done": false
+            },
+            {
+              "text": "AI-помощник (голосовой ввод)",
+              "done": false
+            },
+            {
+              "text": "Автокатегоризация расходов",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "10. Мобильное приложение",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Нативное iOS / Android",
+              "done": false
+            },
+            {
+              "text": "Push-уведомления",
+              "done": false
+            },
+            {
+              "text": "AR-замеры",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "11. Биллинг / Монетизация",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Подписки (Free / Pro / Business)",
+              "done": false
+            },
+            {
+              "text": "Лимиты по тарифу",
+              "done": false
+            },
+            {
+              "text": "Оплата (ЮKassa, Stripe)",
+              "done": false
+            },
+            {
+              "text": "Реферальная программа",
+              "done": false
             }
           ]
         }
-      ]
+      ],
+      "started": "2026-07-01"
     }
   ],
   "sessions": [
@@ -120,11 +271,11 @@
       "date": "2026-10-15",
       "project": "bo81",
       "start": "14:30",
-      "end": "19:42",
-      "duration_min": 312,
-      "events": 90,
-      "screens": 75,
-      "note": "refactor _legacy: CRM, misc, rooms + text/* + Хераборина counters + baseline"
+      "end": "22:40",
+      "duration_min": 490,
+      "events": 110,
+      "screens": 90,
+      "note": "refactor _legacy: CRM, misc, rooms + text/* + Хераборина phases + docs"
     }
   ],
   "baseline": {
