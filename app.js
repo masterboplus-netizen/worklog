@@ -298,12 +298,15 @@ function renderProjects() {
 
   for (const p of DATA.projects || []) {
     const hrs = byProj[p.id] || 0;
-    const totalPlan = (p.plan || []).reduce((acc, ph) =>
-      acc + (ph.items || []).length, 0);
-    const donePlan = (p.plan || []).reduce((acc, ph) =>
-      acc + (ph.items || []).filter(it =>
-        typeof it === 'object' ? it.done : false).length, 0);
-    const pct = totalPlan ? Math.round(donePlan / totalPlan * 100) : 0;
+
+    // Прогресс по фазам
+    let totalItems = 0, doneItems = 0;
+    for (const ph of p.plan || []) {
+      const items = ph.items || [];
+      totalItems += items.length;
+      doneItems += items.filter(it => typeof it === 'object' && it.done).length;
+    }
+    const pct = totalItems ? Math.round(doneItems / totalItems * 100) : 0;
 
     const card = document.createElement('div');
     card.className = 'project-card';
@@ -317,10 +320,54 @@ function renderProjects() {
       '</div>' +
       '<div class="progress-bar"><div class="progress-fill" style="width:' + pct +
         '%;background:' + (p.color || '#4A9EFF') + '"></div></div>' +
-      '<div class="project-meta">Прогресс: ' + donePlan + '/' + totalPlan +
+      '<div class="project-meta">Выполнено: ' + doneItems + ' из ' + totalItems +
         ' (' + pct + '%) · ' + (p.status || '') + '</div>';
+
+    // Фазы
+    const phasesDiv = document.createElement('div');
+    phasesDiv.className = 'phases';
+    for (const ph of p.plan || []) {
+      const items = ph.items || [];
+      const total = items.length;
+      const done = items.filter(it => typeof it === 'object' && it.done).length;
+      const phPct = total ? Math.round(done / total * 100) : 0;
+      const statusIcon = phPct === 100 ? '\u2705' : (phPct > 0 ? '\u{1F7E1}' : '\u{1F4CB}');
+
+      const phDiv = document.createElement('div');
+      phDiv.className = 'phase';
+      phDiv.innerHTML =
+        '<div class="phase-head">' +
+          '<span class="phase-icon">' + statusIcon + '</span>' +
+          '<span class="phase-name">' + ph.phase + '</span>' +
+          '<span class="phase-pct">' + phPct + '%</span>' +
+        '</div>' +
+        '<div class="phase-bar"><div class="phase-fill" style="width:' + phPct +
+          '%;background:' + (p.color || '#4A9EFF') + '"></div></div>';
+
+      // Список пунктов
+      const itemsList = document.createElement('div');
+      itemsList.className = 'phase-items hidden';
+      for (const it of items) {
+        if (typeof it === 'object') {
+          const line = document.createElement('div');
+          line.className = 'phase-item' + (it.done ? ' done' : '');
+          line.textContent = (it.done ? '\u2705 ' : '\u23F3 ') + it.text;
+          itemsList.appendChild(line);
+        }
+      }
+      phDiv.appendChild(itemsList);
+
+      phDiv.addEventListener('click', () => {
+        itemsList.classList.toggle('hidden');
+      });
+
+      phasesDiv.appendChild(phDiv);
+    }
+    card.appendChild(phasesDiv);
+
     sec.appendChild(card);
   }
+
   return sec;
 }
 
