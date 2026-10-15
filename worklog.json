@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-15T19:35:00",
+  "updated": "2026-10-15T19:42:00",
   "projects": [
     {
       "id": "bo81",
@@ -120,11 +120,11 @@
       "date": "2026-10-15",
       "project": "bo81",
       "start": "14:30",
-      "end": "18:14",
-      "duration_min": 224,
-      "events": 82,
-      "screens": 68,
-      "note": "refactor _legacy: CRM, misc, rooms + text/* package + Хераборина counters"
+      "end": "19:42",
+      "duration_min": 312,
+      "events": 90,
+      "screens": 75,
+      "note": "refactor _legacy: CRM, misc, rooms + text/* + Хераборина counters + baseline"
     }
   ],
   "baseline": {
