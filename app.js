@@ -296,6 +296,16 @@ function renderProjects() {
     byProj[s.project] = (byProj[s.project] || 0) + (s.duration_min || 0);
   }
 
+  // Прибавляем baseline (общая история до 15.10) к проекту bo81
+  const base = DATA.baseline || {};
+  if (base.minutes && base.project) {
+    byProj[base.project] = (byProj[base.project] || 0) + base.minutes;
+  } else if (base.minutes) {
+    // По умолчанию — к первому проекту (bo81)
+    const firstId = (DATA.projects || [])[0]?.id;
+    if (firstId) byProj[firstId] = (byProj[firstId] || 0) + base.minutes;
+  }
+
   for (const p of DATA.projects || []) {
     const hrs = byProj[p.id] || 0;
 
