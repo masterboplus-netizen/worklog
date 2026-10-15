@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "updated": "2026-10-15T19:35:00",
+  "projects": [
+    {
+      "id": "bo81",
+      "name": "Бо 8.1",
+      "color": "#4A9EFF",
+      "status": "active",
+      "plan": [
+        {
+          "phase": "Фаза 1: MVP",
+          "status": "done",
+          "items": [
+            {
+              "text": "Объекты",
+              "done": true
+            },
+            {
+              "text": "Задачи",
+              "done": true
+            },
+            {
+              "text": "Финансы",
+              "done": true
+            },
+            {
+              "text": "Личные расходы",
+              "done": true
+            },
+            {
+              "text": "Отчёты",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "Фаза 2: Рефакторинг callbacks",
+          "status": "active",
+          "items": [
+            {
+              "text": "callbacks/tasks.py",
+              "done": true
+            },
+            {
+              "text": "callbacks/estimates.py",
+              "done": true
+            },
+            {
+              "text": "callbacks/kpi.py",
+              "done": true
+            },
+            {
+              "text": "callbacks/finance.py",
+              "done": true
+            },
+            {
+              "text": "callbacks/objects.py",
+              "done": true
+            },
+            {
+              "text": "callbacks/reports.py",
+              "done": true
+            },
+            {
+              "text": "callbacks/misc.py",
+              "done": true
+            },
+            {
+              "text": "restore menu_reports",
+              "done": true
+            },
+            {
+              "text": "handle_text (975 строк)",
+              "done": false
+            },
+            {
+              "text": "rooms.py (7638 строк)",
+              "done": false
+            },
+            {
+              "text": "modules/ → core/",
+              "done": false
+            },
+            {
+              "text": "CRM-домен вынесен",
+              "done": true
+            },
+            {
+              "text": "misc-домен вынесен",
+              "done": true
+            },
+            {
+              "text": "rooms-домен вынесен (room_name, wall_question)",
+              "done": true
+            },
+            {
+              "text": "text/* пакет: objects, tasks, finances, personal, crm, misc, rooms",
+              "done": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sessions": [
+    {
+      "id": "s_20261014_1",
+      "date": "2026-10-14",
+      "project": "bo81",
+      "start": "20:41",
+      "end": "22:03",
+      "duration_min": 82,
+      "events": 18,
+      "screens": 15,
+      "note": "worklog MVP + objects/reports/misc"
+    },
+    {
+      "id": "s_20261015_1",
+      "date": "2026-10-15",
+      "project": "bo81",
+      "start": "14:30",
+      "end": "18:14",
+      "duration_min": 224,
+      "events": 82,
+      "screens": 68,
+      "note": "refactor _legacy: CRM, misc, rooms + text/* package + Хераборина counters"
+    }
+  ],
+  "baseline": {
+    "minutes": 20160,
+    "messages": 7473,
+    "screens": 0,
+    "note": "Часы с июля-сентября 2026 (оценка, 7473 сообщения × 2.7 мин)"
+  }
+}

@@ -242,6 +242,10 @@ function calcTotals() {
   const weekAgo = new Date(now - 7 * 86400000).toISOString().slice(0, 10);
   const monthAgo = new Date(now - 30 * 86400000).toISOString().slice(0, 10);
 
+  const base = DATA.baseline || {};
+  const baseMin = base.minutes || 0;
+  const baseMsgs = base.messages || 0;
+
   let total = 0, week = 0, month = 0, todayMin = 0, screens = 0, msgs = 0;
   for (const s of DATA.sessions || []) {
     total += s.duration_min || 0;
@@ -251,7 +255,16 @@ function calcTotals() {
     screens += s.screens || 0;
     msgs += s.events || 0;
   }
-  return { total, week, month, todayMin, screens, msgs, count: (DATA.sessions || []).length };
+  // Базовая линия (архив) — только в «Всего» и в общих счётчиках
+  return {
+    total: total + baseMin,
+    week,
+    month,
+    todayMin,
+    screens,
+    msgs: msgs + baseMsgs,
+    count: (DATA.sessions || []).length
+  };
 }
 
 function renderMetrics() {
