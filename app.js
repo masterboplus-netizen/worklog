@@ -363,17 +363,19 @@ function renderProjects() {
 
       phasesDiv.appendChild(phDiv);
     }
-    // Фазы — скрыты по умолчанию, раскрываются кликом
+    // Фазы — скрыты по умолчанию
     phasesDiv.classList.add('hidden');
     card.appendChild(phasesDiv);
 
-    // Клик на карточку — раскрыть/свернуть фазы
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', (e) => {
-      // Игнорируем клики по внутренним фазам (чтобы не конфликтовало)
-      if (e.target.closest('.phase')) return;
-      phasesDiv.classList.toggle('hidden');
-    });
+    // Клик на шапку карточки (.project-head) — раскрыть/свернуть фазы
+    const head = card.querySelector('.project-head');
+    if (head) {
+      head.style.cursor = 'pointer';
+      head.addEventListener('click', (e) => {
+        e.stopPropagation();
+        phasesDiv.classList.toggle('hidden');
+      });
+    }
 
     sec.appendChild(card);
   }
