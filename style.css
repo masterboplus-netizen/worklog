@@ -769,13 +769,13 @@ html, body {
 
 /* === Hero ring max (v8) === */
 .ring-wrap {
-  width: 340px;
-  height: 340px;
+  width: 310px;
+  height: 310px;
   max-width: 90vw;
   max-height: 90vw;
 }
 .ring-value {
-  font-size: 52px;
+  font-size: 46px;
 }
 .ring-sub {
   font-size: 15px;

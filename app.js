@@ -301,7 +301,7 @@ function renderHeroRings() {
   // Большое кольцо
   div.innerHTML =
     '<div class="hero-main">' +
-      '<div class="ring-wrap">' + renderRingSVG(pctDur, 340, 16, ringColor) +
+      '<div class="ring-wrap">' + renderRingSVG(pctDur, 310, 15, ringColor) +
         '<div class="ring-center">' +
           '<div class="ring-value">' + fmtH(t.todayMin) + '</div>' +
           '<div class="ring-sub">Цель 12ч · ' + pctDur + '%</div>' +
