@@ -84,7 +84,7 @@ function switchTab(name) {
           '<div class="metric"><div class="metric-label">7 дней</div><div class="metric-value">' + fmtH(tt.week) + '</div></div>' +
           '<div class="metric"><div class="metric-label">30 дней</div><div class="metric-value">' + fmtH(tt.month) + '</div></div>' +
           '<div class="metric"><div class="metric-label">Всего</div><div class="metric-value">' + fmtH(tt.total) + '</div></div>' +
-          '<div class="metric"><div class="metric-label">Среднее</div><div class="metric-value">' + fmtH(Math.round(tt.total / Math.max(1, tt.count))) + '</div></div>' +
+          '<div class="metric"><div class="metric-label">Среднее (сессия)</div><div class="metric-value">' + fmtH(Math.round(tt.totalNoBase / Math.max(1, tt.count))) + '</div></div>' +
         '</div></div>';
     }
   } else {
@@ -359,6 +359,7 @@ function calcTotals() {
   // Базовая линия (архив) — только в «Всего» и в общих счётчиках
   return {
     total: total + baseMin,
+    totalNoBase: total,
     week,
     month,
     todayMin,
