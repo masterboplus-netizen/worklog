@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-16T02:54:00",
+  "updated": "2026-10-16T13:51:00",
   "projects": [
     {
       "id": "bo81",
@@ -287,6 +287,17 @@
       "events": 65,
       "screens": 58,
       "note": "session 18: fallback -> text/fallback.py, est_bykind -> estimates.py, debug indent bug, map_scan.py + docs"
+    },
+    {
+      "id": "s_20261016_1",
+      "date": "2026-10-16",
+      "project": "bo81",
+      "start": "11:17",
+      "end": "13:51",
+      "duration_min": 154,
+      "events": 60,
+      "screens": 40,
+      "note": "session 18 (утро): map_scan v3 + bot.py, lint_routers, AI_INSTRUCTIONS, i18n labels, marketplaces, dedupe estimates"
     }
   ],
   "baseline": {
