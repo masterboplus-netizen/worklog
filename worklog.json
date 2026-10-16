@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-15T22:40:00",
+  "updated": "2026-10-16T02:54:00",
   "projects": [
     {
       "id": "bo81",
@@ -276,6 +276,17 @@
       "events": 110,
       "screens": 90,
       "note": "refactor _legacy: CRM, misc, rooms + text/* + Хераборина phases + docs"
+    },
+    {
+      "id": "s_20261015_2",
+      "date": "2026-10-15",
+      "project": "bo81",
+      "start": "23:52",
+      "end": "02:54",
+      "duration_min": 182,
+      "events": 65,
+      "screens": 58,
+      "note": "session 18: fallback -> text/fallback.py, est_bykind -> estimates.py, debug indent bug, map_scan.py + docs"
     }
   ],
   "baseline": {
