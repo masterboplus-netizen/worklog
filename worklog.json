@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-16T15:20:00",
+  "updated": "2026-10-17T00:26:00",
   "projects": [
     {
       "id": "bo81",
@@ -309,6 +309,17 @@
       "events": 30,
       "screens": 25,
       "note": "Сессия 19: гигиена репо (195+8 бэкапов), .gitignore, фильтр map_scan, доки HANDOFF/STATE."
+    },
+    {
+      "id": "s_20261016_3",
+      "date": "2026-10-16",
+      "project": "bo81",
+      "start": "20:24",
+      "end": "00:26",
+      "duration_min": 242,
+      "events": 50,
+      "screens": 35,
+      "note": "Хераборина X-1: доки, график v3 (периоды/tooltip/axis), hero rings, вкладка Время, cache-bust fix."
     }
   ],
   "baseline": {
