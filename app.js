@@ -427,23 +427,21 @@ function renderChart() {
   const maxVal = Math.max(1, ...days.map(d => byDay[d] || 0));
 
   function niceAxis(v, metric) {
+    // Красивые потолки (не «×4 от шага», а напрямую)
+    let candidates;
     if (metric === 'duration') {
-      const steps = [30, 60, 120, 240, 480, 960, 1440];
-      for (const st of steps) {
-        if (v <= st * 4) {
-          return { top: st * 4, step: st, labels: [0, st, st * 2, st * 3, st * 4] };
-        }
-      }
-      return { top: 5760, step: 1440, labels: [0, 1440, 2880, 4320, 5760] };
+      candidates = [30, 60, 120, 180, 240, 360, 480, 600, 720, 960, 1200, 1440, 1800, 2400, 3600, 4800, 7200];
     } else {
-      const steps = [10, 25, 50, 100, 250, 500, 1000];
-      for (const st of steps) {
-        if (v <= st * 4) {
-          return { top: st * 4, step: st, labels: [0, st, st * 2, st * 3, st * 4] };
-        }
-      }
-      return { top: 4000, step: 1000, labels: [0, 1000, 2000, 3000, 4000] };
+      candidates = [10, 25, 50, 100, 200, 300, 500, 750, 1000, 1500, 2000, 3000, 5000];
     }
+    let top = candidates[candidates.length - 1];
+    for (const c of candidates) {
+      if (v <= c) { top = c; break; }
+    }
+    // Шаг = top / 4, но округлённый до «красивого» (если возможно)
+    const step = top / 4;
+    const labels = [0, step, step * 2, step * 3, top];
+    return { top, step, labels };
   }
   const axis = niceAxis(maxVal, CHART_METRIC);
   const top = axis.top;
@@ -477,6 +475,7 @@ function renderChart() {
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
 
+  // Подписи дат — внутрь barsWrap, под столбики (точная синхронизация)
   const labels = document.createElement('div');
   labels.className = 'chart-labels';
   const step = days.length > 14 ? Math.ceil(days.length / 6) : 1;
@@ -489,7 +488,7 @@ function renderChart() {
     }
     labels.appendChild(lbl);
   }
-  sec.appendChild(labels);
+  barsWrap.appendChild(labels);
 
   if (CHART_SELECTED) {
     const val = byDay[CHART_SELECTED] || 0;
