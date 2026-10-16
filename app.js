@@ -9,6 +9,8 @@ let DATA = null;
 let PIN_BUF = '';
 
 window.__initCalls = 0;
+let CHART_PERIOD = 30; // 7 / 30 / 90 / 0 (0 = всё)
+
 function _bootstrap() {
   window.__initCalls++;
   if (window.__initCalls === 1) init();
@@ -396,13 +398,40 @@ function renderProjects() {
 function renderChart() {
   const sec = document.createElement('div');
   sec.className = 'section';
-  sec.innerHTML = '<div class="section-title">Активность (30 дней)</div>';
 
+  // Заголовок + фильтр периода
+  const periods = [[7, '7 дней'], [30, '30 дней'], [90, '90 дней'], [0, 'Всё']];
+  const filterHTML = periods.map(([n, label]) =>
+    '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
+  ).join('');
+  sec.innerHTML = '<div class="section-title">Активность <span class="period-filter">' + filterHTML + '</span></div>';
+
+  // Список дней
   const days = [];
   const now = new Date();
-  for (let i = 29; i >= 0; i--) {
-    const d = new Date(now - i * 86400000);
-    days.push(d.toISOString().slice(0, 10));
+  if (CHART_PERIOD === 0) {
+    // Всё: от первой сессии до сегодня (минимум — последние 30)
+    const sessions = DATA.sessions || [];
+    if (sessions.length) {
+      const dates = sessions.map(x => x.date).sort();
+      const firstDate = new Date(dates[0] + 'T00:00:00');
+      const msPerDay = 86400000;
+      const totalDays = Math.max(1, Math.floor((now - firstDate) / msPerDay) + 1);
+      for (let i = totalDays - 1; i >= 0; i--) {
+        const d = new Date(now - i * msPerDay);
+        days.push(d.toISOString().slice(0, 10));
+      }
+    } else {
+      for (let i = 29; i >= 0; i--) {
+        const d = new Date(now - i * 86400000);
+        days.push(d.toISOString().slice(0, 10));
+      }
+    }
+  } else {
+    for (let i = CHART_PERIOD - 1; i >= 0; i--) {
+      const d = new Date(now - i * 86400000);
+      days.push(d.toISOString().slice(0, 10));
+    }
   }
 
   const byDay = {};
@@ -420,11 +449,20 @@ function renderChart() {
     const col = document.createElement('div');
     col.className = 'chart-day';
     col.innerHTML =
-      '<div class="chart-bar' + (val ? '' : ' empty') + '" ' +
-      'style="height:' + h + '%" title="' + d + ': ' + fmtH(val) + '"></div>';
+      '<div class="chart-bar' + (val ? '' : ' empty') + '"' +
+      ' style="height:' + h + '%" title="' + d + ': ' + fmtH(val) + '"></div>';
     chart.appendChild(col);
   }
   sec.appendChild(chart);
+
+  // Обработчик клика на кнопки периода
+  sec.querySelectorAll('.period-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      CHART_PERIOD = parseInt(btn.dataset.period, 10);
+      renderDashboard();
+    });
+  });
+
   return sec;
 }
 

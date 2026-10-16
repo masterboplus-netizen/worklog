@@ -507,3 +507,30 @@ html, body {
   color: var(--fg);
   opacity: 0.75;
 }
+
+/* === Фильтр периода (сессия Х-1) === */
+.period-filter {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.period-btn {
+  background: var(--bg3);
+  color: var(--fg-dim);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.period-btn:hover {
+  color: var(--fg);
+  border-color: var(--fg-dim);
+}
+.period-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
