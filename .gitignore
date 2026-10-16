@@ -11,3 +11,6 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Сессия Х-1: наши бэкапы
+*.bak_*
