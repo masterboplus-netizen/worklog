@@ -294,14 +294,6 @@ html, body {
   align-items: center;
   min-width: 0;
 }
-.chart-bar {
-  width: 100%;
-  background: var(--accent);
-  border-radius: 3px 3px 0 0;
-  min-height: 2px;
-  transition: opacity 0.15s;
-}
-.chart-bar.empty { background: var(--bg3); }
 
 /* === Пирог по проектам (полоса) === */
 .project-bars { margin-top: 10px; }
@@ -572,16 +564,8 @@ html, body {
   justify-content: center;
   min-width: 2px;
 }
-.chart-bar {
-  width: 100%;
-  max-width: 24px;
-  background: var(--accent);
-  border-radius: 3px 3px 0 0;
-  transition: opacity 0.15s;
-  cursor: pointer;
-}
+
 .chart-bar:hover { opacity: 0.75; }
-.chart-bar.empty { background: var(--bg3); }
 
 .metric-switch {
   display: flex;
@@ -640,7 +624,6 @@ html, body {
 /* === Chart v3.3: labels под bars (одно чистое правило) === */
 
 /* === Chart v3.4: финальные labels === */
-
 
 /* === Chart v4: labels-row (синхронно с barsWrap) === */
 .chart-labels-row {
@@ -778,4 +761,19 @@ html, body {
   width: 270px;
   height: 270px;
   flex: 0 0 auto;
+}
+
+/* === Chart bar (cleanup) === */
+.chart-bar {
+  width: 100%;
+  max-width: 24px;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+  transition: opacity 0.15s;
+  cursor: pointer;
+}
+.chart-bar.empty {
+  background: transparent;
+  cursor: default;
+  pointer-events: none;
 }
