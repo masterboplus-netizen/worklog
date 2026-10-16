@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-17T00:26:00",
+  "updated": "2026-10-17T00:41:00",
   "projects": [
     {
       "id": "bo81",
@@ -315,11 +315,11 @@
       "date": "2026-10-16",
       "project": "bo81",
       "start": "20:24",
-      "end": "00:26",
-      "duration_min": 242,
-      "events": 50,
-      "screens": 35,
-      "note": "Хераборина X-1: доки, график v3 (периоды/tooltip/axis), hero rings, вкладка Время, cache-bust fix."
+      "end": "00:41",
+      "duration_min": 257,
+      "events": 52,
+      "screens": 36,
+      "note": "Хераборина X-1: доки, график v3, hero rings, вкладка Время, cache-bust fix, avg fix."
     }
   ],
   "baseline": {
