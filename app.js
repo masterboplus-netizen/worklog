@@ -48,28 +48,39 @@ async function init() {
 function setupTabs() {
   const tabDash = document.getElementById('tab-dashboard');
   const tabDiary = document.getElementById('tab-diary');
+  const tabTime = document.getElementById('tab-time');
   if (!tabDash || !tabDiary) return;
   tabDash.addEventListener('click', () => switchTab('dashboard'));
   tabDiary.addEventListener('click', () => switchTab('diary'));
+  if (tabTime) tabTime.addEventListener('click', () => switchTab('time'));
 }
 
 function switchTab(name) {
   const tabDash = document.getElementById('tab-dashboard');
   const tabDiary = document.getElementById('tab-diary');
+  const tabTime = document.getElementById('tab-time');
   const cDash = document.getElementById('content');
   const cDiary = document.getElementById('content-diary');
+  const cTime = document.getElementById('content-time');
   if (!tabDash || !tabDiary || !cDash || !cDiary) return;
 
+  // Скрыть все
+  [tabDash, tabDiary, tabTime].forEach(t => t && t.classList.remove('tab-active'));
+  [cDash, cDiary, cTime].forEach(c => c && c.classList.add('hidden'));
+
   if (name === 'diary') {
-    tabDash.classList.remove('tab-active');
     tabDiary.classList.add('tab-active');
-    cDash.classList.add('hidden');
     cDiary.classList.remove('hidden');
     renderDiary();
+  } else if (name === 'time') {
+    if (tabTime) tabTime.classList.add('tab-active');
+    if (cTime) {
+      cTime.classList.remove('hidden');
+      cTime.innerHTML = '<div class="section"><div class="section-title">⏱ Время — раздел в разработке</div></div>';
+    }
   } else {
-    tabDiary.classList.remove('tab-active');
     tabDash.classList.add('tab-active');
-    cDiary.classList.add('hidden');
+    cDash.classList.remove('hidden');
     cDash.classList.remove('hidden');
   }
 }
@@ -227,11 +238,79 @@ function renderDashboard() {
   if (cTab) cTab.classList.remove('hidden');
   const c = $('#content');
   c.innerHTML = '';
+  c.appendChild(renderHeroRings());
   c.appendChild(renderMetrics());
   c.appendChild(renderProjects());
   c.appendChild(renderChart());
   c.appendChild(renderSessions());
   c.appendChild(renderFooter());
+}
+
+function renderRingSVG(percent, size, strokeWidth, color) {
+  const r = (size - strokeWidth) / 2;
+  const c = 2 * Math.PI * r;
+  const p = Math.max(0, Math.min(100, percent));
+  const dash = c * p / 100;
+  return '<svg width="' + size + '" height="' + size + '" class="ring-svg">' +
+    '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" ' +
+      'fill="none" stroke="var(--bg3)" stroke-width="' + strokeWidth + '"/>' +
+    '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" ' +
+      'fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" ' +
+      'stroke-dasharray="' + dash + ' ' + c + '" stroke-linecap="round" ' +
+      'transform="rotate(-90 ' + size/2 + ' ' + size/2 + ')"/>' +
+    '</svg>';
+}
+
+function renderHeroRings() {
+  const t = calcTotals();
+  const sessions = DATA.sessions || [];
+  // avg за 7 дней
+  const now = new Date();
+  const days7 = [];
+  for (let i = 6; i >= 0; i--) days7.push(new Date(now - i*86400000).toISOString().slice(0,10));
+  let weekDur = 0, weekEv = 0, weekScr = 0;
+  for (const ss of sessions) {
+    if (days7.includes(ss.date)) {
+      weekDur += ss.duration_min || 0;
+      weekEv += ss.events || 0;
+      weekScr += ss.screens || 0;
+    }
+  }
+  const avgDur = weekDur / 7;
+  const avgEv = weekEv / 7;
+  const avgScr = weekScr / 7;
+
+  const pctDur = avgDur > 0 ? Math.round(t.todayMin / avgDur * 100) : 0;
+  const todayEv = sessions.filter(x => x.date === new Date().toISOString().slice(0,10)).reduce((a,x)=>a+(x.events||0),0);
+  const todayScr = sessions.filter(x => x.date === new Date().toISOString().slice(0,10)).reduce((a,x)=>a+(x.screens||0),0);
+  const pctEv = avgEv > 0 ? Math.round(todayEv / avgEv * 100) : 0;
+  const pctScr = avgScr > 0 ? Math.round(todayScr / avgScr * 100) : 0;
+
+  const div = document.createElement('div');
+  div.className = 'hero-rings';
+
+  // Большое кольцо
+  div.innerHTML =
+    '<div class="hero-main">' +
+      '<div class="ring-wrap">' + renderRingSVG(pctDur, 180, 10, 'var(--accent)') +
+        '<div class="ring-center">' +
+          '<div class="ring-value">' + fmtH(t.todayMin) + '</div>' +
+          '<div class="ring-sub">7 дней Ø ' + fmtH(Math.round(avgDur)) + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="hero-mini">' +
+      '<div class="mini-ring">' + renderRingSVG(pctEv, 80, 6, 'var(--green)') +
+        '<div class="mini-center"><div class="mini-ico">📨</div><div class="mini-val">' + todayEv + '</div></div>' +
+      '</div>' +
+      '<div class="mini-ring">' + renderRingSVG(pctScr, 80, 6, 'var(--yellow)') +
+        '<div class="mini-center"><div class="mini-ico">📸</div><div class="mini-val">' + todayScr + '</div></div>' +
+      '</div>' +
+      '<div class="mini-ring">' + renderRingSVG(pctDur, 80, 6, 'var(--accent)') +
+        '<div class="mini-center"><div class="mini-ico">⏱</div><div class="mini-val">' + fmtH(t.todayMin) + '</div></div>' +
+      '</div>' +
+    '</div>';
+  return div;
 }
 
 function fmtH(min) {

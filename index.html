@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css?v=11">
+<link rel="stylesheet" href="style.css?v=12">
 </head>
 <body>
 <div id="app"></div>
@@ -40,9 +40,11 @@
 <nav class="tabs">
 <button id="tab-dashboard" class="tab tab-active" data-tab="dashboard">📊 Дашборд</button>
 <button id="tab-diary" class="tab" data-tab="diary">📖 Дневник</button>
+      <button id="tab-time" class="tab" data-tab="time">⏱ Время</button>
 </nav>
 <main id="content"></main>
 <main id="content-diary" class="hidden"></main>
+    <main id="content-time" class="hidden"></main>
 </div>
 
 <div id="loading" class="screen hidden">
@@ -50,11 +52,11 @@
 <p>Расшифровка…</p>
 </div>
 
-<script src="crypto.js?v=11"></script>
-<script src="app.js?v=11"></script>
+<script src="crypto.js?v=12"></script>
+<script src="app.js?v=12"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js?v=11').catch(function(){});
+  navigator.serviceWorker.register('sw.js?v=12').catch(function(){});
 }
 </script>
 </body>
