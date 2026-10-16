@@ -12,6 +12,7 @@ window.__initCalls = 0;
 let CHART_PERIOD = 7;   // 1 = день, 7 = неделя, 30 = месяц
 let CHART_METRIC = 'duration';  // duration | events | screens
 let CHART_SELECTED = null;  // выбранный день для тултипа
+const DAILY_GOAL_MIN = 720;  // 12ч (временный хардкод)
 
 function _bootstrap() {
   window.__initCalls++;
@@ -83,6 +84,7 @@ function switchTab(name) {
           '<div class="metric"><div class="metric-label">7 дней</div><div class="metric-value">' + fmtH(tt.week) + '</div></div>' +
           '<div class="metric"><div class="metric-label">30 дней</div><div class="metric-value">' + fmtH(tt.month) + '</div></div>' +
           '<div class="metric"><div class="metric-label">Всего</div><div class="metric-value">' + fmtH(tt.total) + '</div></div>' +
+          '<div class="metric"><div class="metric-label">Среднее</div><div class="metric-value">' + fmtH(Math.round(tt.total / Math.max(1, tt.count))) + '</div></div>' +
         '</div></div>';
     }
   } else {
@@ -286,7 +288,8 @@ function renderHeroRings() {
   const avgEv = weekEv / 7;
   const avgScr = weekScr / 7;
 
-  const pctDur = avgDur > 0 ? Math.round(t.todayMin / avgDur * 100) : 0;
+  const pctDur = Math.round(t.todayMin / DAILY_GOAL_MIN * 100);
+  const ringColor = pctDur >= 100 ? 'var(--green)' : 'var(--accent)';
   const todayEv = sessions.filter(x => x.date === new Date().toISOString().slice(0,10)).reduce((a,x)=>a+(x.events||0),0);
   const todayScr = sessions.filter(x => x.date === new Date().toISOString().slice(0,10)).reduce((a,x)=>a+(x.screens||0),0);
   const pctEv = avgEv > 0 ? Math.round(todayEv / avgEv * 100) : 0;
@@ -298,10 +301,10 @@ function renderHeroRings() {
   // Большое кольцо
   div.innerHTML =
     '<div class="hero-main">' +
-      '<div class="ring-wrap">' + renderRingSVG(pctDur, 180, 10, 'var(--accent)') +
+      '<div class="ring-wrap">' + renderRingSVG(pctDur, 180, 10, ringColor) +
         '<div class="ring-center">' +
           '<div class="ring-value">' + fmtH(t.todayMin) + '</div>' +
-          '<div class="ring-sub">7 дней Ø ' + fmtH(Math.round(avgDur)) + '</div>' +
+          '<div class="ring-sub">Цель 12ч · ' + pctDur + '%</div>' +
         '</div>' +
       '</div>' +
     '</div>' +
