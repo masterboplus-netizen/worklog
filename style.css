@@ -302,14 +302,6 @@ html, body {
   transition: opacity 0.15s;
 }
 .chart-bar.empty { background: var(--bg3); }
-.chart-label {
-  font-size: 9px;
-  color: var(--fg-dim);
-  margin-top: 4px;
-  transform: rotate(-45deg);
-  transform-origin: top left;
-  white-space: nowrap;
-}
 
 /* === Пирог по проектам (полоса) === */
 .project-bars { margin-top: 10px; }
@@ -591,20 +583,6 @@ html, body {
 .chart-bar:hover { opacity: 0.75; }
 .chart-bar.empty { background: var(--bg3); }
 
-.chart-labels {
-  display: flex;
-  gap: 2px;
-  margin-left: 56px;
-  margin-bottom: 12px;
-  font-size: 10px;
-  color: var(--fg-dim);
-}
-.chart-label {
-  flex: 1;
-  text-align: center;
-  min-width: 2px;
-}
-
 .metric-switch {
   display: flex;
   gap: 6px;
@@ -645,16 +623,7 @@ html, body {
   text-align: center;
   display: inline-block;
 }
-.chart-labels {
-  margin-left: 56px;
-  margin-bottom: 12px;
-}
-.chart-label {
-  font-size: 10px;
-  color: var(--fg-dim);
-  overflow: hidden;
-  white-space: nowrap;
-}
+
 .metric-btn.active {
   font-weight: 600;
   letter-spacing: 0.3px;
@@ -665,28 +634,19 @@ html, body {
   flex-wrap: wrap;
   align-items: flex-end;
 }
-.chart-bars-wrap .chart-labels {
-  flex: 0 0 100%;
-  margin-left: 0;
-  margin-top: 4px;
-  display: flex;
-  gap: 2px;
-}
 
 /* === Chart v3.2: labels под bars, фиксированный отступ слева === */
-.chart-bars-wrap .chart-labels {
-  /* сброс предыдущего правила */
-  flex: initial;
-  margin-top: 0;
-}
-.chart-bars + .chart-labels {
+
+/* === Chart v3.3: labels под bars (одно чистое правило) === */
+
+/* === Chart v3.4: финальные labels === */
+.chart-labels {
   margin-left: 56px;
   margin-top: 4px;
   display: flex;
   gap: 2px;
-  height: auto;
 }
-.chart-bars + .chart-labels .chart-label {
+.chart-label {
   flex: 1;
   font-size: 10px;
   color: var(--fg-dim);
