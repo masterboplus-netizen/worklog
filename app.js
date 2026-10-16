@@ -9,8 +9,9 @@ let DATA = null;
 let PIN_BUF = '';
 
 window.__initCalls = 0;
-let CHART_PERIOD = 30;  // 7 / 30 / 90 / 0 (0 = всё)
+let CHART_PERIOD = 7;   // 1 = день, 7 = неделя, 30 = месяц
 let CHART_METRIC = 'duration';  // duration | events | screens
+let CHART_SELECTED = null;  // выбранный день для тултипа
 
 function _bootstrap() {
   window.__initCalls++;
@@ -400,41 +401,20 @@ function renderChart() {
   const sec = document.createElement('div');
   sec.className = 'section';
 
-  // --- Заголовок + фильтр периода ---
-  const periods = [[7, '7д'], [30, '30д'], [90, '90д'], [0, 'Всё']];
+  const periods = [[1, 'День'], [7, 'Неделя'], [30, 'Месяц']];
   const filterHTML = periods.map(([n, label]) =>
     '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
   ).join('');
   sec.innerHTML = '<div class="section-title">Активность <span class="period-filter">' + filterHTML + '</span></div>';
 
-  // --- Список дней ---
   const days = [];
   const now = new Date();
-  if (CHART_PERIOD === 0) {
-    const sessions = DATA.sessions || [];
-    if (sessions.length) {
-      const dates = sessions.map(x => x.date).sort();
-      const firstDate = new Date(dates[0] + 'T00:00:00');
-      const msPerDay = 86400000;
-      const totalDays = Math.max(1, Math.floor((now - firstDate) / msPerDay) + 1);
-      for (let i = totalDays - 1; i >= 0; i--) {
-        const d = new Date(now - i * msPerDay);
-        days.push(d.toISOString().slice(0, 10));
-      }
-    } else {
-      for (let i = 29; i >= 0; i--) {
-        const d = new Date(now - i * 86400000);
-        days.push(d.toISOString().slice(0, 10));
-      }
-    }
-  } else {
-    for (let i = CHART_PERIOD - 1; i >= 0; i--) {
-      const d = new Date(now - i * 86400000);
-      days.push(d.toISOString().slice(0, 10));
-    }
+  const totalDays = CHART_PERIOD === 1 ? 1 : CHART_PERIOD;
+  for (let i = totalDays - 1; i >= 0; i--) {
+    const d = new Date(now - i * 86400000);
+    days.push(d.toISOString().slice(0, 10));
   }
 
-  // --- Данные по дням (в зависимости от метрики) ---
   const byDay = {};
   for (const ss of DATA.sessions || []) {
     let v = 0;
@@ -445,23 +425,32 @@ function renderChart() {
   }
 
   const maxVal = Math.max(1, ...days.map(d => byDay[d] || 0));
-  // Красивый верхний порог
-  function niceMax(v) {
-    if (v <= 10) return 10;
-    if (v <= 50) return 50;
-    if (v <= 100) return 100;
-    if (v <= 250) return 250;
-    if (v <= 500) return 500;
-    if (v <= 1000) return 1000;
-    return Math.ceil(v / 1000) * 1000;
-  }
-  const top = niceMax(maxVal);
 
-  // --- Сетка + столбики ---
-  const gridLines = 4;
+  function niceAxis(v, metric) {
+    if (metric === 'duration') {
+      const steps = [30, 60, 120, 240, 480, 960, 1440];
+      for (const st of steps) {
+        if (v <= st * 4) {
+          return { top: st * 4, step: st, labels: [0, st, st * 2, st * 3, st * 4] };
+        }
+      }
+      return { top: 5760, step: 1440, labels: [0, 1440, 2880, 4320, 5760] };
+    } else {
+      const steps = [10, 25, 50, 100, 250, 500, 1000];
+      for (const st of steps) {
+        if (v <= st * 4) {
+          return { top: st * 4, step: st, labels: [0, st, st * 2, st * 3, st * 4] };
+        }
+      }
+      return { top: 4000, step: 1000, labels: [0, 1000, 2000, 3000, 4000] };
+    }
+  }
+  const axis = niceAxis(maxVal, CHART_METRIC);
+  const top = axis.top;
+
   let yAxisHTML = '';
-  for (let i = gridLines; i >= 0; i--) {
-    const val = Math.round(top * i / gridLines);
+  for (let i = axis.labels.length - 1; i >= 0; i--) {
+    const val = axis.labels[i];
     const label = CHART_METRIC === 'duration' ? fmtH(val) : String(val);
     yAxisHTML += '<div class="chart-grid-line"><span class="chart-grid-label">' + label + '</span></div>';
   }
@@ -478,16 +467,16 @@ function renderChart() {
     const h = val ? Math.max(2, Math.round(val / top * 100)) : 0;
     const col = document.createElement('div');
     col.className = 'chart-col';
+    const isSel = CHART_SELECTED === d;
     col.innerHTML =
-      '<div class="chart-bar' + (val ? '' : ' empty') + '"' +
-      ' style="height:' + h + '%" title="' + d + ': ' +
-      (CHART_METRIC === 'duration' ? fmtH(val) : val) + '"></div>';
+      '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '"' +
+      ' data-date="' + d + '"' +
+      ' style="height:' + h + '%"></div>';
     barsWrap.appendChild(col);
   }
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
 
-  // --- Подписи дат внизу ---
   const labels = document.createElement('div');
   labels.className = 'chart-labels';
   const step = days.length > 14 ? Math.ceil(days.length / 6) : 1;
@@ -502,30 +491,49 @@ function renderChart() {
   }
   sec.appendChild(labels);
 
-  // --- Переключатель метрики (внизу) ---
+  if (CHART_SELECTED) {
+    const val = byDay[CHART_SELECTED] || 0;
+    const valStr = CHART_METRIC === 'duration' ? fmtH(val) : String(val);
+    const metricLabel = CHART_METRIC === 'duration' ? 'времени' : (CHART_METRIC === 'events' ? 'сообщений' : 'скринов');
+    const tooltip = document.createElement('div');
+    tooltip.className = 'chart-tooltip';
+    tooltip.textContent = CHART_SELECTED.slice(8, 10) + '.' + CHART_SELECTED.slice(5, 7) + ' · ' + valStr + ' ' + metricLabel;
+    sec.appendChild(tooltip);
+  }
+
+  const totalForPeriod = days.reduce((acc, d) => acc + (byDay[d] || 0), 0);
+  const totalStr = CHART_METRIC === 'duration' ? fmtH(totalForPeriod) : String(totalForPeriod);
   const metrics = [
-    ['duration', '⏱ Время'],
-    ['events', '📨 Сообщения'],
-    ['screens', '📸 Скрины']
+    ['duration', '⏱ Время', '⏱ ' + (CHART_METRIC === 'duration' ? totalStr : 'Время')],
+    ['events', '📨 Сообщения', '📨 ' + (CHART_METRIC === 'events' ? totalStr : 'Сообщения')],
+    ['screens', '📸 Скрины', '📸 ' + (CHART_METRIC === 'screens' ? totalStr : 'Скрины')]
   ];
-  const metricHTML = metrics.map(([key, label]) =>
-    '<button class="metric-btn' + (CHART_METRIC === key ? ' active' : '') + '" data-metric="' + key + '">' + label + '</button>'
+  const metricHTML = metrics.map(([key, label, labelActive]) =>
+    '<button class="metric-btn' + (CHART_METRIC === key ? ' active' : '') + '" data-metric="' + key + '">' + (CHART_METRIC === key ? labelActive : label) + '</button>'
   ).join('');
   const metricBar = document.createElement('div');
   metricBar.className = 'metric-switch';
   metricBar.innerHTML = metricHTML;
   sec.appendChild(metricBar);
 
-  // --- Обработчики ---
   sec.querySelectorAll('.period-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       CHART_PERIOD = parseInt(btn.dataset.period, 10);
+      CHART_SELECTED = null;
       renderDashboard();
     });
   });
   sec.querySelectorAll('.metric-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       CHART_METRIC = btn.dataset.metric;
+      CHART_SELECTED = null;
+      renderDashboard();
+    });
+  });
+  sec.querySelectorAll('.chart-bar').forEach(bar => {
+    bar.addEventListener('click', () => {
+      const d = bar.dataset.date;
+      CHART_SELECTED = (CHART_SELECTED === d) ? null : d;
       renderDashboard();
     });
   });
