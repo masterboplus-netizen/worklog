@@ -475,6 +475,26 @@ function renderChart() {
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
 
+  // --- Подписи дат (в отдельной строке, синхронизированы с barsWrap) ---
+  const labelsRow = document.createElement('div');
+  labelsRow.className = 'chart-labels-row';
+  labelsRow.innerHTML = '<div class="chart-spacer"></div>';
+
+  const labels = document.createElement('div');
+  labels.className = 'chart-labels';
+  const step = days.length > 14 ? Math.ceil(days.length / 6) : 1;
+  for (let i = 0; i < days.length; i++) {
+    const d = days[i];
+    const lbl = document.createElement('div');
+    lbl.className = 'chart-label';
+    if (i % step === 0 || i === days.length - 1) {
+      lbl.textContent = d.slice(8, 10) + '.' + d.slice(5, 7);
+    }
+    labels.appendChild(lbl);
+  }
+  labelsRow.appendChild(labels);
+  sec.appendChild(labelsRow);
+
   if (CHART_SELECTED) {
     const val = byDay[CHART_SELECTED] || 0;
     const valStr = CHART_METRIC === 'duration' ? fmtH(val) : String(val);

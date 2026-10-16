@@ -641,3 +641,29 @@ html, body {
 
 /* === Chart v3.4: финальные labels === */
 
+
+/* === Chart v4: labels-row (синхронно с barsWrap) === */
+.chart-labels-row {
+  display: flex;
+  gap: 8px;                 /* = gap .chart-bars */
+  margin-top: 4px;
+}
+.chart-spacer {
+  min-width: 48px;          /* = min-width .chart-y-axis */
+  padding-right: 4px;       /* = padding-right .chart-y-axis */
+  flex: 0 0 auto;
+}
+.chart-labels-row .chart-labels {
+  flex: 1;
+  display: flex;
+  gap: 2px;                 /* = gap .chart-bars-wrap */
+  padding: 0 2px;           /* = padding .chart-bars-wrap */
+}
+.chart-labels-row .chart-label {
+  flex: 1;
+  text-align: center;
+  font-size: 10px;
+  color: var(--fg-dim);
+  overflow: hidden;
+  white-space: nowrap;
+}
