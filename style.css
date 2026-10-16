@@ -672,3 +672,25 @@ html, body {
   display: flex;
   gap: 2px;
 }
+
+/* === Chart v3.2: labels под bars, фиксированный отступ слева === */
+.chart-bars-wrap .chart-labels {
+  /* сброс предыдущего правила */
+  flex: initial;
+  margin-top: 0;
+}
+.chart-bars + .chart-labels {
+  margin-left: 56px;
+  margin-top: 4px;
+  display: flex;
+  gap: 2px;
+  height: auto;
+}
+.chart-bars + .chart-labels .chart-label {
+  flex: 1;
+  font-size: 10px;
+  color: var(--fg-dim);
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+}

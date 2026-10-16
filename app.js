@@ -488,7 +488,7 @@ function renderChart() {
     }
     labels.appendChild(lbl);
   }
-  barsWrap.appendChild(labels);
+  sec.appendChild(labels);
 
   if (CHART_SELECTED) {
     const val = byDay[CHART_SELECTED] || 0;
