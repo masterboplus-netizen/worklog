@@ -740,3 +740,16 @@ html, body {
   font-weight: 600;
   color: var(--fg);
 }
+
+/* === Mini rings labels (v6) === */
+.mini-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.mini-label {
+  font-size: 11px;
+  color: var(--fg-dim);
+  text-align: center;
+}

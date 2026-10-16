@@ -76,7 +76,14 @@ function switchTab(name) {
     if (tabTime) tabTime.classList.add('tab-active');
     if (cTime) {
       cTime.classList.remove('hidden');
-      cTime.innerHTML = '<div class="section"><div class="section-title">⏱ Время — раздел в разработке</div></div>';
+      const tt = calcTotals();
+      cTime.innerHTML = '<div class="section"><div class="section-title">⏱ Время</div>' +
+        '<div class="metrics">' +
+          '<div class="metric"><div class="metric-label">Сегодня</div><div class="metric-value">' + fmtH(tt.todayMin) + '</div></div>' +
+          '<div class="metric"><div class="metric-label">7 дней</div><div class="metric-value">' + fmtH(tt.week) + '</div></div>' +
+          '<div class="metric"><div class="metric-label">30 дней</div><div class="metric-value">' + fmtH(tt.month) + '</div></div>' +
+          '<div class="metric"><div class="metric-label">Всего</div><div class="metric-value">' + fmtH(tt.total) + '</div></div>' +
+        '</div></div>';
     }
   } else {
     tabDash.classList.add('tab-active');
@@ -239,7 +246,6 @@ function renderDashboard() {
   const c = $('#content');
   c.innerHTML = '';
   c.appendChild(renderHeroRings());
-  c.appendChild(renderMetrics());
   c.appendChild(renderProjects());
   c.appendChild(renderChart());
   c.appendChild(renderSessions());
@@ -300,14 +306,23 @@ function renderHeroRings() {
       '</div>' +
     '</div>' +
     '<div class="hero-mini">' +
-      '<div class="mini-ring">' + renderRingSVG(pctEv, 80, 6, 'var(--green)') +
-        '<div class="mini-center"><div class="mini-ico">📨</div><div class="mini-val">' + todayEv + '</div></div>' +
+      '<div class="mini-block">' +
+        '<div class="mini-ring">' + renderRingSVG(100, 80, 6, 'var(--green)') +
+          '<div class="mini-center"><div class="mini-ico">📨</div><div class="mini-val">' + todayEv + '</div></div>' +
+        '</div>' +
+        '<div class="mini-label">Сообщения</div>' +
       '</div>' +
-      '<div class="mini-ring">' + renderRingSVG(pctScr, 80, 6, 'var(--yellow)') +
-        '<div class="mini-center"><div class="mini-ico">📸</div><div class="mini-val">' + todayScr + '</div></div>' +
+      '<div class="mini-block">' +
+        '<div class="mini-ring">' + renderRingSVG(100, 80, 6, 'var(--yellow)') +
+          '<div class="mini-center"><div class="mini-ico">📸</div><div class="mini-val">' + todayScr + '</div></div>' +
+        '</div>' +
+        '<div class="mini-label">Скрины</div>' +
       '</div>' +
-      '<div class="mini-ring">' + renderRingSVG(pctDur, 80, 6, 'var(--accent)') +
-        '<div class="mini-center"><div class="mini-ico">⏱</div><div class="mini-val">' + fmtH(t.todayMin) + '</div></div>' +
+      '<div class="mini-block">' +
+        '<div class="mini-ring">' + renderRingSVG(100, 80, 6, 'var(--accent)') +
+          '<div class="mini-center"><div class="mini-ico">⏱</div><div class="mini-val">' + fmtH(t.total) + '</div></div>' +
+        '</div>' +
+        '<div class="mini-label">Общее время</div>' +
       '</div>' +
     '</div>';
   return div;
