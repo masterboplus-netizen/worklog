@@ -1,5 +1,5 @@
 // Worklog — Service Worker (офлайн-кэш)
-const CACHE = 'worklog-v18';
+const CACHE = 'worklog-v19';
 const ASSETS = [
   './',
   './index.html',

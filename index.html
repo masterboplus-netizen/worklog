@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css?v=18">
+<link rel="stylesheet" href="style.css?v=19">
 </head>
 <body>
 <div id="app"></div>
@@ -52,11 +52,11 @@
 <p>Расшифровка…</p>
 </div>
 
-<script src="crypto.js?v=18"></script>
-<script src="app.js?v=18"></script>
+<script src="crypto.js?v=19"></script>
+<script src="app.js?v=19"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js?v=18').catch(function(){});
+  navigator.serviceWorker.register('sw.js?v=19', { updateViaCache: 'none' }).catch(function(){});
 }
 </script>
 </body>
