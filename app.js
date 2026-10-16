@@ -84,7 +84,7 @@ function switchTab(name) {
           '<div class="metric"><div class="metric-label">7 дней</div><div class="metric-value">' + fmtH(tt.week) + '</div></div>' +
           '<div class="metric"><div class="metric-label">30 дней</div><div class="metric-value">' + fmtH(tt.month) + '</div></div>' +
           '<div class="metric"><div class="metric-label">Всего</div><div class="metric-value">' + fmtH(tt.total) + '</div></div>' +
-          '<div class="metric"><div class="metric-label">Среднее (сессия)</div><div class="metric-value">' + fmtH(Math.round(tt.totalNoBase / Math.max(1, tt.count))) + '</div></div>' +
+          '<div class="metric"><div class="metric-label">Среднее/день</div><div class="metric-value">' + fmtH(Math.round(tt.totalNoBase / Math.max(1, tt.daysCount))) + '</div></div>' +
         '</div></div>';
     }
   } else {
@@ -357,6 +357,7 @@ function calcTotals() {
     msgs += s.events || 0;
   }
   // Базовая линия (архив) — только в «Всего» и в общих счётчиках
+  const uniqueDays = new Set((DATA.sessions || []).map(x => x.date)).size;
   return {
     total: total + baseMin,
     totalNoBase: total,
@@ -365,7 +366,8 @@ function calcTotals() {
     todayMin,
     screens,
     msgs: msgs + baseMsgs,
-    count: (DATA.sessions || []).length
+    count: (DATA.sessions || []).length,
+    daysCount: uniqueDays
   };
 }
 
