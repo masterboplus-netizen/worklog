@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-16T13:51:00",
+  "updated": "2026-10-16T15:20:00",
   "projects": [
     {
       "id": "bo81",
@@ -298,6 +298,17 @@
       "events": 60,
       "screens": 40,
       "note": "session 18 (утро): map_scan v3 + bot.py, lint_routers, AI_INSTRUCTIONS, i18n labels, marketplaces, dedupe estimates"
+    },
+    {
+      "id": "s_20261016_2",
+      "date": "2026-10-16",
+      "project": "bo81",
+      "start": "14:16",
+      "end": "15:20",
+      "duration_min": 64,
+      "events": 30,
+      "screens": 25,
+      "note": "Сессия 19: гигиена репо (195+8 бэкапов), .gitignore, фильтр map_scan, доки HANDOFF/STATE."
     }
   ],
   "baseline": {
