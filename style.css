@@ -753,3 +753,16 @@ html, body {
   color: var(--fg-dim);
   text-align: center;
 }
+
+/* === Hero ring bigger (v7) === */
+.ring-wrap {
+  width: 280px;
+  height: 280px;
+}
+.ring-value {
+  font-size: 42px;
+}
+.ring-sub {
+  font-size: 14px;
+  margin-top: 6px;
+}
