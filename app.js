@@ -121,13 +121,18 @@ function renderDiary() {
         last.duration_min = (last.duration_min || 0) + (ss.duration_min || 0);
         last.events = (last.events || 0) + (ss.events || 0);
         last.screens = (last.screens || 0) + (ss.screens || 0);
-        last.note = [last.note, ss.note].filter(Boolean).join(' / ');
+        last.note = [(last.note || ''), (ss.note || '')].filter(Boolean).join(' / ');
         last._mergedEndDate = ss.date;
         last._isMerged = true;
         continue;
       }
     }
-    _merged.push(Object.assign({}, ss));
+    const _copy = Object.assign({}, ss);
+    if (!_copy.note) _copy.note = '';
+    if (!_copy.duration_min) _copy.duration_min = 0;
+    if (!_copy.events) _copy.events = 0;
+    if (!_copy.screens) _copy.screens = 0;
+    _merged.push(_copy);
   }
 
   const byDate = {};
