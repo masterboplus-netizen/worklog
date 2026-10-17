@@ -498,6 +498,13 @@ function renderProjects() {
   return sec;
 }
 
+function _localDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + dd;
+}
+
 function renderChart() {
   const sec = document.createElement('div');
   sec.className = 'section';
@@ -520,14 +527,14 @@ function renderChart() {
     const totalDaysInMonth = lastDay.getDate();
     for (let i = 0; i < totalDaysInMonth; i++) {
       const d = new Date(year, month, i + 1);
-      days.push(d.toISOString().slice(0, 10));
+      days.push(_localDate(d));
     }
   } else {
     // ДЕНЬ / НЕДЕЛЯ: последние N дней (как раньше)
     const totalDays = CHART_PERIOD === 1 ? 1 : CHART_PERIOD;
     for (let i = totalDays - 1; i >= 0; i--) {
       const d = new Date(now - i * 86400000);
-      days.push(d.toISOString().slice(0, 10));
+      days.push(_localDate(d));
     }
   }
 
