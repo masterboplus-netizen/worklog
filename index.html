@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css?v=22">
+<link rel="stylesheet" href="style.css?v=23">
 </head>
 <body>
 <div id="app"></div>
@@ -34,13 +34,19 @@
 
 <div id="dashboard" class="screen hidden">
 <header class="topbar">
-<div class="logo">⏳ Хераборина</div>
+<div class="logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:6px;">
+        <rect x="1" y="1" width="22" height="22" rx="5" fill="#4A9EFF"/>
+        <path d="M7 7 L17 17 M17 7 L7 17" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      Хераборина
+    </div>
 <button id="btn-lock" class="btn-icon" title="Заблокировать">🔒</button>
 </header>
 <nav class="tabs">
-<button id="tab-dashboard" class="tab tab-active" data-tab="dashboard">📊 Дашборд</button>
-<button id="tab-diary" class="tab" data-tab="diary">📖 Дневник</button>
-      <button id="tab-time" class="tab" data-tab="time">⏱ Время</button>
+<button id="tab-dashboard" class="tab tab-active" data-tab="dashboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Дашборд</button>
+<button id="tab-diary" class="tab" data-tab="diary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M4 4h12a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M4 4v16"/></svg>Дневник</button>
+      <button id="tab-time" class="tab" data-tab="time"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>Время</button>
 </nav>
 <main id="content"></main>
 <main id="content-diary" class="hidden"></main>
@@ -52,11 +58,11 @@
 <p>Расшифровка…</p>
 </div>
 
-<script src="crypto.js?v=22"></script>
-<script src="app.js?v=22"></script>
+<script src="crypto.js?v=23"></script>
+<script src="app.js?v=23"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js?v=22', { updateViaCache: 'none' }).catch(function(){});
+  navigator.serviceWorker.register('sw.js?v=23', { updateViaCache: 'none' }).catch(function(){});
 }
 </script>
 </body>

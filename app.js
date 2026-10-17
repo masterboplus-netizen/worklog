@@ -582,13 +582,43 @@ function renderChart() {
 
   const labels = document.createElement('div');
   labels.className = 'chart-labels';
-  const step = days.length > 14 ? Math.ceil(days.length / 6) : 1;
+
+  // Логика подписей:
+  // - День/Неделя (≤ 14 дней): дата + день недели
+  // - Месяц (> 14 дней): каждая 5-я дата
+  const isShort = days.length <= 14;
+  const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
   for (let i = 0; i < days.length; i++) {
     const d = days[i];
     const lbl = document.createElement('div');
     lbl.className = 'chart-label';
-    if (i % step === 0 || i === days.length - 1) {
-      lbl.textContent = d.slice(8, 10) + '.' + d.slice(5, 7);
+
+    const dayNum = parseInt(d.slice(8, 10), 10);
+    const monthNum = d.slice(5, 7);
+
+    let show = false;
+    let dateStr = '';
+    let dowStr = '';
+
+    if (isShort) {
+      show = true;
+      dateStr = String(dayNum);
+      const dt = new Date(d + 'T00:00:00');
+      dowStr = dowNames[dt.getDay()];
+    } else {
+      // Месяц: каждая 5-я дата (1, 5, 10, 15, ...)
+      show = (dayNum === 1 || dayNum % 5 === 0);
+      dateStr = String(dayNum);
+    }
+
+    if (show) {
+      if (isShort) {
+        lbl.innerHTML = '<div class="lbl-date">' + dateStr + '</div>' +
+                        '<div class="lbl-dow">' + dowStr + '</div>';
+      } else {
+        lbl.innerHTML = '<div class="lbl-date">' + dateStr + '.' + monthNum + '</div>';
+      }
     }
     labels.appendChild(lbl);
   }

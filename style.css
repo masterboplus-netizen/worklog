@@ -777,3 +777,17 @@ html, body {
   cursor: default;
   pointer-events: none;
 }
+
+/* === Chart labels (v9): дата + день недели === */
+.lbl-date {
+  font-size: 10px;
+  color: var(--fg-dim);
+  line-height: 1.1;
+}
+.lbl-dow {
+  font-size: 9px;
+  color: var(--fg-dim);
+  opacity: 0.6;
+  line-height: 1.1;
+  margin-top: 1px;
+}
