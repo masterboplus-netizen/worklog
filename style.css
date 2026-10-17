@@ -915,3 +915,9 @@ html, body {
   font-size: 10px;
   opacity: 0.75;
 }
+
+/* === Ring-value: уменьшен для длинных значений (359ч 42м) === */
+.ring-value {
+  font-size: 44px;
+  letter-spacing: -1px;
+}
