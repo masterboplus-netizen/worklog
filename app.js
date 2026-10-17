@@ -319,6 +319,16 @@ function _sumRange(sessions, period, field) {
   return sum;
 }
 
+function _valSize(val) {
+  if (val === null || val === undefined) return 22;
+  const str = String(val);
+  if (str.indexOf('<br>') >= 0) return 16;  // 2 строки — мелкий
+  const len = str.length;
+  if (len <= 2) return 22;
+  if (len <= 4) return 20;
+  return 16;
+}
+
 function renderHeroRings() {
   const t = calcTotals();
   const sessions = DATA.sessions || [];
@@ -393,19 +403,19 @@ function renderHeroRings() {
       '<div class="mini-block" data-mini="msg">' +
         '<div class="mini-label"><div class="mini-lbl-title">Сообщения</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_MSG_PERIOD] + '</div></div>' +
         '<div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 92, 7, 'var(--green)') +
-          '<div class="mini-center"><div class="mini-val">' + msgVal + '</div></div>' +
+          '<div class="mini-center"><div class="mini-val" style="font-size:' + _valSize(msgVal) + 'px">' + msgVal + '</div></div>' +
         '</div>' +
       '</div>' +
       '<div class="mini-block" data-mini="scr">' +
         '<div class="mini-label"><div class="mini-lbl-title">Скрины</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_SCR_PERIOD] + '</div></div>' +
         '<div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 92, 7, 'var(--yellow)') +
-          '<div class="mini-center"><div class="mini-val">' + scrVal + '</div></div>' +
+          '<div class="mini-center"><div class="mini-val" style="font-size:' + _valSize(scrVal) + 'px">' + scrVal + '</div></div>' +
         '</div>' +
       '</div>' +
       '<div class="mini-block" data-mini="time">' +
         '<div class="mini-label">' + (MINI_TIME_PERIOD === 'avg' ? '<div class="mini-lbl-title">Среднее/день</div>' : '<div class="mini-lbl-title">Время</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_TIME_PERIOD] + '</div>') + '</div>' +
         '<div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 92, 7, 'var(--accent)') +
-          '<div class="mini-center"><div class="mini-val">' + timeVal + '</div></div>' +
+          '<div class="mini-center"><div class="mini-val" style="font-size:' + _valSize(timeVal) + 'px">' + timeVal + '</div></div>' +
         '</div>' +
       '</div>' +
     '</div>';
