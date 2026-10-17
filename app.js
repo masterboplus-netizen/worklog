@@ -104,11 +104,36 @@ function renderDiary() {
   const projName = {};
   for (const p of DATA.projects || []) projName[p.id] = p.name;
 
-  // Группировка по датам
+  // === Склейка через полночь ===
+  const _sorted = list.slice().sort((a, b) => (a.date + (a.start || '')).localeCompare(b.date + (b.start || '')));
+  const _merged = [];
+  for (const ss of _sorted) {
+    const last = _merged[_merged.length - 1];
+    if (last && (last.end === '23:59' || last.end === '00:00') && ss.start === '00:00') {
+      const lastDate = new Date(last.date + 'T00:00:00');
+      const curDate = new Date(ss.date + 'T00:00:00');
+      if (Math.round((curDate - lastDate) / 86400000) === 1) {
+        last.end = ss.end;
+        last.duration_min = (last.duration_min || 0) + (ss.duration_min || 0);
+        last.events = (last.events || 0) + (ss.events || 0);
+        last.screens = (last.screens || 0) + (ss.screens || 0);
+        last.note = [(last.note || ''), (ss.note || '')].filter(Boolean).join(' / ');
+        last._isMerged = true;
+        continue;
+      }
+    }
+    const _c = Object.assign({}, ss);
+    if (!_c.note) _c.note = '';
+    if (!_c.duration_min) _c.duration_min = 0;
+    if (!_c.events) _c.events = 0;
+    if (!_c.screens) _c.screens = 0;
+    _merged.push(_c);
+  }
+
   const byDate = {};
-  for (const s of list) {
-    if (!byDate[s.date]) byDate[s.date] = [];
-    byDate[s.date].push(s);
+  for (const ss of _merged) {
+    if (!byDate[ss.date]) byDate[ss.date] = [];
+    byDate[ss.date].push(ss);
   }
 
   const dates = Object.keys(byDate).sort().reverse();
@@ -123,7 +148,7 @@ function renderDiary() {
       item.className = 'diary-item';
       const timeRange = (s.start || '?') + ' → ' + (s.end || '?');
       const dur = fmtH(s.duration_min || 0);
-      const proj = projName[s.project] || s.project || '—';
+      const proj = projName[s.project] || s.project || '–';
       const note = s.note || '';
       const evs = s.events || 0;
       const scrs = s.screens || 0;
