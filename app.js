@@ -269,24 +269,27 @@ function renderRingSVG(percent, size, strokeWidth, color) {
     '</svg>';
 }
 
-let MINI_MSG_PERIOD = 'week';  // week | month | all
-let MINI_SCR_PERIOD = 'week';
-let MINI_TIME_PERIOD = 'week';
-const MINI_PERIODS = ['week', 'month', 'all'];
-const MINI_LABELS = {week: 'Неделя', month: 'Месяц', all: 'Всё'};
+let MINI_MSG_PERIOD = 'day';   // day → week → month → all
+let MINI_SCR_PERIOD = 'day';
+let MINI_TIME_PERIOD = 'avg';  // avg → week → month → all
+const MINI_PERIODS_MSG = ['day', 'week', 'month', 'all'];
+const MINI_PERIODS_TIME = ['avg', 'week', 'month', 'all'];
+const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц', all: 'Всё', avg: 'Среднее/день'};
 
 function _miniRange(period) {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const td = _localDate(today);
+  if (period === 'day') return { from: td, to: td };
   if (period === 'week') {
     const from = new Date(today - 6 * 86400000);
-    return { from: _localDate(from), to: _localDate(today) };
+    return { from: _localDate(from), to: td };
   }
   if (period === 'month') {
     const from = new Date(today.getFullYear(), today.getMonth(), 1);
-    return { from: _localDate(from), to: _localDate(today) };
+    return { from: _localDate(from), to: td };
   }
-  return { from: '2000-01-01', to: _localDate(today) };  // all
+  return { from: '2000-01-01', to: td };  // all
 }
 
 function _sumRange(sessions, period, field) {
@@ -327,8 +330,10 @@ function renderHeroRings() {
   const _sessions = DATA.sessions || [];
   const msgVal = _sumRange(_sessions, MINI_MSG_PERIOD, 'events');
   const scrVal = _sumRange(_sessions, MINI_SCR_PERIOD, 'screens');
-  const _timeSum = _sumRange(_sessions, MINI_TIME_PERIOD, 'duration_min');
-  const timeVal = MINI_TIME_PERIOD === 'all' ? fmtH(t.total) : fmtH(_timeSum);
+  let timeVal;
+  if (MINI_TIME_PERIOD === 'avg') timeVal = fmtH(t.avgPerDay);
+  else if (MINI_TIME_PERIOD === 'all') timeVal = fmtH(t.total);
+  else timeVal = fmtH(_sumRange(_sessions, MINI_TIME_PERIOD, 'duration_min'));
 
   const div = document.createElement('div');
   div.className = 'hero-rings';
@@ -360,7 +365,7 @@ function renderHeroRings() {
         '<div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 80, 6, 'var(--accent)') +
           '<div class="mini-center"><div class="mini-ico">⏱</div><div class="mini-val">' + timeVal + '</div></div>' +
         '</div>' +
-        '<div class="mini-label">Время · ' + MINI_LABELS[MINI_TIME_PERIOD] + '</div>' +
+        '<div class="mini-label">' + (MINI_TIME_PERIOD === 'avg' ? 'Среднее/день' : 'Время · ' + MINI_LABELS[MINI_TIME_PERIOD]) + '</div>' +
       '</div>' +
     '</div>';
   // Тап на малые кольца — циклическое переключение периода
@@ -369,9 +374,9 @@ function renderHeroRings() {
     if (!ring) return;
     ring.addEventListener('click', () => {
       const type = block.dataset.mini;
-      if (type === 'msg') MINI_MSG_PERIOD = MINI_PERIODS[(MINI_PERIODS.indexOf(MINI_MSG_PERIOD) + 1) % MINI_PERIODS.length];
-      else if (type === 'scr') MINI_SCR_PERIOD = MINI_PERIODS[(MINI_PERIODS.indexOf(MINI_SCR_PERIOD) + 1) % MINI_PERIODS.length];
-      else if (type === 'time') MINI_TIME_PERIOD = MINI_PERIODS[(MINI_PERIODS.indexOf(MINI_TIME_PERIOD) + 1) % MINI_PERIODS.length];
+      if (type === 'msg') MINI_MSG_PERIOD = MINI_PERIODS_MSG[(MINI_PERIODS_MSG.indexOf(MINI_MSG_PERIOD) + 1) % MINI_PERIODS_MSG.length];
+      else if (type === 'scr') MINI_SCR_PERIOD = MINI_PERIODS_MSG[(MINI_PERIODS_MSG.indexOf(MINI_SCR_PERIOD) + 1) % MINI_PERIODS_MSG.length];
+      else if (type === 'time') MINI_TIME_PERIOD = MINI_PERIODS_TIME[(MINI_PERIODS_TIME.indexOf(MINI_TIME_PERIOD) + 1) % MINI_PERIODS_TIME.length];
       renderDashboard();
     });
   });
