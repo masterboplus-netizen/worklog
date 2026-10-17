@@ -342,22 +342,22 @@ function renderHeroRings() {
     '</div>' +
     '<div class="hero-mini">' +
       '<div class="mini-block" data-mini="msg">' +
+        '<div class="mini-label"><div class="mini-lbl-title">Сообщения</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_MSG_PERIOD] + '</div></div>' +
         '<div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 80, 6, 'var(--green)') +
           '<div class="mini-center"><div class="mini-ico">📨</div><div class="mini-val">' + msgVal + '</div></div>' +
         '</div>' +
-        '<div class="mini-label"><div class="mini-lbl-title">Сообщения</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_MSG_PERIOD] + '</div></div>' +
       '</div>' +
       '<div class="mini-block" data-mini="scr">' +
+        '<div class="mini-label"><div class="mini-lbl-title">Скрины</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_SCR_PERIOD] + '</div></div>' +
         '<div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 80, 6, 'var(--yellow)') +
           '<div class="mini-center"><div class="mini-ico">📸</div><div class="mini-val">' + scrVal + '</div></div>' +
         '</div>' +
-        '<div class="mini-label"><div class="mini-lbl-title">Скрины</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_SCR_PERIOD] + '</div></div>' +
       '</div>' +
       '<div class="mini-block" data-mini="time">' +
+        '<div class="mini-label">' + (MINI_TIME_PERIOD === 'avg' ? '<div class="mini-lbl-title">Среднее/день</div>' : '<div class="mini-lbl-title">Время</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_TIME_PERIOD] + '</div>') + '</div>' +
         '<div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 80, 6, 'var(--accent)') +
           '<div class="mini-center"><div class="mini-ico">⏱</div><div class="mini-val">' + timeVal + '</div></div>' +
         '</div>' +
-        '<div class="mini-label">' + (MINI_TIME_PERIOD === 'avg' ? '<div class="mini-lbl-title">Среднее/день</div>' : '<div class="mini-lbl-title">Время</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_TIME_PERIOD] + '</div>') + '</div>' +
       '</div>' +
     '</div>';
   // Тап на малые кольца — циклическое переключение периода
