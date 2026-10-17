@@ -686,8 +686,8 @@ html, body {
 }
 .mini-ring {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 92px;
+  height: 92px;
 }
 .mini-center {
   position: absolute;
@@ -705,17 +705,20 @@ html, body {
   margin-bottom: 2px;
 }
 .mini-val {
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--fg);
+  line-height: 1;
 }
 
 /* === Mini rings labels (v6) === */
 .mini-block {
+  flex: 0 0 auto;
+  width: 104px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 .mini-label {
   font-size: 11px;
@@ -817,11 +820,11 @@ html, body {
 }
 .mini-block {
   flex: 0 0 auto;
-  width: 90px;
+  width: 104px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 .mini-label {
   text-align: center;
@@ -849,7 +852,7 @@ html, body {
 }
 .mini-block {
   flex: 0 0 auto;
-  width: 96px;
+  width: 104px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -903,6 +906,7 @@ html, body {
   font-size: 16px;
   font-weight: 600;
   color: var(--fg);
+  line-height: 1;
 }
 
 /* === Footer branding === */
