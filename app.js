@@ -269,6 +269,35 @@ function renderRingSVG(percent, size, strokeWidth, color) {
     '</svg>';
 }
 
+let MINI_MSG_PERIOD = 'week';  // week | month | all
+let MINI_SCR_PERIOD = 'week';
+let MINI_TIME_PERIOD = 'week';
+const MINI_PERIODS = ['week', 'month', 'all'];
+const MINI_LABELS = {week: 'Неделя', month: 'Месяц', all: 'Всё'};
+
+function _miniRange(period) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (period === 'week') {
+    const from = new Date(today - 6 * 86400000);
+    return { from: _localDate(from), to: _localDate(today) };
+  }
+  if (period === 'month') {
+    const from = new Date(today.getFullYear(), today.getMonth(), 1);
+    return { from: _localDate(from), to: _localDate(today) };
+  }
+  return { from: '2000-01-01', to: _localDate(today) };  // all
+}
+
+function _sumRange(sessions, period, field) {
+  const r = _miniRange(period);
+  let sum = 0;
+  for (const s of sessions) {
+    if (s.date >= r.from && s.date <= r.to) sum += s[field] || 0;
+  }
+  return sum;
+}
+
 function renderHeroRings() {
   const t = calcTotals();
   const sessions = DATA.sessions || [];
@@ -295,6 +324,12 @@ function renderHeroRings() {
   const pctEv = avgEv > 0 ? Math.round(todayEv / avgEv * 100) : 0;
   const pctScr = avgScr > 0 ? Math.round(todayScr / avgScr * 100) : 0;
 
+  const _sessions = DATA.sessions || [];
+  const msgVal = _sumRange(_sessions, MINI_MSG_PERIOD, 'events');
+  const scrVal = _sumRange(_sessions, MINI_SCR_PERIOD, 'screens');
+  const _timeSum = _sumRange(_sessions, MINI_TIME_PERIOD, 'duration_min');
+  const timeVal = MINI_TIME_PERIOD === 'all' ? fmtH(t.total) : fmtH(_timeSum);
+
   const div = document.createElement('div');
   div.className = 'hero-rings';
 
@@ -309,25 +344,38 @@ function renderHeroRings() {
       '</div>' +
     '</div>' +
     '<div class="hero-mini">' +
-      '<div class="mini-block">' +
-        '<div class="mini-ring">' + renderRingSVG(100, 80, 6, 'var(--green)') +
-          '<div class="mini-center"><div class="mini-ico">📨</div><div class="mini-val">' + todayEv + '</div></div>' +
+      '<div class="mini-block" data-mini="msg">' +
+        '<div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 80, 6, 'var(--green)') +
+          '<div class="mini-center"><div class="mini-ico">📨</div><div class="mini-val">' + msgVal + '</div></div>' +
         '</div>' +
-        '<div class="mini-label">Сообщения</div>' +
+        '<div class="mini-label">Сообщения · ' + MINI_LABELS[MINI_MSG_PERIOD] + '</div>' +
       '</div>' +
-      '<div class="mini-block">' +
-        '<div class="mini-ring">' + renderRingSVG(100, 80, 6, 'var(--yellow)') +
-          '<div class="mini-center"><div class="mini-ico">📸</div><div class="mini-val">' + todayScr + '</div></div>' +
+      '<div class="mini-block" data-mini="scr">' +
+        '<div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 80, 6, 'var(--yellow)') +
+          '<div class="mini-center"><div class="mini-ico">📸</div><div class="mini-val">' + scrVal + '</div></div>' +
         '</div>' +
-        '<div class="mini-label">Скрины</div>' +
+        '<div class="mini-label">Скрины · ' + MINI_LABELS[MINI_SCR_PERIOD] + '</div>' +
       '</div>' +
-      '<div class="mini-block">' +
-        '<div class="mini-ring">' + renderRingSVG(100, 80, 6, 'var(--accent)') +
-          '<div class="mini-center"><div class="mini-ico">⏱</div><div class="mini-val">' + fmtH(t.avgPerDay) + '</div></div>' +
+      '<div class="mini-block" data-mini="time">' +
+        '<div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 80, 6, 'var(--accent)') +
+          '<div class="mini-center"><div class="mini-ico">⏱</div><div class="mini-val">' + timeVal + '</div></div>' +
         '</div>' +
-        '<div class="mini-label">Среднее/день</div>' +
+        '<div class="mini-label">Время · ' + MINI_LABELS[MINI_TIME_PERIOD] + '</div>' +
       '</div>' +
     '</div>';
+  // Тап на малые кольца — циклическое переключение периода
+  div.querySelectorAll('.mini-block').forEach(block => {
+    const ring = block.querySelector('.mini-ring');
+    if (!ring) return;
+    ring.addEventListener('click', () => {
+      const type = block.dataset.mini;
+      if (type === 'msg') MINI_MSG_PERIOD = MINI_PERIODS[(MINI_PERIODS.indexOf(MINI_MSG_PERIOD) + 1) % MINI_PERIODS.length];
+      else if (type === 'scr') MINI_SCR_PERIOD = MINI_PERIODS[(MINI_PERIODS.indexOf(MINI_SCR_PERIOD) + 1) % MINI_PERIODS.length];
+      else if (type === 'time') MINI_TIME_PERIOD = MINI_PERIODS[(MINI_PERIODS.indexOf(MINI_TIME_PERIOD) + 1) % MINI_PERIODS.length];
+      renderDashboard();
+    });
+  });
+
   return div;
 }
 
