@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css?v=39">
+<link rel="stylesheet" href="style.css?v=40">
 </head>
 <body>
 <div id="app"></div>
@@ -18,7 +18,7 @@
 <div id="pin-screen" class="screen">
 <div class="pin-box">
 <img src="icon.svg" alt="" class="pin-logo">
-<h1>Worklog</h1>
+<h1 style="display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="32" height="32" viewBox="0 0 24 24" style="vertical-align:middle;"><rect x="1" y="1" width="22" height="22" rx="5" fill="#4A9EFF"/><path d="M7 7 L17 17 M17 7 L7 17" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>Хераборина</h1>
 <p class="pin-sub">Введи PIN</p>
 <div id="pin-display" class="pin-display"></div>
 <div class="pin-pad">
@@ -58,11 +58,11 @@
 <p>Расшифровка…</p>
 </div>
 
-<script src="crypto.js?v=39"></script>
-<script src="app.js?v=39"></script>
+<script src="crypto.js?v=40"></script>
+<script src="app.js?v=40"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js?v=39', { updateViaCache: 'none' }).catch(function(){});
+  navigator.serviceWorker.register('sw.js?v=40', { updateViaCache: 'none' }).catch(function(){});
 }
 </script>
 </body>

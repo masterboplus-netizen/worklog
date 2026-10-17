@@ -897,3 +897,21 @@ html, body {
   color: var(--fg-dim);
   margin-top: 8px;
 }
+
+/* === Mini rings: цифры без эмодзи, крупнее === */
+.mini-val {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* === Footer branding === */
+.footer-line {
+  font-size: 11px;
+  color: var(--fg-dim);
+  line-height: 1.4;
+}
+.footer-authors {
+  font-size: 10px;
+  opacity: 0.75;
+}
