@@ -323,9 +323,9 @@ function renderHeroRings() {
       '</div>' +
       '<div class="mini-block">' +
         '<div class="mini-ring">' + renderRingSVG(100, 80, 6, 'var(--accent)') +
-          '<div class="mini-center"><div class="mini-ico">⏱</div><div class="mini-val">' + fmtH(t.total) + '</div></div>' +
+          '<div class="mini-center"><div class="mini-ico">⏱</div><div class="mini-val">' + fmtH(t.avgPerDay) + '</div></div>' +
         '</div>' +
-        '<div class="mini-label">Общее время</div>' +
+        '<div class="mini-label">Среднее/день</div>' +
       '</div>' +
     '</div>';
   return div;
@@ -367,7 +367,8 @@ function calcTotals() {
     screens,
     msgs: msgs + baseMsgs,
     count: (DATA.sessions || []).length,
-    daysCount: uniqueDays
+    daysCount: uniqueDays,
+    avgPerDay: Math.round(total / Math.max(1, uniqueDays))
   };
 }
 
@@ -617,7 +618,7 @@ function renderChart() {
         lbl.innerHTML = '<div class="lbl-date">' + dateStr + '</div>' +
                         '<div class="lbl-dow">' + dowStr + '</div>';
       } else {
-        lbl.innerHTML = '<div class="lbl-date">' + dateStr + '.' + monthNum + '</div>';
+        lbl.innerHTML = '<div class="lbl-date">' + dateStr + '</div>';
       }
     }
     labels.appendChild(lbl);
@@ -700,7 +701,7 @@ function renderSessions() {
   for (const s of list) {
     const tr = document.createElement('tr');
     tr.innerHTML =
-      '<td>' + s.date.slice(5) + '</td>' +
+      '<td>' + s.date.slice(8, 10) + '.' + s.date.slice(5, 7) + '</td>' +
       '<td>' + (projName[s.project] || s.project || '—') + '</td>' +
       '<td class="dur">' + fmtH(s.duration_min || 0) + '</td>' +
       '<td class="note" title="' + (s.note || '') + '">' + (s.note || '') + '</td>';
