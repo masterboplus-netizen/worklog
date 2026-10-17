@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-17T22:20:00",
+  "updated": "2026-10-18T00:44:00",
   "projects": [
     {
       "id": "bo81",
@@ -353,6 +353,17 @@
       "events": 30,
       "screens": 20,
       "note": "Хераборина Х-3 (вечер): футер v4.2 Сорокин/Karina Merkulova, PIN без SVG в h1, кольца 92px, ring-value 44px, TODO.md."
+    },
+    {
+      "id": "s_20261018_1",
+      "date": "2026-10-18",
+      "project": "bo81",
+      "start": "00:20",
+      "end": "00:44",
+      "duration_min": 24,
+      "events": 10,
+      "screens": 8,
+      "note": "X-4 (ночь): tz-fix (calcTotals локальная дата), компактный PIN-пад (octagon 78px)."
     }
   ],
   "baseline": {
