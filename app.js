@@ -372,9 +372,12 @@ function renderHeroRings() {
   // Большое кольцо
   div.innerHTML =
     '<div class="hero-main">' +
-      '<div class="ring-wrap" style="cursor:pointer" id="hero-ring">' + renderRingSVG(pctDur, 270, 13, ringColor) +
+      '<div class="ring-wrap" style="cursor:pointer" id="hero-ring">' + renderRingSVG(pctDur, 290, 14, ringColor) +
         '<div class="ring-center">' +
-          '<div class="ring-label" style="font-size:12px;color:var(--fg-dim);margin-bottom:6px;">' + heroLabel + '</div>' +
+          '<div class="ring-icon">' + (HERO_MODE === 'today'
+            ? '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>'
+            : '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>') + '</div>' +
+          '<div class="ring-label">' + heroLabel + '</div>' +
           '<div class="ring-value">' + fmtH(heroValue) + '</div>' +
           '<div class="ring-sub">' + heroSub + '</div>' +
         '</div>' +

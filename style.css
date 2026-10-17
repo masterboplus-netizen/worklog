@@ -871,3 +871,29 @@ html, body {
   line-height: 1.2;
   margin-top: 1px;
 }
+
+/* === Hero ring: иконка + крупный шрифт (v10) === */
+.ring-wrap {
+  width: 290px;
+  height: 290px;
+}
+.ring-icon {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+}
+.ring-label {
+  font-size: 14px;
+  color: var(--fg-dim);
+  margin-bottom: 6px;
+}
+.ring-value {
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 1;
+}
+.ring-sub {
+  font-size: 14px;
+  color: var(--fg-dim);
+  margin-top: 8px;
+}
