@@ -452,9 +452,9 @@ function fmtH(min) {
 
 function calcTotals() {
   const now = new Date();
-  const today = now.toISOString().slice(0, 10);
-  const weekAgo = new Date(now - 7 * 86400000).toISOString().slice(0, 10);
-  const monthAgo = new Date(now - 30 * 86400000).toISOString().slice(0, 10);
+  const today = _localDate(now);
+  const weekAgo = _localDate(new Date(now - 7 * 86400000));
+  const monthAgo = _localDate(new Date(now - 30 * 86400000));
 
   const base = DATA.baseline || {};
   const baseMin = base.minutes || 0;
