@@ -844,7 +844,7 @@ function renderFooter() {
   const verStr = ver.length > 1 ? ver.slice(0, -1) + '.' + ver.slice(-1) : ver;
   f.innerHTML =
     '<div class="footer-line">Хераборина v' + verStr + '</div>' +
-    '<div class="footer-line footer-authors">Product of Andrey Sorokin · Design & idea Merkulova Karina</div>';
+    '<div class="footer-line footer-authors">Product of Andrey Sorokin · Design & idea Karina Merkulova</div>';
   // _upd сохранён для будущего (если надо показать время обновления)
   void upd;
   return f;
