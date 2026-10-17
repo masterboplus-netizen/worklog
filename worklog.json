@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-17T00:44:00",
+  "updated": "2026-10-17T20:44:00",
   "projects": [
     {
       "id": "bo81",
@@ -331,6 +331,17 @@
       "events": 8,
       "screens": 6,
       "note": "Хераборина X-1 (2/2): cache-bust fix, avg/day fix."
+    },
+    {
+      "id": "s_20261017_3",
+      "date": "2026-10-17",
+      "project": "bo81",
+      "start": "17:33",
+      "end": "20:44",
+      "duration_min": 191,
+      "events": 65,
+      "screens": 45,
+      "note": "Хераборина Х-2: лого X, SVG-иконки, ДН, календарный месяц, ДД.ММ, тапы на кольца, вкладка Проекты, склейка через полночь, hero ring today/last."
     }
   ],
   "baseline": {
