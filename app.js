@@ -241,7 +241,6 @@ function renderDashboard() {
   const c = $('#content');
   c.innerHTML = '';
   c.appendChild(renderHeroRings());
-  c.appendChild(renderProjects());
   c.appendChild(renderChart());
   c.appendChild(renderSessions());
   c.appendChild(renderFooter());
