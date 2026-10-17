@@ -510,10 +510,25 @@ function renderChart() {
 
   const days = [];
   const now = new Date();
-  const totalDays = CHART_PERIOD === 1 ? 1 : CHART_PERIOD;
-  for (let i = totalDays - 1; i >= 0; i--) {
-    const d = new Date(now - i * 86400000);
-    days.push(d.toISOString().slice(0, 10));
+
+  if (CHART_PERIOD === 30) {
+    // МЕСЯЦ: календарный месяц (с 1-го числа по последний день)
+    const year = now.getFullYear();
+    const month = now.getMonth();  // 0-11
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);  // последний день месяца
+    const totalDaysInMonth = lastDay.getDate();
+    for (let i = 0; i < totalDaysInMonth; i++) {
+      const d = new Date(year, month, i + 1);
+      days.push(d.toISOString().slice(0, 10));
+    }
+  } else {
+    // ДЕНЬ / НЕДЕЛЯ: последние N дней (как раньше)
+    const totalDays = CHART_PERIOD === 1 ? 1 : CHART_PERIOD;
+    for (let i = totalDays - 1; i >= 0; i--) {
+      const d = new Date(now - i * 86400000);
+      days.push(d.toISOString().slice(0, 10));
+    }
   }
 
   const byDay = {};
