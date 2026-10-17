@@ -105,44 +105,13 @@ function renderDiary() {
   for (const p of DATA.projects || []) projName[p.id] = p.name;
 
   // Группировка по датам
-  // === Склейка сессий через полночь ===
-  // Одна логическая сессия: prev.end === '23:59' && cur.start === '00:00' && cur.date = prev.date + 1 день
-  const _merged = [];
-  const _sorted = list.slice().sort((a, b) => (a.date + (a.start || '')).localeCompare(b.date + (b.start || '')));
-  for (const ss of _sorted) {
-    const last = _merged[_merged.length - 1];
-    if (last && (last.end === '23:59' || last.end === '00:00') && ss.start === '00:00') {
-      // Склеить
-      const lastDate = new Date(last.date + 'T00:00:00');
-      const curDate = new Date(ss.date + 'T00:00:00');
-      const diffDays = Math.round((curDate - lastDate) / 86400000);
-      if (diffDays === 1) {
-        last.end = ss.end;
-        last.duration_min = (last.duration_min || 0) + (ss.duration_min || 0);
-        last.events = (last.events || 0) + (ss.events || 0);
-        last.screens = (last.screens || 0) + (ss.screens || 0);
-        last.note = [(last.note || ''), (ss.note || '')].filter(Boolean).join(' / ');
-        last._mergedEndDate = ss.date;
-        last._isMerged = true;
-        continue;
-      }
-    }
-    const _copy = Object.assign({}, ss);
-    if (!_copy.note) _copy.note = '';
-    if (!_copy.duration_min) _copy.duration_min = 0;
-    if (!_copy.events) _copy.events = 0;
-    if (!_copy.screens) _copy.screens = 0;
-    _merged.push(_copy);
-  }
-
   const byDate = {};
-  for (const ss of _merged) {
-    if (!byDate[ss.date]) byDate[ss.date] = [];
-    byDate[ss.date].push(ss);
+  for (const s of list) {
+    if (!byDate[s.date]) byDate[s.date] = [];
+    byDate[s.date].push(s);
   }
 
-  // === Сортировка дат (убывание) ===
-
+  const dates = Object.keys(byDate).sort().reverse();
   for (const d of dates) {
     const header = document.createElement('div');
     header.className = 'diary-date';
