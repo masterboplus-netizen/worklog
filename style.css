@@ -800,3 +800,11 @@ html, body {
   opacity: 0.6;
   margin-top: 1px;
 }
+
+/* === Projects tab + отступ секции после колец === */
+.hero-rings {
+  margin-bottom: 24px;
+}
+.section-title {
+  margin-top: 16px;
+}

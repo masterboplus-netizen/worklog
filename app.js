@@ -49,43 +49,36 @@ async function init() {
 function setupTabs() {
   const tabDash = document.getElementById('tab-dashboard');
   const tabDiary = document.getElementById('tab-diary');
-  const tabTime = document.getElementById('tab-time');
+  const tabProjects = document.getElementById('tab-projects');
   if (!tabDash || !tabDiary) return;
   tabDash.addEventListener('click', () => switchTab('dashboard'));
   tabDiary.addEventListener('click', () => switchTab('diary'));
-  if (tabTime) tabTime.addEventListener('click', () => switchTab('time'));
+  if (tabProjects) tabProjects.addEventListener('click', () => switchTab('projects'));
 }
 
 function switchTab(name) {
   const tabDash = document.getElementById('tab-dashboard');
   const tabDiary = document.getElementById('tab-diary');
-  const tabTime = document.getElementById('tab-time');
+  const tabProjects = document.getElementById('tab-projects');
   const cDash = document.getElementById('content');
   const cDiary = document.getElementById('content-diary');
-  const cTime = document.getElementById('content-time');
+  const cProjects = document.getElementById('content-projects');
   if (!tabDash || !tabDiary || !cDash || !cDiary) return;
 
   // Скрыть все
-  [tabDash, tabDiary, tabTime].forEach(t => t && t.classList.remove('tab-active'));
-  [cDash, cDiary, cTime].forEach(c => c && c.classList.add('hidden'));
+  [tabDash, tabDiary, tabProjects].forEach(t => t && t.classList.remove('tab-active'));
+  [cDash, cDiary, cProjects].forEach(c => c && c.classList.add('hidden'));
 
   if (name === 'diary') {
     tabDiary.classList.add('tab-active');
     cDiary.classList.remove('hidden');
     renderDiary();
-  } else if (name === 'time') {
-    if (tabTime) tabTime.classList.add('tab-active');
-    if (cTime) {
-      cTime.classList.remove('hidden');
-      const tt = calcTotals();
-      cTime.innerHTML = '<div class="section"><div class="section-title">⏱ Время</div>' +
-        '<div class="metrics">' +
-          '<div class="metric"><div class="metric-label">Сегодня</div><div class="metric-value">' + fmtH(tt.todayMin) + '</div></div>' +
-          '<div class="metric"><div class="metric-label">7 дней</div><div class="metric-value">' + fmtH(tt.week) + '</div></div>' +
-          '<div class="metric"><div class="metric-label">30 дней</div><div class="metric-value">' + fmtH(tt.month) + '</div></div>' +
-          '<div class="metric"><div class="metric-label">Всего</div><div class="metric-value">' + fmtH(tt.total) + '</div></div>' +
-          '<div class="metric"><div class="metric-label">Среднее/день</div><div class="metric-value">' + fmtH(Math.round(tt.totalNoBase / Math.max(1, tt.daysCount))) + '</div></div>' +
-        '</div></div>';
+  } else if (name === 'projects') {
+    if (tabProjects) tabProjects.classList.add('tab-active');
+    if (cProjects) {
+      cProjects.classList.remove('hidden');
+      cProjects.innerHTML = '';
+      cProjects.appendChild(renderProjects());
     }
   } else {
     tabDash.classList.add('tab-active');
