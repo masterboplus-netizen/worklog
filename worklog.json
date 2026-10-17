@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-17T20:44:00",
+  "updated": "2026-10-17T22:20:00",
   "projects": [
     {
       "id": "bo81",
@@ -342,6 +342,17 @@
       "events": 65,
       "screens": 45,
       "note": "Хераборина Х-2: лого X, SVG-иконки, ДН, календарный месяц, ДД.ММ, тапы на кольца, вкладка Проекты, склейка через полночь, hero ring today/last."
+    },
+    {
+      "id": "s_20261017_4",
+      "date": "2026-10-17",
+      "project": "bo81",
+      "start": "21:25",
+      "end": "22:20",
+      "duration_min": 55,
+      "events": 30,
+      "screens": 20,
+      "note": "Хераборина Х-3 (вечер): футер v4.2 Сорокин/Karina Merkulova, PIN без SVG в h1, кольца 92px, ring-value 44px, TODO.md."
     }
   ],
   "baseline": {
