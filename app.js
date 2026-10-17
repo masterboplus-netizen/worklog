@@ -286,6 +286,7 @@ function renderRingSVG(percent, size, strokeWidth, color) {
     '</svg>';
 }
 
+let HERO_MODE = 'today';  // today | last
 let MINI_MSG_PERIOD = 'day';   // day → week → month → all
 let MINI_SCR_PERIOD = 'day';
 let MINI_TIME_PERIOD = 'avg';  // avg → week → month → all
@@ -337,7 +338,20 @@ function renderHeroRings() {
   const avgEv = weekEv / 7;
   const avgScr = weekScr / 7;
 
-  const pctDur = Math.round(t.todayMin / DAILY_GOAL_MIN * 100);
+  // Логика: Сегодня / Последняя сессия
+  let heroValue, heroSub, heroLabel;
+  if (HERO_MODE === 'last') {
+    const sorted = (DATA.sessions || []).slice().sort((a, b) => (b.date + (b.end || '')).localeCompare(a.date + (a.end || '')));
+    const lastSess = sorted[0];
+    heroValue = lastSess ? (lastSess.duration_min || 0) : 0;
+    heroLabel = 'Последняя сессия';
+    heroSub = lastSess ? (lastSess.date.slice(8, 10) + '.' + lastSess.date.slice(5, 7)) : '';
+  } else {
+    heroValue = t.todayMin;
+    heroLabel = 'Сегодня';
+    heroSub = 'Цель 12ч · ' + Math.round(t.todayMin / DAILY_GOAL_MIN * 100) + '%';
+  }
+  const pctDur = Math.round(heroValue / DAILY_GOAL_MIN * 100);
   const ringColor = pctDur >= 100 ? 'var(--green)' : 'var(--accent)';
   const todayEv = sessions.filter(x => x.date === new Date().toISOString().slice(0,10)).reduce((a,x)=>a+(x.events||0),0);
   const todayScr = sessions.filter(x => x.date === new Date().toISOString().slice(0,10)).reduce((a,x)=>a+(x.screens||0),0);
@@ -358,10 +372,11 @@ function renderHeroRings() {
   // Большое кольцо
   div.innerHTML =
     '<div class="hero-main">' +
-      '<div class="ring-wrap">' + renderRingSVG(pctDur, 270, 13, ringColor) +
+      '<div class="ring-wrap" style="cursor:pointer" id="hero-ring">' + renderRingSVG(pctDur, 270, 13, ringColor) +
         '<div class="ring-center">' +
-          '<div class="ring-value">' + fmtH(t.todayMin) + '</div>' +
-          '<div class="ring-sub">Цель 12ч · ' + pctDur + '%</div>' +
+          '<div class="ring-label" style="font-size:12px;color:var(--fg-dim);margin-bottom:6px;">' + heroLabel + '</div>' +
+          '<div class="ring-value">' + fmtH(heroValue) + '</div>' +
+          '<div class="ring-sub">' + heroSub + '</div>' +
         '</div>' +
       '</div>' +
     '</div>' +
@@ -385,6 +400,15 @@ function renderHeroRings() {
         '</div>' +
       '</div>' +
     '</div>';
+  // Тап на главное кольцо — переключение Сегодня / Последняя сессия
+  const heroRing = div.querySelector('#hero-ring');
+  if (heroRing) {
+    heroRing.addEventListener('click', () => {
+      HERO_MODE = HERO_MODE === 'today' ? 'last' : 'today';
+      renderDashboard();
+    });
+  }
+
   // Тап на малые кольца — циклическое переключение периода
   div.querySelectorAll('.mini-block').forEach(block => {
     const ring = block.querySelector('.mini-ring');
