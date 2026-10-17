@@ -361,10 +361,16 @@ function renderHeroRings() {
   const _sessions = DATA.sessions || [];
   const msgVal = _sumRange(_sessions, MINI_MSG_PERIOD, 'events');
   const scrVal = _sumRange(_sessions, MINI_SCR_PERIOD, 'screens');
+  // timeVal: часы сверху, минуты снизу (для «Всё время» 359ч 42м)
+  function _fmtH2(min) {
+    const h = Math.floor(min / 60);
+    const m = min % 60;
+    return h + 'ч<br>' + m + 'м';
+  }
   let timeVal;
   if (MINI_TIME_PERIOD === 'avg') timeVal = fmtH(t.avgPerDay);
-  else if (MINI_TIME_PERIOD === 'all') timeVal = fmtH(t.total);
-  else timeVal = fmtH(_sumRange(_sessions, MINI_TIME_PERIOD, 'duration_min'));
+  else if (MINI_TIME_PERIOD === 'all') timeVal = _fmtH2(t.total);
+  else timeVal = _fmtH2(_sumRange(_sessions, MINI_TIME_PERIOD, 'duration_min'));
 
   const div = document.createElement('div');
   div.className = 'hero-rings';

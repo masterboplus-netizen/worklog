@@ -705,10 +705,11 @@ html, body {
   margin-bottom: 2px;
 }
 .mini-val {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--fg);
-  line-height: 1;
+  line-height: 1.05;
+  text-align: center;
 }
 
 /* === Mini rings labels (v6) === */
@@ -903,10 +904,11 @@ html, body {
 
 /* === Mini rings: цифры без эмодзи, крупнее === */
 .mini-val {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--fg);
-  line-height: 1;
+  line-height: 1.05;
+  text-align: center;
 }
 
 /* === Footer branding === */
