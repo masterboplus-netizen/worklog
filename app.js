@@ -12,7 +12,7 @@ window.__initCalls = 0;
 let CHART_PERIOD = 7;   // 1 = день, 7 = неделя, 30 = месяц
 let CHART_METRIC = 'duration';  // duration | events | screens
 let CHART_SELECTED = null;  // выбранный день для тултипа
-const DAILY_GOAL_MIN = 720;  // 12ч (временный хардкод)
+let DAILY_GOAL_MIN = parseInt(localStorage.getItem('worklog_goal_min') || '720', 10);
 
 function _bootstrap() {
   window.__initCalls++;
@@ -359,7 +359,7 @@ function renderHeroRings() {
   } else {
     heroValue = t.todayMin;
     heroLabel = 'Сегодня';
-    heroSub = 'Цель 12ч · ' + Math.round(t.todayMin / DAILY_GOAL_MIN * 100) + '%';
+    heroSub = 'Цель ' + Math.floor(DAILY_GOAL_MIN / 60) + 'ч · ' + Math.round(t.todayMin / DAILY_GOAL_MIN * 100) + '% <span class="edit-goal" style="cursor:pointer;margin-left:4px;">✏️</span>';
   }
   const pctDur = Math.round(heroValue / DAILY_GOAL_MIN * 100);
   const ringColor = pctDur >= 100 ? 'var(--green)' : 'var(--accent)';
@@ -422,7 +422,21 @@ function renderHeroRings() {
   // Тап на главное кольцо — переключение Сегодня / Последняя сессия
   const heroRing = div.querySelector('#hero-ring');
   if (heroRing) {
-    heroRing.addEventListener('click', () => {
+    heroRing.addEventListener('click', (ev) => {
+      if (ev.target.classList.contains('edit-goal')) {
+        // Не переключаем режим, а редактируем цель
+        const curH = Math.floor(DAILY_GOAL_MIN / 60);
+        const inp = prompt('Цель в часах (сейчас: ' + curH + '):', curH);
+        if (inp !== null) {
+          const h = parseInt(inp, 10);
+          if (h > 0 && h <= 24) {
+            localStorage.setItem('worklog_goal_min', h * 60);
+            DAILY_GOAL_MIN = h * 60;
+            renderDashboard();
+          }
+        }
+        return;
+      }
       HERO_MODE = HERO_MODE === 'today' ? 'last' : 'today';
       renderDashboard();
     });
