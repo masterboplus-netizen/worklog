@@ -1484,18 +1484,7 @@ html, body {
 .phase.open .phase-arrow { transform: rotate(180deg); }
 
 /* === Month picker === */
-.month-btn {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  color: var(--fg);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  margin-right: 8px;
-}
+
 .month-btn:active { background: var(--accent); }
 .month-picker {
   display: grid;
@@ -1520,13 +1509,26 @@ html, body {
 }
 
 /* === Month btn справа от Активность === */
-.month-btn {
-  margin-left: 8px;
-  margin-right: 0;
-}
+
 .section-title {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 6px;
 }
+
+/* === Month btn справа от Активность === */
+.month-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.month-btn:active { background: var(--accent); }
