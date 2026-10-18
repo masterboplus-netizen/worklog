@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-18T00:44:00",
+  "updated": "2026-10-18T10:16:00",
   "projects": [
     {
       "id": "bo81",
@@ -359,11 +359,11 @@
       "date": "2026-10-18",
       "project": "bo81",
       "start": "00:20",
-      "end": "00:44",
-      "duration_min": 24,
-      "events": 10,
-      "screens": 8,
-      "note": "X-4 (ночь): tz-fix (calcTotals локальная дата), компактный PIN-пад (octagon 78px)."
+      "end": "00:54",
+      "duration_min": 34,
+      "events": 14,
+      "screens": 10,
+      "note": "X-4 (ночь): tz-fix (calcTotals локальная дата), PIN-пад octagon 78px, STATE/TODO."
     }
   ],
   "baseline": {
