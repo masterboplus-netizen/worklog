@@ -342,11 +342,10 @@ function openGoalSheet() {
     '<div class="goal-sheet" id="goal-sheet">' +
       '<button class="goal-sheet-close" aria-label="Закрыть">✕</button>' +
       '<h2 class="goal-sheet-title">Цель по времени</h2>' +
-      '<div class="goal-sheet-row">' +
-        '<button class="goal-step" data-step="-1">−</button>' +
-        '<input id="goal-input" type="number" min="1" max="24" value="' + curH + '" inputmode="numeric">' +
-        '<span class="goal-unit">ч</span>' +
-        '<button class="goal-step" data-step="1">+</button>' +
+      '<div class="goal-picker" id="goal-picker">' +
+        Array.from({length: 24}, (_, i) => i + 1).map(h =>
+          '<div class="goal-picker-item' + (h === curH ? ' active' : '') + '" data-h="' + h + '">' + h + ' ч</div>'
+        ).join('') +
       '</div>' +
       '<div class="goal-sheet-actions">' +
         '<button class="goal-cancel">Отмена</button>' +
@@ -355,10 +354,12 @@ function openGoalSheet() {
     '</div>';
   document.body.appendChild(overlay);
 
-  const inp = overlay.querySelector('#goal-input');
+  const picker = overlay.querySelector('#goal-picker');
   const close = () => overlay.remove();
   const save = () => {
-    const v = parseInt(inp.value, 10);
+    // Активный элемент — по центру
+    const active = picker.querySelector('.goal-picker-item.active');
+    const v = active ? parseInt(active.dataset.h, 10) : curH;
     if (v > 0 && v <= 24) {
       localStorage.setItem('worklog_goal_min', v * 60);
       DAILY_GOAL_MIN = v * 60;
@@ -367,21 +368,30 @@ function openGoalSheet() {
     }
   };
 
+  // Скроллим к текущей
+  setTimeout(() => {
+    const cur = picker.querySelector('.goal-picker-item.active');
+    if (cur) cur.scrollIntoView({ block: 'center' });
+  }, 10);
+
+  // При скролле — обновляем active (по центру)
+  picker.addEventListener('scroll', () => {
+    const rect = picker.getBoundingClientRect();
+    const center = rect.top + rect.height / 2;
+    let best = null, bestDist = Infinity;
+    picker.querySelectorAll('.goal-picker-item').forEach(it => {
+      const r = it.getBoundingClientRect();
+      const d = Math.abs((r.top + r.height / 2) - center);
+      if (d < bestDist) { bestDist = d; best = it; }
+    });
+    picker.querySelectorAll('.goal-picker-item').forEach(it => it.classList.remove('active'));
+    if (best) best.classList.add('active');
+  });
+
   overlay.querySelector('.goal-sheet-close').addEventListener('click', close);
   overlay.querySelector('.goal-cancel').addEventListener('click', close);
   overlay.querySelector('.goal-save').addEventListener('click', save);
-  overlay.querySelectorAll('.goal-step').forEach(b => {
-    b.addEventListener('click', () => {
-      const delta = parseInt(b.dataset.step, 10);
-      let v = parseInt(inp.value, 10) + delta;
-      if (v < 1) v = 1;
-      if (v > 24) v = 24;
-      inp.value = v;
-    });
-  });
   overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
-  // Enter — сохранить
-  inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); });
 }
 
 function renderHeroRings() {
