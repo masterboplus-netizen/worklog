@@ -1086,25 +1086,30 @@ function renderChart() {
       ' data-date="' + d + '"' +
       ' style="height:' + h + '%"></div>';
     barsWrap.appendChild(col);
-    const barEl = col.querySelector('.chart-bar');
-    if (barEl) {
-      barEl.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        const all = barsWrap.querySelectorAll('.chart-bar-label-abs');
-        all.forEach(el => el.remove());
-        if (!val) return;
-        const lbl = CHART_METRIC === 'duration'
-          ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м')
-          : String(val);
-        const absLbl = document.createElement('div');
-        absLbl.className = 'chart-bar-label-abs';
-        absLbl.textContent = lbl;
-        absLbl.style.left = (col.offsetLeft + col.offsetWidth / 2) + 'px';
-        absLbl.style.top = '0px';
-        chart.appendChild(absLbl);
-      });
-    }
   }
+  if (!barsWrap._delegated) {
+    barsWrap._delegated = true;
+    barsWrap.addEventListener('click', (ev) => {
+      const bar = ev.target.closest && ev.target.closest('.chart-bar');
+      if (!bar) return;
+      const all = barsWrap.querySelectorAll('.chart-bar-label-abs');
+      all.forEach(el => el.remove());
+      const d = bar.dataset.date;
+      const val = byDay[d] || 0;
+      if (!val) return;
+      const lbl = CHART_METRIC === 'duration'
+        ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м')
+        : String(val);
+      const col = bar.parentElement;
+      const absLbl = document.createElement('div');
+      absLbl.className = 'chart-bar-label-abs';
+      absLbl.textContent = lbl;
+      absLbl.style.left = (col.offsetLeft + col.offsetWidth / 2) + 'px';
+      absLbl.style.top = '4px';
+      chart.appendChild(absLbl);
+    });
+  }
+
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
 
