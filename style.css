@@ -1187,14 +1187,8 @@ html, body {
 }
 
 /* === Analytics project button === */
-.project-analytics-btn {
-  margin-left: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 4px;
-}
-.project-analytics-btn:active { background: var(--bg3); }
+
+
 
 /* === Analytics sheet (5 blocks) === */
 .analytics-sheet {
@@ -1281,10 +1275,12 @@ html, body {
 .project-card {
   margin-bottom: 0;
 }
+
+/* === Project analytics button (shifted) === */
 .project-analytics-btn {
   position: absolute;
-  top: 12px;
-  right: -4px;
+  top: 44px;
+  right: 8px;
   background: var(--bg3);
   border: 1px solid var(--border);
   color: var(--fg);
@@ -1295,7 +1291,7 @@ html, body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 0;
   padding: 0;
+  z-index: 2;
 }
 .project-analytics-btn:active { background: var(--accent); color: #fff; }
