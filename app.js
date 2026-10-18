@@ -577,6 +577,102 @@ function renderMetrics() {
   return div;
 }
 
+function openAnalyticsSheet(projectId) {
+  const old = document.getElementById('analytics-sheet-overlay');
+  if (old) old.remove();
+
+  const proj = (DATA.projects || []).find(p => p.id === projectId) || {};
+  const sessions = (DATA.sessions || []).filter(s => s.project === projectId);
+  const realMin = sessions.reduce((a, s) => a + (s.duration_min || 0), 0);
+  const realEv = sessions.reduce((a, s) => a + (s.events || 0), 0);
+  const realScr = sessions.reduce((a, s) => a + (s.screens || 0), 0);
+  const uniqueDays = new Set(sessions.map(s => s.date)).size;
+  const avgDay = uniqueDays > 0 ? Math.round(realMin / uniqueDays) : 0;
+
+  // По месяцам
+  const byMonth = {};
+  for (const s of sessions) {
+    const m = s.date.slice(0, 7);  // YYYY-MM
+    byMonth[m] = (byMonth[m] || 0) + (s.duration_min || 0);
+  }
+  const months = Object.keys(byMonth).sort();
+  const maxMonth = Math.max(1, ...months.map(m => byMonth[m]));
+  const monthBars = months.map(m => {
+    const pct = Math.round(byMonth[m] / maxMonth * 100);
+    const label = m.slice(5, 7) + '.' + m.slice(0, 4);
+    return '<div class="an-month-row"><div class="an-month-label">' + label + '</div>' +
+      '<div class="an-month-bar-wrap"><div class="an-month-bar" style="width:' + pct + '%"></div></div>' +
+      '<div class="an-month-val">' + fmtH(byMonth[m]) + '</div></div>';
+  }).join('');
+
+  // Топ-3 дня
+  const byDay = {};
+  for (const s of sessions) byDay[s.date] = (byDay[s.date] || 0) + (s.duration_min || 0);
+  const topDays = Object.entries(byDay).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  const topDaysHTML = topDays.map(([d, v], i) =>
+    '<div class="an-top-row"><span class="an-top-rank">' + (i + 1) + '.</span> ' +
+    d.slice(8, 10) + '.' + d.slice(5, 7) + ' — <b>' + fmtH(v) + '</b></div>'
+  ).join('') || '<div class="an-top-row">Пока нет данных</div>';
+
+  // Тренд: эта неделя vs прошлая
+  const now = new Date();
+  function weekMin(offsetWeeks) {
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6 - offsetWeeks * 7);
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offsetWeeks * 7);
+    let sum = 0;
+    for (const s of sessions) {
+      const sd = new Date(s.date + 'T00:00:00');
+      if (sd >= start && sd <= end) sum += (s.duration_min || 0);
+    }
+    return sum;
+  }
+  const thisWeek = weekMin(0);
+  const prevWeek = weekMin(1);
+  let trendStr = '—';
+  let trendClass = 'trend-neutral';
+  if (prevWeek > 0) {
+    const pct = Math.round((thisWeek - prevWeek) / prevWeek * 100);
+    if (pct > 5) { trendStr = 'активнее обычного (+' + pct + '%)'; trendClass = 'trend-up'; }
+    else if (pct < -5) { trendStr = 'медленнее обычного (' + pct + '%)'; trendClass = 'trend-down'; }
+    else { trendStr = 'как обычно (±' + pct + '%)'; trendClass = 'trend-neutral'; }
+  }
+
+  const overlay = document.createElement('div');
+  overlay.id = 'analytics-sheet-overlay';
+  overlay.className = 'goal-sheet-overlay';
+  overlay.innerHTML =
+    '<div class="goal-sheet analytics-sheet" id="analytics-sheet">' +
+      '<button class="goal-sheet-close" aria-label="Закрыть">✕</button>' +
+      '<h2 class="goal-sheet-title">Аналитика: ' + (proj.name || projectId) + '</h2>' +
+      // Блок 1: средние
+      '<div class="an-block an-stats">' +
+        '<div class="an-stat"><div class="an-stat-label">Среднее/день</div><div class="an-stat-val">' + fmtH(avgDay) + '</div></div>' +
+        '<div class="an-stat"><div class="an-stat-label">Всего</div><div class="an-stat-val">' + fmtH(realMin) + '</div></div>' +
+        '<div class="an-stat"><div class="an-stat-label">Сессий</div><div class="an-stat-val">' + sessions.length + '</div></div>' +
+      '</div>' +
+      // Блок 2: счётчики
+      '<div class="an-block an-stats">' +
+        '<div class="an-stat"><div class="an-stat-label">Сообщений</div><div class="an-stat-val">' + realEv + '</div></div>' +
+        '<div class="an-stat"><div class="an-stat-label">Скринов</div><div class="an-stat-val">' + realScr + '</div></div>' +
+        '<div class="an-stat"><div class="an-stat-label">Дней</div><div class="an-stat-val">' + uniqueDays + '</div></div>' +
+      '</div>' +
+      // Блок 3: по месяцам
+      '<div class="an-section-title">📅 По месяцам</div>' +
+      '<div class="an-block">' + (monthBars || '<div class="an-top-row">Нет данных</div>') + '</div>' +
+      // Блок 4: топ-3
+      '<div class="an-section-title">🏆 Топ-3 дня</div>' +
+      '<div class="an-block">' + topDaysHTML + '</div>' +
+      // Блок 5: тренд
+      '<div class="an-section-title">📈 Тренд (7 дней)</div>' +
+      '<div class="an-block an-trend ' + trendClass + '">' + trendStr + '</div>' +
+    '</div>';
+  document.body.appendChild(overlay);
+
+  const close = () => overlay.remove();
+  overlay.querySelector('.goal-sheet-close').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+}
+
 function renderProjects() {
   const sec = document.createElement('div');
   sec.className = 'section';
@@ -616,6 +712,7 @@ function renderProjects() {
         '<div class="project-name">' +
           '<span class="project-dot" style="background:' + (p.color || '#4A9EFF') + '"></span>' +
           p.name +
+        '<span class="project-analytics-btn" data-proj="' + p.id + '" title="Аналитика">📊</span>' +
         '</div>' +
         '<div class="project-hours">' + fmtH(hrs) + '</div>' +
       '</div>' +
@@ -679,6 +776,13 @@ function renderProjects() {
     }
 
     sec.appendChild(card);
+    const anBtn = card.querySelector('.project-analytics-btn');
+    if (anBtn) {
+      anBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        openAnalyticsSheet(anBtn.dataset.proj);
+      });
+    }
   }
 
   return sec;
