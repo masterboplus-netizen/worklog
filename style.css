@@ -1562,7 +1562,7 @@ html, body {
 /* === Month/year: без рамки, большой шрифт === */
 .month-year-wrap {
   margin-left: auto;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--fg);
   white-space: nowrap;
@@ -1575,4 +1575,23 @@ html, body {
 }
 .month-text:hover, .year-text:hover {
   background: var(--bg3);
+}
+
+/* === Chart bar label: z-index, visible === */
+.chart-col {
+  overflow: visible !important;
+}
+.chart-bar-label-abs {
+  z-index: 9999 !important;
+  position: absolute !important;
+  background: var(--bg2) !important;
+  border: 1px solid var(--accent) !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--fg) !important;
+  white-space: nowrap !important;
+  pointer-events: none !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4) !important;
 }
