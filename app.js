@@ -877,7 +877,7 @@ function renderChart() {
   let yAxisHTML = '';
   for (let i = axis.labels.length - 1; i >= 0; i--) {
     const val = axis.labels[i];
-    const label = CHART_METRIC === 'duration' ? fmtH(val) : String(val);
+    const label = CHART_METRIC === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
     yAxisHTML += '<div class="chart-grid-line"><span class="chart-grid-label">' + label + '</span></div>';
   }
 
@@ -894,10 +894,13 @@ function renderChart() {
     const col = document.createElement('div');
     col.className = 'chart-col';
     const isSel = CHART_SELECTED === d;
+    const _lbl = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : val) : '';
     col.innerHTML =
       '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '"' +
       ' data-date="' + d + '"' +
-      ' style="height:' + h + '%"></div>';
+      ' style="height:' + h + '%">' +
+      (_lbl ? '<span class="chart-bar-label">' + _lbl + '</span>' : '') +
+      '</div>';
     barsWrap.appendChild(col);
   }
   chart.appendChild(barsWrap);
@@ -952,16 +955,6 @@ function renderChart() {
   }
   labelsRow.appendChild(labels);
   sec.appendChild(labelsRow);
-
-  if (CHART_SELECTED) {
-    const val = byDay[CHART_SELECTED] || 0;
-    const valStr = CHART_METRIC === 'duration' ? fmtH(val) : String(val);
-    const metricLabel = CHART_METRIC === 'duration' ? 'времени' : (CHART_METRIC === 'events' ? 'сообщений' : 'скринов');
-    const tooltip = document.createElement('div');
-    tooltip.className = 'chart-tooltip';
-    tooltip.textContent = CHART_SELECTED.slice(8, 10) + '.' + CHART_SELECTED.slice(5, 7) + ' · ' + valStr + ' ' + metricLabel;
-    sec.appendChild(tooltip);
-  }
 
   const totalForPeriod = days.reduce((acc, d) => acc + (byDay[d] || 0), 0);
   const totalStr = CHART_METRIC === 'duration' ? fmtH(totalForPeriod) : String(totalForPeriod);
