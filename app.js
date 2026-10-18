@@ -705,9 +705,6 @@ function renderProjects() {
     }
     const pct = totalItems ? Math.round(doneItems / totalItems * 100) : 0;
 
-    const cardWrap = document.createElement('div');
-    cardWrap.className = 'project-card-wrap';
-
     const card = document.createElement('div');
     card.className = 'project-card';
     card.innerHTML =
@@ -787,9 +784,8 @@ function renderProjects() {
       ev.stopPropagation();
       openAnalyticsSheet(p.id);
     });
-    cardWrap.appendChild(card);
-    cardWrap.appendChild(anBtn);
-    sec.appendChild(cardWrap);
+      card.appendChild(anBtn);
+      sec.appendChild(card);
   }
 
   return sec;
