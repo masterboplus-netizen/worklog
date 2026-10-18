@@ -345,9 +345,11 @@ function openGoalSheet() {
       '<button class="goal-sheet-close" aria-label="Закрыть">✕</button>' +
       '<h2 class="goal-sheet-title">Цель по времени</h2>' +
       '<div class="goal-picker" id="goal-picker">' +
+        '<div class="goal-picker-spacer"></div>' +
         Array.from({length: 24}, (_, i) => i + 1).map(h =>
           '<div class="goal-picker-item' + (h === curH ? ' active' : '') + '" data-h="' + h + '">' + h + ' ч</div>'
         ).join('') +
+        '<div class="goal-picker-spacer"></div>' +
       '</div>' +
       '<div class="goal-sheet-actions">' +
         '<button class="goal-cancel">Отмена</button>' +
@@ -735,7 +737,7 @@ function renderProjects() {
       const phDiv = document.createElement('div');
       phDiv.className = 'phase';
       phDiv.innerHTML =
-        '<div class="phase-head"><span class="phase-arrow">▶</span>' +
+        '<div class="phase-head"><span class="phase-arrow">›</span>' +
           '<span class="phase-icon">' + statusIcon + '</span>' +
           '<span class="phase-name">' + ph.phase + '</span>' +
           '<span class="phase-pct">' + phPct + '%</span>' +
@@ -811,6 +813,54 @@ function _localDate(d) {
   return y + '-' + m + '-' + dd;
 }
 
+function openMonthSheet() {
+  const old = document.getElementById('month-sheet-overlay');
+  if (old) old.remove();
+  const now = new Date();
+  const curM = now.getMonth();
+  const curY = now.getFullYear();
+  const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  const years = [];
+  for (let y = curY - 2; y <= curY + 2; y++) years.push(y);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'month-sheet-overlay';
+  overlay.className = 'goal-sheet-overlay';
+  overlay.innerHTML =
+    '<div class="goal-sheet" style="max-height: 80vh; overflow-y: auto;">' +
+      '<button class="goal-sheet-close">✕</button>' +
+      '<h2 class="goal-sheet-title">Выберите месяц</h2>' +
+      '<div class="month-picker">' +
+        months.map((m, i) => '<button class="month-pick-item' + (i === curM + CHART_OFFSET_MONTHS ? ' active' : '') + '" data-m="' + i + '">' + m + '</button>').join('') +
+      '</div>' +
+      '<h2 class="goal-sheet-title" style="margin-top:16px;">Год</h2>' +
+      '<div class="month-picker">' +
+        years.map(y => '<button class="month-pick-item' + (y === curY ? ' active' : '') + '" data-y="' + y + '">' + y + '</button>').join('') +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(overlay);
+
+  const close = () => overlay.remove();
+  overlay.querySelector('.goal-sheet-close').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+
+  overlay.querySelectorAll('.month-pick-item[data-m]').forEach(b => {
+    b.addEventListener('click', () => {
+      // delta = выбранный месяц - текущий
+      const m = parseInt(b.dataset.m, 10);
+      CHART_OFFSET_MONTHS = m - curM;
+      close();
+      renderDashboard();
+    });
+  });
+  overlay.querySelectorAll('.month-pick-item[data-y]').forEach(b => {
+    b.addEventListener('click', () => {
+      // год — игнорируем (пока)
+      close();
+    });
+  });
+}
+
 function renderChart() {
   const sec = document.createElement('div');
   sec.className = 'section';
@@ -819,7 +869,7 @@ function renderChart() {
   const filterHTML = periods.map(([n, label]) =>
     '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
   ).join('');
-  sec.innerHTML = '<div class="section-title"><span class="month-nav">' + (CHART_PERIOD === 30 ? '<button class="month-prev">◀</button><span class="month-label">' + (function(){const d=new Date();d.setMonth(d.getMonth()+CHART_OFFSET_MONTHS);const m=['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];return m[d.getMonth()] + ' ' + d.getFullYear();})() + '</span><button class="month-next">▶</button>' : '') + '</span>Активность <span class="period-filter">' + filterHTML + '</span></div>';
+  sec.innerHTML = '<div class="section-title"><span class="month-nav">' + (CHART_PERIOD === 30 ? '<button class="month-btn">' + (function(){const d=new Date();d.setMonth(d.getMonth()+CHART_OFFSET_MONTHS);const m=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];return m[d.getMonth()] + ' ' + d.getFullYear();})() + '</button>' : '') + '</span>Активность <span class="period-filter">' + filterHTML + '</span></div>';
 
   const days = [];
   const now = new Date();
@@ -884,6 +934,8 @@ function renderChart() {
 
   const chart = document.createElement('div');
   chart.className = 'chart-bars';
+  chart.style.position = 'relative';
+  chart.style.paddingTop = '32px';
   chart.innerHTML = '<div class="chart-y-axis">' + yAxisHTML + '</div>';
 
   const barsWrap = document.createElement('div');
@@ -895,14 +947,25 @@ function renderChart() {
     const col = document.createElement('div');
     col.className = 'chart-col';
     const isSel = CHART_SELECTED === d;
-    const _lbl = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : val) : '';
     col.innerHTML =
       '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '"' +
       ' data-date="' + d + '"' +
-      ' style="height:' + h + '%">' +
-      (_lbl ? '<span class="chart-bar-label">' + _lbl + '</span>' : '') +
-      '</div>';
+      ' style="height:' + h + '%"></div>';
     barsWrap.appendChild(col);
+    col.addEventListener('click', () => {
+      const all = barsWrap.querySelectorAll('.chart-bar-label-abs');
+      all.forEach(el => el.remove());
+      if (!val) return;
+      const lbl = CHART_METRIC === 'duration'
+        ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м')
+        : String(val);
+      const absLbl = document.createElement('div');
+      absLbl.className = 'chart-bar-label-abs';
+      absLbl.textContent = lbl;
+      absLbl.style.left = (col.offsetLeft + col.offsetWidth / 2) + 'px';
+      absLbl.style.top = '0px';
+      chart.appendChild(absLbl);
+    });
   }
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
@@ -975,10 +1038,8 @@ function renderChart() {
   metricBar.innerHTML = metricHTML;
   sec.appendChild(metricBar);
 
-  const mPrev = sec.querySelector('.month-prev');
-  const mNext = sec.querySelector('.month-next');
-  if (mPrev) mPrev.addEventListener('click', () => { CHART_OFFSET_MONTHS -= 1; renderDashboard(); });
-  if (mNext) mNext.addEventListener('click', () => { CHART_OFFSET_MONTHS += 1; renderDashboard(); });
+  const mBtn = sec.querySelector('.month-btn');
+  if (mBtn) mBtn.addEventListener('click', () => { openMonthSheet(); });
 
   sec.querySelectorAll('.period-btn').forEach(btn => {
     btn.addEventListener('click', () => {

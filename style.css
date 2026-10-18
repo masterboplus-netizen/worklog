@@ -1449,3 +1449,76 @@ html, body {
 .phase.open .phase-arrow {
   transform: rotate(90deg);
 }
+
+/* === Goal picker: spacer сверху/снизу === */
+.goal-picker {
+  padding: 0;
+  scroll-padding: 0;
+}
+.goal-picker-spacer {
+  height: 60px;
+  flex-shrink: 0;
+}
+
+/* === Chart bar label (абсолютный, над столбиком) === */
+.chart-bar-label-abs {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
+}
+/* === Phase arrow → скобки (chevron) === */
+.phase-arrow {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--fg-dim);
+  transition: transform 0.15s;
+  margin-right: 6px;
+  transform-origin: center;
+}
+.phase.open .phase-arrow {
+  transform: rotate(90deg);
+}
+
+/* === Month picker === */
+.month-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-right: 8px;
+}
+.month-btn:active { background: var(--accent); }
+.month-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+.month-pick-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.month-pick-item.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
