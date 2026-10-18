@@ -1034,6 +1034,7 @@ function renderChart() {
 
   const days = [];
   const now = new Date();
+  now.setMonth(now.getMonth() + CHART_OFFSET_MONTHS);
 
   if (CHART_PERIOD === 30) {
     // МЕСЯЦ: календарный месяц (с 1-го числа по последний день)
