@@ -143,7 +143,8 @@ function renderDiary() {
     header.textContent = formatDiaryDate(d);
     c.appendChild(header);
 
-    for (const s of byDate[d]) {
+    const _sortedSess = byDate[d].slice().sort((a, b) => (b.start || '').localeCompare(a.start || ''));
+    for (const s of _sortedSess) {
       const item = document.createElement('div');
       item.className = 'diary-item';
       const timeRange = (s.start || '?') + ' → ' + (s.end || '?');
