@@ -58,6 +58,11 @@ async function init() {
 }
 
 function setupTabs() {
+  const logo = document.querySelector('.logo');
+  if (logo) {
+    logo.style.cursor = 'pointer';
+    logo.addEventListener('click', () => { switchTab('dashboard'); });
+  }
   const tabDash = document.getElementById('tab-dashboard');
   const tabDiary = document.getElementById('tab-diary');
   const tabProjects = document.getElementById('tab-projects');
