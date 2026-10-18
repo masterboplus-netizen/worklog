@@ -9,7 +9,8 @@ let DATA = null;
 let PIN_BUF = '';
 
 window.__initCalls = 0;
-let CHART_PERIOD = 7;   // 1 = день, 7 = неделя, 30 = месяц
+let CHART_PERIOD = 7;
+let CHART_OFFSET_MONTHS = 0;  // сдвиг месяца (0 = текущий, -1 = прошлый)   // 1 = день, 7 = неделя, 30 = месяц
 let CHART_METRIC = 'duration';  // duration | events | screens
 let CHART_SELECTED = null;  // выбранный день для тултипа
 let DAILY_GOAL_MIN = parseInt(localStorage.getItem('worklog_goal_min') || '720', 10);
@@ -734,7 +735,7 @@ function renderProjects() {
       const phDiv = document.createElement('div');
       phDiv.className = 'phase';
       phDiv.innerHTML =
-        '<div class="phase-head">' +
+        '<div class="phase-head"><span class="phase-arrow">▶</span>' +
           '<span class="phase-icon">' + statusIcon + '</span>' +
           '<span class="phase-name">' + ph.phase + '</span>' +
           '<span class="phase-pct">' + phPct + '%</span>' +
@@ -818,7 +819,7 @@ function renderChart() {
   const filterHTML = periods.map(([n, label]) =>
     '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
   ).join('');
-  sec.innerHTML = '<div class="section-title">Активность <span class="period-filter">' + filterHTML + '</span></div>';
+  sec.innerHTML = '<div class="section-title"><span class="month-nav">' + (CHART_PERIOD === 30 ? '<button class="month-prev">◀</button><span class="month-label">' + (function(){const d=new Date();d.setMonth(d.getMonth()+CHART_OFFSET_MONTHS);const m=['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'];return m[d.getMonth()] + ' ' + d.getFullYear();})() + '</span><button class="month-next">▶</button>' : '') + '</span>Активность <span class="period-filter">' + filterHTML + '</span></div>';
 
   const days = [];
   const now = new Date();
@@ -948,7 +949,10 @@ function renderChart() {
         lbl.innerHTML = '<div class="lbl-date">' + dateStr + '</div>' +
                         '<div class="lbl-dow">' + dowStr + '</div>';
       } else {
-        lbl.innerHTML = '<div class="lbl-date">' + dateStr + '</div>';
+        const _d = new Date(d + 'T00:00:00');
+        const _dow = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'][_d.getDay()];
+        lbl.innerHTML = '<div class="lbl-date">' + dateStr + '</div>' +
+                        '<div class="lbl-dow">' + _dow + '</div>';
       }
     }
     labels.appendChild(lbl);
@@ -970,6 +974,11 @@ function renderChart() {
   metricBar.className = 'metric-switch';
   metricBar.innerHTML = metricHTML;
   sec.appendChild(metricBar);
+
+  const mPrev = sec.querySelector('.month-prev');
+  const mNext = sec.querySelector('.month-next');
+  if (mPrev) mPrev.addEventListener('click', () => { CHART_OFFSET_MONTHS -= 1; renderDashboard(); });
+  if (mNext) mNext.addEventListener('click', () => { CHART_OFFSET_MONTHS += 1; renderDashboard(); });
 
   sec.querySelectorAll('.period-btn').forEach(btn => {
     btn.addEventListener('click', () => {
