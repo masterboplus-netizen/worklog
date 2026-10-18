@@ -1044,3 +1044,101 @@ html, body {
 .ring-center .edit-goal {
   pointer-events: auto !important;
 }
+
+/* === Goal bottom sheet === */
+.goal-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.goal-sheet {
+  background: var(--bg2);
+  width: 100%;
+  max-width: 480px;
+  border-radius: 20px 20px 0 0;
+  padding: 20px 16px 24px;
+  position: relative;
+  animation: slideUp 0.2s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.goal-sheet-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--bg3);
+  border: none;
+  color: var(--fg);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+}
+.goal-sheet-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 20px;
+  color: var(--fg);
+}
+.goal-sheet-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.goal-step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg3);
+  color: var(--fg);
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+.goal-step:active { background: var(--accent); }
+#goal-input {
+  width: 100px;
+  height: 56px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--fg);
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+}
+#goal-input::-webkit-inner-spin-button { display: none; }
+#goal-input::-webkit-outer-spin-button { display: none; }
+.goal-unit {
+  font-size: 20px;
+  color: var(--fg-dim);
+}
+.goal-sheet-actions {
+  display: flex;
+  gap: 10px;
+}
+.goal-cancel, .goal-save {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.goal-cancel {
+  background: var(--bg3);
+  color: var(--fg);
+}
+.goal-save {
+  background: var(--accent);
+  color: #fff;
+}

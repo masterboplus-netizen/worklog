@@ -329,6 +329,61 @@ function _valSize(val) {
   return 16;
 }
 
+function openGoalSheet() {
+  // Удалить старый, если есть
+  const old = document.getElementById('goal-sheet-overlay');
+  if (old) old.remove();
+
+  const curH = Math.floor(DAILY_GOAL_MIN / 60);
+  const overlay = document.createElement('div');
+  overlay.id = 'goal-sheet-overlay';
+  overlay.className = 'goal-sheet-overlay';
+  overlay.innerHTML =
+    '<div class="goal-sheet" id="goal-sheet">' +
+      '<button class="goal-sheet-close" aria-label="Закрыть">✕</button>' +
+      '<h2 class="goal-sheet-title">Цель по времени</h2>' +
+      '<div class="goal-sheet-row">' +
+        '<button class="goal-step" data-step="-1">−</button>' +
+        '<input id="goal-input" type="number" min="1" max="24" value="' + curH + '" inputmode="numeric">' +
+        '<span class="goal-unit">ч</span>' +
+        '<button class="goal-step" data-step="1">+</button>' +
+      '</div>' +
+      '<div class="goal-sheet-actions">' +
+        '<button class="goal-cancel">Отмена</button>' +
+        '<button class="goal-save">Сохранить</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(overlay);
+
+  const inp = overlay.querySelector('#goal-input');
+  const close = () => overlay.remove();
+  const save = () => {
+    const v = parseInt(inp.value, 10);
+    if (v > 0 && v <= 24) {
+      localStorage.setItem('worklog_goal_min', v * 60);
+      DAILY_GOAL_MIN = v * 60;
+      close();
+      renderDashboard();
+    }
+  };
+
+  overlay.querySelector('.goal-sheet-close').addEventListener('click', close);
+  overlay.querySelector('.goal-cancel').addEventListener('click', close);
+  overlay.querySelector('.goal-save').addEventListener('click', save);
+  overlay.querySelectorAll('.goal-step').forEach(b => {
+    b.addEventListener('click', () => {
+      const delta = parseInt(b.dataset.step, 10);
+      let v = parseInt(inp.value, 10) + delta;
+      if (v < 1) v = 1;
+      if (v > 24) v = 24;
+      inp.value = v;
+    });
+  });
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  // Enter — сохранить
+  inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); });
+}
+
 function renderHeroRings() {
   const t = calcTotals();
   const sessions = DATA.sessions || [];
@@ -428,16 +483,7 @@ function renderHeroRings() {
       if (editEl) {
         ev.stopPropagation();
         ev.preventDefault();
-        const curH = Math.floor(DAILY_GOAL_MIN / 60);
-        const inp = prompt('Цель в часах (сейчас: ' + curH + '):', curH);
-        if (inp !== null) {
-          const h = parseInt(inp, 10);
-          if (h > 0 && h <= 24) {
-            localStorage.setItem('worklog_goal_min', h * 60);
-            DAILY_GOAL_MIN = h * 60;
-            renderDashboard();
-          }
-        }
+        openGoalSheet();
         return;
       }
       HERO_MODE = HERO_MODE === 'today' ? 'last' : 'today';
