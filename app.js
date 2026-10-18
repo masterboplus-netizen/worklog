@@ -423,8 +423,11 @@ function renderHeroRings() {
   const heroRing = div.querySelector('#hero-ring');
   if (heroRing) {
     heroRing.addEventListener('click', (ev) => {
-      if (ev.target.classList.contains('edit-goal')) {
-        // Не переключаем режим, а редактируем цель
+      // Проверяем ближайший родитель — вдруг клик по вложенному элементу
+      const editEl = ev.target.closest && ev.target.closest('.edit-goal');
+      if (editEl) {
+        ev.stopPropagation();
+        ev.preventDefault();
         const curH = Math.floor(DAILY_GOAL_MIN / 60);
         const inp = prompt('Цель в часах (сейчас: ' + curH + '):', curH);
         if (inp !== null) {

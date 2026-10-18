@@ -1029,3 +1029,18 @@ html, body {
 .pin-pad .pin-fn {
   font-size: 18px;
 }
+
+/* === ✏️ goal: кликабелен, поверх === */
+.edit-goal {
+  pointer-events: auto !important;
+  display: inline-block;
+  padding: 2px 4px;
+  cursor: pointer;
+  font-size: 1.1em;
+}
+.ring-center {
+  pointer-events: none;
+}
+.ring-center .edit-goal {
+  pointer-events: auto !important;
+}
