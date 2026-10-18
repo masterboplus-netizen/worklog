@@ -13,7 +13,14 @@ let CHART_PERIOD = 7;
 let CHART_OFFSET_MONTHS = 0;  // сдвиг месяца (0 = текущий, -1 = прошлый)   // 1 = день, 7 = неделя, 30 = месяц
 let CHART_METRIC = 'duration';  // duration | events | screens
 let CHART_SELECTED = null;  // выбранный день для тултипа
-let DAILY_GOAL_MIN = parseInt(localStorage.getItem('worklog_goal_min') || '720', 10);
+let DAILY_GOAL_MIN = (function(){
+  try {
+    const v = parseInt(localStorage.getItem('worklog_goal_min'), 10);
+    return (v > 0 && v <= 1440) ? v : 720;
+  } catch (e) {
+    return 720;
+  }
+})();
 
 function _bootstrap() {
   window.__initCalls++;
@@ -365,7 +372,11 @@ function openGoalSheet() {
     const active = picker.querySelector('.goal-picker-item.active');
     const v = active ? parseInt(active.dataset.h, 10) : curH;
     if (v > 0 && v <= 24) {
-      localStorage.setItem('worklog_goal_min', v * 60);
+      try {
+        localStorage.setItem('worklog_goal_min', String(v * 60));
+      } catch (e) {
+        console.warn('localStorage failed:', e);
+      }
       DAILY_GOAL_MIN = v * 60;
       close();
       renderDashboard();
