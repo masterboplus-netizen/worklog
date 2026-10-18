@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-18T10:16:00",
+  "updated": "2026-10-18T12:48:00",
   "projects": [
     {
       "id": "bo81",
@@ -364,6 +364,17 @@
       "events": 14,
       "screens": 10,
       "note": "X-4 (ночь): tz-fix (calcTotals локальная дата), PIN-пад octagon 78px, STATE/TODO."
+    },
+    {
+      "id": "s_20261018_2",
+      "date": "2026-10-18",
+      "project": "bo81",
+      "start": "10:16",
+      "end": "12:48",
+      "duration_min": 152,
+      "events": 35,
+      "screens": 22,
+      "note": "X-5: цель в localStorage + bottom sheet scroll-picker, аналитика проекта (5 блоков), кнопка в карточке."
     }
   ],
   "baseline": {
