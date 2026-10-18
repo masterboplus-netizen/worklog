@@ -737,7 +737,7 @@ function renderProjects() {
       const phDiv = document.createElement('div');
       phDiv.className = 'phase';
       phDiv.innerHTML =
-        '<div class="phase-head"><span class="phase-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>' +
+        '<div class="phase-head"><span class="phase-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>' +
           '<span class="phase-icon">' + statusIcon + '</span>' +
           '<span class="phase-name">' + ph.phase + '</span>' +
           '<span class="phase-pct">' + phPct + '%</span>' +

@@ -1446,9 +1446,7 @@ html, body {
   transition: transform 0.15s;
   margin-right: 4px;
 }
-.phase.open .phase-arrow {
-  transform: rotate(90deg);
-}
+.phase.open .phase-arrow { transform: rotate(180deg); }
 
 /* === Goal picker: spacer сверху/снизу === */
 .goal-picker {
@@ -1483,9 +1481,7 @@ html, body {
   margin-right: 6px;
   transform-origin: center;
 }
-.phase.open .phase-arrow {
-  transform: rotate(90deg);
-}
+.phase.open .phase-arrow { transform: rotate(180deg); }
 
 /* === Month picker === */
 .month-btn {
