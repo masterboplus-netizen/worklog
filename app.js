@@ -1081,10 +1081,13 @@ function renderChart() {
     const col = document.createElement('div');
     col.className = 'chart-col';
     const isSel = CHART_SELECTED === d;
+    const _label = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : String(val)) : '';
     col.innerHTML =
       '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '"' +
       ' data-date="' + d + '"' +
-      ' style="height:' + h + '%"></div>';
+      ' style="height:' + h + '%">' +
+      (_label ? '<span class="bar-label">' + _label + '</span>' : '') +
+      '</div>';
     barsWrap.appendChild(col);
   }
   if (!barsWrap._delegated) {
@@ -1109,6 +1112,14 @@ function renderChart() {
       chart.appendChild(absLbl);
     });
   }
+
+  barsWrap.addEventListener('click', (ev) => {
+    const bar = ev.target.closest && ev.target.closest('.chart-bar');
+    if (!bar) return;
+    const wasSelected = bar.classList.contains('selected');
+    barsWrap.querySelectorAll('.chart-bar.selected').forEach(b => b.classList.remove('selected'));
+    if (!wasSelected) bar.classList.add('selected');
+  });
 
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
