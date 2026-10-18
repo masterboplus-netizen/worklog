@@ -737,7 +737,7 @@ function renderProjects() {
       const phDiv = document.createElement('div');
       phDiv.className = 'phase';
       phDiv.innerHTML =
-        '<div class="phase-head"><span class="phase-arrow">›</span>' +
+        '<div class="phase-head"><span class="phase-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>' +
           '<span class="phase-icon">' + statusIcon + '</span>' +
           '<span class="phase-name">' + ph.phase + '</span>' +
           '<span class="phase-pct">' + phPct + '%</span>' +
@@ -869,7 +869,7 @@ function renderChart() {
   const filterHTML = periods.map(([n, label]) =>
     '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
   ).join('');
-  sec.innerHTML = '<div class="section-title"><span class="month-nav">' + (CHART_PERIOD === 30 ? '<button class="month-btn">' + (function(){const d=new Date();d.setMonth(d.getMonth()+CHART_OFFSET_MONTHS);const m=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];return m[d.getMonth()] + ' ' + d.getFullYear();})() + '</button>' : '') + '</span>Активность <span class="period-filter">' + filterHTML + '</span></div>';
+  sec.innerHTML = '<div class="section-title">Активность <span class="period-filter">' + filterHTML + '</span></div>';
 
   const days = [];
   const now = new Date();
