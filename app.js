@@ -780,11 +780,14 @@ function renderProjects() {
 
       const openBtn = document.createElement('button');
       openBtn.className = 'project-btn project-open-btn';
-      openBtn.textContent = 'Открыть';
+      openBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg> Открыть';
       openBtn.addEventListener('click', (ev) => {
         ev.stopPropagation();
         phasesDiv.classList.toggle('hidden');
-        openBtn.textContent = phasesDiv.classList.contains('hidden') ? 'Открыть' : 'Свернуть';
+        const isHidden = phasesDiv.classList.contains('hidden');
+        openBtn.innerHTML = isHidden
+          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg> Открыть'
+          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg> Свернуть';
       });
 
       const anBtn = document.createElement('button');
@@ -798,7 +801,7 @@ function renderProjects() {
 
       actionsDiv.appendChild(openBtn);
       actionsDiv.appendChild(anBtn);
-      card.appendChild(actionsDiv);
+      card.insertBefore(actionsDiv, phasesDiv);
       sec.appendChild(card);
   }
 
