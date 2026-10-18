@@ -1605,7 +1605,7 @@ html, body {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--fg);
   white-space: nowrap;
@@ -1615,18 +1615,4 @@ html, body {
   margin-bottom: 4px;
   z-index: 999;
 }
-.chart-bar.selected .bar-label {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--fg);
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s;
-  margin-bottom: 4px;
-  z-index: 999;
-}
+.chart-bar.selected .bar-label { opacity: 1; }
