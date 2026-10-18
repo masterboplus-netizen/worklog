@@ -871,7 +871,8 @@ function renderChart() {
     '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
   ).join('');
   const _mBtn = '<button class="month-btn">' + (function(){const d=new Date();d.setMonth(d.getMonth()+CHART_OFFSET_MONTHS);const m=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];return m[d.getMonth()] + ' ' + d.getFullYear();})() + '</button>';
-  sec.innerHTML = '<div class="section-title">Активность <span class="period-filter">' + filterHTML + '</span>' + _mBtn + '</div>';
+  sec.innerHTML = '<div class="section-title">Активность' + _mBtn + '</div>' +
+    '<div class="period-filter-row">' + filterHTML + '</div>';
 
   const days = [];
   const now = new Date();
@@ -954,20 +955,24 @@ function renderChart() {
       ' data-date="' + d + '"' +
       ' style="height:' + h + '%"></div>';
     barsWrap.appendChild(col);
-    col.addEventListener('click', () => {
-      const all = barsWrap.querySelectorAll('.chart-bar-label-abs');
-      all.forEach(el => el.remove());
-      if (!val) return;
-      const lbl = CHART_METRIC === 'duration'
-        ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м')
-        : String(val);
-      const absLbl = document.createElement('div');
-      absLbl.className = 'chart-bar-label-abs';
-      absLbl.textContent = lbl;
-      absLbl.style.left = (col.offsetLeft + col.offsetWidth / 2) + 'px';
-      absLbl.style.top = '0px';
-      chart.appendChild(absLbl);
-    });
+    const barEl = col.querySelector('.chart-bar');
+    if (barEl) {
+      barEl.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        const all = barsWrap.querySelectorAll('.chart-bar-label-abs');
+        all.forEach(el => el.remove());
+        if (!val) return;
+        const lbl = CHART_METRIC === 'duration'
+          ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м')
+          : String(val);
+        const absLbl = document.createElement('div');
+        absLbl.className = 'chart-bar-label-abs';
+        absLbl.textContent = lbl;
+        absLbl.style.left = (col.offsetLeft + col.offsetWidth / 2) + 'px';
+        absLbl.style.top = '0px';
+        chart.appendChild(absLbl);
+      });
+    }
   }
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
