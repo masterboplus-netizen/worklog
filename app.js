@@ -789,6 +789,7 @@ function renderProjects() {
       openBtn.addEventListener('click', (ev) => {
         ev.stopPropagation();
         phasesDiv.classList.toggle('hidden');
+      phasesDiv.classList.toggle('open');
         const isHidden = phasesDiv.classList.contains('hidden');
         openBtn.querySelector('path').setAttribute('d', isHidden ? 'M6 9l6 6 6-6' : 'M6 15l6-6 6 6');
         openBtn.querySelector('span').textContent = isHidden ? 'Открыть' : 'Свернуть';
