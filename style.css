@@ -1309,7 +1309,7 @@ html, body {
 }
 
 .project-btn:active { background: var(--accent); color: #fff; }
-.project-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
 
 /* === Project btn: фикс. высота, выравнивание === */
 .project-btn {
@@ -1332,9 +1332,13 @@ html, body {
   box-sizing: border-box;
 }
 .project-btn:active { background: var(--accent); color: #fff; }
+
+/* === Project btn svg: выравнивание === */
 .project-btn svg {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
   display: block;
+  vertical-align: middle;
+  margin: 0;
 }
