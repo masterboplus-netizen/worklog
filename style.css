@@ -1281,41 +1281,32 @@ html, body {
 /* === Project analytics button (прямоугольная, по центру) === */
 
 /* === Project analytics button (справа, под прогрессом) === */
-.project-analytics-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin: 10px 0 0 auto;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  color: var(--fg);
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: inherit;
-  width: fit-content;
-}
-.project-analytics-btn:active { background: var(--accent); color: #fff; }
-.project-analytics-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+
+
 
 /* === Project actions: 2 кнопки в ряд === */
+
+
+
+
+
+/* === Project btn: фикс. высота, выравнивание === */
+
+
+
+/* === Project btn svg: выравнивание === */
+
+/* === Project actions (final, clean) === */
 .project-actions {
   display: flex;
   gap: 8px;
   margin-top: 12px;
 }
-
-.project-btn:active { background: var(--accent); color: #fff; }
-
-
-/* === Project btn: фикс. высота, выравнивание === */
 .project-btn {
   flex: 1;
   height: 44px;
-  padding: 0 8px;
+  padding: 0 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
   color: var(--fg);
@@ -1324,21 +1315,17 @@ html, body {
   font-weight: 500;
   cursor: pointer;
   font-family: inherit;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  line-height: 1;
   box-sizing: border-box;
+  line-height: 1;
 }
 .project-btn:active { background: var(--accent); color: #fff; }
-
-/* === Project btn svg: выравнивание === */
 .project-btn svg {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
   display: block;
-  vertical-align: middle;
-  margin: 0;
 }
