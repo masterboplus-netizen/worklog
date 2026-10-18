@@ -16,10 +16,13 @@ let CHART_SELECTED = null;  // выбранный день для тултипа
 let DAILY_GOAL_MIN = (function(){
   try {
     const v = parseInt(localStorage.getItem('worklog_goal_min'), 10);
-    return (v > 0 && v <= 1440) ? v : 720;
-  } catch (e) {
-    return 720;
+    if (v > 0 && v <= 1440) return v;
+  } catch (e) {}
+  // Fallback из DATA (расшифрованного worklog.json)
+  if (typeof DATA !== 'undefined' && DATA && DATA.daily_goal_min) {
+    return DATA.daily_goal_min;
   }
+  return 720;
 })();
 
 function _bootstrap() {
@@ -259,6 +262,10 @@ async function tryUnlock(pin) {
     if (!resp.ok) throw new Error('fetch failed');
     const encrypted = await resp.json();
     DATA = await decryptData(pin, encrypted);
+    // Обновить DAILY_GOAL_MIN из DATA (если есть)
+    if (DATA && DATA.daily_goal_min) {
+      DAILY_GOAL_MIN = DATA.daily_goal_min;
+    }
     return true;
   } catch (e) {
     return false;
@@ -376,6 +383,10 @@ function openGoalSheet() {
         localStorage.setItem('worklog_goal_min', String(v * 60));
       } catch (e) {
         console.warn('localStorage failed:', e);
+      }
+      // Обновить DATA (для сохранения на сервере при следующем encrypt.py)
+      if (typeof DATA !== 'undefined' && DATA) {
+        DATA.daily_goal_min = v * 60;
       }
       DAILY_GOAL_MIN = v * 60;
       close();

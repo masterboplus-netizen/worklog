@@ -383,5 +383,6 @@
     "screens": 0,
     "note": "Часы с июля-сентября 2026 (оценка, 7473 сообщения × 2.7 мин)"
   },
-  "gap_rule_minutes": 15
+  "gap_rule_minutes": 15,
+  "daily_goal_min": 720
 }
