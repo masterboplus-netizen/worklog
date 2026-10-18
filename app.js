@@ -869,7 +869,8 @@ function renderChart() {
   const filterHTML = periods.map(([n, label]) =>
     '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
   ).join('');
-  sec.innerHTML = '<div class="section-title">Активность <span class="period-filter">' + filterHTML + '</span></div>';
+  const _mBtn = '<button class="month-btn">' + (function(){const d=new Date();d.setMonth(d.getMonth()+CHART_OFFSET_MONTHS);const m=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];return m[d.getMonth()] + ' ' + d.getFullYear();})() + '</button>';
+  sec.innerHTML = '<div class="section-title">Активность <span class="period-filter">' + filterHTML + '</span>' + _mBtn + '</div>';
 
   const days = [];
   const now = new Date();
