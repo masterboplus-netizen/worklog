@@ -705,6 +705,9 @@ function renderProjects() {
     }
     const pct = totalItems ? Math.round(doneItems / totalItems * 100) : 0;
 
+    const cardWrap = document.createElement('div');
+    cardWrap.className = 'project-card-wrap';
+
     const card = document.createElement('div');
     card.className = 'project-card';
     card.innerHTML =
@@ -712,7 +715,6 @@ function renderProjects() {
         '<div class="project-name">' +
           '<span class="project-dot" style="background:' + (p.color || '#4A9EFF') + '"></span>' +
           p.name +
-        '<span class="project-analytics-btn" data-proj="' + p.id + '" title="Аналитика">📊</span>' +
         '</div>' +
         '<div class="project-hours">' + fmtH(hrs) + '</div>' +
       '</div>' +
@@ -775,14 +777,19 @@ function renderProjects() {
       });
     }
 
-    sec.appendChild(card);
-    const anBtn = card.querySelector('.project-analytics-btn');
-    if (anBtn) {
-      anBtn.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        openAnalyticsSheet(anBtn.dataset.proj);
-      });
-    }
+    // Кнопка аналитики — отдельно, справа от карточки
+    const anBtn = document.createElement('button');
+    anBtn.className = 'project-analytics-btn';
+    anBtn.dataset.proj = p.id;
+    anBtn.title = 'Аналитика';
+    anBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7" fill="currentColor" stroke="none"/><rect x="12" y="6" width="3" height="11" fill="currentColor" stroke="none"/><rect x="17" y="13" width="3" height="4" fill="currentColor" stroke="none"/></svg>';
+    anBtn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      openAnalyticsSheet(p.id);
+    });
+    cardWrap.appendChild(card);
+    cardWrap.appendChild(anBtn);
+    sec.appendChild(cardWrap);
   }
 
   return sec;

@@ -1272,3 +1272,30 @@ html, body {
 .trend-up { color: var(--green); }
 .trend-down { color: var(--red); }
 .trend-neutral { color: var(--fg-dim); }
+
+/* === Project card + analytics button (v13) === */
+.project-card-wrap {
+  position: relative;
+  margin-bottom: 12px;
+}
+.project-card {
+  margin-bottom: 0;
+}
+.project-analytics-btn {
+  position: absolute;
+  top: 12px;
+  right: -4px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0;
+  padding: 0;
+}
+.project-analytics-btn:active { background: var(--accent); color: #fff; }
