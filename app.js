@@ -136,7 +136,7 @@ function renderDiary() {
     byDate[ss.date].push(ss);
   }
 
-  const dates = Object.keys(byDate).sort().reverse();
+  const dates = Object.keys(byDate).sort((a, b) => b.localeCompare(a));
   for (const d of dates) {
     const header = document.createElement('div');
     header.className = 'diary-date';
