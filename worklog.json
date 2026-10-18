@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-18T14:50:00",
+  "updated": "2026-10-18T21:12:00",
   "projects": [
     {
       "id": "bo81",
@@ -370,11 +370,11 @@
       "date": "2026-10-18",
       "project": "bo81",
       "start": "10:16",
-      "end": "14:50",
-      "duration_min": 274,
-      "events": 60,
-      "screens": 40,
-      "note": "X-5: цель в localStorage + scroll-picker, аналитика проекта (5 блоков), 2 кнопки (Открыть/Аналитика) с SVG, тап убран."
+      "end": "21:12",
+      "duration_min": 656,
+      "events": 80,
+      "screens": 55,
+      "note": "X-5: цель+scroll-picker, аналитика (5 блоков), 2 кнопки проекта, sticky tabs, month/year picker, phase arrows, тап на столбик — не работает (в TODO)."
     }
   ],
   "baseline": {
