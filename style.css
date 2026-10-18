@@ -1558,3 +1558,21 @@ html, body {
   margin: 8px 0;
   justify-content: flex-end;
 }
+
+/* === Month/year: без рамки, большой шрифт === */
+.month-year-wrap {
+  margin-left: auto;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--fg);
+  white-space: nowrap;
+}
+.month-text, .year-text {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.month-text:hover, .year-text:hover {
+  background: var(--bg3);
+}
