@@ -765,15 +765,7 @@ function renderProjects() {
     card.appendChild(phasesDiv);
 
     // Клик на шапку карточки (.project-head) — раскрыть/свернуть фазы
-    const head = card.querySelector('.project-head');
-    if (head) {
-      head.style.cursor = 'pointer';
-      head.addEventListener('click', (e) => {
-        e.stopPropagation();
-        phasesDiv.classList.toggle('hidden');
-      });
-    }
-
+      // Тап на шапку убран (раскрытие — через кнопку «Открыть»)
       // Две кнопки: Открыть + Аналитика (готовый HTML)
       const actionsDiv = document.createElement('div');
       actionsDiv.className = 'project-actions';
