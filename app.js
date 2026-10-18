@@ -774,33 +774,35 @@ function renderProjects() {
       });
     }
 
-      // Две кнопки: Открыть + Аналитика
+      // Две кнопки: Открыть + Аналитика (готовый HTML)
       const actionsDiv = document.createElement('div');
       actionsDiv.className = 'project-actions';
+      actionsDiv.innerHTML =
+        '<button class="project-btn project-open-btn">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+          '<span>Открыть</span>' +
+        '</button>' +
+        '<button class="project-btn project-analytics-btn" data-proj="' + p.id + '">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7" fill="currentColor" stroke="none"/><rect x="12" y="6" width="3" height="11" fill="currentColor" stroke="none"/><rect x="17" y="13" width="3" height="4" fill="currentColor" stroke="none"/></svg>' +
+          '<span>Аналитика</span>' +
+        '</button>';
 
-      const openBtn = document.createElement('button');
-      openBtn.className = 'project-btn project-open-btn';
-      openBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg> Открыть';
+      const openBtn = actionsDiv.querySelector('.project-open-btn');
+      const anBtn = actionsDiv.querySelector('.project-analytics-btn');
+
       openBtn.addEventListener('click', (ev) => {
         ev.stopPropagation();
         phasesDiv.classList.toggle('hidden');
         const isHidden = phasesDiv.classList.contains('hidden');
-        openBtn.innerHTML = isHidden
-          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg> Открыть'
-          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg> Свернуть';
+        openBtn.querySelector('path').setAttribute('d', isHidden ? 'M6 9l6 6 6-6' : 'M6 15l6-6 6 6');
+        openBtn.querySelector('span').textContent = isHidden ? 'Открыть' : 'Свернуть';
       });
 
-      const anBtn = document.createElement('button');
-      anBtn.className = 'project-btn project-analytics-btn';
-      anBtn.dataset.proj = p.id;
-      anBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7" fill="currentColor" stroke="none"/><rect x="12" y="6" width="3" height="11" fill="currentColor" stroke="none"/><rect x="17" y="13" width="3" height="4" fill="currentColor" stroke="none"/></svg> Аналитика';
       anBtn.addEventListener('click', (ev) => {
         ev.stopPropagation();
         openAnalyticsSheet(p.id);
       });
 
-      actionsDiv.appendChild(openBtn);
-      actionsDiv.appendChild(anBtn);
       card.insertBefore(actionsDiv, phasesDiv);
       sec.appendChild(card);
   }
