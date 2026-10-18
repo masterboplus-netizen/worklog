@@ -1329,3 +1329,19 @@ html, body {
   flex-shrink: 0;
   display: block;
 }
+
+/* === Logo в топбаре: flex, выравнивание, обводка === */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  box-sizing: border-box;
+  display: block;
+  flex-shrink: 0;
+}
