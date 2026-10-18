@@ -1307,9 +1307,15 @@ html, body {
   gap: 8px;
   margin-top: 12px;
 }
+
+.project-btn:active { background: var(--accent); color: #fff; }
+.project-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* === Project btn: фикс. высота, выравнивание === */
 .project-btn {
   flex: 1;
-  padding: 10px 8px;
+  height: 44px;
+  padding: 0 8px;
   background: var(--bg3);
   border: 1px solid var(--border);
   color: var(--fg);
@@ -1318,10 +1324,17 @@ html, body {
   font-weight: 500;
   cursor: pointer;
   font-family: inherit;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  line-height: 1;
+  box-sizing: border-box;
 }
 .project-btn:active { background: var(--accent); color: #fff; }
-.project-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+.project-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: block;
+}
