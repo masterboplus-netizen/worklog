@@ -774,17 +774,31 @@ function renderProjects() {
       });
     }
 
-    // Кнопка аналитики — отдельно, справа от карточки
-    const anBtn = document.createElement('button');
-    anBtn.className = 'project-analytics-btn';
-    anBtn.dataset.proj = p.id;
-    anBtn.title = 'Аналитика';
-    anBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7" fill="currentColor" stroke="none"/><rect x="12" y="6" width="3" height="11" fill="currentColor" stroke="none"/><rect x="17" y="13" width="3" height="4" fill="currentColor" stroke="none"/></svg>';
-    anBtn.addEventListener('click', (ev) => {
-      ev.stopPropagation();
-      openAnalyticsSheet(p.id);
-    });
-      card.appendChild(anBtn);
+      // Две кнопки: Открыть + Аналитика
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'project-actions';
+
+      const openBtn = document.createElement('button');
+      openBtn.className = 'project-btn project-open-btn';
+      openBtn.textContent = 'Открыть';
+      openBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        phasesDiv.classList.toggle('hidden');
+        openBtn.textContent = phasesDiv.classList.contains('hidden') ? 'Открыть' : 'Свернуть';
+      });
+
+      const anBtn = document.createElement('button');
+      anBtn.className = 'project-btn project-analytics-btn';
+      anBtn.dataset.proj = p.id;
+      anBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7" fill="currentColor" stroke="none"/><rect x="12" y="6" width="3" height="11" fill="currentColor" stroke="none"/><rect x="17" y="13" width="3" height="4" fill="currentColor" stroke="none"/></svg> Аналитика';
+      anBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        openAnalyticsSheet(p.id);
+      });
+
+      actionsDiv.appendChild(openBtn);
+      actionsDiv.appendChild(anBtn);
+      card.appendChild(actionsDiv);
       sec.appendChild(card);
   }
 

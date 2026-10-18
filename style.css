@@ -1300,3 +1300,28 @@ html, body {
 }
 .project-analytics-btn:active { background: var(--accent); color: #fff; }
 .project-analytics-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* === Project actions: 2 кнопки в ряд === */
+.project-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.project-btn {
+  flex: 1;
+  padding: 10px 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.project-btn:active { background: var(--accent); color: #fff; }
+.project-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
