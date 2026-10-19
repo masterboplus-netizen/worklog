@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-19T16:45:00",
+  "updated": "2026-10-19T19:55:00",
   "projects": [
     {
       "id": "bo81",
@@ -91,11 +91,11 @@
               "done": true
             },
             {
-              "text": "handle_text → text/* (60%)",
+              "text": "handle_text → text/* (90%) — parse.py вынесен",
               "done": false
             },
             {
-              "text": "rooms.py (7638 строк)",
+              "text": "rooms.py (аудит 100%, 2 мертвых удалены, архитектура готова, старт выноса в сессии 21)",
               "done": false
             },
             {
