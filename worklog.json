@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-18T23:00:00",
+  "updated": "2026-10-19T15:45:00",
   "projects": [
     {
       "id": "bo81",
@@ -375,6 +375,17 @@
       "events": 80,
       "screens": 55,
       "note": "X-5: цель+scroll-picker, аналитика (5 блоков), 2 кнопки проекта, sticky tabs, month/year picker, phase arrows, тап на столбик — не работает (в TODO)."
+    },
+    {
+      "id": "s_20261019_1",
+      "date": "2026-10-19",
+      "project": "bo81",
+      "start": "12:26",
+      "end": "15:45",
+      "duration_min": 199,
+      "events": 65,
+      "screens": 55,
+      "note": "Сессия 20: _legacy.py 487→360, text/parse.py (10 actions), фикс парсера (материалы, ноая), digest.py МСК, дубль update_object_status, аудит rooms.py (план 25-35ч), 13 коммитов"
     }
   ],
   "baseline": {
