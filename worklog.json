@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-19T15:45:00",
+  "updated": "2026-10-19T16:35:00",
   "projects": [
     {
       "id": "bo81",
@@ -381,11 +381,11 @@
       "date": "2026-10-19",
       "project": "bo81",
       "start": "12:26",
-      "end": "15:45",
-      "duration_min": 199,
+      "end": "16:35",
+      "duration_min": 249,
       "events": 65,
       "screens": 55,
-      "note": "Сессия 20: _legacy.py 487→360, text/parse.py (10 actions), фикс парсера (материалы, ноая), digest.py МСК, дубль update_object_status, аудит rooms.py (план 25-35ч), 13 коммитов"
+      "note": "Сессия 20: _legacy.py 487->360, text/parse.py (10 actions), 5 багов (материалы, ноая, МСК, дубль, wall_niche), аудит rooms.py (весь код), архитектура rooms/ (4 слоя), все доки обновлены. 16 коммитов."
     }
   ],
   "baseline": {
