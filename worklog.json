@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-20T11:34:00",
+  "updated": "2026-10-20T13:40:00",
   "projects": [
     {
       "id": "bo81",
@@ -403,11 +403,11 @@
       "date": "2026-10-20",
       "project": "bo81",
       "start": "09:54",
-      "end": "11:34",
-      "duration_min": 100,
-      "events": 15,
-      "screens": 10,
-      "note": "Сессия 22: фиксы импортов после выноса (rooms_core, rooms_walls). Вынос handle_measure_input (472 строки). Обход стен и размеры работают."
+      "end": "13:38",
+      "duration_min": 224,
+      "events": 65,
+      "screens": 55,
+      "note": "Сессия 23: веб-старт. Replit не хавает uvicorn/venv. Сделали web_app.py (FastAPI в потоке), порт 8080. Настроили .replit (python web_app.py + python bot.py). Дашборд временно отключен."
     }
   ],
   "baseline": {
