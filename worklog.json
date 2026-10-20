@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-20T13:40:00",
+  "updated": "2026-10-20T14:40:00",
   "projects": [
     {
       "id": "bo81",
@@ -402,12 +402,12 @@
       "id": "s_20261020_1",
       "date": "2026-10-20",
       "project": "bo81",
-      "start": "09:54",
-      "end": "13:38",
-      "duration_min": 224,
-      "events": 65,
-      "screens": 55,
-      "note": "Сессия 23: веб-старт. Replit не хавает uvicorn/venv. Сделали web_app.py (FastAPI в потоке), порт 8080. Настроили .replit (python web_app.py + python bot.py). Дашборд временно отключен."
+      "start": "13:42",
+      "end": "14:40",
+      "duration_min": 58,
+      "events": 22,
+      "screens": 18,
+      "note": "Сессия 23: запуск FastAPI, фикс Jinja2, вынос PWA на GitHub Pages, возврат дашборда"
     }
   ],
   "baseline": {
