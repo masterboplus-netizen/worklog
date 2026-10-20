@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-19T19:55:00",
+  "updated": "2026-10-20T10:25:00",
   "projects": [
     {
       "id": "bo81",
@@ -386,6 +386,28 @@
       "events": 65,
       "screens": 55,
       "note": "Сессия 20: _legacy.py 487->360, text/parse.py (10 actions), 5 багов (материалы, ноая, МСК, дубль, wall_niche), аудит rooms.py (весь код), архитектура rooms/ (4 слоя), все доки обновлены. 16 коммитов."
+    },
+    {
+      "id": "s_20261019_3",
+      "date": "2026-10-19",
+      "project": "bo81",
+      "start": "20:48",
+      "end": "23:36",
+      "duration_min": 168,
+      "events": 60,
+      "screens": 50,
+      "note": "Сессия 21: вынос rooms.py (часть 1). rooms.py 7904→1845. 6 доменов (walls, comm, openings, floors, elec, reports)."
+    },
+    {
+      "id": "s_20261020_1",
+      "date": "2026-10-20",
+      "project": "bo81",
+      "start": "09:54",
+      "end": "10:25",
+      "duration_min": 31,
+      "events": 15,
+      "screens": 10,
+      "note": "Сессия 22: фиксы импортов после выноса (rooms_core, rooms_walls). Вынос handle_measure_input (472 строки). Обход стен и размеры работают."
     }
   ],
   "baseline": {
