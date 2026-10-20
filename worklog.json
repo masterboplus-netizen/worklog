@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-20T14:40:00",
+  "updated": "2026-10-20T22:25:00",
   "projects": [
     {
       "id": "bo81",
@@ -419,6 +419,17 @@
       "events": 22,
       "screens": 18,
       "note": "Сессия 23: PWA, FastAPI, venv"
+    },
+    {
+      "id": "s_20261020_3",
+      "date": "2026-10-20",
+      "project": "bo81",
+      "start": "19:59",
+      "end": "22:25",
+      "duration_min": 146,
+      "events": 35,
+      "screens": 21,
+      "note": "Сессия 24: битва за PWA. Вынос на GitHub Pages, Surge. Провал установки Chrome. Настройка цели Хераборины."
     }
   ],
   "baseline": {

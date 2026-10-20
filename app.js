@@ -459,7 +459,7 @@ function renderHeroRings() {
   } else {
     heroValue = t.todayMin;
     heroLabel = 'Сегодня';
-    heroSub = 'Цель ' + Math.floor(DAILY_GOAL_MIN / 60) + 'ч · ' + Math.round(t.todayMin / DAILY_GOAL_MIN * 100) + '%';
+    heroSub = 'Цель ' + fmtH(DAILY_GOAL_MIN) + ' · ' + Math.round(t.todayMin / DAILY_GOAL_MIN * 100) + '%';
   }
   const pctDur = Math.round(heroValue / DAILY_GOAL_MIN * 100);
   const ringColor = pctDur >= 100 ? 'var(--green)' : 'var(--accent)';
