@@ -1071,7 +1071,18 @@ function renderChart() {
     // Красивые потолки (не «×4 от шага», а напрямую)
     let candidates;
     if (metric === 'duration') {
-      candidates = [30, 60, 120, 180, 240, 360, 480, 600, 720, 960, 1200, 1440, 1800, 2400, 3600, 4800, 7200];
+      // Вычисляем среднее время за день
+        let totalMin = 0;
+        let daysWithSessions = 0;
+        const now = new Date();
+        const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        if (window.DATA && window.DATA.sessions) {
+            const recent = window.DATA.sessions.filter(s => new Date(s.date) >= thirtyDaysAgo);
+            totalMin = recent.reduce((sum, s) => sum + s.duration_min, 0);
+            daysWithSessions = new Set(recent.map(s => s.date)).size;
+        }
+        const avgMin = daysWithSessions > 0 ? Math.round(totalMin / daysWithSessions) : 720;
+        candidates = [avgMin]; // В списке теперь только среднее время
     } else {
       candidates = [10, 25, 50, 100, 200, 300, 500, 750, 1000, 1500, 2000, 3000, 5000];
     }
