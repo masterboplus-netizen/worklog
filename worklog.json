@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-20T11:35:00",
+  "updated": "2026-10-20T11:34:00",
   "projects": [
     {
       "id": "bo81",
@@ -403,8 +403,8 @@
       "date": "2026-10-20",
       "project": "bo81",
       "start": "09:54",
-      "end": "10:25",
-      "duration_min": 31,
+      "end": "11:34",
+      "duration_min": 100,
       "events": 15,
       "screens": 10,
       "note": "Сессия 22: фиксы импортов после выноса (rooms_core, rooms_walls). Вынос handle_measure_input (472 строки). Обход стен и размеры работают."
