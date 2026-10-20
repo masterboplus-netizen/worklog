@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-20T10:25:00",
+  "updated": "2026-10-20T11:35:00",
   "projects": [
     {
       "id": "bo81",
@@ -396,7 +396,7 @@
       "duration_min": 168,
       "events": 60,
       "screens": 50,
-      "note": "Сессия 21: вынос rooms.py (часть 1). rooms.py 7904→1845. 6 доменов (walls, comm, openings, floors, elec, reports)."
+      "note": "Сессия 21: rooms.py 7904→1845. Вынос rooms_walls, rooms_comm, rooms_openings, rooms_floors, rooms_elec, rooms_reports."
     },
     {
       "id": "s_20261020_1",
