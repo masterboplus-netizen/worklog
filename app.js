@@ -427,6 +427,10 @@ function openGoalSheet() {
 
 function renderHeroRings() {
   const t = calcTotals();
+  // Заменяем цель на среднее время за день
+  if (t.avgPerDay > 0) {
+    DAILY_GOAL_MIN = t.avgPerDay;
+  }
   const sessions = DATA.sessions || [];
   // avg за 7 дней
   const now = new Date();
