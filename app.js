@@ -459,7 +459,7 @@ function renderHeroRings() {
   } else {
     heroValue = t.todayMin;
     heroLabel = 'Сегодня';
-    heroSub = 'Цель ' + Math.floor(DAILY_GOAL_MIN / 60) + 'ч · ' + Math.round(t.todayMin / DAILY_GOAL_MIN * 100) + '% <span class="edit-goal" style="cursor:pointer;margin-left:4px;">✏️</span>';
+    heroSub = 'Цель ' + Math.floor(DAILY_GOAL_MIN / 60) + 'ч · ' + Math.round(t.todayMin / DAILY_GOAL_MIN * 100) + '%';
   }
   const pctDur = Math.round(heroValue / DAILY_GOAL_MIN * 100);
   const ringColor = pctDur >= 100 ? 'var(--green)' : 'var(--accent)';
@@ -525,7 +525,7 @@ function renderHeroRings() {
     heroRing.addEventListener('click', (ev) => {
       // Проверяем ближайший родитель — вдруг клик по вложенному элементу
       const editEl = ev.target.closest && ev.target.closest('.edit-goal');
-      if (editEl) {
+      if (false) {
         ev.stopPropagation();
         ev.preventDefault();
         openGoalSheet();
