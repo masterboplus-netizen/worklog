@@ -1671,3 +1671,29 @@ body { padding-bottom: 70px; }
 body { padding-bottom: 70px; }
 
 
+
+/* Анимации для пасхалки */
+.laughing-emoji {
+    display: inline-block !important;
+    animation: laughAnim 0.8s infinite !important;
+}
+@keyframes laughAnim {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.15) rotate(5deg); }
+    50% { transform: scale(1) rotate(0deg); }
+    75% { transform: scale(1.15) rotate(-5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+.angry-emoji {
+    display: inline-block !important;
+    animation: shakeAnim 0.6s infinite !important;
+}
+@keyframes shakeAnim {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(15deg); }
+    40% { transform: rotate(-15deg); }
+    60% { transform: rotate(10deg); }
+    80% { transform: rotate(-10deg); }
+    100% { transform: rotate(0deg); }
+}
