@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-21T12:45:00",
+  "updated": "2026-10-21T13:55:00",
   "projects": [
     {
       "id": "bo81",
@@ -326,6 +326,50 @@
           ]
         }
       ]
+    },
+    {
+      "id": "fclub1952",
+      "name": "ФК Богородское 1952",
+      "color": "#e63946",
+      "status": "active",
+      "plan": [
+        {
+          "phase": "1. Парсинг сайта",
+          "status": "done",
+          "items": [
+            {
+              "text": "Скачать chronicle.htm",
+              "done": true
+            },
+            {
+              "text": "Скачать comanda.html",
+              "done": true
+            },
+            {
+              "text": "Скачать картинки",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "2. Приложение",
+          "status": "active",
+          "items": [
+            {
+              "text": "Создать Flask main.py",
+              "done": false
+            },
+            {
+              "text": "Сделать шаблон comanda.html",
+              "done": false
+            },
+            {
+              "text": "Настроить вывод данных",
+              "done": false
+            }
+          ]
+        }
+      ]
     }
   ],
   "sessions": [
@@ -515,6 +559,17 @@
       "events": 25,
       "screens": 15,
       "note": "Запуск API объектов, CORS, умный SQL, выравнивание карточек в Хераборине."
+    },
+    {
+      "id": "s_20261021_2",
+      "date": "2026-10-21",
+      "project": "fclub1952",
+      "start": "13:00",
+      "end": "13:55",
+      "duration_min": 55,
+      "events": 10,
+      "screens": 5,
+      "note": "Парсинг сайта fclub1952.narod.ru, перенос в Replit, настройка Flask."
     }
   ],
   "baseline": {
