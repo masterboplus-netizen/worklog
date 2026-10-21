@@ -424,7 +424,7 @@ html, body {
 /* === Фазы проекта === */
 .phases {
   margin-top: 12px;
-  border-top: 1px solid var(--border);
+  
   padding-top: 8px;
 }
 .phase {
@@ -1641,7 +1641,7 @@ body { padding-bottom: 70px; }
     left: 0;
     right: 0;
     background: var(--bg);
-    border-top: 1px solid var(--border);
+    
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
