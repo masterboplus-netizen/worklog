@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-21T19:31:00",
+  "updated": "2026-10-21T20:59:00",
   "projects": [
     {
       "id": "bo81",
@@ -563,13 +563,13 @@
     {
       "id": "s_20261021_2",
       "date": "2026-10-21",
-      "project": "fclub1952",
-      "start": "13:00",
-      "end": "14:03",
-      "duration_min": 63,
-      "events": 10,
-      "screens": 5,
-      "note": "Парсинг сайта fclub1952.narod.ru, перенос в Replit, настройка Flask."
+      "project": "bo81",
+      "start": "19:31",
+      "end": "20:59",
+      "duration_min": 88,
+      "events": 55,
+      "screens": 12,
+      "note": "Нижняя навигация в bo-web, откат Хераборины, UI_MAP"
     },
     {
       "id": "s_20261021_3",
