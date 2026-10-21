@@ -252,6 +252,32 @@
         }
       ],
       "started": "2026-07-01"
+    },
+    {
+      "id": "bo-web",
+      "name": "Бо Веб",
+      "color": "#007aff",
+      "status": "active",
+      "plan": [
+        {
+          "phase": "Фаза 1: MVP",
+          "status": "active",
+          "items": [
+            {
+              "text": "Скелет приложения",
+              "done": true
+            },
+            {
+              "text": "Экран Объекты (API)",
+              "done": false
+            },
+            {
+              "text": "Экран Комнаты",
+              "done": false
+            }
+          ]
+        }
+      ]
     }
   ],
   "sessions": [
