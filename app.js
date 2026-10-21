@@ -1330,3 +1330,38 @@ function renderFooter() {
   void upd;
   return f;
 }
+
+function showJoke() {
+    const modal = document.getElementById('joke-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        // Небольшая задержка для срабатывания transition
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            modal.querySelector('div').style.transform = 'scale(1)';
+        }, 10);
+    }
+}
+
+function closeJoke() {
+    const modal = document.getElementById('joke-modal');
+    if (modal) {
+        modal.style.opacity = '0';
+        modal.querySelector('div').style.transform = 'scale(0.8)';
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+}
+
+// Вешаем событие при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    const logo = document.getElementById('logo-btn');
+    if (logo) {
+        logo.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            showJoke();
+        });
+    }
+});
