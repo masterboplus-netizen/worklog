@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-21T20:59:00",
+  "updated": "2026-10-22T01:17:00",
   "projects": [
     {
       "id": "bo81",
@@ -553,34 +553,56 @@
       "id": "s_20261021_1",
       "date": "2026-10-21",
       "project": "bo81",
-      "start": "17:28",
-      "end": "18:38",
-      "duration_min": 70,
-      "events": 45,
-      "screens": 15,
-      "note": "Настройка API /rooms, UI_MAP.md, главное меню веба"
+      "start": "11:00",
+      "end": "14:10",
+      "duration_min": 190,
+      "events": 15,
+      "screens": 10,
+      "note": "Утро: фикс pip, запуск бота, настройка Хераборины"
     },
     {
       "id": "s_20261021_2",
       "date": "2026-10-21",
-      "project": "bo81",
-      "start": "13:00",
-      "end": "17:20",
-      "duration_min": 260,
-      "events": 55,
+      "project": "fclub1952",
+      "start": "14:20",
+      "end": "15:40",
+      "duration_min": 80,
+      "events": 8,
+      "screens": 4,
+      "note": "Парсинг fclub1952.narod.ru, перенос в Replit"
+    },
+    {
+      "id": "s_20261021_3",
+      "date": "2026-10-21",
+      "project": "bo-web",
+      "start": "15:46",
+      "end": "18:46",
+      "duration_min": 180,
+      "events": 15,
       "screens": 12,
-      "note": "Бо Веб: настройка домена, API, UI_MAP"
+      "note": "Настройка домена masterbo.work.gd, DNS, API"
     },
     {
       "id": "s_20261021_4",
       "date": "2026-10-21",
       "project": "bo-web",
-      "start": "15:42",
-      "end": "17:20",
-      "duration_min": 98,
-      "events": 15,
-      "screens": 10,
-      "note": "Настройка домена masterbo.work.gd, DNS, ожидание SSL."
+      "start": "19:29",
+      "end": "20:59",
+      "duration_min": 90,
+      "events": 10,
+      "screens": 5,
+      "note": "Продолжение настройки веба, UI_MAP"
+    },
+    {
+      "id": "s_20261021_5",
+      "date": "2026-10-22",
+      "project": "bo-web",
+      "start": "00:34",
+      "end": "01:17",
+      "duration_min": 43,
+      "events": 5,
+      "screens": 2,
+      "note": "Ночная сессия: проверка домена, фиксы"
     }
   ],
   "baseline": {
