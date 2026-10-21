@@ -260,19 +260,67 @@
       "status": "active",
       "plan": [
         {
-          "phase": "Фаза 1: MVP",
+          "phase": "Фаза 1: MVP (Просмотр)",
           "status": "active",
           "items": [
             {
-              "text": "Скелет приложения",
-              "done": true
-            },
-            {
-              "text": "Экран Объекты (API)",
+              "text": "API: список объектов",
               "done": false
             },
             {
-              "text": "Экран Комнаты",
+              "text": "API: список комнат",
+              "done": false
+            },
+            {
+              "text": "Фронт: подключить API объектов",
+              "done": false
+            },
+            {
+              "text": "Фронт: экран Комнаты",
+              "done": false
+            },
+            {
+              "text": "Фронт: экран Замеры",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "Фаза 2: ЭОМ и Сантехника",
+          "status": "pending",
+          "items": [
+            {
+              "text": "API: щиты и группы",
+              "done": false
+            },
+            {
+              "text": "Фронт: экран Электрика",
+              "done": false
+            },
+            {
+              "text": "API: коллекторы",
+              "done": false
+            },
+            {
+              "text": "Фронт: экран Сантехника",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "Фаза 3: Финансы и CRM",
+          "status": "pending",
+          "items": [
+            {
+              "text": "API: финансы",
+              "done": false
+            },
+            {
+              "text": "Фронт: экран Финансы",
+              "done": false
+            },
+            {
+              "text": "Фронт: добавление замеров",
               "done": false
             }
           ]
