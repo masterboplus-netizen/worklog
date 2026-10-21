@@ -84,7 +84,7 @@ html, body {
 .pin-pad button {
   aspect-ratio: 1;
   border: 1px solid var(--border);
-  background: var(--bg2);
+  background: var(--bg);
   color: var(--fg);
   font-size: 24px;
   font-weight: 500;
@@ -163,7 +163,7 @@ html, body {
   margin-bottom: 20px;
 }
 .metric {
-  background: var(--bg2);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 14px;
@@ -196,7 +196,7 @@ html, body {
 
 /* === Карточка проекта === */
 .project-card { 
-  background: var(--bg2);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 14px;
@@ -360,7 +360,7 @@ html, body {
   border-bottom-color: var(--accent);
 }
 .tab:active {
-  background: var(--bg2);
+  background: var(--bg);
 }
 
 /* === Дневник === */
@@ -382,7 +382,7 @@ html, body {
 .diary-date:first-child { margin-top: 0; }
 
 .diary-item {
-  background: var(--bg2);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 12px 14px;
@@ -1044,7 +1044,7 @@ html, body {
 }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .goal-sheet {
-  background: var(--bg2);
+  background: var(--bg);
   width: 100%;
   max-width: 480px;
   border-radius: 20px 20px 0 0;
@@ -1216,7 +1216,7 @@ html, body {
 .an-month-bar-wrap {
   flex: 1;
   height: 14px;
-  background: var(--bg2);
+  background: var(--bg);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -1640,7 +1640,7 @@ body { padding-bottom: 70px; }
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--bg2);
+    background: var(--bg);
     border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-around;
