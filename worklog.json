@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-21T17:20:00",
+  "updated": "2026-10-21T19:31:00",
   "projects": [
     {
       "id": "bo81",
@@ -552,13 +552,13 @@
     {
       "id": "s_20261021_1",
       "date": "2026-10-21",
-      "project": "bo-web",
-      "start": "11:07",
-      "end": "12:45",
-      "duration_min": 98,
-      "events": 25,
+      "project": "bo81",
+      "start": "17:28",
+      "end": "18:38",
+      "duration_min": 70,
+      "events": 45,
       "screens": 15,
-      "note": "Запуск API объектов, CORS, умный SQL, выравнивание карточек в Хераборине."
+      "note": "Настройка API /rooms, UI_MAP.md, главное меню веба"
     },
     {
       "id": "s_20261021_2",
