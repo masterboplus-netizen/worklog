@@ -195,7 +195,7 @@ html, body {
 }
 
 /* === Карточка проекта === */
-.project-card { margin-bottom: 16px; 
+.project-card { 
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -1258,11 +1258,11 @@ html, body {
 .trend-neutral { color: var(--fg-dim); }
 
 /* === Project card + analytics button (v13) === */
-.project-card-wrap {
+.project-card-wrap { margin-bottom: 16px;
   position: relative;
   margin-bottom: 12px;
 }
-.project-card { margin-bottom: 16px; 
+.project-card { 
   margin-bottom: 0;
 }
 
