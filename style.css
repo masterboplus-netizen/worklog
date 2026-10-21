@@ -1670,16 +1670,4 @@ body { padding-bottom: 70px; }
 }
 body { padding-bottom: 70px; }
 
-.angry-emoji {
-    display: inline-block;
-    animation: shakeAnim 4s infinite;
-    animation-delay: 2s; /* Ждем, пока смеющийся закончит */
-}
-@keyframes shakeAnim {
-    0%, 10% { transform: rotate(0deg); }
-    2% { transform: rotate(15deg); }
-    4% { transform: rotate(-15deg); }
-    6% { transform: rotate(10deg); }
-    8% { transform: rotate(-10deg); }
-    10%, 100% { transform: rotate(0deg); }
-}
+
