@@ -711,7 +711,7 @@ function openAnalyticsSheet(projectId) {
 function renderProjects() {
   const sec = document.createElement('div');
   sec.className = 'section';
-  sec.innerHTML = '<div class="section-title">Проекты</div>';
+  
 
   const byProj = {};
   for (const s of DATA.sessions || []) {
