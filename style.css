@@ -79,7 +79,7 @@ html, body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  margin-bottom: 16px;
+  
 }
 .pin-pad button {
   aspect-ratio: 1;
@@ -151,7 +151,7 @@ html, body {
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  margin-bottom: 16px;
+  
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -195,7 +195,7 @@ html, body {
 }
 
 /* === Карточка проекта === */
-.project-card {
+.project-card { margin-bottom: 16px; 
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -646,7 +646,7 @@ html, body {
 .hero-main {
   display: flex;
   justify-content: center;
-  margin-bottom: 16px;
+  
 }
 
 .ring-svg {
@@ -944,10 +944,10 @@ html, body {
 }
 .pin-sub {
   font-size: 13px;
-  margin-bottom: 16px;
+  
 }
 .pin-display {
-  margin-bottom: 16px;
+  
 }
 .pin-pad {
   gap: 6px;
@@ -1262,7 +1262,7 @@ html, body {
   position: relative;
   margin-bottom: 12px;
 }
-.project-card {
+.project-card { margin-bottom: 16px; 
   margin-bottom: 0;
 }
 
