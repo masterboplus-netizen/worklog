@@ -184,7 +184,7 @@ html, body {
 
 /* === Секции === */
 .section { margin-bottom: 24px; }
-.section-title {
+.section-title { padding-left: 16px;
   font-size: 14px;
   font-weight: 600;
   color: var(--fg-dim);
@@ -809,7 +809,7 @@ html, body {
 .hero-rings {
   margin-bottom: 24px;
 }
-.section-title {
+.section-title { padding-left: 16px;
   margin-top: 16px;
 }
 
@@ -1510,7 +1510,7 @@ html, body {
 
 /* === Month btn справа от Активность === */
 
-.section-title {
+.section-title { padding-left: 16px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
