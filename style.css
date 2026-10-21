@@ -1616,3 +1616,5 @@ html, body {
   z-index: 999;
 }
 .chart-bar.selected .bar-label { opacity: 1; }
+
+#content-projects { padding-top: 16px; }
