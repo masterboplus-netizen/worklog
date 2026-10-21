@@ -743,6 +743,8 @@ function renderProjects() {
     const card = document.createElement('div');
     card.className = 'project-card';
     card.style.marginBottom = '16px';
+    card.style.marginLeft = '16px';
+    card.style.marginRight = '16px';
     card.innerHTML =
       '<div class="project-head">' +
         '<div class="project-name">' +
