@@ -1334,8 +1334,7 @@ html, body {
     bottom: 0;
     left: 0;
     right: 0;
-    background: var(--bg);
-    border-top: 1px solid var(--border);
+    background: transparent;
     display: flex;
     justify-content: space-around;
     padding: 8px 0;
@@ -1347,6 +1346,8 @@ html, body {
     background: none;
     border: none;
     color: var(--fg-dim);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
     align-items: center;
