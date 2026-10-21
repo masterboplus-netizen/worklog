@@ -189,12 +189,19 @@ function formatDiaryDate(iso) {
 }
 
 function showScreen(name) {
-  ['pin-screen', 'dashboard', 'loading'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (id === name) el.classList.remove('hidden');
-    else el.classList.add('hidden');
-  });
+    ['pin-screen', 'dashboard', 'loading'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (id === name) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+    });
+
+    // Управление видимостью нижней навигации
+    const tabs = document.querySelector('.tabs');
+    if (tabs) {
+        if (name === 'pin-screen') tabs.style.display = 'none';
+        else tabs.style.display = 'flex';
+    }
 }
 
 function lock() {
