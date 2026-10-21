@@ -1697,3 +1697,13 @@ body { padding-bottom: 70px; }
     80% { transform: rotate(-10deg); }
     100% { transform: rotate(0deg); }
 }
+
+/* Анимация пульсации для кнопки */
+.pulse-btn {
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74, 158, 255, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(74, 158, 255, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74, 158, 255, 0); }
+}
