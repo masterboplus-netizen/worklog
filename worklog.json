@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-21T15:45:00",
+  "updated": "2026-10-21T17:20:00",
   "projects": [
     {
       "id": "bo81",
@@ -581,6 +581,17 @@
       "events": 2,
       "screens": 1,
       "note": "Возврат к Бо Веб, добавление комнат"
+    },
+    {
+      "id": "s_20261021_4",
+      "date": "2026-10-21",
+      "project": "bo-web",
+      "start": "15:42",
+      "end": "17:20",
+      "duration_min": 98,
+      "events": 15,
+      "screens": 10,
+      "note": "Настройка домена masterbo.work.gd, DNS, ожидание SSL."
     }
   ],
   "baseline": {
