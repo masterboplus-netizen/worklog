@@ -1131,7 +1131,6 @@ function renderChart() {
       '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '"' +
       ' data-date="' + d + '"' +
       ' style="height:' + h + '%">' +
-      (_label ? '<span class="bar-label">' + _label + '</span>' : '') +
       '</div>';
     barsWrap.appendChild(col);
   }
