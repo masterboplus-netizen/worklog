@@ -1126,13 +1126,12 @@ function renderChart() {
     const col = document.createElement('div');
     col.className = 'chart-col';
     const isSel = CHART_SELECTED === d;
-    const _label = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : String(val)) : '';
     const lblText = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : String(val)) : '';
     col.innerHTML =
-      (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') +
       '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '"' +
       ' data-date="' + d + '"' +
       ' style="height:' + h + '%">' +
+      (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') +
       '</div>';
     barsWrap.appendChild(col);
   }
@@ -1165,6 +1164,11 @@ function renderChart() {
     const wasSelected = bar.classList.contains('selected');
     barsWrap.querySelectorAll('.chart-bar.selected').forEach(b => b.classList.remove('selected'));
     if (!wasSelected) bar.classList.add('selected');
+    
+    // Обновляем глобальный выбранный день и перерисовываем дашборд
+    const d = bar.dataset.date;
+    CHART_SELECTED = (CHART_SELECTED === d) ? null : d;
+    renderDashboard();
   });
 
   chart.appendChild(barsWrap);
