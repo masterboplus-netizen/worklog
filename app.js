@@ -286,48 +286,17 @@ async function tryUnlock(pin) {
 
 // === Рендер дашборда ===
 function renderDashboard() {
-    if (!DATA) return;
-    const cDash = $('#content-diary');
-    if (cDash) cDash.classList.add('hidden');
-    const cTab = $('#content');
-    if (cTab) cTab.classList.remove('hidden');
-
-    const c = $('#content');
-    c.innerHTML = '';
-
-    // 1. Сначала показываем круги
-    c.appendChild(renderHeroRings());
-
-    // 2. Добавляем подсказку о скролле (Активность / Последние сессии)
-    const hintDiv = document.createElement('div');
-    hintDiv.id = 'scroll-hint';
-    hintDiv.style.textAlign = 'center';
-    hintDiv.style.marginTop = '40px';
-    hintDiv.style.marginBottom = '20px';
-    hintDiv.innerHTML = `
-        <div style="font-size: 18px; color: var(--fg-dim); margin-bottom: 15px; font-weight: 500;">Активность</div>
-        <div style="font-size: 16px; color: var(--fg-dim); margin-bottom: 15px;">Последние сессии</div>
-        <div class="scroll-arrow">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
-            </svg>
-        </div>
-    `;
-    c.appendChild(hintDiv);
-
-    // 3. Создаем контейнер для графика и сессий, который будет скрыт
-    const hiddenContainer = document.createElement('div');
-    hiddenContainer.id = 'hidden-content';
-    hiddenContainer.style.transform = 'translateY(100%)';
-    hiddenContainer.style.transition = 'transform 0.6s ease-out';
-    hiddenContainer.style.position = 'relative';
-    hiddenContainer.style.zIndex = '1';
-
-    hiddenContainer.appendChild(renderChart());
-    hiddenContainer.appendChild(renderSessions());
-    hiddenContainer.appendChild(renderFooter());
-
-    c.appendChild(hiddenContainer);
+  if (!DATA) return;
+  const cDash = $('#content-diary');
+  if (cDash) cDash.classList.add('hidden');
+  const cTab = $('#content');
+  if (cTab) cTab.classList.remove('hidden');
+  const c = $('#content');
+  c.innerHTML = '';
+  c.appendChild(renderHeroRings());
+  c.appendChild(renderChart());
+  c.appendChild(renderSessions());
+  c.appendChild(renderFooter());
 }
 
 function renderRingSVG(percent, size, strokeWidth, color) {
@@ -1394,31 +1363,5 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             showJoke();
         });
-    }
-});
-
-// Логика появления графика при скролле
-let isChartVisible = false;
-window.addEventListener('scroll', () => {
-    if (isChartVisible) return; // Если уже показали, ничего не делаем
-
-    const scrollY = window.scrollY;
-    // Если прокрутили вниз больше чем на 80 пикселей
-    if (scrollY > 80) {
-        isChartVisible = true;
-        const hiddenContent = document.getElementById('hidden-content');
-        const hint = document.getElementById('scroll-hint');
-
-        if (hiddenContent && hint) {
-            // Плавно скрываем подсказку
-            hint.style.transition = 'opacity 0.3s';
-            hint.style.opacity = '0';
-            
-            setTimeout(() => {
-                hint.style.display = 'none';
-                // Плавно выезжает снизу
-                hiddenContent.style.transform = 'translateY(0)';
-            }, 300);
-        }
     }
 });
