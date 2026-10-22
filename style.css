@@ -1412,22 +1412,7 @@ body { padding-bottom: 70px; }
   background: linear-gradient(to top, var(--bg3) 0%, transparent 100%);
 }
 
-/* === Chart bar label (внутри столбика) === */
-.chart-bar {
-  position: relative;
-}
-.chart-bar-label {
-  position: absolute;
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 9px;
-  color: #fff;
-  font-weight: 600;
-  white-space: nowrap;
-  pointer-events: none;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
-}
+
 
 /* === Month nav (активность) === */
 .month-nav {
@@ -1474,20 +1459,7 @@ body { padding-bottom: 70px; }
   flex-shrink: 0;
 }
 
-/* === Chart bar label (абсолютный, над столбиком) === */
-.chart-bar-label-abs {
-  position: absolute;
-  transform: translateX(-50%);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--fg);
-  background: var(--bg3);
-  padding: 2px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-  pointer-events: none;
-  z-index: 10;
-}
+
 /* === Phase arrow → скобки (chevron) === */
 .phase-arrow {
   display: inline-block;
@@ -1593,45 +1565,9 @@ body { padding-bottom: 70px; }
   background: var(--bg3);
 }
 
-/* === Chart bar label: z-index, visible === */
-.chart-col {
-  overflow: visible !important;
-}
-.chart-bar-label-abs {
-  z-index: 9999 !important;
-  position: absolute !important;
-  background: var(--bg2) !important;
-  border: 1px solid var(--accent) !important;
-  padding: 4px 8px !important;
-  border-radius: 4px !important;
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  color: var(--fg) !important;
-  white-space: nowrap !important;
-  pointer-events: none !important;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4) !important;
-}
 
-/* === Bar label: сверху столбика === */
-.chart-bar {
-  position: relative;
-}
-.bar-label {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--fg);
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s;
-  margin-bottom: 4px;
-  z-index: 999;
-}
-.chart-bar.selected .bar-label { opacity: 1; }
+
+
 
 #content-projects { padding-top: 16px; }
 
@@ -1779,3 +1715,40 @@ body.first-load .hero-rings {
 .accordion-content.closed { display: none; }
 
 
+
+
+/* =========================================
+   ЧИСТАЯ ЛЕГЕНДА ГРАФИКА (ФИНАЛ)
+   ========================================= */
+.chart-bar {
+  position: relative;
+  overflow: visible !important;
+}
+
+.bar-label {
+  position: absolute;
+  bottom: 105%; /* Чуть выше столбика */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 100;
+}
+
+.chart-bar.selected .bar-label {
+  opacity: 1;
+}
+
+.chart-bar.selected {
+  background: var(--green) !important;
+  box-shadow: 0 0 8px rgba(63, 185, 80, 0.5);
+}

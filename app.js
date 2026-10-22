@@ -1127,49 +1127,34 @@ function renderChart() {
     col.className = 'chart-col';
     const isSel = CHART_SELECTED === d;
     const lblText = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : String(val)) : '';
+    
     col.innerHTML =
       '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '"' +
       ' data-date="' + d + '"' +
       ' style="height:' + h + '%">' +
-      (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') +
+        (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') +
       '</div>';
     barsWrap.appendChild(col);
   }
+
+  // === ЕДИНСТВЕННЫЙ ПРАВИЛЬНЫЙ ОБРАБОТЧИК ===
   if (!barsWrap._delegated) {
     barsWrap._delegated = true;
     barsWrap.addEventListener('click', (ev) => {
       const bar = ev.target.closest && ev.target.closest('.chart-bar');
       if (!bar) return;
-      const all = chart.querySelectorAll('.chart-bar-label-abs');
-      all.forEach(el => el.remove());
-      const d = bar.dataset.date;
-      const val = byDay[d] || 0;
-      if (!val) return;
-      const lbl = CHART_METRIC === 'duration'
-        ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м')
-        : String(val);
-      const col = bar.parentElement;
-      // const oldLbl = chart.querySelector('.chart-bar-label-abs'); if (oldLbl) oldLbl.remove(); const absLbl = document.createElement('div');
-      // absLbl.className = 'chart-bar-label-abs';
-      // absLbl.textContent = lbl;
-      // absLbl.style.left = (col.offsetLeft + col.offsetWidth / 2) + 'px';
-      // absLbl.style.top = '4px';
-      // chart.appendChild(absLbl);
+      
+      const wasSelected = bar.classList.contains('selected');
+      
+      // Снимаем выделение со всех
+      barsWrap.querySelectorAll('.chart-bar.selected').forEach(b => b.classList.remove('selected'));
+      
+      // Если он не был выбран — выделяем
+      if (!wasSelected) bar.classList.add('selected');
+      
+      CHART_SELECTED = wasSelected ? null : bar.dataset.date;
     });
   }
-
-  barsWrap.addEventListener('click', (ev) => {
-    const bar = ev.target.closest && ev.target.closest('.chart-bar');
-    if (!bar) return;
-    const wasSelected = bar.classList.contains('selected');
-    barsWrap.querySelectorAll('.chart-bar.selected').forEach(b => b.classList.remove('selected'));
-    if (!wasSelected) bar.classList.add('selected');
-    
-    // Обновляем глобальный выбранный день и перерисовываем дашборд
-    const d = bar.dataset.date;
-    CHART_SELECTED = (CHART_SELECTED === d) ? null : d;
-    renderDashboard();
-  });
 
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
