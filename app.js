@@ -1232,27 +1232,7 @@ function renderChart() {
   if (mText) mText.addEventListener('click', () => { openMonthPicker(); });
   if (yText) yText.addEventListener('click', () => { openYearPicker(); });
 
-  sec.querySelectorAll('.period-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      CHART_PERIOD = parseInt(btn.dataset.period, 10);
-      CHART_SELECTED = null;
-      // renderDashboard();
-    });
-  });
-  sec.querySelectorAll('.metric-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      CHART_METRIC = btn.dataset.metric;
-      CHART_SELECTED = null;
-      // renderDashboard();
-    });
-  });
-  sec.querySelectorAll('.chart-bar').forEach(bar => {
-    bar.addEventListener('click', () => {
-      const d = bar.dataset.date;
-      CHART_SELECTED = (CHART_SELECTED === d) ? null : d;
-      // renderDashboard();
-    });
-  });
+
 
   return sec;
 }
