@@ -347,9 +347,16 @@ function renderDashboard() {
     // Логика для сессий
     const sessArrow = sessAcc.querySelector('.accordion-arrow');
     sessArrow.addEventListener('click', () => {
-        const isHidden = sessContent.style.display === 'none';
-        sessContent.style.display = isHidden ? 'block' : 'none';
-        sessArrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        const isOpen = sessContent.classList.contains('open');
+        if (isOpen) {
+            sessContent.classList.remove('open');
+            sessContent.classList.add('closed');
+            sessArrow.style.transform = 'rotate(0deg)';
+        } else {
+            sessContent.classList.remove('closed');
+            sessContent.classList.add('open');
+            sessArrow.style.transform = 'rotate(180deg)';
+        }
     });
 
     const chartArrow = chartAcc.querySelector('.accordion-arrow');

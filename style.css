@@ -1767,3 +1767,19 @@ body.first-load .hero-rings {
 .accordion-header {
     margin-top: 15px !important;
 }
+
+/* Плавное раскрытие аккордеонов */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+    opacity: 0;
+}
+.accordion-content.open {
+    max-height: 2000px; /* Достаточно для графика */
+    opacity: 1;
+}
+.accordion-content.closed {
+    max-height: 0;
+    opacity: 0;
+}
