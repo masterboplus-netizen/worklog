@@ -1783,3 +1783,18 @@ body.first-load .hero-rings {
     max-height: 0;
     opacity: 0;
 }
+
+/* Переопределяем анимацию: используем display и opacity вместо max-height */
+.accordion-content {
+    display: none !important;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+.accordion-content.open {
+    display: block !important;
+    opacity: 1;
+}
+.accordion-content.closed {
+    display: none !important;
+    opacity: 0;
+}
