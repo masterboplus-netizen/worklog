@@ -304,42 +304,56 @@ function renderDashboard() {
     const c = $('#content');
     c.innerHTML = '';
 
-    // 1. Большой круг и маленькие круги
+    // 1. Круги
     c.appendChild(renderHeroRings());
 
-    // 2. Заголовок "Активность" с кнопкой раскрытия (как в проектах)
-    const headerDiv = document.createElement('div');
-    headerDiv.className = 'activity-header';
-    headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 15px; cursor: pointer; padding: 0 16px;';
-    headerDiv.innerHTML = `
-        <div style="display: flex; flex-direction: column;">
+    // 2. Аккордеон для графика (Активность)
+    const chartAcc = document.createElement('div');
+    chartAcc.innerHTML = `
+        <div class="accordion-header" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
             <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Активность</span>
-            <span style="font-size: 14px; color: var(--fg-dim);">Последние сессии</span>
+            <div class="accordion-arrow" style="color: var(--accent); transition: transform 0.3s;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
         </div>
-        <div class="activity-toggle" style="color: var(--accent); transition: transform 0.3s;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 9l6 6 6-6"/>
-            </svg>
-        </div>
+        <div class="accordion-content" style="display: none; padding: 0 16px;"></div>
     `;
-    
-    // 3. Скрытый контейнер для графика и сессий
-    const hiddenContent = document.createElement('div');
-    hiddenContent.id = 'activity-content';
-    hiddenContent.style.cssText = 'display: none; padding: 0 16px;'; // скрыто по умолчанию
-    hiddenContent.appendChild(renderChart());
-    hiddenContent.appendChild(renderSessions());
-    hiddenContent.appendChild(renderFooter());
+    const chartContent = chartAcc.querySelector('.accordion-content');
+    chartContent.appendChild(renderChart()); // Сюда вставляем график
 
-    // Логика раскрытия
-    headerDiv.addEventListener('click', () => {
-        const isHidden = hiddenContent.style.display === 'none';
-        hiddenContent.style.display = isHidden ? 'block' : 'none';
-        headerDiv.querySelector('.activity-toggle').style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    // Логика для графика
+    const chartHeader = chartAcc.querySelector('.accordion-header');
+    chartHeader.addEventListener('click', () => {
+        const isHidden = chartContent.style.display === 'none';
+        chartContent.style.display = isHidden ? 'block' : 'none';
+        chartAcc.querySelector('.accordion-arrow').style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
     });
 
-    c.appendChild(headerDiv);
-    c.appendChild(hiddenContent);
+    // 3. Аккордеон для сессий (Последние сессии)
+    const sessAcc = document.createElement('div');
+    sessAcc.innerHTML = `
+        <div class="accordion-header" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
+            <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Последние сессии</span>
+            <div class="accordion-arrow" style="color: var(--accent); transition: transform 0.3s;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+        </div>
+        <div class="accordion-content" style="display: none; padding: 0 16px;"></div>
+    `;
+    const sessContent = sessAcc.querySelector('.accordion-content');
+    sessContent.appendChild(renderSessions()); // Сюда вставляем сессии
+
+    // Логика для сессий
+    const sessHeader = sessAcc.querySelector('.accordion-header');
+    sessHeader.addEventListener('click', () => {
+        const isHidden = sessContent.style.display === 'none';
+        sessContent.style.display = isHidden ? 'block' : 'none';
+        sessAcc.querySelector('.accordion-arrow').style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    c.appendChild(chartAcc);
+    c.appendChild(sessAcc);
+    c.appendChild(renderFooter());
 }
 
 function renderRingSVG(percent, size, strokeWidth, color) {
@@ -1087,7 +1101,7 @@ function renderChart() {
     '<span class="month-text" id="month-text">' + (function(){const d=new Date();d.setMonth(d.getMonth()+CHART_OFFSET_MONTHS);const m=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];return m[d.getMonth()];})() + '</span>' +
     ' <span class="year-text" id="year-text">' + (function(){const d=new Date();d.setMonth(d.getMonth()+CHART_OFFSET_MONTHS);return d.getFullYear();})() + '</span>' +
     '</span>';
-  sec.innerHTML = '<div class="section-title">Активность' + _mBtn + '</div>' +
+  sec.innerHTML = '' +
     '<div class="period-filter-row">' + filterHTML + '</div>';
 
   const days = [];
