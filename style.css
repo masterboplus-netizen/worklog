@@ -1740,3 +1740,10 @@ body { padding-bottom: 70px; }
         transform: translateX(0);
     }
 }
+
+/* Анимация для большого круга */
+.hero-rings {
+    opacity: 0;
+    animation: slideInLeft 0.6s ease-out forwards;
+    animation-delay: 0s; /* Он появляется первым */
+}
