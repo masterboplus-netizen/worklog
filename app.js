@@ -286,6 +286,10 @@ async function tryUnlock(pin) {
 
 // === Рендер дашборда ===
 function renderDashboard() {
+    // Проверка: анимация была?
+    const isFirstLoad = !window._dashAnimated;
+    window._dashAnimated = true;
+
   if (!DATA) return;
   const cDash = $('#content-diary');
   if (cDash) cDash.classList.add('hidden');
