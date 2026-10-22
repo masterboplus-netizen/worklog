@@ -286,6 +286,9 @@ async function tryUnlock(pin) {
 
 // === Рендер дашборда ===
 function renderDashboard() {
+    if (!DATA) return;
+    
+    // Проверка: анимация была?
     if (!window._dashAnimated) {
         document.body.classList.add('first-load');
         window._dashAnimated = true;
@@ -293,25 +296,50 @@ function renderDashboard() {
         document.body.classList.remove('first-load');
     }
 
-    // Проверка: анимация была?
-    const isFirstLoad = !window._dashAnimated;
-    window._dashAnimated = true;
+    const cDash = $('#content-diary');
+    if (cDash) cDash.classList.add('hidden');
+    const cTab = $('#content');
+    if (cTab) cTab.classList.remove('hidden');
 
-  if (!DATA) return;
-  const cDash = $('#content-diary');
-  if (cDash) cDash.classList.add('hidden');
-  const cTab = $('#content');
-  if (cTab) cTab.classList.remove('hidden');
-  const c = $('#content');
-  c.innerHTML = '';
-  const rings = renderHeroRings();
-    if (!isFirstLoad) {
-        rings.classList.add('no-anim');
-    }
-    c.appendChild(rings);
-  c.appendChild(renderChart());
-  c.appendChild(renderSessions());
-  c.appendChild(renderFooter());
+    const c = $('#content');
+    c.innerHTML = '';
+
+    // 1. Большой круг и маленькие круги
+    c.appendChild(renderHeroRings());
+
+    // 2. Заголовок "Активность" с кнопкой раскрытия (как в проектах)
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'activity-header';
+    headerDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 15px; cursor: pointer; padding: 0 16px;';
+    headerDiv.innerHTML = `
+        <div style="display: flex; flex-direction: column;">
+            <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Активность</span>
+            <span style="font-size: 14px; color: var(--fg-dim);">Последние сессии</span>
+        </div>
+        <div class="activity-toggle" style="color: var(--accent); transition: transform 0.3s;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9l6 6 6-6"/>
+            </svg>
+        </div>
+    `;
+    
+    // 3. Скрытый контейнер для графика и сессий
+    const hiddenContent = document.createElement('div');
+    hiddenContent.id = 'activity-content';
+    hiddenContent.style.cssText = 'display: none; padding: 0 16px;'; // скрыто по умолчанию
+    hiddenContent.appendChild(renderChart());
+    hiddenContent.appendChild(renderSessions());
+    hiddenContent.appendChild(renderFooter());
+
+    // Логика раскрытия
+    headerDiv.addEventListener('click', () => {
+        const isHidden = hiddenContent.style.display === 'none';
+        hiddenContent.style.display = isHidden ? 'block' : 'none';
+        headerDiv.querySelector('.activity-toggle').style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    c.appendChild(headerDiv);
+    c.appendChild(hiddenContent);
 }
 
 function renderRingSVG(percent, size, strokeWidth, color) {
