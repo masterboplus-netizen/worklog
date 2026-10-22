@@ -1757,3 +1757,8 @@ body.first-load .hero-rings {
     flex-direction: row-reverse;
     gap: 8px;
 }
+
+.accordion-arrow {
+    padding: 10px;
+    cursor: pointer;
+}

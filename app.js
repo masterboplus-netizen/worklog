@@ -349,15 +349,11 @@ function renderDashboard() {
     sessContent.appendChild(renderSessions()); // Сюда вставляем сессии
 
     // Логика для сессий
-    const sessHeader = sessAcc.querySelector('.accordion-header');
-    sessHeader.addEventListener('click', () => {
+    const sessArrow = sessAcc.querySelector('.accordion-arrow');
+    sessArrow.addEventListener('click', () => {
         const isHidden = sessContent.style.display === 'none';
         sessContent.style.display = isHidden ? 'block' : 'none';
-        sessAcc.querySelector('.accordion-arrow').style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-    });
-    
-    sessContent.addEventListener('click', (e) => {
-        e.stopPropagation();
+        sessArrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
     });
 
     c.appendChild(chartAcc);
