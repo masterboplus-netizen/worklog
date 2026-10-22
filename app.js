@@ -1341,7 +1341,7 @@ function toggleAccordion(contentId, arrowId) {
 
 function renderDashboard() {
     if (!DATA) return;
-    
+
     if (!window._dashAnimated) {
         document.body.classList.add('first-load');
         window._dashAnimated = true;
@@ -1372,20 +1372,30 @@ function renderDashboard() {
         </div>
         <div id="chart-content" style="display: none; padding: 0 16px;"></div>
     `;
-    
-    const chartContent = chartAcc.querySelector('#chart-content');
-    chartContent.appendChild(renderChart()); // Вставляем график
 
-    // Обработчик ТОЛЬКО на шапку (и стрелку) — открывает/закрывает
+    const chartContent = chartAcc.querySelector('#chart-content');
+    chartContent.appendChild(renderChart());
+
     const chartHeader = chartAcc.querySelector('#chart-header');
     chartHeader.addEventListener('click', (e) => {
         e.stopPropagation();
         const content = document.getElementById('chart-content');
         const arrow = document.getElementById('chart-arrow');
         if (!content || !arrow) return;
+        
         const isHidden = content.style.display === 'none' || !content.style.display;
         content.style.display = isHidden ? 'block' : 'none';
         arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+
+        // ПЛАВНАЯ ПРОКРУТКА (срабатывает только при открытии)
+        if (isHidden) {
+            setTimeout(() => {
+                // Прокручиваем так, чтобы шапка графика оказалась чуть ниже топбара
+                const yOffset = -70; 
+                const y = chartAcc.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }, 100);
+        }
     });
 
     // 3. Аккордеон "Последние сессии"
@@ -1400,9 +1410,9 @@ function renderDashboard() {
         </div>
         <div id="sess-content" style="display: none; padding: 0 16px;"></div>
     `;
-    
+
     const sessContent = sessAcc.querySelector('#sess-content');
-    sessContent.appendChild(renderSessions()); // Вставляем сессии
+    sessContent.appendChild(renderSessions());
 
     const sessHeader = sessAcc.querySelector('#sess-header');
     sessHeader.addEventListener('click', (e) => {
@@ -1420,3 +1430,4 @@ function renderDashboard() {
     c.appendChild(sessAcc);
     c.appendChild(renderFooter());
 }
+
