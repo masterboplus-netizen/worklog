@@ -578,10 +578,7 @@ html, body {
 }
 
 /* === Chart v3: тултип + активная метрика + подписи дат === */
-.chart-bar.selected {
-  background: var(--green);
-  box-shadow: 0 0 8px rgba(63, 185, 80, 0.5);
-}
+
 .chart-tooltip {
   margin-top: 8px;
   padding: 6px 12px;
@@ -1748,7 +1745,14 @@ body.first-load .hero-rings {
   opacity: 1;
 }
 
+
+
+
+/* === Ярко-зеленый столбик при тапе === */
 .chart-bar.selected {
-  background: var(--green) !important;
-  box-shadow: 0 0 8px rgba(63, 185, 80, 0.5);
+  background: #00ff00 !important;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.6) !important;
+}
+.chart-bar.selected .bar-label {
+  opacity: 1 !important;
 }
