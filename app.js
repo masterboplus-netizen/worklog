@@ -293,7 +293,11 @@ function renderDashboard() {
   if (cTab) cTab.classList.remove('hidden');
   const c = $('#content');
   c.innerHTML = '';
-  c.appendChild(renderHeroRings());
+  const rings = renderHeroRings();
+    if (!isFirstLoad) {
+        rings.classList.add('no-anim');
+    }
+    c.appendChild(rings);
   c.appendChild(renderChart());
   c.appendChild(renderSessions());
   c.appendChild(renderFooter());
