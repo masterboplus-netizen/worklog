@@ -4,6 +4,11 @@ function toggleAccordion(headerId, contentId, arrowId) {
     const arrow = document.getElementById(arrowId);
     if (!content || !arrow) return;
     
+    // Если контент уже открыт, и мы кликнули по нему — ничего не делаем
+    if (content.style.display === 'block' && event && event.target && content.contains(event.target)) {
+        return;
+    }
+    
     const isHidden = content.style.display === 'none' || !content.style.display;
     content.style.display = isHidden ? 'block' : 'none';
     arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
