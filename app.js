@@ -286,6 +286,13 @@ async function tryUnlock(pin) {
 
 // === Рендер дашборда ===
 function renderDashboard() {
+    if (!window._dashAnimated) {
+        document.body.classList.add('first-load');
+        window._dashAnimated = true;
+    } else {
+        document.body.classList.remove('first-load');
+    }
+
     // Проверка: анимация была?
     const isFirstLoad = !window._dashAnimated;
     window._dashAnimated = true;

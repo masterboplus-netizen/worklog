@@ -1720,7 +1720,7 @@ body { padding-bottom: 70px; }
 }
 
 /* Анимация вылета для маленьких кругов */
-.hero-mini .mini-block {
+body.first-load .hero-mini .mini-block {
     opacity: 0;
     animation: slideInLeft 0.5s ease-out forwards;
 }
@@ -1742,15 +1742,11 @@ body { padding-bottom: 70px; }
 }
 
 /* Анимация для большого круга */
-.hero-rings {
+body.first-load .hero-rings {
     opacity: 0;
     animation: slideInLeft 0.6s ease-out forwards;
-    animation-delay: 0s; /* Он появляется первым */
+    animation-delay: 0s;
 }
 
 /* Отключаем анимацию, если это не первый раз */
-.no-anim, .no-anim .mini-block {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-}
+
