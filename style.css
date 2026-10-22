@@ -1736,3 +1736,11 @@ body { padding-bottom: 70px; }
 .rings-grid {
     margin-top: 30px !important;
 }
+
+/* Точная настройка расстояния между большим и малыми кругами */
+.hero-rings {
+    margin-bottom: 15px !important; /* Убираем лишний отступ снизу */
+}
+.rings-grid {
+    margin-top: 15px !important; /* И оставляем только один отступ сверху */
+}
