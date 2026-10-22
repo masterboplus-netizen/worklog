@@ -1725,3 +1725,14 @@ body { padding-bottom: 70px; }
     flex-direction: row-reverse;
     gap: 8px;
 }
+
+/* Сдвигаем большой круг вниз */
+.hero-rings {
+    margin-top: 40px !important;
+    margin-bottom: 40px !important;
+}
+
+/* Сдвигаем маленькие круги вниз */
+.rings-grid {
+    margin-top: 40px !important;
+}
