@@ -1,3 +1,4 @@
+let isChartOpen = false;
 // Хераборина — основная логика UI
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
@@ -354,10 +355,16 @@ function renderDashboard() {
     const chartArrow = chartAcc.querySelector('.accordion-arrow');
     chartArrow.addEventListener('click', (e) => {
         e.stopPropagation();
-        const isHidden = chartContent.style.display === 'none';
-        chartContent.style.display = isHidden ? 'block' : 'none';
-        chartArrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+        isChartOpen = !isChartOpen; // Переключаем состояние
+        chartContent.style.display = isChartOpen ? 'block' : 'none';
+        chartArrow.style.transform = isChartOpen ? 'rotate(180deg)' : 'rotate(0deg)';
     });
+
+    // Устанавливаем начальное состояние
+    if (isChartOpen) {
+        chartContent.style.display = 'block';
+        chartArrow.style.transform = 'rotate(180deg)';
+    }
     c.appendChild(chartAcc);
     c.appendChild(sessAcc);
     c.appendChild(renderFooter());
