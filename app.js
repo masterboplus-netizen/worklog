@@ -1333,7 +1333,7 @@ function toggleAccordion(contentId, arrowId) {
         setTimeout(() => {
           const yOffset = -60; 
           const y = chartAcc.getBoundingClientRect().top + window.pageYOffset + yOffset;
-          window.scrollTo({ top: y, behavior: 'smooth' });
+          const sessHeader = document.getElementById('sess-header'); if (sessHeader) sessHeader.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }, 50);
       }
 }
@@ -1393,7 +1393,7 @@ function renderDashboard() {
                 // Прокручиваем так, чтобы шапка графика оказалась чуть ниже топбара
                 const yOffset = -70; 
                 const y = chartAcc.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                window.scrollTo({ top: y, behavior: 'smooth' });
+                const sessHeader = document.getElementById('sess-header'); if (sessHeader) sessHeader.scrollIntoView({ behavior: 'smooth', block: 'end' });
             }, 100);
         }
     });
