@@ -1728,11 +1728,11 @@ body { padding-bottom: 70px; }
 
 /* Сдвигаем большой круг вниз */
 .hero-rings {
-    margin-top: 40px !important;
-    margin-bottom: 40px !important;
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
 }
 
 /* Сдвигаем маленькие круги вниз */
 .rings-grid {
-    margin-top: 40px !important;
+    margin-top: 30px !important;
 }
