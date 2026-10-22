@@ -1140,7 +1140,7 @@ function renderChart() {
     barsWrap.addEventListener('click', (ev) => {
       const bar = ev.target.closest && ev.target.closest('.chart-bar');
       if (!bar) return;
-      const all = barsWrap.querySelectorAll('.chart-bar-label-abs');
+      const all = chart.querySelectorAll('.chart-bar-label-abs');
       all.forEach(el => el.remove());
       const d = bar.dataset.date;
       const val = byDay[d] || 0;
