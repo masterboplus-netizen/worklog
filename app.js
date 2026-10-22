@@ -322,12 +322,7 @@ function renderDashboard() {
     chartContent.appendChild(renderChart()); // Сюда вставляем график
 
     // Логика для графика
-    const chartHeader = chartAcc.querySelector('.accordion-header');
-    chartHeader.addEventListener('click', () => {
-        const isHidden = chartContent.style.display === 'none';
-        chartContent.style.display = isHidden ? 'block' : 'none';
-        chartAcc.querySelector('.accordion-arrow').style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-    });
+
     
     // Останавливаем всплытие кликов внутри графика, чтобы они не закрывали аккордеон
     chartContent.addEventListener('click', (e) => {
@@ -356,6 +351,13 @@ function renderDashboard() {
         sessArrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
     });
 
+    const chartArrow = chartAcc.querySelector('.accordion-arrow');
+    chartArrow.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isHidden = chartContent.style.display === 'none';
+        chartContent.style.display = isHidden ? 'block' : 'none';
+        chartArrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
     c.appendChild(chartAcc);
     c.appendChild(sessAcc);
     c.appendChild(renderFooter());
