@@ -1127,7 +1127,9 @@ function renderChart() {
     col.className = 'chart-col';
     const isSel = CHART_SELECTED === d;
     const _label = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : String(val)) : '';
+    const lblText = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : String(val)) : '';
     col.innerHTML =
+      (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') +
       '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '"' +
       ' data-date="' + d + '"' +
       ' style="height:' + h + '%">' +
@@ -1148,12 +1150,12 @@ function renderChart() {
         ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м')
         : String(val);
       const col = bar.parentElement;
-      const oldLbl = chart.querySelector('.chart-bar-label-abs'); if (oldLbl) oldLbl.remove(); const absLbl = document.createElement('div');
-      absLbl.className = 'chart-bar-label-abs';
-      absLbl.textContent = lbl;
-      absLbl.style.left = (col.offsetLeft + col.offsetWidth / 2) + 'px';
-      absLbl.style.top = '4px';
-      chart.appendChild(absLbl);
+      // const oldLbl = chart.querySelector('.chart-bar-label-abs'); if (oldLbl) oldLbl.remove(); const absLbl = document.createElement('div');
+      // absLbl.className = 'chart-bar-label-abs';
+      // absLbl.textContent = lbl;
+      // absLbl.style.left = (col.offsetLeft + col.offsetWidth / 2) + 'px';
+      // absLbl.style.top = '4px';
+      // chart.appendChild(absLbl);
     });
   }
 
