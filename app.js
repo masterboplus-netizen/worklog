@@ -317,7 +317,7 @@ function renderDashboard() {
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
             </div>
         </div>
-        <div class="accordion-content" style="padding: 0 16px;" class="accordion-content closed"></div>
+        <div class="accordion-content closed" style="padding: 0 16px;"></div>
     `;
     const chartContent = chartAcc.querySelector('.accordion-content');
     chartContent.appendChild(renderChart()); // Сюда вставляем график
@@ -339,7 +339,7 @@ function renderDashboard() {
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
             </div>
         </div>
-        <div class="accordion-content" style="padding: 0 16px;" class="accordion-content closed"></div>
+        <div class="accordion-content closed" style="padding: 0 16px;"></div>
     `;
     const sessContent = sessAcc.querySelector('.accordion-content');
     sessContent.appendChild(renderSessions()); // Сюда вставляем сессии
