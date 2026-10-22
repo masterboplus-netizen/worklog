@@ -1367,6 +1367,7 @@ function toggleAccordion(contentId, arrowId) {
     arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
 }
 
+
 function renderDashboard() {
     if (!DATA) return;
     
@@ -1400,13 +1401,20 @@ function renderDashboard() {
         </div>
         <div id="chart-content" style="display: none; padding: 0 16px;"></div>
     `;
+    
     const chartContent = chartAcc.querySelector('#chart-content');
-    chartContent.appendChild(renderChart());
+    chartContent.appendChild(renderChart()); // Вставляем график
 
+    // Обработчик ТОЛЬКО на шапку (и стрелку) — открывает/закрывает
     const chartHeader = chartAcc.querySelector('#chart-header');
     chartHeader.addEventListener('click', (e) => {
         e.stopPropagation();
-        toggleAccordion('chart-content', 'chart-arrow');
+        const content = document.getElementById('chart-content');
+        const arrow = document.getElementById('chart-arrow');
+        if (!content || !arrow) return;
+        const isHidden = content.style.display === 'none' || !content.style.display;
+        content.style.display = isHidden ? 'block' : 'none';
+        arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
     });
 
     // 3. Аккордеон "Последние сессии"
@@ -1421,13 +1429,19 @@ function renderDashboard() {
         </div>
         <div id="sess-content" style="display: none; padding: 0 16px;"></div>
     `;
+    
     const sessContent = sessAcc.querySelector('#sess-content');
-    sessContent.appendChild(renderSessions());
+    sessContent.appendChild(renderSessions()); // Вставляем сессии
 
     const sessHeader = sessAcc.querySelector('#sess-header');
     sessHeader.addEventListener('click', (e) => {
         e.stopPropagation();
-        toggleAccordion('sess-content', 'sess-arrow');
+        const content = document.getElementById('sess-content');
+        const arrow = document.getElementById('sess-arrow');
+        if (!content || !arrow) return;
+        const isHidden = content.style.display === 'none' || !content.style.display;
+        content.style.display = isHidden ? 'block' : 'none';
+        arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
     });
 
     // 4. Добавляем на страницу
