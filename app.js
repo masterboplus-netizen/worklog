@@ -1290,6 +1290,24 @@ function renderSessions() {
   }
   tbl.appendChild(tbody);
   sec.appendChild(tbl);
+  // Обработчики для кнопок периодов (День/Неделя/Месяц)
+  sec.querySelectorAll('.period-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      CHART_PERIOD = parseInt(btn.dataset.period, 10);
+      CHART_SELECTED = null;
+      renderDashboard();
+    });
+  });
+
+  // Обработчики для кнопок метрик (Время/Сообщения/Скрины)
+  sec.querySelectorAll('.metric-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      CHART_METRIC = btn.dataset.metric;
+      CHART_SELECTED = null;
+      renderDashboard();
+    });
+  });
+
   return sec;
 }
 
