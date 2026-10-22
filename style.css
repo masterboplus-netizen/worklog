@@ -1718,3 +1718,25 @@ body { padding-bottom: 70px; }
 .hero-mini {
     margin-top: 30px !important;
 }
+
+/* Анимация вылета для маленьких кругов */
+.hero-mini .mini-block {
+    opacity: 0;
+    animation: slideInLeft 0.5s ease-out forwards;
+}
+
+/* Задержки для каждого блока (слева направо) */
+.hero-mini .mini-block:nth-child(1) { animation-delay: 0.1s; }
+.hero-mini .mini-block:nth-child(2) { animation-delay: 0.3s; }
+.hero-mini .mini-block:nth-child(3) { animation-delay: 0.5s; }
+
+@keyframes slideInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
