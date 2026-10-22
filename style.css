@@ -1769,32 +1769,11 @@ body.first-load .hero-rings {
 }
 
 /* Плавное раскрытие аккордеонов */
-.accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
-    opacity: 0;
-}
-.accordion-content.open {
-    max-height: 2000px; /* Достаточно для графика */
-    opacity: 1;
-}
-.accordion-content.closed {
-    max-height: 0;
-    opacity: 0;
-}
+.accordion-content { display: none; }
+.accordion-content.open { display: block; }
+.accordion-content.closed { display: none; }
 
 /* Переопределяем анимацию: используем display и opacity вместо max-height */
-.accordion-content {
-    display: none !important;
-    opacity: 0;
-    transition: opacity 0.3s ease-out;
-}
-.accordion-content.open {
-    display: block !important;
-    opacity: 1;
-}
-.accordion-content.closed {
-    display: none !important;
-    opacity: 0;
-}
+.accordion-content { display: none; }
+.accordion-content.open { display: block; }
+.accordion-content.closed { display: none; }
