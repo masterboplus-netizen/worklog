@@ -1393,3 +1393,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Логика появления графика при скролле
+let isChartVisible = false;
+window.addEventListener('scroll', () => {
+    if (isChartVisible) return; // Если уже показали, ничего не делаем
+
+    const scrollY = window.scrollY;
+    // Если прокрутили вниз больше чем на 80 пикселей
+    if (scrollY > 80) {
+        isChartVisible = true;
+        const hiddenContent = document.getElementById('hidden-content');
+        const hint = document.getElementById('scroll-hint');
+
+        if (hiddenContent && hint) {
+            // Плавно скрываем подсказку
+            hint.style.transition = 'opacity 0.3s';
+            hint.style.opacity = '0';
+            
+            setTimeout(() => {
+                hint.style.display = 'none';
+                // Показываем график и сессии
+                hiddenContent.style.display = 'block';
+                // Небольшая анимация появления
+                hiddenContent.style.opacity = '0';
+                hiddenContent.style.transition = 'opacity 0.5s';
+                setTimeout(() => hiddenContent.style.opacity = '1', 50);
+            }, 300);
+        }
+    }
+});
