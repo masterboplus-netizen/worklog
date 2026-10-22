@@ -1777,3 +1777,8 @@ body.first-load .hero-rings {
 .accordion-content { display: none; }
 .accordion-content.open { display: block; }
 .accordion-content.closed { display: none; }
+
+/* Скрываем вторую легенду на столбике (оставляем только всплывающую) */
+.chart-bar .bar-label {
+    display: none !important;
+}
