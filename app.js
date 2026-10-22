@@ -1,18 +1,5 @@
 
-function toggleAccordion(headerId, contentId, arrowId) {
-    const content = document.getElementById(contentId);
-    const arrow = document.getElementById(arrowId);
-    if (!content || !arrow) return;
-    
-    // Если контент уже открыт, и мы кликнули по нему — ничего не делаем
-    if (content.style.display === 'block' && event && event.target && content.contains(event.target)) {
-        return;
-    }
-    
-    const isHidden = content.style.display === 'none' || !content.style.display;
-    content.style.display = isHidden ? 'block' : 'none';
-    arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-}
+
 let isChartOpen = false;
 // Хераборина — основная логика UI
 const $ = (sel) => document.querySelector(sel);
@@ -301,96 +288,7 @@ async function tryUnlock(pin) {
 }
 
 // === Рендер дашборда ===
-function renderDashboard() {
-    if (!DATA) return;
-    
-    // Проверка: анимация была?
-    if (!window._dashAnimated) {
-        document.body.classList.add('first-load');
-        window._dashAnimated = true;
-    } else {
-        document.body.classList.remove('first-load');
-    }
 
-    const cDash = $('#content-diary');
-    if (cDash) cDash.classList.add('hidden');
-    const cTab = $('#content');
-    if (cTab) cTab.classList.remove('hidden');
-
-    const c = $('#content');
-    c.innerHTML = '';
-
-    // 1. Круги
-    c.appendChild(renderHeroRings());
-
-    // 2. Аккордеон для графика (Активность)
-    const chartAcc = document.createElement('div');
-    chartAcc.innerHTML = `
-        <div class="accordion-header"  style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
-            <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Активность</span>
-            <div id="chart-arrow" class="accordion-arrow" style="color: var(--accent); transition: transform 0.3s;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-            </div>
-        </div>
-        <div id="chart-content" class="accordion-content" style="display: none; padding: 0 16px;"></div>
-    `;
-    const chartContent = chartAcc.querySelector('.accordion-content');
-    chartContent.appendChild(renderChart()); // Сюда вставляем график
-
-    const chartArrow = chartAcc.querySelector('#chart-arrow');
-    if (chartArrow) {
-        chartArrow.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleAccordion('chart', 'chart-content', 'chart-arrow');
-        });
-    }
-
-
-    // Логика для графика
-
-    
-    // Останавливаем всплытие кликов внутри графика, чтобы они не закрывали аккордеон
-    chartContent.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-
-    // 3. Аккордеон для сессий (Последние сессии)
-    const sessAcc = document.createElement('div');
-    sessAcc.innerHTML = `
-        <div class="accordion-header"  style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
-            <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Последние сессии</span>
-            <div id="sess-arrow" class="accordion-arrow" style="color: var(--accent); transition: transform 0.3s;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-            </div>
-        </div>
-        <div id="sess-content" class="accordion-content" style="display: none; padding: 0 16px;"></div>
-    `;
-    const sessContent = sessAcc.querySelector('.accordion-content');
-    sessContent.appendChild(renderSessions()); // Сюда вставляем сессии
-
-    const sessArrow = sessAcc.querySelector('#sess-arrow');
-    if (sessArrow) {
-        sessArrow.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleAccordion('sess', 'sess-content', 'sess-arrow');
-        });
-    }
-
-
-    // Логика для сессий
-
-
-
-
-    // Устанавливаем начальное состояние
-    if (isChartOpen) {
-        chartContent.style.display = 'block';
-        chartArrow.style.transform = 'rotate(180deg)';
-    }
-    c.appendChild(chartAcc);
-    c.appendChild(sessAcc);
-    c.appendChild(renderFooter());
-}
 
 function renderRingSVG(percent, size, strokeWidth, color) {
   const r = (size - strokeWidth) / 2;
@@ -1458,3 +1356,82 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+function toggleAccordion(contentId, arrowId) {
+    const content = document.getElementById(contentId);
+    const arrow = document.getElementById(arrowId);
+    if (!content || !arrow) return;
+
+    const isHidden = content.style.display === 'none' || !content.style.display;
+    content.style.display = isHidden ? 'block' : 'none';
+    arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+function renderDashboard() {
+    if (!DATA) return;
+    
+    if (!window._dashAnimated) {
+        document.body.classList.add('first-load');
+        window._dashAnimated = true;
+    } else {
+        document.body.classList.remove('first-load');
+    }
+
+    const cDash = $('#content-diary');
+    if (cDash) cDash.classList.add('hidden');
+    const cTab = $('#content');
+    if (cTab) cTab.classList.remove('hidden');
+
+    const c = $('#content');
+    c.innerHTML = '';
+
+    // 1. Круги
+    c.appendChild(renderHeroRings());
+
+    // 2. Аккордеон "Активность" (График)
+    const chartAcc = document.createElement('div');
+    chartAcc.style.marginTop = '30px';
+    chartAcc.innerHTML = `
+        <div id="chart-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
+            <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Активность</span>
+            <div id="chart-arrow" style="color: var(--accent); transition: transform 0.3s;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+        </div>
+        <div id="chart-content" style="display: none; padding: 0 16px;"></div>
+    `;
+    const chartContent = chartAcc.querySelector('#chart-content');
+    chartContent.appendChild(renderChart());
+
+    const chartHeader = chartAcc.querySelector('#chart-header');
+    chartHeader.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleAccordion('chart-content', 'chart-arrow');
+    });
+
+    // 3. Аккордеон "Последние сессии"
+    const sessAcc = document.createElement('div');
+    sessAcc.style.marginTop = '20px';
+    sessAcc.innerHTML = `
+        <div id="sess-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
+            <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Последние сессии</span>
+            <div id="sess-arrow" style="color: var(--accent); transition: transform 0.3s;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+        </div>
+        <div id="sess-content" style="display: none; padding: 0 16px;"></div>
+    `;
+    const sessContent = sessAcc.querySelector('#sess-content');
+    sessContent.appendChild(renderSessions());
+
+    const sessHeader = sessAcc.querySelector('#sess-header');
+    sessHeader.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleAccordion('sess-content', 'sess-arrow');
+    });
+
+    // 4. Добавляем на страницу
+    c.appendChild(chartAcc);
+    c.appendChild(sessAcc);
+    c.appendChild(renderFooter());
+}
