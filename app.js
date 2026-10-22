@@ -1327,6 +1327,15 @@ function toggleAccordion(contentId, arrowId) {
     const isHidden = content.style.display === 'none' || !content.style.display;
     content.style.display = isHidden ? 'block' : 'none';
     arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+      
+      // Плавная прокрутка к графику при открытии
+      if (isHidden) {
+        setTimeout(() => {
+          const yOffset = -60; 
+          const y = chartAcc.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }, 50);
+      }
 }
 
 
