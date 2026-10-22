@@ -1750,3 +1750,10 @@ body.first-load .hero-rings {
 
 /* Отключаем анимацию, если это не первый раз */
 
+
+/* Меняем местами кнопки (Аналитика слева, Открыть справа) */
+.project-actions {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 8px;
+}
