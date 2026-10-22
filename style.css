@@ -1718,3 +1718,10 @@ body { padding-bottom: 70px; }
 .rings-grid {
     margin-top: 30px !important;
 }
+
+/* Меняем местами кнопки Открыть и Аналитика */
+.project-actions {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 8px;
+}
