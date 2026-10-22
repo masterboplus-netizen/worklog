@@ -793,7 +793,7 @@ html, body {
 
 /* === Projects tab + отступ секции после колец === */
 .hero-rings {
-    margin-top: 30px;
+    margin-top: 0;
     margin-bottom: 30px;
 }
 .section-title { padding-left: 16px;
