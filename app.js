@@ -1165,17 +1165,31 @@ function renderChart() {
   sec.querySelectorAll('.period-btn').forEach(btn => {
     btn.addEventListener('click', (ev) => {
       ev.preventDefault();
+      ev.stopPropagation(); // СТОП! Не даем клику всплыть до аккордеона!
       CHART_PERIOD = parseInt(btn.dataset.period, 10);
       CHART_SELECTED = null;
-      renderDashboard();
+      
+      // Перерисовываем ТОЛЬКО график внутри его контейнера
+      const chartContent = document.getElementById('chart-content');
+      if (chartContent) {
+        chartContent.innerHTML = '';
+        chartContent.appendChild(renderChart());
+      }
     });
   });
   sec.querySelectorAll('.metric-btn').forEach(btn => {
     btn.addEventListener('click', (ev) => {
       ev.preventDefault();
+      ev.stopPropagation(); // СТОП! Не даем клику всплыть до аккордеона!
       CHART_METRIC = btn.dataset.metric;
       CHART_SELECTED = null;
-      renderDashboard();
+      
+      // Перерисовываем ТОЛЬКО график внутри его контейнера
+      const chartContent = document.getElementById('chart-content');
+      if (chartContent) {
+        chartContent.innerHTML = '';
+        chartContent.appendChild(renderChart());
+      }
     });
   });
 
