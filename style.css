@@ -1364,7 +1364,7 @@ html, body {
     width: 22px;
     height: 22px;
 }
-body { padding-bottom: 70px; }
+body { padding-bottom: 120px; }
 
 /* === Goal picker: padding, чтобы 1 и 24 были видны === */
 .goal-picker {
@@ -1605,7 +1605,7 @@ body { padding-bottom: 70px; }
     height: 22px;
     stroke-width: 2.5;
 }
-body { padding-bottom: 70px; }
+body { padding-bottom: 120px; }
 
 
 
