@@ -1,3 +1,13 @@
+
+function toggleAccordion(headerId, contentId, arrowId) {
+    const content = document.getElementById(contentId);
+    const arrow = document.getElementById(arrowId);
+    if (!content || !arrow) return;
+    
+    const isHidden = content.style.display === 'none' || !content.style.display;
+    content.style.display = isHidden ? 'block' : 'none';
+    arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+}
 let isChartOpen = false;
 // Хераборина — основная логика UI
 const $ = (sel) => document.querySelector(sel);
@@ -311,13 +321,13 @@ function renderDashboard() {
     // 2. Аккордеон для графика (Активность)
     const chartAcc = document.createElement('div');
     chartAcc.innerHTML = `
-        <div class="accordion-header" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
+        <div class="accordion-header" onclick="toggleAccordion('chart', 'chart-content', 'chart-arrow')" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
             <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Активность</span>
-            <div class="accordion-arrow" style="color: var(--accent); transition: transform 0.3s;">
+            <div id="chart-arrow" class="accordion-arrow" style="color: var(--accent); transition: transform 0.3s;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
             </div>
         </div>
-        <div class="accordion-content closed" style="padding: 0 16px;"></div>
+        <div id="chart-content" class="accordion-content" style="display: none; padding: 0 16px;"></div>
     `;
     const chartContent = chartAcc.querySelector('.accordion-content');
     chartContent.appendChild(renderChart()); // Сюда вставляем график
@@ -333,39 +343,21 @@ function renderDashboard() {
     // 3. Аккордеон для сессий (Последние сессии)
     const sessAcc = document.createElement('div');
     sessAcc.innerHTML = `
-        <div class="accordion-header" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
+        <div class="accordion-header" onclick="toggleAccordion('sess', 'sess-content', 'sess-arrow')" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
             <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Последние сессии</span>
-            <div class="accordion-arrow" style="color: var(--accent); transition: transform 0.3s;">
+            <div id="sess-arrow" class="accordion-arrow" style="color: var(--accent); transition: transform 0.3s;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
             </div>
         </div>
-        <div class="accordion-content closed" style="padding: 0 16px;"></div>
+        <div id="sess-content" class="accordion-content" style="display: none; padding: 0 16px;"></div>
     `;
     const sessContent = sessAcc.querySelector('.accordion-content');
     sessContent.appendChild(renderSessions()); // Сюда вставляем сессии
 
     // Логика для сессий
-    const sessArrow = sessAcc.querySelector('.accordion-arrow');
-    sessArrow.addEventListener('click', () => {
-        const isOpen = sessContent.classList.contains('open');
-        if (isOpen) {
-            sessContent.classList.remove('open');
-            sessContent.classList.add('closed');
-            sessArrow.style.transform = 'rotate(0deg)';
-        } else {
-            sessContent.classList.remove('closed');
-            sessContent.classList.add('open');
-            sessArrow.style.transform = 'rotate(180deg)';
-        }
-    });
 
-    const chartArrow = chartAcc.querySelector('.accordion-arrow');
-    chartArrow.addEventListener('click', (e) => {
-        e.stopPropagation();
-        isChartOpen = !isChartOpen; // Переключаем состояние
-        chartContent.style.display = isChartOpen ? 'block' : 'none';
-        chartArrow.style.transform = isChartOpen ? 'rotate(180deg)' : 'rotate(0deg)';
-    });
+
+
 
     // Устанавливаем начальное состояние
     if (isChartOpen) {
