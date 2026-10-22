@@ -328,6 +328,11 @@ function renderDashboard() {
         chartContent.style.display = isHidden ? 'block' : 'none';
         chartAcc.querySelector('.accordion-arrow').style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
     });
+    
+    // Останавливаем всплытие кликов внутри графика, чтобы они не закрывали аккордеон
+    chartContent.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
 
     // 3. Аккордеон для сессий (Последние сессии)
     const sessAcc = document.createElement('div');
@@ -349,6 +354,10 @@ function renderDashboard() {
         const isHidden = sessContent.style.display === 'none';
         sessContent.style.display = isHidden ? 'block' : 'none';
         sessAcc.querySelector('.accordion-arrow').style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+    
+    sessContent.addEventListener('click', (e) => {
+        e.stopPropagation();
     });
 
     c.appendChild(chartAcc);
