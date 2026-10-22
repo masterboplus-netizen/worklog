@@ -1713,3 +1713,8 @@ body { padding-bottom: 70px; }
 .rings-grid {
     margin-top: 20px !important;
 }
+
+/* Опускаем маленькие круги вместе с подписями */
+.hero-mini {
+    margin-top: 30px !important;
+}
