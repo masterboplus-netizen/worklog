@@ -626,9 +626,7 @@ html, body {
 .chart-labels-row 
 
 /* === Hero Rings (v5) === */
-.hero-rings {
-  margin-bottom: 20px;
-}
+
 .hero-main {
   display: flex;
   justify-content: center;
@@ -792,9 +790,7 @@ html, body {
 }
 
 /* === Projects tab + отступ секции после колец === */
-.hero-rings {
-  margin-bottom: 24px;
-}
+
 .section-title { padding-left: 16px;
   margin-top: 16px;
 }
@@ -1709,15 +1705,11 @@ body { padding-bottom: 70px; }
 }
 
 /* Отступы для дашборда */
-.hero-rings {
-    margin-bottom: 30px !important;
-}
+
 .dashboard-header, .activity-header {
     margin-top: 30px !important;
 }
-.rings-grid {
-    margin-top: 30px !important;
-}
+
 
 /* Меняем местами кнопки Открыть и Аналитика */
 .project-actions {
@@ -1727,20 +1719,20 @@ body { padding-bottom: 70px; }
 }
 
 /* Сдвигаем большой круг вниз */
+
+
+/* Сдвигаем маленькие круги вниз */
+
+
+/* Точная настройка расстояния между большим и малыми кругами */
+
+
+
+/* Чистые отступы для кругов */
 .hero-rings {
     margin-top: 30px !important;
     margin-bottom: 30px !important;
 }
-
-/* Сдвигаем маленькие круги вниз */
 .rings-grid {
-    margin-top: 30px !important;
-}
-
-/* Точная настройка расстояния между большим и малыми кругами */
-.hero-rings {
-    margin-bottom: 15px !important; /* Убираем лишний отступ снизу */
-}
-.rings-grid {
-    margin-top: 15px !important; /* И оставляем только один отступ сверху */
+    margin-top: 0px !important; /* Убираем лишний отступ, чтобы не складывался */
 }
