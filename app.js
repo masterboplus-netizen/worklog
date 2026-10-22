@@ -318,7 +318,10 @@ function renderDashboard() {
     // 3. Создаем контейнер для графика и сессий, который будет скрыт
     const hiddenContainer = document.createElement('div');
     hiddenContainer.id = 'hidden-content';
-    hiddenContainer.style.display = 'none'; // Скрыто по умолчанию
+    hiddenContainer.style.transform = 'translateY(100%)';
+    hiddenContainer.style.transition = 'transform 0.6s ease-out';
+    hiddenContainer.style.position = 'relative';
+    hiddenContainer.style.zIndex = '1';
 
     hiddenContainer.appendChild(renderChart());
     hiddenContainer.appendChild(renderSessions());
@@ -1413,12 +1416,8 @@ window.addEventListener('scroll', () => {
             
             setTimeout(() => {
                 hint.style.display = 'none';
-                // Показываем график и сессии
-                hiddenContent.style.display = 'block';
-                // Небольшая анимация появления
-                hiddenContent.style.opacity = '0';
-                hiddenContent.style.transition = 'opacity 0.5s';
-                setTimeout(() => hiddenContent.style.opacity = '1', 50);
+                // Плавно выезжает снизу
+                hiddenContent.style.transform = 'translateY(0)';
             }, 300);
         }
     }
