@@ -1336,7 +1336,7 @@ function renderChart() {
 function renderSessions() {
   const sec = document.createElement('div');
   sec.className = 'section';
-  sec.innerHTML = '<div class="section-title">Последние сессии</div>';
+  sec.innerHTML = '';
 
   const list = (DATA.sessions || []).slice().sort((a, b) =>
     (b.date + (b.start || '')).localeCompare(a.date + (a.start || ''))
