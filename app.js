@@ -286,17 +286,45 @@ async function tryUnlock(pin) {
 
 // === Рендер дашборда ===
 function renderDashboard() {
-  if (!DATA) return;
-  const cDash = $('#content-diary');
-  if (cDash) cDash.classList.add('hidden');
-  const cTab = $('#content');
-  if (cTab) cTab.classList.remove('hidden');
-  const c = $('#content');
-  c.innerHTML = '';
-  c.appendChild(renderHeroRings());
-  c.appendChild(renderChart());
-  c.appendChild(renderSessions());
-  c.appendChild(renderFooter());
+    if (!DATA) return;
+    const cDash = $('#content-diary');
+    if (cDash) cDash.classList.add('hidden');
+    const cTab = $('#content');
+    if (cTab) cTab.classList.remove('hidden');
+
+    const c = $('#content');
+    c.innerHTML = '';
+
+    // 1. Сначала показываем круги
+    c.appendChild(renderHeroRings());
+
+    // 2. Добавляем подсказку о скролле (Активность / Последние сессии)
+    const hintDiv = document.createElement('div');
+    hintDiv.id = 'scroll-hint';
+    hintDiv.style.textAlign = 'center';
+    hintDiv.style.marginTop = '40px';
+    hintDiv.style.marginBottom = '20px';
+    hintDiv.innerHTML = `
+        <div style="font-size: 18px; color: var(--fg-dim); margin-bottom: 15px; font-weight: 500;">Активность</div>
+        <div style="font-size: 16px; color: var(--fg-dim); margin-bottom: 15px;">Последние сессии</div>
+        <div class="scroll-arrow">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+            </svg>
+        </div>
+    `;
+    c.appendChild(hintDiv);
+
+    // 3. Создаем контейнер для графика и сессий, который будет скрыт
+    const hiddenContainer = document.createElement('div');
+    hiddenContainer.id = 'hidden-content';
+    hiddenContainer.style.display = 'none'; // Скрыто по умолчанию
+
+    hiddenContainer.appendChild(renderChart());
+    hiddenContainer.appendChild(renderSessions());
+    hiddenContainer.appendChild(renderFooter());
+
+    c.appendChild(hiddenContainer);
 }
 
 function renderRingSVG(percent, size, strokeWidth, color) {
