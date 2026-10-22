@@ -1762,3 +1762,8 @@ body.first-load .hero-rings {
     padding: 10px;
     cursor: pointer;
 }
+
+/* Уменьшаем расстояние между аккордеонами */
+.accordion-header {
+    margin-top: 15px !important;
+}
