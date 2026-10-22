@@ -326,7 +326,7 @@ function renderDashboard() {
     // 2. Аккордеон для графика (Активность)
     const chartAcc = document.createElement('div');
     chartAcc.innerHTML = `
-        <div class="accordion-header" onclick="toggleAccordion('chart', 'chart-content', 'chart-arrow')" style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
+        <div class="accordion-header"  style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
             <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Активность</span>
             <div id="chart-arrow" class="accordion-arrow" style="color: var(--accent); transition: transform 0.3s;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
@@ -336,6 +336,15 @@ function renderDashboard() {
     `;
     const chartContent = chartAcc.querySelector('.accordion-content');
     chartContent.appendChild(renderChart()); // Сюда вставляем график
+
+    const chartArrow = chartAcc.querySelector('#chart-arrow');
+    if (chartArrow) {
+        chartArrow.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleAccordion('chart', 'chart-content', 'chart-arrow');
+        });
+    }
+
 
     // Логика для графика
 
@@ -348,7 +357,7 @@ function renderDashboard() {
     // 3. Аккордеон для сессий (Последние сессии)
     const sessAcc = document.createElement('div');
     sessAcc.innerHTML = `
-        <div class="accordion-header" onclick="toggleAccordion('sess', 'sess-content', 'sess-arrow')" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
+        <div class="accordion-header"  style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
             <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Последние сессии</span>
             <div id="sess-arrow" class="accordion-arrow" style="color: var(--accent); transition: transform 0.3s;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
@@ -358,6 +367,15 @@ function renderDashboard() {
     `;
     const sessContent = sessAcc.querySelector('.accordion-content');
     sessContent.appendChild(renderSessions()); // Сюда вставляем сессии
+
+    const sessArrow = sessAcc.querySelector('#sess-arrow');
+    if (sessArrow) {
+        sessArrow.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleAccordion('sess', 'sess-content', 'sess-arrow');
+        });
+    }
+
 
     // Логика для сессий
 
