@@ -88,12 +88,19 @@ function switchTab(name) {
   [tabDash, tabDiary, tabProjects].forEach(t => t && t.classList.remove('tab-active'));
   [cDash, cDiary, cProjects].forEach(c => c && c.classList.add('hidden'));
 
-  // Принудительно закрываем аккордеон графика при любом переключении вкладок
+  // Принудительно закрываем аккордеоны при любом переключении вкладок
   const chartContent = document.getElementById('chart-content');
   const chartArrow = document.getElementById('chart-arrow');
   if (chartContent && chartArrow) {
     chartContent.style.display = 'none';
     chartArrow.style.transform = 'rotate(0deg)';
+  }
+  
+  const sessContent = document.getElementById('sess-content');
+  const sessArrow = document.getElementById('sess-arrow');
+  if (sessContent && sessArrow) {
+    sessContent.style.display = 'none';
+    sessArrow.style.transform = 'rotate(0deg)';
   }
 
   if (name === 'diary') {
