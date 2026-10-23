@@ -81,37 +81,25 @@ function switchTab(name) {
   const tabDash = document.getElementById('tab-dashboard');
   const tabDiary = document.getElementById('tab-diary');
   const tabProjects = document.getElementById('tab-projects');
+  const tabActivity = document.getElementById('tab-activity');
+  
   const cDash = document.getElementById('content');
   const cDiary = document.getElementById('content-diary');
   const cProjects = document.getElementById('content-projects');
+  const cActivity = document.getElementById('content-activity');
+
   if (!tabDash || !tabDiary || !cDash || !cDiary) return;
 
-  // Скрыть все
-  [tabDash, tabDiary, tabProjects].forEach(t => t && t.classList.remove('tab-active'));
-  const cActivity = document.getElementById('content-activity'); [cDash, cDiary, cProjects, cActivity].forEach(c => c && c.classList.add('hidden'));
+  // 1. Скрываем ВСЕ вкладки и ВСЕ контейнеры
+  [tabDash, tabDiary, tabProjects, tabActivity].forEach(t => t && t.classList.remove('tab-active'));
+  [cDash, cDiary, cProjects, cActivity].forEach(c => c && c.classList.add('hidden'));
 
-  // Принудительно закрываем аккордеоны при любом переключении вкладок
-  const chartContent = document.getElementById('chart-content');
-  const chartArrow = document.getElementById('chart-arrow');
-  if (chartContent && chartArrow) {
-    chartContent.style.display = 'none';
-    chartArrow.style.transform = 'rotate(0deg)';
-  }
-  
-  const sessContent = document.getElementById('sess-content');
-  const sessArrow = document.getElementById('sess-arrow');
-  if (sessContent && sessArrow) {
-    sessContent.style.display = 'none';
-    sessArrow.style.transform = 'rotate(0deg)';
-  }
-
+  // 2. Показываем нужную
   if (name === 'activity') {
-    const tabActivity = document.getElementById('tab-activity');
-    const cActivity = document.getElementById('content-activity');
     if (tabActivity) tabActivity.classList.add('tab-active');
     if (cActivity) {
-        cActivity.classList.remove('hidden');
-        renderActivityPage();
+      cActivity.classList.remove('hidden');
+      renderActivityPage();
     }
   } else if (name === 'diary') {
     tabDiary.classList.add('tab-active');
@@ -125,11 +113,12 @@ function switchTab(name) {
       cProjects.appendChild(renderProjects());
     }
   } else {
+    // По умолчанию — Дашборд
     tabDash.classList.add('tab-active');
-    cDash.classList.remove('hidden');
     cDash.classList.remove('hidden');
   }
 }
+
 
 function renderDiary() {
   const c = document.getElementById('content-diary');
