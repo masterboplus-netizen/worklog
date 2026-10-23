@@ -1,5 +1,5 @@
 // Worklog — Service Worker (офлайн-кэш)
-const CACHE = 'worklog-v188';
+const CACHE = 'worklog-v189';
 const ASSETS = [
   './',
   './index.html',
@@ -8,7 +8,9 @@ const ASSETS = [
   './crypto.js',
   './app.js',
   './manifest.webmanifest',
-  './icon.svg'
+  './icon.svg',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', (e) => {
