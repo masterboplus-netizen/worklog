@@ -47,9 +47,11 @@ async function init() {
   if (_btnLock) _btnLock.addEventListener('click', lock);
   setupTabs();
 
+  // Всегда сначала показываем экран загрузки (логотип)
+  showScreen('loading');
+
   const saved = localStorage.getItem(PIN_KEY);
   if (saved) {
-    showScreen('loading');
     const ok = await tryUnlock(saved);
     if (ok) {
       renderDashboard();
@@ -58,7 +60,11 @@ async function init() {
     }
     localStorage.removeItem(PIN_KEY);
   }
-  showScreen('pin-screen');
+  
+  // Небольшая задержка, чтобы логотип успел показаться (эффект загрузки)
+  setTimeout(() => {
+    showScreen('pin-screen');
+  }, 800);
 }
 
 function setupTabs() {
