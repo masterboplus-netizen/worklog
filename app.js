@@ -41,14 +41,6 @@ setTimeout(_bootstrap, 0);
 
 
 async function init() {
-  // Создаем контейнер для графика, если его нет
-  if (!document.getElementById('content-activity')) {
-    const activityDiv = document.createElement('div');
-    activityDiv.id = 'content-activity';
-    activityDiv.className = 'screen hidden';
-    activityDiv.style.cssText = 'display:none; background:var(--bg); padding-bottom:80px;';
-    document.body.appendChild(activityDiv);
-  }
 
   setupPinPad();
   const _btnLock = $('#btn-lock');
@@ -101,7 +93,11 @@ function switchTab(name) {
 
   // 1. Скрываем ВСЕ вкладки и ВСЕ контейнеры
   [tabDash, tabDiary, tabProjects, tabActivity].forEach(t => t && t.classList.remove('tab-active'));
-  [cDash, cDiary, cProjects, cActivity].forEach(c => { if (c) { c.classList.add('hidden'); } });
+    // Удаляем контейнер графика из DOM при переходе на другие вкладки
+  const actDivToRemove = document.getElementById('content-activity');
+  if (actDivToRemove) actDivToRemove.remove();
+  
+  [cDash, cDiary, cProjects].forEach(c => { if (c) { c.classList.add('hidden'); } });
 
   // 2. Показываем нужную
   if (name === 'activity') {
