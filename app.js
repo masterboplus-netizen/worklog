@@ -12,6 +12,21 @@ let PIN_BUF = '';
 function init() {
   setupPinPad();
   const btnLock = $('#btn-lock');
+  
+  // Клик по логотипу — возврат на дашборд и обновление
+  const logoBtn = $('#logo-btn');
+  if (logoBtn) {
+    logoBtn.addEventListener('click', () => {
+      // Если мы уже на дашборде — просто перерисовываем
+      if (!document.getElementById('content').classList.contains('hidden')) {
+        renderDashboard();
+      } else {
+        // Если на другой вкладке — переключаемся на дашборд
+        switchTab('dashboard');
+      }
+    });
+  }
+
   const btnHeart = $('#btn-heart');
   if (btnHeart) btnHeart.addEventListener('click', showJoke);
   if (btnLock) btnLock.addEventListener('click', lock);

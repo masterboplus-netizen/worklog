@@ -14,3 +14,19 @@
   line-height: 1;
   padding: 6px 10px;
 }
+
+/* === ФИКС: Красивое выравнивание кнопок в шапке === */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.topbar .logo {
+  flex: 1; /* Логотип занимает всё свободное место слева */
+  cursor: pointer;
+}
+.topbar-actions {
+  display: flex;
+  gap: 8px; /* Расстояние между сердечком и замком */
+  align-items: center;
+}
