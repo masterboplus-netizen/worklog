@@ -1892,3 +1892,42 @@ body.first-load .hero-rings {
 
 /* ЖЕСТКИЙ ФИКС ДЛЯ PIN */
 #pin-screen { position: relative; z-index: 1000; background: var(--bg); height: 100vh; }
+
+/* === ФИКС: Выравнивание графика === */
+.chart-bars {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 4px;
+  height: 180px;
+  justify-content: flex-start; /* Прижимаем к левому краю */
+}
+
+.chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 30px; /* Уменьшаем ширину оси Y */
+  font-size: 10px;
+  color: var(--fg-dim);
+  text-align: right;
+  padding-right: 4px;
+}
+
+.chart-bars-wrap {
+  position: relative;
+  flex: 1; /* Занимает всё оставшееся место */
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  border-bottom: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  padding: 0 2px;
+  background-image: linear-gradient(to top, var(--border) 1px, transparent 1px);
+  background-size: 100% 25%;
+  background-position: 0 0;
+}
+
+/* Убираем отступ у первой колонки, чтобы она была вплотную к оси */
+.chart-col:first-child {
+  margin-left: 0;
+}
