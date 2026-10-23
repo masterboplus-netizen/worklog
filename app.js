@@ -99,7 +99,11 @@ function switchTab(name) {
     if (tabActivity) tabActivity.classList.add('tab-active');
     if (cActivity) {
       cActivity.classList.remove('hidden');
+      cActivity.style.display = 'block'; // Принудительно показываем
+      console.log('container found, calling renderActivityPage');
       renderActivityPage();
+    } else {
+      console.error('cActivity is null');
     }
   } else if (name === 'diary') {
     tabDiary.classList.add('tab-active');
