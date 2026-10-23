@@ -1131,14 +1131,7 @@ function renderChart() {
   }
 
   // 5. ОДИН обработчик для столбиков
-  barsWrap.addEventListener('click', (ev) => {
-    const bar = ev.target.closest && ev.target.closest('.chart-bar');
-    if (!bar) return;
-    const wasSelected = bar.classList.contains('selected');
-    barsWrap.querySelectorAll('.chart-bar.selected').forEach(b => b.classList.remove('selected'));
-    if (!wasSelected) bar.classList.add('selected');
-    CHART_SELECTED = wasSelected ? null : bar.dataset.date;
-  });
+
 
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
