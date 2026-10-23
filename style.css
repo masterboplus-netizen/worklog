@@ -1821,3 +1821,31 @@ body.first-load .hero-rings {
 #content-activity .chart-col {
   height: 100% !important;
 }
+
+
+/* === ФИНАЛЬНЫЙ ФИКС: График сверху, без прижатия к низу === */
+#content-activity {
+  display: block !important;
+  padding: 0 !important;
+  padding-bottom: 80px !important;
+  background: var(--bg) !important;
+}
+
+#content-activity h2 {
+  margin: 16px 16px 0 16px !important;
+  padding: 0 !important;
+  font-size: 22px !important;
+  color: var(--fg) !important;
+}
+
+#content-activity .chart-bars {
+  height: 220px !important; /* Чуть меньше, чтобы влезло */
+  display: block !important;
+  margin: 10px 16px !important;
+}
+
+#content-activity .chart-bars-wrap {
+  height: 100% !important;
+  display: flex !important;
+  align-items: flex-end !important;
+}
