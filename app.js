@@ -1412,6 +1412,5 @@ function renderDashboard() {
     c.appendChild(renderHeroRings());
 
         // Активность и сессии вынесены на отдельную страницу
-c.appendChild(renderFooter());
 }
 
