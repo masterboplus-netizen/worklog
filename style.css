@@ -1791,7 +1791,7 @@ body.first-load .hero-rings {
 /* === ФИНАЛЬНЫЕ СТИЛИ ДЛЯ СТРАНИЦЫ ГРАФИК === */
 #content-activity {
   display: block !important;
-  min-height: 100vh !important;
+  min-height: auto !important;
   padding: 16px !important;
   padding-bottom: 100px !important; /* чтобы меню не перекрывало */
   background: var(--bg) !important;
