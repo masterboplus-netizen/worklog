@@ -80,6 +80,28 @@ function setupTabs() {
 
 
 
+function showJoke() {
+  const modal = document.getElementById('joke-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.style.opacity = '1';
+      modal.querySelector('div').style.transform = 'scale(1)';
+    }, 10);
+  }
+}
+
+window.closeJoke = function closeJoke() {
+  const modal = document.getElementById('joke-modal');
+  if (modal) {
+    modal.style.opacity = '0';
+    modal.querySelector('div').style.transform = 'scale(0.8)';
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 300);
+  }
+}
+
 function switchTab(name) {
   console.log('switchTab called:', name);
   
