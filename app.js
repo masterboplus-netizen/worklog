@@ -101,7 +101,7 @@ function switchTab(name) {
 
   // 1. Скрываем ВСЕ вкладки и ВСЕ контейнеры
   [tabDash, tabDiary, tabProjects, tabActivity].forEach(t => t && t.classList.remove('tab-active'));
-  [cDash, cDiary, cProjects, cActivity].forEach(c => { if (c) { c.classList.add('hidden'); c.style.setProperty('display', 'none', 'important'); } });
+  [cDash, cDiary, cProjects, cActivity].forEach(c => { if (c) { c.classList.add('hidden'); } });
 
   // 2. Показываем нужную
   if (name === 'activity') {
@@ -116,19 +116,26 @@ function switchTab(name) {
     }
   } else if (name === 'diary') {
     tabDiary.classList.add('tab-active');
-    cDiary.classList.remove('hidden');
+    if (cDiary) {
+      cDiary.classList.remove('hidden');
+      cDiary.style.display = 'block';
+    }
     renderDiary();
   } else if (name === 'projects') {
     if (tabProjects) tabProjects.classList.add('tab-active');
     if (cProjects) {
       cProjects.classList.remove('hidden');
+      cProjects.style.display = 'block';
       cProjects.innerHTML = '';
       cProjects.appendChild(renderProjects());
     }
   } else {
     // По умолчанию — Дашборд
     tabDash.classList.add('tab-active');
-    cDash.classList.remove('hidden');
+    if (cDash) {
+      cDash.classList.remove('hidden');
+      cDash.style.display = 'block';
+    }
   }
 }
 
