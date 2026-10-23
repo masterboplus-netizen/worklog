@@ -1189,36 +1189,8 @@ function renderChart() {
   sec.appendChild(metricBar);
 
   // 8. Обработчики кнопок (ПЕРИОДЫ и МЕТРИКИ)
-  sec.querySelectorAll('.period-btn').forEach(btn => {
-    btn.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation(); // СТОП! Не даем клику всплыть до аккордеона!
-      CHART_PERIOD = parseInt(btn.dataset.period, 10);
-      CHART_SELECTED = null;
-      
-      // Перерисовываем ТОЛЬКО график внутри его контейнера
-      const chartContent = document.getElementById('chart-content');
-      if (chartContent) {
-        chartContent.innerHTML = '';
-        chartContent.appendChild(renderChart());
-      }
-    });
-  });
-  sec.querySelectorAll('.metric-btn').forEach(btn => {
-    btn.addEventListener('click', (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation(); // СТОП! Не даем клику всплыть до аккордеона!
-      CHART_METRIC = btn.dataset.metric;
-      CHART_SELECTED = null;
-      
-      // Перерисовываем ТОЛЬКО график внутри его контейнера
-      const chartContent = document.getElementById('chart-content');
-      if (chartContent) {
-        chartContent.innerHTML = '';
-        chartContent.appendChild(renderChart());
-      }
-    });
-  });
+
+
 
   return sec;
 }
@@ -1261,7 +1233,7 @@ function renderSessions() {
     btn.addEventListener('click', () => {
       CHART_PERIOD = parseInt(btn.dataset.period, 10);
       CHART_SELECTED = null;
-      renderDashboard();
+      renderActivityPage();
     });
   });
 
@@ -1270,7 +1242,7 @@ function renderSessions() {
     btn.addEventListener('click', () => {
       CHART_METRIC = btn.dataset.metric;
       CHART_SELECTED = null;
-      renderDashboard();
+      renderActivityPage();
     });
   });
 
