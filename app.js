@@ -41,6 +41,15 @@ setTimeout(_bootstrap, 0);
 
 
 async function init() {
+  // Создаем контейнер для графика, если его нет
+  if (!document.getElementById('content-activity')) {
+    const activityDiv = document.createElement('div');
+    activityDiv.id = 'content-activity';
+    activityDiv.className = 'screen hidden';
+    activityDiv.style.cssText = 'display:none; min-height:100vh; background:var(--bg); padding-bottom:80px;';
+    document.body.appendChild(activityDiv);
+  }
+
   setupPinPad();
   const _btnLock = $('#btn-lock');
   if (_btnLock) _btnLock.addEventListener('click', lock);
