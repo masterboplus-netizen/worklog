@@ -48,7 +48,7 @@ async function init() {
   setupTabs();
 
   // Всегда сначала показываем экран загрузки (логотип)
-  showScreen('loading');
+  
 
   const saved = localStorage.getItem(PIN_KEY);
   if (saved) {
@@ -300,7 +300,7 @@ function updatePinDisplay() {
 }
 
 async function submitPin(pin) {
-  showScreen('loading');
+  
   const ok = await tryUnlock(pin);
   if (ok) {
     localStorage.setItem(PIN_KEY, pin);
