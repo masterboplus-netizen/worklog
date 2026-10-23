@@ -1889,3 +1889,6 @@ body.first-load .hero-rings {
 #content, #content-diary, #content-projects, #content-activity {
   padding-bottom: 90px !important;
 }
+
+/* ЖЕСТКИЙ ФИКС ДЛЯ PIN */
+#pin-screen { position: relative; z-index: 1000; background: var(--bg); height: 100vh; }
