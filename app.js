@@ -245,7 +245,7 @@ function showScreen(name) {
     // Управление видимостью нижней навигации
     const tabs = document.querySelector('.tabs');
     if (tabs) {
-        if (name === 'pin-screen') tabs.style.display = 'none';
+        if (name === 'pin-screen' || name === 'loading') tabs.style.display = 'none';
         else tabs.style.display = 'flex';
     }
 }
