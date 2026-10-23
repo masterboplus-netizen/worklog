@@ -1342,20 +1342,19 @@ function renderActivityPage() {
     chartDiv.appendChild(renderChart());
     c.appendChild(chartDiv);
 
-    // Делегирование событий (вешаем один раз на контейнер)
     if (!c._delegated) {
         c._delegated = true;
         c.addEventListener('click', (e) => {
-            // Клик по кнопкам периода
+            // Кнопки периода
             const periodBtn = e.target.closest('.period-btn');
             if (periodBtn) {
                 CHART_PERIOD = parseInt(periodBtn.dataset.period, 10);
                 CHART_SELECTED = null;
-                renderActivityPage(); // Перерисовываем только график
+                renderActivityPage();
                 return;
             }
 
-            // Клик по кнопкам метрик
+            // Кнопки метрик
             const metricBtn = e.target.closest('.metric-btn');
             if (metricBtn) {
                 CHART_METRIC = metricBtn.dataset.metric;
@@ -1364,7 +1363,7 @@ function renderActivityPage() {
                 return;
             }
 
-            // Клик по столбику (легенда)
+            // Столбик (ищем .chart-bar)
             const bar = e.target.closest('.chart-bar');
             if (bar) {
                 const wasSelected = bar.classList.contains('selected');
