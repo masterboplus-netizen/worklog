@@ -57,8 +57,11 @@ async function init() {
     localStorage.removeItem(PIN_KEY);
   }
 
-  // Если PIN нет — показываем PIN-пад (без логотипа)
-  showScreen('pin-screen');
+  // Если PIN нет — показываем экран загрузки на 1.5 сек, потом PIN-пад
+  showScreen('loading');
+  setTimeout(() => {
+    showScreen('pin-screen');
+  }, 1500);
 }
 
 function setupTabs() {

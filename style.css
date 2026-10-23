@@ -1849,7 +1849,3 @@ body.first-load .hero-rings {
   color: var(--fg-dim);
   opacity: 0.7;
 }
-
-
-/* === Скрываем логотип загрузки (он не нужен) === */
-#loading { display: none !important; }
