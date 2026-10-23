@@ -305,6 +305,11 @@ async function submitPin(pin) {
   const ok = await tryUnlock(pin);
   if (ok) {
     localStorage.setItem(PIN_KEY, pin);
+    
+    // ФИКС: Удаляем экран загрузки из DOM, чтобы он не перекрывал вкладки
+    const loadingEl = document.getElementById('loading');
+    if (loadingEl) loadingEl.remove();
+
     renderDashboard();
     showScreen('dashboard');
   } else {
