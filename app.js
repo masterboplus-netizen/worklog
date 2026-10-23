@@ -26,12 +26,19 @@ function init() {
       else { localStorage.removeItem(PIN_KEY); showScreen('pin-screen'); }
     });
   } else {
-    showScreen('pin-screen');
+    // Показываем лоадер только при самом первом запуске
+    const loadingEl = document.getElementById('loading');
+    if (loadingEl) loadingEl.classList.remove('hidden');
+    
+    setTimeout(() => {
+      if (loadingEl) loadingEl.classList.add('hidden');
+      showScreen('pin-screen');
+    }, 1000);
   }
 }
 
 function showScreen(name) {
-  ['pin-screen', 'dashboard', 'loading'].forEach(id => {
+  ['pin-screen', 'dashboard'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     if (id === name) el.classList.remove('hidden');
