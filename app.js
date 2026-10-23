@@ -233,6 +233,127 @@ function formatDiaryDate(iso) {
   return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + days[d.getDay()];
 }
 
+
+// === ПРОЕКТЫ (ОРИГИНАЛ) ===
+function renderProjects() {
+  const sec = document.createElement('div');
+  sec.className = 'section';
+
+  const byProj = {};
+  for (const s of DATA.sessions || []) {
+    byProj[s.project] = (byProj[s.project] || 0) + (s.duration_min || 0);
+  }
+
+  const base = DATA.baseline || {};
+  if (base.minutes && base.project) {
+    byProj[base.project] = (byProj[base.project] || 0) + base.minutes;
+  } else if (base.minutes) {
+    const firstId = (DATA.projects || [])[0]?.id;
+    if (firstId) byProj[firstId] = (byProj[firstId] || 0) + base.minutes;
+  }
+
+  for (const p of DATA.projects || []) {
+    const hrs = byProj[p.id] || 0;
+
+    let totalItems = 0, doneItems = 0;
+    for (const ph of p.plan || []) {
+      const items = ph.items || [];
+      totalItems += items.length;
+      doneItems += items.filter(it => typeof it === 'object' && it.done).length;
+    }
+    const pct = totalItems ? Math.round(doneItems / totalItems * 100) : 0;
+
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.style.marginBottom = '16px';
+    card.style.marginTop = '16px';
+    card.style.marginLeft = '16px';
+    card.style.marginRight = '16px';
+    card.innerHTML =
+      '<div class="project-head">' +
+        '<div class="project-name">' +
+          '<span class="project-dot" style="background:' + (p.color || '#4A9EFF') + '"></span>' +
+          p.name +
+        '</div>' +
+        '<div class="project-hours">' + fmtH(hrs) + '</div>' +
+      '</div>' +
+      '<div class="progress-bar"><div class="progress-fill" style="width:' + pct +
+        '%;background:' + (p.color || '#4A9EFF') + '"></div></div>' +
+      '<div class="project-meta">Выполнено: ' + doneItems + ' из ' + totalItems +
+        ' (' + pct + '%) · ' + (p.status || '') + '</div>';
+
+    const phasesDiv = document.createElement('div');
+    phasesDiv.className = 'phases';
+    for (const ph of p.plan || []) {
+      const items = ph.items || [];
+      const total = items.length;
+      const done = items.filter(it => typeof it === 'object' && it.done).length;
+      const phPct = total ? Math.round(done / total * 100) : 0;
+      const statusIcon = phPct === 100 ? '✅' : (phPct > 0 ? '🟡' : '📋');
+
+      const phDiv = document.createElement('div');
+      phDiv.className = 'phase';
+      phDiv.innerHTML =
+        '<div class="phase-head"><span class="phase-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>' +
+          '<span class="phase-icon">' + statusIcon + '</span>' +
+          '<span class="phase-name">' + ph.phase + '</span>' +
+          '<span class="phase-pct">' + phPct + '%</span>' +
+        '</div>' +
+        '<div class="phase-bar"><div class="phase-fill" style="width:' + phPct +
+          '%;background:' + (p.color || '#4A9EFF') + '"></div></div>';
+
+      const itemsList = document.createElement('div');
+      itemsList.className = 'phase-items hidden';
+      for (const it of items) {
+        if (typeof it === 'object') {
+          const line = document.createElement('div');
+          line.className = 'phase-item' + (it.done ? ' done' : '');
+          line.textContent = (it.done ? '✅ ' : '⏳ ') + it.text;
+          itemsList.appendChild(line);
+        }
+      }
+      phDiv.appendChild(itemsList);
+
+      phDiv.addEventListener('click', () => {
+        phDiv.classList.toggle('open');
+        itemsList.classList.toggle('hidden');
+      });
+
+      phasesDiv.appendChild(phDiv);
+    }
+    phasesDiv.classList.add('hidden');
+    card.appendChild(phasesDiv);
+
+    const actionsDiv = document.createElement('div');
+    actionsDiv.className = 'project-actions';
+    actionsDiv.innerHTML =
+      '<button class="project-btn project-open-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg><span>Открыть</span></button>' +
+      '<button class="project-btn project-analytics-btn" data-proj="' + p.id + '"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7" fill="currentColor" stroke="none"/><rect x="12" y="6" width="3" height="11" fill="currentColor" stroke="none"/><rect x="17" y="13" width="3" height="4" fill="currentColor" stroke="none"/></svg><span>Аналитика</span></button>';
+
+    const openBtn = actionsDiv.querySelector('.project-open-btn');
+    const anBtn = actionsDiv.querySelector('.project-analytics-btn');
+
+    openBtn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      phasesDiv.classList.toggle('hidden');
+      const isHidden = phasesDiv.classList.contains('hidden');
+      openBtn.querySelector('path').setAttribute('d', isHidden ? 'M6 9l6 6 6-6' : 'M6 15l6-6 6 6');
+      openBtn.querySelector('span').textContent = isHidden ? 'Открыть' : 'Свернуть';
+    });
+
+    anBtn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      // Заглушка для аналитики (пока не перенесли)
+      alert('Аналитика проекта: ' + p.name);
+    });
+
+    card.insertBefore(actionsDiv, phasesDiv);
+    sec.appendChild(card);
+  }
+
+  return sec;
+}
+
 // === РЕНДЕР ДАШБОРДА (Кольца) ===
 
 function renderRingSVG(percent, size, strokeWidth, color) {
