@@ -97,7 +97,12 @@ function switchTab(name) {
   const actDivToRemove = document.getElementById('content-activity');
   if (actDivToRemove) actDivToRemove.remove();
   
-  [cDash, cDiary, cProjects].forEach(c => { if (c) { c.classList.add('hidden'); } });
+    [cDash, cDiary, cProjects].forEach(c => { if (c) { c.classList.add('hidden'); } });
+
+  // Удаляем контейнер графика из DOM, если он есть
+  const actDiv = document.getElementById('content-activity');
+  if (actDiv) actDiv.remove();
+
 
   // 2. Показываем нужную
   if (name === 'activity') {
