@@ -10,13 +10,14 @@ const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц',
 
 // === ДНЕВНИК ===
 
+
 function renderDiary() {
   const c = document.getElementById('content-diary');
   if (!c || !window.DATA) return;
   c.innerHTML = '';
 
   const list = (window.DATA.sessions || []).slice().sort((a, b) =>
-    (a.date + (a.start || '')).localeCompare(b.date + (b.start || ''))
+    (b.date + (b.start || '')).localeCompare(a.date + (a.start || ''))
   );
 
   if (!list.length) {
@@ -27,40 +28,9 @@ function renderDiary() {
   const projName = {};
   for (const p of window.DATA.projects || []) projName[p.id] = p.name;
 
-  // === ПРАВИЛЬНАЯ СКЛЕЙКА ===
-  const merged = [];
-  for (let i = 0; i < list.length; i++) {
-    const s = list[i];
-    const last = merged[merged.length - 1];
-    
-    if (last) {
-      const lastEndH = parseInt((last.end || '00:00').split(':')[0], 10);
-      const currStartH = parseInt((s.start || '00:00').split(':')[0], 10);
-      
-      const lastDate = new Date(last.date + 'T00:00:00');
-      const currDate = new Date(s.date + 'T00:00:00');
-      const dayDiff = Math.round((currDate - lastDate) / 86400000);
-
-      // Если прошлая закончилась в 23:xx, а текущая началась в 00:xx следующего дня
-      if (lastEndH === 23 && currStartH === 0 && dayDiff === 1) {
-        last.end = s.end;
-        last.duration_min = (last.duration_min || 0) + (s.duration_min || 0);
-        last.events = (last.events || 0) + (s.events || 0);
-        last.screens = (last.screens || 0) + (s.screens || 0);
-        last.note = [(last.note || ''), (s.note || '')].filter(Boolean).join(' / ');
-        last._isMerged = true;
-        // Помечаем текущую сессию как "съеденную", чтобы она не выводилась отдельно
-        s._skip = true; 
-        continue;
-      }
-    }
-    merged.push(Object.assign({}, s));
-  }
-
   // Группируем по дате
   const byDate = {};
-  for (const s of merged) {
-    if (s._skip) continue; // Пропускаем вторую часть склейки
+  for (const s of list) {
     if (!byDate[s.date]) byDate[s.date] = [];
     byDate[s.date].push(s);
   }
@@ -77,7 +47,6 @@ function renderDiary() {
       const item = document.createElement('div');
       item.className = 'diary-item';
       
-      const mergeBadge = s._isMerged ? ' <span style="color:var(--fg-dim); font-size:11px;">(через полночь)</span>' : '';
       const timeRange = (s.start || '?') + ' → ' + (s.end || '?');
       const dur = fmtH(s.duration_min || 0);
       const proj = projName[s.project] || s.project || '–';
@@ -87,7 +56,7 @@ function renderDiary() {
       const counters = (evs || scrs) ? ('📨 ' + evs + ' · 📸 ' + scrs) : '';
       
       item.innerHTML =
-        '<div class="diary-time">' + timeRange + ' · <span class="diary-dur">' + dur + '</span>' + mergeBadge + '</div>' +
+        '<div class="diary-time">' + timeRange + ' · <span class="diary-dur">' + dur + '</span></div>' +
         '<div class="diary-proj">' + proj + '</div>' +
         (counters ? '<div class="diary-counters">' + counters + '</div>' : '') +
         (note ? '<div class="diary-note">' + note + '</div>' : '');
@@ -95,6 +64,7 @@ function renderDiary() {
     }
   }
 }
+
 
 
 function formatDiaryDate(iso) {
