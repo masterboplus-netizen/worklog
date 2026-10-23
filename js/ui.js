@@ -330,17 +330,22 @@ function renderActivityPage() {
 }
 
 
+
 function renderChart() {
   const sec = document.createElement('div');
   sec.className = 'section';
+
   const periods = [[1, 'День'], [7, 'Неделя'], [30, 'Месяц']];
   const filterHTML = periods.map(([n, label]) =>
     '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
   ).join('');
+  
   sec.innerHTML = '<div class="period-filter-row">' + filterHTML + '</div>';
+
   const days = [];
   const now = new Date();
   now.setMonth(now.getMonth() + CHART_OFFSET_MONTHS);
+
   if (CHART_PERIOD === 30) {
     const year = now.getFullYear();
     const month = now.getMonth();
@@ -350,6 +355,7 @@ function renderChart() {
     const totalDays = CHART_PERIOD === 1 ? 1 : CHART_PERIOD;
     for (let i = totalDays - 1; i >= 0; i--) days.push(_localDate(new Date(now - i * 86400000)));
   }
+
   const byDay = {};
   for (const ss of window.DATA.sessions || []) {
     let v = 0;
@@ -358,21 +364,26 @@ function renderChart() {
     else if (CHART_METRIC === 'screens') v = ss.screens || 0;
     byDay[ss.date] = (byDay[ss.date] || 0) + v;
   }
+
   const maxVal = Math.max(1, ...days.map(d => byDay[d] || 0));
   let top = 60;
   if (maxVal > 60) top = Math.ceil(maxVal / 60) * 60;
   const step = top / 4;
+
   let yAxisHTML = '';
   for (let i = 4; i >= 0; i--) {
     const val = step * i;
     const label = CHART_METRIC === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
     yAxisHTML += '<div class="chart-grid-line"><span class="chart-grid-label">' + label + '</span></div>';
   }
+
   const chart = document.createElement('div');
   chart.className = 'chart-bars';
   chart.innerHTML = '<div class="chart-y-axis">' + yAxisHTML + '</div>';
+
   const barsWrap = document.createElement('div');
   barsWrap.className = 'chart-bars-wrap';
+
   for (const d of days) {
     const val = byDay[d] || 0;
     const h = val ? Math.max(2, Math.round(val / top * 100)) : 0;
@@ -380,25 +391,49 @@ function renderChart() {
     col.className = 'chart-col';
     const isSel = CHART_SELECTED === d;
     const lblText = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : String(val)) : '';
-    col.innerHTML = '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '" data-date="' + d + '" style="height:' + h + '%">' + (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') + '</div>';
+
+    col.innerHTML =
+      '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '"' +
+      ' data-date="' + d + '"' +
+      ' style="height:' + h + '%">' +
+        (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') +
+      '</div>';
     barsWrap.appendChild(col);
   }
+
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
+
+  // НОВЫЙ БЛОК ПОДПИСЕЙ: теперь даты лежат в том же флекс-контейнере, что и столбики
   const labelsRow = document.createElement('div');
   labelsRow.className = 'chart-labels-row';
-  labelsRow.innerHTML = '<div class="chart-spacer"></div>';
+  
+  // Создаем пустой блок под ось Y
+  const spacer = document.createElement('div');
+  spacer.className = 'chart-spacer';
+  labelsRow.appendChild(spacer);
+
   const labels = document.createElement('div');
   labels.className = 'chart-labels';
+
   const isShort = days.length <= 14;
   const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
   for (const d of days) {
     const lbl = document.createElement('div');
     lbl.className = 'chart-label';
     const dayNum = parseInt(d.slice(8, 10), 10);
     let show = false, dateStr = '', dowStr = '';
-    if (isShort) { show = true; dateStr = String(dayNum); dowStr = dowNames[new Date(d + 'T00:00:00').getDay()]; }
-    else { show = (dayNum === 1 || dayNum % 5 === 0); dateStr = String(dayNum); }
+    
+    if (isShort) {
+      show = true;
+      dateStr = String(dayNum);
+      dowStr = dowNames[new Date(d + 'T00:00:00').getDay()];
+    } else {
+      show = (dayNum === 1 || dayNum % 5 === 0);
+      dateStr = String(dayNum);
+    }
+    
     if (show) {
       const _d = new Date(d + 'T00:00:00');
       const _dow = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'][_d.getDay()];
@@ -408,6 +443,7 @@ function renderChart() {
   }
   labelsRow.appendChild(labels);
   sec.appendChild(labelsRow);
+
   const totalForPeriod = days.reduce((acc, d) => acc + (byDay[d] || 0), 0);
   const totalStr = CHART_METRIC === 'duration' ? fmtH(totalForPeriod) : String(totalForPeriod);
   const metrics = [
@@ -422,8 +458,10 @@ function renderChart() {
   metricBar.className = 'metric-switch';
   metricBar.innerHTML = metricHTML;
   sec.appendChild(metricBar);
+
   return sec;
 }
+
 
 function renderDashboard() {
   if (!window.DATA) return;
