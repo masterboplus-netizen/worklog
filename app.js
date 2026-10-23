@@ -41,6 +41,15 @@ setTimeout(_bootstrap, 0);
 
 
 async function init() {
+  // Создаем лоадер динамически
+  if (!document.getElementById('loading')) {
+    const l = document.createElement('div');
+    l.id = 'loading';
+    l.className = 'screen hidden';
+    l.innerHTML = '<div class="spinner"></div><p>Расшифровка…</p>';
+    document.body.appendChild(l);
+  }
+
   setupPinPad();
   const _btnLock = $('#btn-lock');
   if (_btnLock) _btnLock.addEventListener('click', lock);
@@ -114,15 +123,15 @@ function switchTab(name) {
   // 2. Показываем нужную
   if (name === 'activity') {
     if (tabActivity) tabActivity.classList.add('tab-active');
-    // Создаем контейнер заново, если его нет
+    // Проверяем, есть ли контейнер в HTML
     let actDiv = document.getElementById('content-activity');
     if (!actDiv) {
       actDiv = document.createElement('div');
       actDiv.id = 'content-activity';
-      actDiv.className = 'screen';
-      actDiv.style.cssText = 'display:block; background:var(--bg); padding-bottom:80px;';
-      document.body.appendChild(actDiv);
+      actDiv.className = 'screen hidden';
+      document.getElementById('dashboard').appendChild(actDiv);
     }
+    actDiv.classList.remove('hidden');
     renderActivityPage();
   } else if (name === 'diary') {
     tabDiary.classList.add('tab-active');
