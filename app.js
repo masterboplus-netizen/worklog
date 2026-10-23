@@ -125,12 +125,115 @@ function switchTab(name) {
   }
 }
 
-// Заглушки для рендера (чтобы не падало)
+// === РЕНДЕР ДАШБОРДА (Кольца) ===
+
+function renderRingSVG(percent, size, strokeWidth, color) {
+  const r = (size - strokeWidth) / 2;
+  const c = 2 * Math.PI * r;
+  const p = Math.max(0, Math.min(100, percent));
+  const dash = c * p / 100;
+  return '<svg width="' + size + '" height="' + size + '" class="ring-svg">' +
+    '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--bg3)" stroke-width="' + strokeWidth + '"/>' +
+    '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" stroke-dasharray="' + dash + ' ' + c + '" stroke-linecap="round" transform="rotate(-90 ' + size/2 + ' ' + size/2 + ')"/>' +
+    '</svg>';
+}
+
+function calcTotals() {
+  const now = new Date();
+  const today = _localDate(now);
+  const weekAgo = _localDate(new Date(now - 7 * 86400000));
+  const monthAgo = _localDate(new Date(now - 30 * 86400000));
+  const base = DATA.baseline || {};
+  const baseMin = base.minutes || 0;
+  const baseMsgs = base.messages || 0;
+  let total = 0, week = 0, month = 0, todayMin = 0, screens = 0, msgs = 0;
+  for (const s of DATA.sessions || []) {
+    total += s.duration_min || 0;
+    if (s.date >= weekAgo) week += s.duration_min || 0;
+    if (s.date >= monthAgo) month += s.duration_min || 0;
+    if (s.date === today) todayMin += s.duration_min || 0;
+    screens += s.screens || 0;
+    msgs += s.events || 0;
+  }
+  const uniqueDays = new Set((DATA.sessions || []).map(x => x.date)).size;
+  return {
+    total: total + baseMin, totalNoBase: total, week, month, todayMin, screens, msgs: msgs + baseMsgs,
+    count: (DATA.sessions || []).length, daysCount: uniqueDays, avgPerDay: Math.round(total / Math.max(1, uniqueDays))
+  };
+}
+
+function _localDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + dd;
+}
+
+function fmtH(min) {
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return h > 0 ? h + 'ч ' + m + 'м' : m + 'м';
+}
+
+function _sumRange(sessions, period, field) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const td = _localDate(today);
+  let from = '2000-01-01';
+  if (period === 'day') from = td;
+  else if (period === 'week') from = _localDate(new Date(today - 6 * 86400000));
+  else if (period === 'month') from = _localDate(new Date(today.getFullYear(), today.getMonth(), 1));
+  
+  let sum = 0;
+  for (const s of sessions) {
+    if (s.date >= from && s.date <= td) sum += s[field] || 0;
+  }
+  return sum;
+}
+
+let HERO_MODE = 'today';
+let MINI_MSG_PERIOD = 'day';
+let MINI_SCR_PERIOD = 'day';
+let MINI_TIME_PERIOD = 'avg';
+const MINI_PERIODS_MSG = ['day', 'week', 'month', 'all'];
+const MINI_PERIODS_TIME = ['avg', 'week', 'month', 'all'];
+const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц', all: 'Всё', avg: 'Среднее/день'};
+
 function renderDashboard() {
   if (!DATA) return;
   const c = document.getElementById('content');
-  if (c) c.innerHTML = '<div style="padding:20px; text-align:center;">Данные расшифрованы!<br>ID: ' + (DATA.sessions ? DATA.sessions.length : 0) + '</div>';
-}
+  if (!c) return;
+  c.innerHTML = '';
+  
+  const t = calcTotals();
+  const sessions = DATA.sessions || [];
+  const msgVal = _sumRange(sessions, MINI_MSG_PERIOD, 'events');
+  const scrVal = _sumRange(sessions, MINI_SCR_PERIOD, 'screens');
+  const timeVal = MINI_TIME_PERIOD === 'avg' ? fmtH(t.avgPerDay) : (MINI_TIME_PERIOD === 'all' ? Math.floor(t.total/60)+'ч<br>'+(t.total%60)+'м' : Math.floor(_sumRange(sessions, MINI_TIME_PERIOD, 'duration_min')/60)+'ч<br>'+(_sumRange(sessions, MINI_TIME_PERIOD, 'duration_min')%60)+'м');
 
+  let heroValue = t.todayMin, heroLabel = 'Сегодня', heroSub = 'Цель 12ч · ' + Math.round(t.todayMin / 720 * 100) + '%';
+  if (HERO_MODE === 'last') {
+    const sorted = sessions.slice().sort((a, b) => (b.date + (b.end || '')).localeCompare(a.date + (a.end || '')));
+    const lastSess = sorted[0];
+    heroValue = lastSess ? (lastSess.duration_min || 0) : 0;
+    heroLabel = 'Последняя сессия';
+    heroSub = lastSess ? (lastSess.date.slice(8, 10) + '.' + lastSess.date.slice(5, 7)) : '';
+  }
+  
+  const pctDur = Math.round(heroValue / 720 * 100); // Пока цель хардкод 720 (12ч)
+  const ringColor = pctDur >= 100 ? 'var(--green)' : 'var(--accent)';
+
+  const div = document.createElement('div');
+  div.className = 'hero-rings';
+  div.innerHTML = 
+    '<div class="hero-main"><div class="ring-wrap" style="cursor:pointer" id="hero-ring">' + renderRingSVG(pctDur, 290, 14, ringColor) +
+      '<div class="ring-center"><div class="ring-icon">' + (HERO_MODE === 'today' ? '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' : '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>') + '</div>' +
+      '<div class="ring-label">' + heroLabel + '</div><div class="ring-value">' + fmtH(heroValue) + '</div><div class="ring-sub">' + heroSub + '</div></div></div></div>' +
+    '<div class="hero-mini"><div class="mini-block"><div class="mini-label"><div class="mini-lbl-title">Сообщения</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_MSG_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 92, 7, 'var(--green)') + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + msgVal + '</div></div></div></div>' +
+      '<div class="mini-block"><div class="mini-label"><div class="mini-lbl-title">Скрины</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_SCR_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 92, 7, 'var(--yellow)') + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + scrVal + '</div></div></div></div>' +
+      '<div class="mini-block"><div class="mini-label">' + (MINI_TIME_PERIOD === 'avg' ? '<div class="mini-lbl-title">Среднее/день</div>' : '<div class="mini-lbl-title">Время</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_TIME_PERIOD] + '</div>') + '</div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 92, 7, 'var(--accent)') + '<div class="mini-center"><div class="mini-val" style="font-size:' + (String(timeVal).includes('<br>') ? '16' : '22') + 'px">' + timeVal + '</div></div></div></div></div>';
+  
+  c.appendChild(div);
+}
 // Запуск
 window.addEventListener('DOMContentLoaded', init);
