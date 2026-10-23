@@ -1931,3 +1931,32 @@ body.first-load .hero-rings {
 .chart-col:first-child {
   margin-left: 0;
 }
+
+/* === ФИКС: Выравнивание столбиков и дат === */
+.chart-bars-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between; /* Равномерно распределяем столбики */
+  padding: 0;
+}
+
+.chart-col {
+  flex: 1; /* Каждый столбик занимает равную долю */
+  display: flex;
+  justify-content: center;
+}
+
+.chart-labels {
+  display: flex;
+  justify-content: space-between; /* Равномерно распределяем даты */
+  width: 100%;
+  padding: 0;
+}
+
+.chart-label {
+  flex: 1; /* Каждая дата занимает равную долю (как и столбик) */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
