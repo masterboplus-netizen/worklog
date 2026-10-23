@@ -1780,3 +1780,21 @@ body.first-load .hero-rings {
   margin-top: 10px !important;
   padding-top: 0 !important;
 }
+
+
+/* === Легенда графика: не наезжает на кнопки === */
+.chart-bar .bar-label {
+  bottom: 100% !important;
+  margin-bottom: 8px !important; /* Отступ от столбика */
+  font-size: 11px !important;
+  padding: 2px 6px !important;
+  background: var(--bg2) !important;
+  border: 1px solid var(--accent) !important;
+  border-radius: 4px !important;
+  z-index: 1000 !important;
+}
+
+/* Чтобы легенда не перекрывала кнопки периодов, ограничим высоту графика */
+#content-activity .chart-bars {
+  margin-top: 40px !important; /* Отодвигаем график от кнопок */
+}
