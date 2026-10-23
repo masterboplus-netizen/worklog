@@ -1759,10 +1759,25 @@ body.first-load .hero-rings {
 
 
 /* === Экран Графика (Activity) === */
+
+
+/* === Экран Графика (Activity) — принудительная видимость === */
 #content-activity {
   display: block !important;
-  padding-bottom: 80px; /* чтобы меню не перекрывало */
+  min-height: calc(100vh - 70px) !important;
+  padding-bottom: 100px;
+  background: var(--bg);
 }
+
+#content-activity .chart-bars {
+  height: 250px !important; /* Увеличиваем высоту графика, чтобы был виден */
+  margin-top: 20px;
+}
+
+#content-activity .chart-bars-wrap {
+  min-height: 200px !important;
+}
+
 
 #content-activity h2 {
   margin-top: 16px;
