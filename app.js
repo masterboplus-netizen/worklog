@@ -1169,7 +1169,7 @@ function renderChart() {
       show = (dayNum === 1 || dayNum % 5 === 0);
       dateStr = String(dayNum);
     }
-    if (show) lbl.innerHTML = '<div class="lbl-date">' + dateStr + '</div>' + (isShort ? '<div class="lbl-dow">' + dowStr + '</div>' : '');
+    if (show) lbl.innerHTML = '<div class="lbl-date">' + dateStr + '</div>' + '<div class="lbl-dow">' + dowStr + '</div>';
     labels.appendChild(lbl);
   }
   labelsRow.appendChild(labels);
