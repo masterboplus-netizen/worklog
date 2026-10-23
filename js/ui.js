@@ -266,8 +266,15 @@ function renderProjects() {
     card.appendChild(phasesDiv);
     const actionsDiv = document.createElement('div');
     actionsDiv.className = 'project-actions';
-    actionsDiv.innerHTML = '<button class="project-btn project-open-btn"><span>Открыть</span></button>' +
-      '<button class="project-btn project-analytics-btn" data-proj="' + p.id + '"><span>Аналитика</span></button>';
+    actionsDiv.innerHTML = 
+      '<button class="project-btn project-open-btn">' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
+        '<span>Открыть</span>' +
+      '</button>' +
+      '<button class="project-btn project-analytics-btn" data-proj="' + p.id + '">' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7" fill="currentColor" stroke="none"/><rect x="12" y="6" width="3" height="11" fill="currentColor" stroke="none"/><rect x="17" y="13" width="3" height="4" fill="currentColor" stroke="none"/></svg>' +
+        '<span>Аналитика</span>' +
+      '</button>';
     const openBtn = actionsDiv.querySelector('.project-open-btn');
     const anBtn = actionsDiv.querySelector('.project-analytics-btn');
     openBtn.addEventListener('click', (ev) => {
@@ -283,6 +290,7 @@ function renderProjects() {
 }
 
 // === ГРАФИК ===
+
 function renderActivityPage() {
     const c = document.getElementById('content-activity');
     if (!c) return;
@@ -305,9 +313,22 @@ function renderActivityPage() {
             if (periodBtn) { CHART_PERIOD = parseInt(periodBtn.dataset.period, 10); CHART_SELECTED = null; renderActivityPage(); return; }
             const metricBtn = e.target.closest('.metric-btn');
             if (metricBtn) { CHART_METRIC = metricBtn.dataset.metric; CHART_SELECTED = null; renderActivityPage(); return; }
+            
+            // ТАП НА СТОЛБИК
+            const bar = e.target.closest('.chart-bar');
+            if (bar) {
+                const wasSelected = bar.classList.contains('selected');
+                c.querySelectorAll('.chart-bar.selected').forEach(b => b.classList.remove('selected'));
+                if (!wasSelected) bar.classList.add('selected');
+                CHART_SELECTED = wasSelected ? null : bar.dataset.date;
+                // Перерисовываем, чтобы показать тултип
+                renderActivityPage();
+                return;
+            }
         });
     }
 }
+
 
 function renderChart() {
   const sec = document.createElement('div');
