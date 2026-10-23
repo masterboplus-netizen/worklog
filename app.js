@@ -82,6 +82,10 @@ function setupTabs() {
 }
 
 function switchTab(name) {
+  // Скрываем экран загрузки, если он есть
+  const loadingEl = document.getElementById('loading');
+  if (loadingEl) loadingEl.classList.add('hidden');
+
   const tabDash = document.getElementById('tab-dashboard');
   const tabDiary = document.getElementById('tab-diary');
   const tabProjects = document.getElementById('tab-projects');
