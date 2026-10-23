@@ -135,7 +135,10 @@ function switchTab(name) {
     document.getElementById('tab-diary').classList.add('tab-active');
     renderDiary(); // <--- ВЫЗЫВАЕМ РЕНДЕР ДНЕВНИКА
   } else if (name === 'projects') {
-    document.getElementById('content-projects').classList.remove('hidden');
+    const cProj = document.getElementById('content-projects');
+    cProj.classList.remove('hidden');
+    cProj.innerHTML = '';
+    cProj.appendChild(renderProjects()); // Вставляем карточки
     document.getElementById('tab-projects').classList.add('tab-active');
   } else if (name === 'activity') {
     document.getElementById('content-activity').classList.remove('hidden');
