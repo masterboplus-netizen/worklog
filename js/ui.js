@@ -11,6 +11,7 @@ const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц',
 // === ДНЕВНИК ===
 
 
+
 function renderDiary() {
   const c = document.getElementById('content-diary');
   if (!c || !window.DATA) return;
@@ -28,7 +29,7 @@ function renderDiary() {
   const projName = {};
   for (const p of window.DATA.projects || []) projName[p.id] = p.name;
 
-  // Группируем по дате
+  // Группируем по дате (без склейки)
   const byDate = {};
   for (const s of list) {
     if (!byDate[s.date]) byDate[s.date] = [];
@@ -64,6 +65,7 @@ function renderDiary() {
     }
   }
 }
+
 
 
 
