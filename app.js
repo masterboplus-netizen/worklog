@@ -78,7 +78,9 @@ function setupTabs() {
   if (tabActivity) tabActivity.addEventListener('click', () => switchTab('activity'));
 }
 
+
 function switchTab(name) {
+  // Скрываем все контейнеры
   ['content', 'content-diary', 'content-projects', 'content-activity'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
@@ -86,24 +88,27 @@ function switchTab(name) {
       if (id === 'content-activity') el.innerHTML = '';
     }
   });
-  const tabs = document.querySelectorAll('.tab');
-  tabs.forEach(t => t.classList.remove('tab-active'));
+  
+  // Снимаем активность со всех кнопок
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab-active'));
 
+  // Показываем нужную вкладку (с проверкой на существование)
   if (name === 'diary') {
     const c = document.getElementById('content-diary');
-    if (c) { c.classList.remove('hidden'); renderDiary(); }
-    document.getElementById('tab-diary').classList.add('tab-active');
+    if (c) { c.classList.remove('hidden'); if (typeof renderDiary === 'function') renderDiary(); }
+    const t = document.getElementById('tab-diary'); if (t) t.classList.add('tab-active');
   } else if (name === 'projects') {
     const c = document.getElementById('content-projects');
-    if (c) { c.classList.remove('hidden'); c.innerHTML = ''; c.appendChild(renderProjects()); }
-    document.getElementById('tab-projects').classList.add('tab-active');
+    if (c) { c.classList.remove('hidden'); c.innerHTML = ''; if (typeof renderProjects === 'function') c.appendChild(renderProjects()); }
+    const t = document.getElementById('tab-projects'); if (t) t.classList.add('tab-active');
   } else if (name === 'activity') {
     const c = document.getElementById('content-activity');
-    if (c) { c.classList.remove('hidden'); renderActivityPage(); }
-    document.getElementById('tab-activity').classList.add('tab-active');
+    if (c) { c.classList.remove('hidden'); if (typeof renderActivityPage === 'function') renderActivityPage(); }
+    const t = document.getElementById('tab-activity'); if (t) t.classList.add('tab-active');
   } else {
     const c = document.getElementById('content');
-    if (c) { c.classList.remove('hidden'); renderDashboard(); }
-    document.getElementById('tab-dashboard').classList.add('tab-active');
+    if (c) { c.classList.remove('hidden'); if (typeof renderDashboard === 'function') renderDashboard(); }
+    const t = document.getElementById('tab-dashboard'); if (t) t.classList.add('tab-active');
   }
 }
+
