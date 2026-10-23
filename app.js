@@ -82,8 +82,11 @@ async function submitPin(pin) {
   const ok = await tryUnlock(pin);
   if (ok) {
     localStorage.setItem(PIN_KEY, pin);
+    
+    // ЖЕСТКО УДАЛЯЕМ ЛОУДЕР
     const l = document.getElementById('loading');
     if (l) l.remove();
+
     renderDashboard();
     showScreen('dashboard');
   } else {
@@ -113,6 +116,7 @@ function switchTab(name) {
   if (name === 'diary') {
     document.getElementById('content-diary').classList.remove('hidden');
     document.getElementById('tab-diary').classList.add('tab-active');
+    renderDiary(); // <--- ВЫЗЫВАЕМ РЕНДЕР ДНЕВНИКА
   } else if (name === 'projects') {
     document.getElementById('content-projects').classList.remove('hidden');
     document.getElementById('tab-projects').classList.add('tab-active');
