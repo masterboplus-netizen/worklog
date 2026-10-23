@@ -69,10 +69,12 @@ function setupTabs() {
   const tabDash = document.getElementById('tab-dashboard');
   const tabDiary = document.getElementById('tab-diary');
   const tabProjects = document.getElementById('tab-projects');
+  const tabActivity = document.getElementById('tab-activity');
   if (!tabDash || !tabDiary) return;
   tabDash.addEventListener('click', () => switchTab('dashboard'));
   tabDiary.addEventListener('click', () => switchTab('diary'));
   if (tabProjects) tabProjects.addEventListener('click', () => switchTab('projects'));
+  if (tabActivity) tabActivity.addEventListener('click', () => switchTab('activity'));
 }
 
 function switchTab(name) {
@@ -86,7 +88,7 @@ function switchTab(name) {
 
   // Скрыть все
   [tabDash, tabDiary, tabProjects].forEach(t => t && t.classList.remove('tab-active'));
-  [cDash, cDiary, cProjects].forEach(c => c && c.classList.add('hidden'));
+  const cActivity = document.getElementById('content-activity'); [cDash, cDiary, cProjects, cActivity].forEach(c => c && c.classList.add('hidden'));
 
   // Принудительно закрываем аккордеоны при любом переключении вкладок
   const chartContent = document.getElementById('chart-content');
@@ -103,7 +105,15 @@ function switchTab(name) {
     sessArrow.style.transform = 'rotate(0deg)';
   }
 
-  if (name === 'diary') {
+  if (name === 'activity') {
+    const tabActivity = document.getElementById('tab-activity');
+    const cActivity = document.getElementById('content-activity');
+    if (tabActivity) tabActivity.classList.add('tab-active');
+    if (cActivity) {
+        cActivity.classList.remove('hidden');
+        cActivity.innerHTML = '<h2 style="padding:16px;color:var(--fg)">Активность</h2>';
+    }
+  } else if (name === 'diary') {
     tabDiary.classList.add('tab-active');
     cDiary.classList.remove('hidden');
     renderDiary();
