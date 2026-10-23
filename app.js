@@ -101,7 +101,7 @@ function switchTab(name) {
 
   // 1. Скрываем ВСЕ вкладки и ВСЕ контейнеры
   [tabDash, tabDiary, tabProjects, tabActivity].forEach(t => t && t.classList.remove('tab-active'));
-  [cDash, cDiary, cProjects, cActivity].forEach(c => c && c.classList.add('hidden'));
+  [cDash, cDiary, cProjects, cActivity].forEach(c => { if (c) { c.classList.add('hidden'); c.style.setProperty('display', 'none', 'important'); } });
 
   // 2. Показываем нужную
   if (name === 'activity') {
