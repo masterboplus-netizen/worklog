@@ -1362,6 +1362,7 @@ function renderActivityPage() {
     
     try {
         const chart = renderChart();
+        alert('График создан, длина HTML: ' + chart.innerHTML.length);
         chartDiv.appendChild(chart);
         alert('График добавлен в DOM');
     } catch (e) {
