@@ -1770,3 +1770,15 @@ body.first-load .hero-rings {
   background: var(--bg);
   box-sizing: border-box;
 }
+
+
+/* === Поднимаем график наверх === */
+#content-activity {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+#content-activity h2 {
+  margin-top: 10px !important;
+  padding-top: 0 !important;
+}
