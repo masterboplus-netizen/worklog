@@ -41,14 +41,10 @@ setTimeout(_bootstrap, 0);
 
 
 async function init() {
-
   setupPinPad();
   const _btnLock = $('#btn-lock');
   if (_btnLock) _btnLock.addEventListener('click', lock);
   setupTabs();
-
-  // Всегда сначала показываем экран загрузки (логотип)
-  
 
   const saved = localStorage.getItem(PIN_KEY);
   if (saved) {
@@ -60,11 +56,9 @@ async function init() {
     }
     localStorage.removeItem(PIN_KEY);
   }
-  
-  // Небольшая задержка, чтобы логотип успел показаться (эффект загрузки)
-  setTimeout(() => {
-    showScreen('pin-screen');
-  }, 1500); // 1.5 секунды
+
+  // Если PIN нет — показываем PIN-пад (без логотипа)
+  showScreen('pin-screen');
 }
 
 function setupTabs() {
