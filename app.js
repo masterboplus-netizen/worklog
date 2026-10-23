@@ -111,7 +111,7 @@ function switchTab(name) {
     if (tabActivity) tabActivity.classList.add('tab-active');
     if (cActivity) {
         cActivity.classList.remove('hidden');
-        cActivity.innerHTML = '<h2 style="padding:16px;color:var(--fg)">Активность</h2>';
+        renderActivityPage();
     }
   } else if (name === 'diary') {
     tabDiary.classList.add('tab-active');
@@ -1349,6 +1349,28 @@ function toggleAccordion(contentId, arrowId) {
 }
 
 
+
+function renderActivityPage() {
+    const c = document.getElementById('content-activity');
+    if (!c) return;
+    c.innerHTML = '';
+    
+    // Добавляем заголовок
+    const header = document.createElement('h2');
+    header.textContent = 'Активность';
+    header.style.padding = '16px';
+    header.style.color = 'var(--fg)';
+    header.style.margin = '0';
+    header.style.fontSize = '22px';
+    c.appendChild(header);
+
+    // Контейнер для графика
+    const chartDiv = document.createElement('div');
+    chartDiv.style.padding = '0 16px 16px 16px';
+    chartDiv.appendChild(renderChart());
+    c.appendChild(chartDiv);
+}
+
 function renderDashboard() {
     if (!DATA) return;
 
@@ -1370,74 +1392,7 @@ function renderDashboard() {
     // 1. Круги
     c.appendChild(renderHeroRings());
 
-    // 2. Аккордеон "Активность" (График)
-    const chartAcc = document.createElement('div');
-    chartAcc.style.marginTop = '30px';
-    chartAcc.innerHTML = `
-        <div id="chart-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
-            <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Активность</span>
-            <div id="chart-arrow" style="color: var(--accent); transition: transform 0.3s;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-            </div>
-        </div>
-        <div id="chart-content" style="display: none; padding: 0 16px;"></div>
-    `;
-
-    const chartContent = chartAcc.querySelector('#chart-content');
-    chartContent.appendChild(renderChart());
-
-    const chartHeader = chartAcc.querySelector('#chart-header');
-    chartHeader.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const content = document.getElementById('chart-content');
-        const arrow = document.getElementById('chart-arrow');
-        if (!content || !arrow) return;
-        
-        const isHidden = content.style.display === 'none' || !content.style.display;
-        content.style.display = isHidden ? 'block' : 'none';
-        arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-
-        // ПЛАВНАЯ ПРОКРУТКА (срабатывает только при открытии)
-        if (isHidden) {
-            setTimeout(() => {
-                // Прокручиваем так, чтобы шапка графика оказалась чуть ниже топбара
-                const yOffset = -70; 
-                const y = chartAcc.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                const sessHeader = document.getElementById('sess-header'); if (sessHeader) sessHeader.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }, 100);
-        }
-    });
-
-    // 3. Аккордеон "Последние сессии"
-    const sessAcc = document.createElement('div');
-    sessAcc.style.marginTop = '20px';
-    sessAcc.innerHTML = `
-        <div id="sess-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; cursor: pointer; padding: 0 16px;">
-            <span style="font-size: 18px; font-weight: bold; color: var(--fg);">Последние сессии</span>
-            <div id="sess-arrow" style="color: var(--accent); transition: transform 0.3s;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-            </div>
-        </div>
-        <div id="sess-content" style="display: none; padding: 0 16px;"></div>
-    `;
-
-    const sessContent = sessAcc.querySelector('#sess-content');
-    sessContent.appendChild(renderSessions());
-
-    const sessHeader = sessAcc.querySelector('#sess-header');
-    sessHeader.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const content = document.getElementById('sess-content');
-        const arrow = document.getElementById('sess-arrow');
-        if (!content || !arrow) return;
-        const isHidden = content.style.display === 'none' || !content.style.display;
-        content.style.display = isHidden ? 'block' : 'none';
-        arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
-    });
-
-    // 4. Добавляем на страницу
-    c.appendChild(chartAcc);
-    c.appendChild(sessAcc);
-    c.appendChild(renderFooter());
+        // Активность и сессии вынесены на отдельную страницу
+c.appendChild(renderFooter());
 }
 
