@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css?v=171">
+<link rel="stylesheet" href="style.css?v=172">
 </head>
 <body>
 <div id="app"></div>
@@ -53,17 +53,17 @@
 </div>
 
 <nav class="tabs" style="display: none;">
-<button id="tab-dashboard" class="tab tab-active" data-tab="dashboard">Дашборд</button>
-<button id="tab-diary" class="tab" data-tab="diary">Дневник</button>
-<button id="tab-projects" class="tab" data-tab="projects">Проекты</button>
-<button id="tab-activity" class="tab" data-tab="activity">График</button>
+  <button id="tab-dashboard" class="tab tab-active" data-tab="dashboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Дашборд</button>
+  <button id="tab-diary" class="tab" data-tab="diary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M4 4h12a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M4 4v16"/></svg>Дневник</button>
+  <button id="tab-projects" class="tab" data-tab="projects"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M3 7h18v13H3z"/><path d="M3 7l2-4h14l2 4"/><path d="M12 11v6"/></svg>Проекты</button>
+  <button id="tab-activity" class="tab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>График</button>
 </nav>
 
-<script src="crypto.js?v=171"></script>
-<script src="app.js?v=171"></script>
+<script src="crypto.js?v=172"></script>
+<script src="app.js?v=172"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js?v=171', { updateViaCache: 'none' }).catch(function(){});
+  navigator.serviceWorker.register('sw.js?v=172', { updateViaCache: 'none' }).catch(function(){});
 }
 </script>
 </body>

@@ -234,6 +234,27 @@ function renderDashboard() {
       '<div class="mini-block"><div class="mini-label">' + (MINI_TIME_PERIOD === 'avg' ? '<div class="mini-lbl-title">Среднее/день</div>' : '<div class="mini-lbl-title">Время</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_TIME_PERIOD] + '</div>') + '</div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 92, 7, 'var(--accent)') + '<div class="mini-center"><div class="mini-val" style="font-size:' + (String(timeVal).includes('<br>') ? '16' : '22') + 'px">' + timeVal + '</div></div></div></div></div>';
   
   c.appendChild(div);
+
+  // Оживляем кольца
+  const heroRing = div.querySelector('#hero-ring');
+  if (heroRing) {
+    heroRing.addEventListener('click', () => {
+      HERO_MODE = HERO_MODE === 'today' ? 'last' : 'today';
+      renderDashboard();
+    });
+  }
+
+  div.querySelectorAll('.mini-block').forEach((block, index) => {
+    const ring = block.querySelector('.mini-ring');
+    if (ring) {
+      ring.addEventListener('click', () => {
+        if (index === 0) MINI_MSG_PERIOD = MINI_PERIODS_MSG[(MINI_PERIODS_MSG.indexOf(MINI_MSG_PERIOD) + 1) % MINI_PERIODS_MSG.length];
+        else if (index === 1) MINI_SCR_PERIOD = MINI_PERIODS_MSG[(MINI_PERIODS_MSG.indexOf(MINI_SCR_PERIOD) + 1) % MINI_PERIODS_MSG.length];
+        else if (index === 2) MINI_TIME_PERIOD = MINI_PERIODS_TIME[(MINI_PERIODS_TIME.indexOf(MINI_TIME_PERIOD) + 1) % MINI_PERIODS_TIME.length];
+        renderDashboard();
+      });
+    }
+  });
 }
 // Запуск
 window.addEventListener('DOMContentLoaded', init);
