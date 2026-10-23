@@ -3,7 +3,7 @@
 const PIN_KEY = 'worklog_pin';
 const PIN_LEN = 6;
 let PIN_BUF = '';
-let DATA = null;
+window.DATA = null;
 
 function setupPinPad() {
   $$('.pin-pad button').forEach(btn => {

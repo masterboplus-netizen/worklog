@@ -1,5 +1,6 @@
 
 // --- МОДУЛЬ: UI (Отрисовка) ---
+let DATA = window.DATA;
 let HERO_MODE = 'today';
 let MINI_MSG_PERIOD = 'day';
 let MINI_SCR_PERIOD = 'day';
