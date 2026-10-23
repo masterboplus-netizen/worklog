@@ -331,6 +331,7 @@ function renderActivityPage() {
 
 
 
+
 function renderChart() {
   const sec = document.createElement('div');
   sec.className = 'section';
@@ -404,11 +405,10 @@ function renderChart() {
   chart.appendChild(barsWrap);
   sec.appendChild(chart);
 
-  // НОВЫЙ БЛОК ПОДПИСЕЙ: теперь даты лежат в том же флекс-контейнере, что и столбики
+  // БЛОК ПОДПИСЕЙ
   const labelsRow = document.createElement('div');
   labelsRow.className = 'chart-labels-row';
   
-  // Создаем пустой блок под ось Y
   const spacer = document.createElement('div');
   spacer.className = 'chart-spacer';
   labelsRow.appendChild(spacer);
@@ -423,8 +423,9 @@ function renderChart() {
     const lbl = document.createElement('div');
     lbl.className = 'chart-label';
     const dayNum = parseInt(d.slice(8, 10), 10);
-    let show = false, dateStr = '', dowStr = '';
     
+    // ВСЕГДА создаем ячейку, чтобы сохранить сетку
+    let show = false, dateStr = '', dowStr = '';
     if (isShort) {
       show = true;
       dateStr = String(dayNum);
@@ -439,6 +440,7 @@ function renderChart() {
       const _dow = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'][_d.getDay()];
       lbl.innerHTML = '<div class="lbl-date">' + dateStr + '</div>' + '<div class="lbl-dow">' + _dow + '</div>';
     }
+    // Даже если show=false, пустой div остается на месте
     labels.appendChild(lbl);
   }
   labelsRow.appendChild(labels);
@@ -461,6 +463,7 @@ function renderChart() {
 
   return sec;
 }
+
 
 
 function renderDashboard() {
