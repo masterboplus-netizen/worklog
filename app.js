@@ -1341,6 +1341,40 @@ function renderActivityPage() {
     chartDiv.style.padding = '0 16px 16px 16px';
     chartDiv.appendChild(renderChart());
     c.appendChild(chartDiv);
+
+    // Делегирование событий (вешаем один раз на контейнер)
+    if (!c._delegated) {
+        c._delegated = true;
+        c.addEventListener('click', (e) => {
+            // Клик по кнопкам периода
+            const periodBtn = e.target.closest('.period-btn');
+            if (periodBtn) {
+                CHART_PERIOD = parseInt(periodBtn.dataset.period, 10);
+                CHART_SELECTED = null;
+                renderActivityPage(); // Перерисовываем только график
+                return;
+            }
+
+            // Клик по кнопкам метрик
+            const metricBtn = e.target.closest('.metric-btn');
+            if (metricBtn) {
+                CHART_METRIC = metricBtn.dataset.metric;
+                CHART_SELECTED = null;
+                renderActivityPage();
+                return;
+            }
+
+            // Клик по столбику (легенда)
+            const bar = e.target.closest('.chart-bar');
+            if (bar) {
+                const wasSelected = bar.classList.contains('selected');
+                c.querySelectorAll('.chart-bar.selected').forEach(b => b.classList.remove('selected'));
+                if (!wasSelected) bar.classList.add('selected');
+                CHART_SELECTED = wasSelected ? null : bar.dataset.date;
+                return;
+            }
+        });
+    }
 }
 
 
