@@ -147,6 +147,7 @@ function switchTab(name) {
   } else if (name === 'activity') {
     document.getElementById('content-activity').classList.remove('hidden');
     document.getElementById('tab-activity').classList.add('tab-active');
+    renderActivityPage(); // <--- ВЫЗЫВАЕМ РЕНДЕР ГРАФИКА
   } else {
     document.getElementById('content').classList.remove('hidden');
     document.getElementById('tab-dashboard').classList.add('tab-active');
