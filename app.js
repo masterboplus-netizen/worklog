@@ -22,8 +22,18 @@ function init() {
   const saved = localStorage.getItem(PIN_KEY);
   if (saved) {
     tryUnlock(saved).then(ok => {
-      if (ok) { renderDashboard(); showScreen('dashboard'); }
-      else { localStorage.removeItem(PIN_KEY); showScreen('pin-screen'); }
+      if (ok) { 
+        // ЖЕСТКО УДАЛЯЕМ ЛОУДЕР ПРИ АВТОВХОДЕ
+        const l = document.getElementById('loading');
+        if (l) l.remove();
+        
+        renderDashboard(); 
+        showScreen('dashboard'); 
+      }
+      else { 
+        localStorage.removeItem(PIN_KEY); 
+        showScreen('pin-screen'); 
+      }
     });
   } else {
     // Показываем лоадер только при самом первом запуске
