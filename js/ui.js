@@ -341,12 +341,11 @@ function renderActivityPage() {
     }
 }
 
-
 function renderChart() {
   const container = document.createElement('div');
   container.className = 'chart-container';
 
-  // 1. Фильтры
+  // 1. Фильтры периодов
   const periods = [[1, 'День'], [7, 'Неделя'], [30, 'Месяц']];
   const filterHTML = periods.map(([n, label]) =>
     '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
@@ -356,7 +355,7 @@ function renderChart() {
   filterRow.innerHTML = filterHTML;
   container.appendChild(filterRow);
 
-  // 2. Дни
+  // 2. Формируем список дней
   const days = [];
   const now = new Date();
   now.setMonth(now.getMonth() + CHART_OFFSET_MONTHS);
@@ -365,13 +364,17 @@ function renderChart() {
     const year = now.getFullYear();
     const month = now.getMonth();
     const lastDay = new Date(year, month + 1, 0);
-    for (let i = 0; i < lastDay.getDate(); i++) days.push(_localDate(new Date(year, month, i + 1)));
+    for (let i = 0; i < lastDay.getDate(); i++) {
+      days.push(_localDate(new Date(year, month, i + 1)));
+    }
   } else {
     const totalDays = CHART_PERIOD === 1 ? 1 : CHART_PERIOD;
-    for (let i = totalDays - 1; i >= 0; i--) days.push(_localDate(new Date(now - i * 86400000)));
+    for (let i = totalDays - 1; i >= 0; i--) {
+      days.push(_localDate(new Date(now - i * 86400000)));
+    }
   }
 
-  // 3. Данные
+  // 3. Считаем значения
   const byDay = {};
   for (const ss of window.DATA.sessions || []) {
     let v = 0;
@@ -381,12 +384,12 @@ function renderChart() {
     byDay[ss.date] = (byDay[ss.date] || 0) + v;
   }
 
+  // 4. Строим график (Ось Y + Столбики)
   const maxVal = Math.max(1, ...days.map(d => byDay[d] || 0));
   let top = 60;
   if (maxVal > 60) top = Math.ceil(maxVal / 60) * 60;
   const step = top / 4;
 
-  // 4. Строим график
   const chartBars = document.createElement('div');
   chartBars.className = 'chart-bars';
 
@@ -397,48 +400,64 @@ function renderChart() {
   for (let i = 4; i >= 0; i--) {
     const val = step * i;
     const label = CHART_METRIC === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
-    yAxisHTML += '<div>' + label + '</div>';
+    yAxisHTML += '<div class="chart-grid-line"><span>' + label + '</span></div>';
   }
   yAxis.innerHTML = yAxisHTML;
   chartBars.appendChild(yAxis);
 
-  // Обертка со всеми колонками
-  const colsWrap = document.createElement('div');
-  colsWrap.className = 'chart-cols-wrap';
-
-  const isShort = days.length <= 14;
-  const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
-
+  // Столбики
+  const barsWrap = document.createElement('div');
+  barsWrap.className = 'chart-bars-wrap';
+  
   for (const d of days) {
     const val = byDay[d] || 0;
     const h = val ? Math.max(2, Math.round(val / top * 100)) : 0;
     const isSel = CHART_SELECTED === d;
     const lblText = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : String(val)) : '';
-    
-    const dayNum = parseInt(d.slice(8, 10), 10);
-    const dow = dowNames[new Date(d + 'T00:00:00').getDay()];
-    
-    // Показывать ли дату
-    const showDate = isShort || (dayNum === 1 || dayNum % 5 === 0);
-    const dateHTML = showDate ? '<div class="lbl-date">' + dayNum + '</div><div class="lbl-dow">' + dow + '</div>' : '';
 
     const col = document.createElement('div');
     col.className = 'chart-col';
     col.innerHTML = 
-      '<div class="chart-bar-wrapper">' +
-        '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '" data-date="' + d + '" style="height:' + h + '%">' +
-          (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') +
-        '</div>' +
-      '</div>' +
-      '<div class="chart-label">' + dateHTML + '</div>';
-      
-    colsWrap.appendChild(col);
+      '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '" ' +
+      'data-date="' + d + '" style="height:' + h + '%">' +
+        (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') +
+      '</div>';
+    barsWrap.appendChild(col);
   }
-
-  chartBars.appendChild(colsWrap);
+  chartBars.appendChild(barsWrap);
   container.appendChild(chartBars);
 
-  // 5. Кнопки метрик
+  // 5. Подписи дат (Синхронизированы со столбиками)
+  const labelsRow = document.createElement('div');
+  labelsRow.className = 'chart-labels-row';
+
+  const spacer = document.createElement('div');
+  spacer.className = 'chart-spacer';
+  labelsRow.appendChild(spacer);
+
+  const labelsWrap = document.createElement('div');
+  labelsWrap.className = 'chart-labels';
+
+  const isShort = days.length <= 14;
+  const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
+  for (const d of days) {
+    const lbl = document.createElement('div');
+    lbl.className = 'chart-label';
+    const dayNum = parseInt(d.slice(8, 10), 10);
+    
+    // Показываем все даты для коротких периодов, для месяца — только 1, 5, 10, 15...
+    if (isShort || dayNum === 1 || dayNum % 5 === 0) {
+      const dow = dowNames[new Date(d + 'T00:00:00').getDay()];
+      lbl.innerHTML = '<div class="lbl-date">' + dayNum + '</div><div class="lbl-dow">' + dow + '</div>';
+    }
+    labelsWrap.appendChild(lbl);
+  }
+  
+  labelsRow.appendChild(labelsWrap);
+  container.appendChild(labelsRow);
+
+  // 6. Кнопки метрик
   const totalForPeriod = days.reduce((acc, d) => acc + (byDay[d] || 0), 0);
   const totalStr = CHART_METRIC === 'duration' ? fmtH(totalForPeriod) : String(totalForPeriod);
   const metrics = [
@@ -457,7 +476,6 @@ function renderChart() {
 
   return container;
 }
-
 
 
 function renderDashboard() {

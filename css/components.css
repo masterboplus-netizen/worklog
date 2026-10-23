@@ -2085,6 +2085,7 @@ body.first-load .hero-rings {
 
 
 /* ========================================= */
+/* === ГРАФИК (ПОЛНОСТЬЮ НОВЫЙ) === */
 /* ========================================= */
 
 /* Общий контейнер */
@@ -2219,97 +2220,7 @@ body.first-load .hero-rings {
   border-color: var(--accent);
 }
 
-
-/* ========================================= */
-/* === ГРАФИК (АБСОЛЮТНАЯ СИНХРОНИЗАЦИЯ) === */
-/* ========================================= */
-
-.chart-container {
-  margin: 12px 0;
+/* === ТОЧНАЯ ПРАВКА: Сдвиг контейнера с датами влево === */
+.chart-labels-row {
+  margin-left: -30px !important; /* Сдвигаем даты влево на ширину оси Y */
 }
-
-/* Главная строка: Ось Y + Все колонки */
-.chart-bars {
-  display: flex;
-  height: 200px; /* Чуть выше, чтобы влезли даты */
-  align-items: stretch;
-}
-
-/* Ось Y */
-.chart-y-axis {
-  width: 35px;
-  min-width: 35px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  font-size: 10px;
-  color: var(--fg-dim);
-  text-align: right;
-  padding-right: 5px;
-  padding-bottom: 20px; /* Отступ снизу, чтобы ось не налезала на даты */
-  box-sizing: border-box;
-}
-
-/* Обертка для всех колонок (столбики + даты) */
-.chart-cols-wrap {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  border-left: 1px solid var(--border);
-  background-image: linear-gradient(to top, var(--border) 1px, transparent 1px);
-  background-size: 100% 25%;
-  box-sizing: border-box;
-}
-
-/* Одна колонка (внутри: столбик и дата) */
-.chart-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end; /* Прижимаем всё вниз */
-  align-items: center;
-  min-width: 0;
-  position: relative;
-}
-
-/* Столбик */
-.chart-bar-wrapper {
-  flex: 1; /* Занимает всё свободное место над датой */
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
-
-.chart-bar {
-  width: 100%;
-  max-width: 24px;
-  background: var(--accent);
-  border-radius: 3px 3px 0 0;
-  cursor: pointer;
-}
-.chart-bar.empty { background: transparent; pointer-events: none; }
-
-/* Дата (прибита к низу колонки) */
-.chart-label {
-  height: 20px; /* Фиксированная высота под дату */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  text-align: center;
-  font-size: 9px;
-  color: var(--fg-dim);
-  line-height: 1.1;
-}
-.lbl-date { font-size: 10px; }
-.lbl-dow { font-size: 9px; opacity: 0.6; }
-
-/* Кнопки и фильтры */
-.period-filter-row { display: flex; justify-content: flex-end; gap: 6px; margin-bottom: 16px; }
-.period-btn { background: var(--bg3); color: var(--fg-dim); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; cursor: pointer; }
-.period-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-.metric-switch { display: flex; gap: 6px; justify-content: center; margin-top: 16px; }
-.metric-btn { background: var(--bg3); color: var(--fg-dim); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; cursor: pointer; }
-.metric-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
