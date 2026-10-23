@@ -1344,11 +1344,11 @@ function toggleAccordion(contentId, arrowId) {
 
 
 function renderActivityPage() {
-    alert('Функция renderActivityPage вызвана!');
+    
     const c = document.getElementById('content-activity');
     if (!c) { alert('Нет контейнера content-activity'); return; }
     c.innerHTML = '';
-    alert('Контейнер найден, рисую график...');
+    
     const header = document.createElement('h2');
     header.textContent = 'Активность';
     header.style.padding = '16px';
@@ -1362,9 +1362,9 @@ function renderActivityPage() {
     
     try {
         const chart = renderChart();
-        alert('График создан, длина HTML: ' + chart.innerHTML.length);
+        
         chartDiv.appendChild(chart);
-        alert('График добавлен в DOM');
+        
     } catch (e) {
         alert('Ошибка в renderChart: ' + e.message);
         chartDiv.innerHTML = '<div style="color:red; padding:20px;">Ошибка: ' + e.message + '</div>';

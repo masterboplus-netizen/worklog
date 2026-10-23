@@ -1786,3 +1786,38 @@ body.first-load .hero-rings {
 #content-activity .chart-bars {
   margin-top: 0;
 }
+
+
+/* === ФИНАЛЬНЫЕ СТИЛИ ДЛЯ СТРАНИЦЫ ГРАФИК === */
+#content-activity {
+  display: block !important;
+  min-height: 100vh !important;
+  padding: 16px !important;
+  padding-bottom: 100px !important; /* чтобы меню не перекрывало */
+  background: var(--bg) !important;
+}
+
+#content-activity h2 {
+  font-size: 22px !important;
+  color: var(--fg) !important;
+  margin-bottom: 16px !important;
+}
+
+/* Принудительно задаем высоту графику внутри activity */
+#content-activity .chart-bars {
+  height: 250px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  margin-top: 0 !important;
+}
+
+#content-activity .chart-bars-wrap {
+  height: 100% !important;
+  min-height: 200px !important;
+  display: flex !important;
+  align-items: flex-end !important;
+}
+
+#content-activity .chart-col {
+  height: 100% !important;
+}
