@@ -107,14 +107,16 @@ function switchTab(name) {
   // 2. Показываем нужную
   if (name === 'activity') {
     if (tabActivity) tabActivity.classList.add('tab-active');
-    if (cActivity) {
-      cActivity.classList.remove('hidden');
-      cActivity.style.display = 'block'; // Принудительно показываем
-      console.log('container found, calling renderActivityPage');
-      renderActivityPage();
-    } else {
-      console.error('cActivity is null');
+    // Создаем контейнер заново, если его нет
+    let actDiv = document.getElementById('content-activity');
+    if (!actDiv) {
+      actDiv = document.createElement('div');
+      actDiv.id = 'content-activity';
+      actDiv.className = 'screen';
+      actDiv.style.cssText = 'display:block; background:var(--bg); padding-bottom:80px;';
+      document.body.appendChild(actDiv);
     }
+    renderActivityPage();
   } else if (name === 'diary') {
     tabDiary.classList.add('tab-active');
     if (cDiary) {
