@@ -548,7 +548,7 @@
     {
       "id": "s_20261016_3",
       "date": "2026-10-16",
-      "project": "bo81",
+      "project": "worklog",
       "start": "20:24",
       "end": "23:59",
       "duration_min": 215,
@@ -559,7 +559,7 @@
     {
       "id": "s_20261017_1",
       "date": "2026-10-17",
-      "project": "bo81",
+      "project": "worklog",
       "start": "00:00",
       "end": "00:44",
       "duration_min": 44,
@@ -570,7 +570,7 @@
     {
       "id": "s_20261017_3",
       "date": "2026-10-17",
-      "project": "bo81",
+      "project": "worklog",
       "start": "17:33",
       "end": "20:44",
       "duration_min": 191,
@@ -581,7 +581,7 @@
     {
       "id": "s_20261017_4",
       "date": "2026-10-17",
-      "project": "bo81",
+      "project": "worklog",
       "start": "21:25",
       "end": "22:20",
       "duration_min": 55,
@@ -724,7 +724,7 @@
     {
       "id": "s_20261022_1",
       "date": "2026-10-22",
-      "project": "bo81",
+      "project": "worklog",
       "start": "12:30",
       "end": "15:18",
       "duration_min": 168,
@@ -735,7 +735,7 @@
     {
       "id": "s_20261022_2",
       "date": "2026-10-22",
-      "project": "bo81",
+      "project": "worklog",
       "start": "18:26",
       "end": "20:03",
       "duration_min": 97,
@@ -746,7 +746,7 @@
     {
       "id": "s_20261022_3",
       "date": "2026-10-22",
-      "project": "bo81",
+      "project": "worklog",
       "start": "20:13",
       "end": "22:09",
       "duration_min": 116,
@@ -757,7 +757,7 @@
     {
       "id": "s_20261022_6",
       "date": "2026-10-22",
-      "project": "bo81",
+      "project": "worklog",
       "start": "22:13",
       "end": "23:52",
       "duration_min": 99,
@@ -768,7 +768,7 @@
     {
       "id": "s_20261023_2",
       "date": "2026-10-23",
-      "project": "bo81",
+      "project": "worklog",
       "start": "00:15",
       "end": "01:17",
       "duration_min": 62,
@@ -779,7 +779,7 @@
     {
       "id": "s_20261023_3",
       "date": "2026-10-23",
-      "project": "bo81",
+      "project": "worklog",
       "start": "05:00",
       "end": "05:24",
       "duration_min": 24,
@@ -790,7 +790,7 @@
     {
       "id": "s_20261023_4",
       "date": "2026-10-23",
-      "project": "bo81",
+      "project": "worklog",
       "start": "12:05",
       "end": "14:30",
       "duration_min": 145,
