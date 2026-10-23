@@ -1756,3 +1756,18 @@ body.first-load .hero-rings {
 .chart-bar.selected .bar-label {
   opacity: 1 !important;
 }
+
+
+/* === Экран Графика (Activity) === */
+#content-activity {
+  display: block !important;
+  padding-bottom: 80px; /* чтобы меню не перекрывало */
+}
+
+#content-activity h2 {
+  margin-top: 16px;
+}
+
+#content-activity .chart-bars {
+  margin-top: 0;
+}
