@@ -1,0 +1,16 @@
+
+/* === ФИКС: Кнопки в шапке (сердечко и замочек) === */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.topbar > div:last-child { /* Если они в контейнере */
+  display: flex;
+  gap: 4px;
+}
+#btn-heart {
+  font-size: 20px;
+  line-height: 1;
+  padding: 6px 10px;
+}
