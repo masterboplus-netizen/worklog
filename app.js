@@ -1,6 +1,5 @@
 // --- ГЛАВНЫЙ МОДУЛЬ (Дирижер) ---
 const $ = (sel) => document.querySelector(sel);
-const DATA = window.DATA;
 const $$ = (sel) => document.querySelectorAll(sel);
 
 let DAILY_GOAL_MIN = (function(){

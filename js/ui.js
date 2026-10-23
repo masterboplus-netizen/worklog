@@ -1,6 +1,5 @@
 
 // --- МОДУЛЬ: UI (Отрисовка) ---
-let DATA = window.DATA;
 let HERO_MODE = 'today';
 let MINI_MSG_PERIOD = 'day';
 let MINI_SCR_PERIOD = 'day';
@@ -12,10 +11,10 @@ const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц',
 // === ДНЕВНИК ===
 function renderDiary() {
   const c = document.getElementById('content-diary');
-  if (!c || !DATA) return;
+  if (!c || !window.DATA) return;
   c.innerHTML = '';
 
-  const list = (DATA.sessions || []).slice().sort((a, b) =>
+  const list = (window.DATA.sessions || []).slice().sort((a, b) =>
     (b.date + (b.start || '')).localeCompare(a.date + (a.start || ''))
   );
 
@@ -25,7 +24,7 @@ function renderDiary() {
   }
 
   const projName = {};
-  for (const p of DATA.projects || []) projName[p.id] = p.name;
+  for (const p of window.DATA.projects || []) projName[p.id] = p.name;
 
   // === Склейка через полночь ===
   const _sorted = list.slice().sort((a, b) => (a.date + (a.start || '')).localeCompare(b.date + (b.start || '')));
@@ -112,8 +111,8 @@ function renderRingSVG(percent, size, strokeWidth, color) {
 
 function renderHeroRings() {
   const t = calcTotals();
-  const sessions = DATA.sessions || [];
-  const _sessions = DATA.sessions || [];
+  const sessions = window.DATA.sessions || [];
+  const _sessions = window.DATA.sessions || [];
   const msgVal = _sumRange(_sessions, MINI_MSG_PERIOD, 'events');
   const scrVal = _sumRange(_sessions, MINI_SCR_PERIOD, 'screens');
   function _fmtH2(min) { return Math.floor(min / 60) + 'ч<br>' + (min % 60) + 'м'; }
@@ -121,7 +120,7 @@ function renderHeroRings() {
   
   let heroValue = t.todayMin, heroLabel = 'Сегодня', heroSub = 'Цель ' + fmtH(DAILY_GOAL_MIN) + ' · ' + Math.round(t.todayMin / DAILY_GOAL_MIN * 100) + '%';
   if (HERO_MODE === 'last') {
-    const sorted = (DATA.sessions || []).slice().sort((a, b) => (b.date + (b.end || '')).localeCompare(a.date + (a.end || '')));
+    const sorted = (window.DATA.sessions || []).slice().sort((a, b) => (b.date + (b.end || '')).localeCompare(a.date + (a.end || '')));
     const lastSess = sorted[0];
     heroValue = lastSess ? (lastSess.duration_min || 0) : 0;
     heroLabel = 'Последняя сессия';
@@ -151,7 +150,7 @@ function renderHeroRings() {
 }
 
 function renderDashboard() {
-  if (!DATA) return;
+  if (!window.DATA) return;
   const c = document.getElementById('content');
   if (!c) return;
   c.innerHTML = '';
