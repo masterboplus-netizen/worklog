@@ -46,7 +46,7 @@ async function init() {
     const activityDiv = document.createElement('div');
     activityDiv.id = 'content-activity';
     activityDiv.className = 'screen hidden';
-    activityDiv.style.cssText = 'display:none; min-height:100vh; background:var(--bg); padding-bottom:80px;';
+    activityDiv.style.cssText = 'display:none; background:var(--bg); padding-bottom:80px;';
     document.body.appendChild(activityDiv);
   }
 
