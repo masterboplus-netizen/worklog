@@ -1798,3 +1798,41 @@ body.first-load .hero-rings {
 #content-activity .chart-bars {
   margin-top: 40px !important; /* Отодвигаем график от кнопок */
 }
+
+
+/* === Экран загрузки с логотипом === */
+#loading {
+  align-items: center;
+  justify-content: center;
+  display: flex !important;
+  flex-direction: column;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+#loading .spinner {
+  display: none !important; /* Скрываем старый спиннер */
+}
+
+#loading::before {
+  content: 'X';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  animation: pulse 1.5s infinite;
+}
+
+#loading::after {
+  content: 'Хераборина';
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 600;
+}

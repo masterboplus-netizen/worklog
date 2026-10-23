@@ -64,7 +64,7 @@ async function init() {
   // Небольшая задержка, чтобы логотип успел показаться (эффект загрузки)
   setTimeout(() => {
     showScreen('pin-screen');
-  }, 800);
+  }, 1500); // 1.5 секунды
 }
 
 function setupTabs() {
