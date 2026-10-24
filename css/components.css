@@ -2224,3 +2224,23 @@ body.first-load .hero-rings {
 .chart-labels-row {
   margin-left: -30px !important; /* Сдвигаем даты влево на ширину оси Y */
 }
+
+/* === Кнопки месяца и года === */
+.month-year-filter {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.month-btn, .year-btn {
+  background: var(--bg3);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.month-btn:active, .year-btn:active {
+  background: var(--border);
+}
