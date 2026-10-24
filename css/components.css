@@ -2400,3 +2400,8 @@ body.first-load .hero-rings {
   box-shadow: 0 0 12px rgba(0, 255, 0, 0.6);
   transition: all 0.2s ease;
 }
+
+/* === Сдвиг дат влево на 10px === */
+.chart-labels {
+  margin-left: -10px !important;
+}
