@@ -2405,3 +2405,8 @@ body.first-load .hero-rings {
 .chart-labels {
   margin-left: -10px !important;
 }
+
+/* === Корректировка сдвига дат (итог: -4px) === */
+.chart-labels {
+  margin-left: -4px !important;
+}
