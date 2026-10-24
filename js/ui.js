@@ -337,7 +337,7 @@ function renderActivityPage() {
 }
 
 
-function renderChartOld() {
+function renderChart() {
   const container = document.createElement('div');
   container.className = 'chart-container';
 
@@ -611,104 +611,4 @@ function openYearPicker() {
   overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
 }
 
-function renderChart() {
-  const container = document.createElement('div');
-  container.className = 'chart-container';
-  container.style.marginTop = '40px';
-  container.style.borderTop = '2px dashed var(--accent)';
-  container.style.paddingTop = '20px';
 
-  const title = document.createElement('div');
-  title.textContent = '--- НОВЫЙ ТЕСТОВЫЙ ГРАФИК ---';
-  title.style.textAlign = 'center';
-  title.style.color = 'var(--accent)';
-  title.style.fontSize = '12px';
-  title.style.marginBottom = '10px';
-  container.appendChild(title);
-
-  const periods = [[1, 'День'], [7, 'Неделя'], [30, 'Месяц']];
-  const filterHTML = periods.map(([n, label]) =>
-    '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
-  ).join('');
-  const filterRow = document.createElement('div');
-  filterRow.className = 'period-filter-row';
-  filterRow.innerHTML = filterHTML;
-  container.appendChild(filterRow);
-
-  const days = [];
-  const now = new Date();
-  now.setMonth(now.getMonth() + CHART_OFFSET_MONTHS);
-
-  if (CHART_PERIOD === 30) {
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const lastDay = new Date(year, month + 1, 0);
-    for (let i = 0; i < lastDay.getDate(); i++) days.push(_localDate(new Date(year, month, i + 1)));
-  } else {
-    const totalDays = CHART_PERIOD === 1 ? 1 : CHART_PERIOD;
-    for (let i = totalDays - 1; i >= 0; i--) days.push(_localDate(new Date(now - i * 86400000)));
-  }
-
-  const byDay = {};
-  for (const ss of window.DATA.sessions || []) {
-    let v = 0;
-    if (CHART_METRIC === 'duration') v = ss.duration_min || 0;
-    else if (CHART_METRIC === 'events') v = ss.events || 0;
-    else if (CHART_METRIC === 'screens') v = ss.screens || 0;
-    byDay[ss.date] = (byDay[ss.date] || 0) + v;
-  }
-
-  const maxVal = Math.max(1, ...days.map(d => byDay[d] || 0));
-  let top = 60;
-  if (maxVal > 60) top = Math.ceil(maxVal / 60) * 60;
-  const step = top / 4;
-
-  const chartBars = document.createElement('div');
-  chartBars.className = 'chart-bars';
-
-  const yAxis = document.createElement('div');
-  yAxis.className = 'chart-y-axis';
-  let yAxisHTML = '';
-  for (let i = 4; i >= 0; i--) {
-    const val = step * i;
-    const label = CHART_METRIC === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
-    yAxisHTML += '<div>' + label + '</div>';
-  }
-  yAxis.innerHTML = yAxisHTML;
-  chartBars.appendChild(yAxis);
-
-  const colsWrap = document.createElement('div');
-  colsWrap.className = 'chart-cols-wrap';
-
-  const isShort = days.length <= 14;
-  const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
-
-  for (const d of days) {
-    const val = byDay[d] || 0;
-    const h = val ? Math.max(2, Math.round(val / top * 100)) : 0;
-    const isSel = CHART_SELECTED === d;
-    const lblText = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : String(val)) : '';
-    
-    const dayNum = parseInt(d.slice(8, 10), 10);
-    const dow = dowNames[new Date(d + 'T00:00:00').getDay()];
-    const showDate = isShort || (dayNum === 1 || dayNum % 5 === 0);
-    const dateHTML = showDate ? '<div class="lbl-date">' + dayNum + '</div><div class="lbl-dow">' + dow + '</div>' : '';
-
-    const col = document.createElement('div');
-    col.className = 'chart-col';
-    col.innerHTML = 
-      '<div class="chart-bar-wrapper">' +
-        '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '" data-date="' + d + '" style="height:' + h + '%">' +
-          (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') +
-        '</div>' +
-      '</div>' +
-      '<div class="chart-label">' + dateHTML + '</div>';
-      
-    colsWrap.appendChild(col);
-  }
-
-  chartBars.appendChild(colsWrap);
-  container.appendChild(chartBars);
-
-  return container;
-}
