@@ -425,7 +425,7 @@ function renderChart() {
     col.innerHTML = 
       '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '" ' +
       'data-date="' + d + '" style="height:' + h + '%">' +
-        (lblText ? '<div class="bar-label">' + lblText + '</div>' : '') +
+        ((isSel && lblText) ? '<div class="bar-label">' + lblText + '</div>' : '') +
       '</div>';
     barsWrap.appendChild(col);
   }
