@@ -274,11 +274,13 @@ function renderProjects() {
 
 
 // === ГРАФИК ===
+
 function renderActivityPage() {
     const c = document.getElementById('content-activity');
     if (!c) return;
     c.innerHTML = '';
-    
+
+    // Заголовок
     const header = document.createElement('h2');
     header.textContent = 'Активность';
     header.style.padding = '16px';
@@ -306,26 +308,13 @@ function renderActivityPage() {
       if (btnYear) btnYear.addEventListener('click', () => openYearPicker());
     }, 0);
 
-    const chartDiv = document.createElement('div');
-    chartDiv.style.padding = '0 16px 16px 16px';
-    chartDiv.appendChild(renderChart());
-    c.appendChild(chartDiv);
-    if (!c) return;
-    c.innerHTML = '';
-    
-    header.textContent = 'Активность';
-    header.style.padding = '16px';
-    header.style.color = 'var(--fg)';
-    header.style.margin = '0';
-    header.style.fontSize = '22px';
-    c.appendChild(header);
-
+    // Сам график
     const chartDiv = document.createElement('div');
     chartDiv.style.padding = '0 16px 16px 16px';
     chartDiv.appendChild(renderChart());
     c.appendChild(chartDiv);
 
-    // Делегирование событий (тапы на кнопки и столбики)
+    // Делегирование событий (только один раз)
     if (!c._delegated) {
         c._delegated = true;
         c.addEventListener('click', (e) => {
@@ -343,19 +332,10 @@ function renderActivityPage() {
                 renderActivityPage();
                 return;
             }
-            const bar = e.target.closest('.chart-bar');
-            if (bar) {
-                const wasSelected = bar.classList.contains('selected');
-                c.querySelectorAll('.chart-bar.selected').forEach(b => b.classList.remove('selected'));
-                if (!wasSelected) bar.classList.add('selected');
-                CHART_SELECTED = wasSelected ? null : bar.dataset.date;
-                // Перерисовываем, чтобы обновить тултип
-                renderActivityPage();
-                return;
-            }
         });
     }
 }
+
 
 function renderChartOld() {
   const container = document.createElement('div');
