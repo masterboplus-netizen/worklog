@@ -310,7 +310,6 @@ function renderActivityPage() {
     chartDiv.style.padding = '0 16px 16px 16px';
     chartDiv.appendChild(renderChart());
     c.appendChild(chartDiv);
-    const c = document.getElementById('content-activity');
     if (!c) return;
     c.innerHTML = '';
     
