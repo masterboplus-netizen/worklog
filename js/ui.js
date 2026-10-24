@@ -332,6 +332,15 @@ function renderActivityPage() {
                 renderActivityPage();
                 return;
             }
+            // ТАП НА СТОЛБИК
+            const bar = e.target.closest('.chart-bar');
+            if (bar) {
+                const wasSelected = bar.classList.contains('selected');
+                c.querySelectorAll('.chart-bar.selected').forEach(b => b.classList.remove('selected'));
+                if (!wasSelected) bar.classList.add('selected');
+                CHART_SELECTED = wasSelected ? null : bar.dataset.date;
+                return;
+            }
         });
     }
 }
