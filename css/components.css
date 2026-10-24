@@ -2337,22 +2337,28 @@ body.first-load .hero-rings {
 .month-year-filter { display: flex; justify-content: center; gap: 10px; margin-bottom: 12px; }
 .month-btn, .year-btn { background: var(--bg3); color: var(--fg); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 14px; cursor: pointer; }
 
-/* === Легенда на столбике === */
+
+
+/* === Легенда и выделение столбика === */
+
+/* Плашка с цифрой (без рамки, просто текст) */
 .bar-label {
   position: absolute;
-  top: -24px;
+  top: -20px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--bg2);
   color: var(--accent);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 600;
   white-space: nowrap;
-  border: 1px solid var(--accent);
+  text-shadow: 0 0 4px rgba(0,0,0,0.8);
   z-index: 10;
+  pointer-events: none;
 }
+
+/* Выделенный столбик (яркий зеленый) */
 .chart-bar.selected {
-  background: var(--green) !important;
-  box-shadow: 0 0 10px var(--green);
+  background: #00ff00 !important; /* Яркий чистый зеленый */
+  box-shadow: 0 0 12px rgba(0, 255, 0, 0.6);
+  transition: all 0.2s ease;
 }
