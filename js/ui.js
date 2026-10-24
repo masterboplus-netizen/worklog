@@ -313,7 +313,6 @@ function renderActivityPage() {
     if (!c) return;
     c.innerHTML = '';
     
-    const header = document.createElement('h2');
     header.textContent = 'Активность';
     header.style.padding = '16px';
     header.style.color = 'var(--fg)';
