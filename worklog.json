@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-25T19:50:00",
+  "updated": "2026-10-25T22:23:00",
   "projects": [
     {
       "id": "bo81",
@@ -919,6 +919,17 @@
       "events": 54,
       "screens": 24,
       "note": "Реструктуризация документации: создание папки docs, перенос файлов, очистка архивов."
+    },
+    {
+      "id": "s_20261025_2",
+      "date": "2026-10-25",
+      "project": "bo81",
+      "start": "21:00",
+      "end": "22:23",
+      "duration_min": 83,
+      "events": 25,
+      "screens": 12,
+      "note": "Фикс правил README, пуш docs на GitHub, исправление путей documenty->docs."
     }
   ],
   "baseline": {
