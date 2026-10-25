@@ -621,3 +621,57 @@ function openYearPicker() {
 }
 
 
+
+// === АНАЛИТИКА ПРОЕКТА ===
+function openAnalyticsSheet(projectId) {
+  const proj = (window.DATA.projects || []).find(p => p.id === projectId);
+  if (!proj) return;
+
+  const sessions = (window.DATA.sessions || []).filter(s => s.project === projectId);
+  const totalMin = sessions.reduce((acc, s) => acc + (s.duration_min || 0), 0);
+  const totalEvents = sessions.reduce((acc, s) => acc + (s.events || 0), 0);
+  const totalScreens = sessions.reduce((acc, s) => acc + (s.screens || 0), 0);
+  const uniqueDays = new Set(sessions.map(s => s.date)).size;
+  const avgPerDay = uniqueDays ? Math.round(totalMin / uniqueDays) : 0;
+
+  // Создаем оверлей
+  const overlay = document.createElement('div');
+  overlay.className = 'goal-sheet-overlay';
+  
+  // Создаем саму шторку
+  const sheet = document.createElement('div');
+  sheet.className = 'goal-sheet';
+  sheet.innerHTML = `
+    <button class="goal-sheet-close" onclick="this.closest('.goal-sheet-overlay').remove()">✕</button>
+    <h3 class="goal-sheet-title">Аналитика: ${proj.name}</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+      <div style="background: var(--bg3); padding: 12px; border-radius: 8px; text-align: center;">
+        <div style="font-size: 12px; color: var(--fg-dim); margin-bottom: 4px;">Всего времени</div>
+        <div style="font-size: 20px; font-weight: 600; color: var(--accent);">${fmtH(totalMin)}</div>
+      </div>
+      <div style="background: var(--bg3); padding: 12px; border-radius: 8px; text-align: center;">
+        <div style="font-size: 12px; color: var(--fg-dim); margin-bottom: 4px;">Среднее/день</div>
+        <div style="font-size: 20px; font-weight: 600; color: var(--fg);">${fmtH(avgPerDay)}</div>
+      </div>
+      <div style="background: var(--bg3); padding: 12px; border-radius: 8px; text-align: center;">
+        <div style="font-size: 12px; color: var(--fg-dim); margin-bottom: 4px;">Сообщения</div>
+        <div style="font-size: 20px; font-weight: 600; color: var(--green);">${totalEvents}</div>
+      </div>
+      <div style="background: var(--bg3); padding: 12px; border-radius: 8px; text-align: center;">
+        <div style="font-size: 12px; color: var(--fg-dim); margin-bottom: 4px;">Скрины</div>
+        <div style="font-size: 20px; font-weight: 600; color: var(--yellow);">${totalScreens}</div>
+      </div>
+    </div>
+    <div style="text-align: center; color: var(--fg-dim); font-size: 13px;">
+      Сессий: ${sessions.length} · Дней: ${uniqueDays}
+    </div>
+  `;
+  
+  overlay.appendChild(sheet);
+  document.body.appendChild(overlay);
+
+  // Закрытие по клику на фон
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+}
