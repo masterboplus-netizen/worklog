@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-25T22:23:00",
+  "updated": "2026-10-26T02:30:00",
   "projects": [
     {
       "id": "bo81",
@@ -930,6 +930,28 @@
       "events": 25,
       "screens": 12,
       "note": "Фикс правил README, пуш docs на GitHub, исправление путей documenty->docs."
+    },
+    {
+      "id": "s_20261025_3",
+      "date": "2026-10-25",
+      "project": "bo81",
+      "start": "22:24",
+      "end": "23:59",
+      "duration_min": 95,
+      "events": 20,
+      "screens": 11,
+      "note": "Фикс README, пуш docs, начало работы над доменом и SSL."
+    },
+    {
+      "id": "s_20261026_1",
+      "date": "2026-10-26",
+      "project": "bo81",
+      "start": "00:00",
+      "end": "02:30",
+      "duration_min": 150,
+      "events": 20,
+      "screens": 11,
+      "note": "Настройка SSL, установка PWA, генерация иконок, смена названия."
     }
   ],
   "baseline": {
