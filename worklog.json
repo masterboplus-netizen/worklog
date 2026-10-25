@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-10-25T19:42:00",
+  "updated": "2026-10-25T19:50:00",
   "projects": [
     {
       "id": "bo81",
@@ -76,7 +76,7 @@
         },
         {
           "phase": "4. Рефакторинг",
-          "status": "active",
+          "status": "88%",
           "items": [
             {
               "text": "callbacks/tasks, estimates, kpi, finance",
@@ -101,6 +101,10 @@
             {
               "text": "modules/ → core/ (176 импортов)",
               "done": false
+            },
+            {
+              "text": "Реструктуризация документации (docs)",
+              "done": true
             }
           ]
         },
