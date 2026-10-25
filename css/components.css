@@ -607,8 +607,16 @@ html, body {
 /* === Chart v3.4: финальные labels === */
 
 /* === Chart v4: labels-row (синхронно с barsWrap) === */
-
-
+.chart-labels-row {
+  display: flex;
+  gap: 8px;                 /* = gap .chart-bars */
+  margin-top: 4px;
+}
+.chart-spacer {
+  min-width: 48px;          /* = min-width .chart-y-axis */
+  padding-right: 4px;       /* = padding-right .chart-y-axis */
+  flex: 0 0 auto;
+}
 .chart-labels-row 
 .chart-labels-row 
 
@@ -748,7 +756,12 @@ html, body {
 /* === Month labels: мелкий шрифт === */
 
 /* === Chart labels (final) === */
-
+.chart-labels {
+  display: flex;
+  gap: 2px;
+  width: 100%;
+  overflow: visible;
+}
 .chart-label {
   flex: 1 1 0;
   min-width: 0;
@@ -1967,7 +1980,12 @@ body.first-load .hero-rings {
   justify-content: center;
 }
 
-
+.chart-labels {
+  display: flex;
+  justify-content: space-between; /* Равномерно распределяем даты */
+  width: 100%;
+  padding: 0;
+}
 
 .chart-label {
   flex: 1; /* Каждая дата занимает равную долю (как и столбик) */
@@ -1995,7 +2013,15 @@ body.first-load .hero-rings {
 }
 
 /* Контейнер с датами (должен иметь такой же отступ слева, как ось Y) */
-
+.chart-labels {
+  display: flex;
+  justify-content: space-between !important;
+  width: 100% !important;
+  padding: 0 !important;
+  /* Учитываем ширину оси Y (обычно 30px) */
+  margin-left: 30px !important; 
+  width: calc(100% - 30px) !important; 
+}
 
 /* Каждая дата */
 .chart-label {
@@ -2057,13 +2083,29 @@ body.first-load .hero-rings {
 }
 
 /* 5. Строка с подписями */
-
+.chart-labels-row {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
 
 /* 6. Пустышка, которая сдвигает даты ровно на ширину оси Y (30px) */
-
+.chart-spacer {
+  width: 30px;
+  min-width: 30px;
+  flex: 0 0 30px;
+  padding-right: 4px;
+  box-sizing: border-box;
+}
 
 /* 7. Контейнер с датами (занимает всё оставшееся место) */
-
+.chart-labels {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+}
 
 /* 8. Сама дата (равная доля, как и столбик) */
 .chart-label {
@@ -2127,13 +2169,26 @@ body.first-load .hero-rings {
 }
 
 /* Строка подписей (имеет тот же отступ слева, что и ось Y) */
-
+.chart-labels-row {
+  display: flex;
+  margin-top: 4px;
+}
 
 /* Отступ под ось Y */
-
+.chart-spacer {
+  width: 30px;
+  min-width: 30px;
+  flex: 0 0 30px;
+  padding-right: 4px;
+  box-sizing: border-box;
+}
 
 /* Контейнер с датами (занимает всё место после оси Y) */
-
+.chart-labels {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+}
 
 /* Сама дата */
 .chart-label {
@@ -2199,7 +2254,9 @@ body.first-load .hero-rings {
 }
 
 /* === ТОЧНАЯ ПРАВКА: Сдвиг контейнера с датами влево === */
-
+.chart-labels-row {
+  margin-left: -30px !important; /* Сдвигаем даты влево на ширину оси Y */
+}
 
 /* === Кнопки месяца и года === */
 .month-year-filter {
@@ -2270,9 +2327,25 @@ body.first-load .hero-rings {
 }
 .chart-bar.empty { background: transparent; pointer-events: none; }
 
-
-
-
+.chart-labels-row {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+.chart-spacer {
+  width: 30px;
+  min-width: 30px;
+  flex: 0 0 30px;
+  padding-right: 4px;
+  box-sizing: border-box;
+}
+.chart-labels {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+}
 .chart-label {
   flex: 1;
   display: flex;
@@ -2329,61 +2402,11 @@ body.first-load .hero-rings {
 }
 
 /* === Сдвиг дат влево на 10px === */
-
+.chart-labels {
+  margin-left: -10px !important;
+}
 
 /* === Корректировка сдвига дат (итог: -4px) === */
-
-
-
-/* ========================================= */
-/* === ФИНАЛЬНОЕ ВЫРАВНИВАНИЕ ДАТ (v15) === */
-/* ========================================= */
-
-/* Контейнер строки с датами */
-
-
-/* Пустышка под ось Y (ровно 30px) */
-
-
-/* Контейнер с датами (всё оставшееся место) */
-
-
-/* Сама дата (равная доля, как столбик) */
-.chart-label {
-}
-
-/* Принудительно убираем все старые сдвиги */
-
-
-/* ========================================= */
-/* === ФИНАЛЬНОЕ ВЫРАВНИВАНИЕ ДАТ (v15) === */
-/* ========================================= */
-
-.chart-labels-row {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-.chart-spacer {
-  width: 30px;
-  min-width: 30px;
-  flex: 0 0 30px;
-  padding-right: 4px;
-  box-sizing: border-box;
-}
 .chart-labels {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  margin: 0;
-  padding: 0;
-}
-.chart-label {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-width: 0;
+  margin-left: -4px !important;
 }
