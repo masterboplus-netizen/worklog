@@ -1,13 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Прозрачный фон -->
-  <rect width="512" height="512" fill="none" />
-  
-  <!-- Тонкий круг -->
-  <circle cx="256" cy="256" r="230" fill="none" stroke="#4A9EFF" stroke-width="16" />
-  
-  <!-- Тонкая буква X (векторные линии) -->
-  <g stroke="#4A9EFF" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
-    <line x1="160" y1="160" x2="352" y2="352" />
-    <line x1="352" y1="160" x2="160" y2="352" />
-  </g>
+  <rect width="512" height="512" rx="96" fill="#0d1117"/>
+  <circle cx="256" cy="256" r="200" fill="#4A9EFF" opacity="0.1"/>
+  <text x="256" y="256" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="320" font-weight="700" fill="#4A9EFF" text-anchor="middle" dominant-baseline="central">Х</text>
 </svg>
