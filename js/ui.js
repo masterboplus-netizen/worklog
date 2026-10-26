@@ -312,14 +312,8 @@ function renderActivityPage() {
     if (!c) return;
     c.innerHTML = '';
 
-    // Заголовок
-    const header = document.createElement('h2');
-    header.textContent = 'Активность';
-    header.style.padding = '16px';
-    header.style.color = 'var(--fg)';
-    header.style.margin = '0';
-    header.style.fontSize = '22px';
-    c.appendChild(header);
+    // Заголовок убран, начинаем сразу с фильтров (отступ задан в стилях)
+
 
     // --- НОВЫЙ БЛОК ФИЛЬТРОВ (в одну строку) ---
     const topFilterRow = document.createElement('div');
