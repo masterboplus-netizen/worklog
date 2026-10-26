@@ -2241,3 +2241,17 @@ div[style*="justify-content: space-between"] {
   color: var(--fg) !important;
   font-weight: 600 !important;
 }
+
+/* === ОДИНАКОВЫЙ ШРИФТ ДЛЯ ВСЕХ КНОПОК === */
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--fg-dim) !important;
+  background: transparent !important;
+  border: none !important;
+}
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
