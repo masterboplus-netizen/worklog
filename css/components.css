@@ -2366,3 +2366,33 @@ body.first-load .hero-rings {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
+
+/* === КРАСИВЫЕ КНОПКИ МЕСЯЦА И ГОДА === */
+.month-year-filter {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.month-btn, .year-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  padding: 4px 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+}
+.month-btn::after, .year-btn::after {
+  content: '▼';
+  font-size: 10px;
+  opacity: 0.5;
+  margin-top: 2px;
+}
+.month-btn:active, .year-btn:active {
+  opacity: 0.7;
+}
