@@ -325,7 +325,7 @@ function renderActivityPage() {
     const topFilterRow = document.createElement('div');
     topFilterRow.className = 'top-filter-row';
     // ЖЕСТКИЕ ИНЛАЙН-СТИЛИ (перебивают любой CSS)
-    topFilterRow.style.cssText = 'display: flex !important; width: 100% !important; padding: 0 16px 0 34px !important; box-sizing: border-box !important; margin: 0 0 16px 0 !important; align-items: center !important;';
+    topFilterRow.style.cssText = 'display: grid !important; grid-template-columns: repeat(4, 1fr) !important; width: 100% !important; padding: 0 16px 0 34px !important; box-sizing: border-box !important; margin: 0 0 16px 0 !important; align-items: center !important;';
 
     // 1. Кнопки периодов (7 дней / Месяц)
     const periods = [[7, '7 дней'], [30, 'Месяц']];
