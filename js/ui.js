@@ -320,17 +320,37 @@ function renderActivityPage() {
     header.style.fontSize = '22px';
     c.appendChild(header);
 
-    // Кнопки месяца и года
+    // --- НОВЫЙ БЛОК ФИЛЬТРОВ (в одну строку) ---
+    const topFilterRow = document.createElement('div');
+    topFilterRow.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 0 16px 12px 16px; gap: 10px;';
+
+    // 1. Кнопки периодов (7 дней / Месяц)
+    const periods = [[7, '7 дней'], [30, 'Месяц']];
+    const periodHTML = periods.map(([n, label]) =>
+      '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
+    ).join('');
+    const periodDiv = document.createElement('div');
+    periodDiv.className = 'period-filter-row';
+    periodDiv.style.margin = '0';
+    periodDiv.innerHTML = periodHTML;
+    topFilterRow.appendChild(periodDiv);
+
+    // 2. Кнопки месяца и года (без стрелочек)
     const d = new Date();
     d.setMonth(d.getMonth() + CHART_OFFSET_MONTHS);
     const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
     
-    const filterDiv = document.createElement('div');
-    filterDiv.className = 'month-year-filter';
-    filterDiv.innerHTML = 
+    const dateDiv = document.createElement('div');
+    dateDiv.className = 'month-year-filter';
+    dateDiv.style.margin = '0';
+    dateDiv.style.gap = '8px';
+    dateDiv.style.display = 'flex';
+    dateDiv.innerHTML = 
       '<button class="month-btn" id="btn-month">' + months[d.getMonth()] + '</button>' +
       '<button class="year-btn" id="btn-year">' + d.getFullYear() + '</button>';
-    c.appendChild(filterDiv);
+    topFilterRow.appendChild(dateDiv);
+
+    c.appendChild(topFilterRow);
 
     setTimeout(() => {
       const btnMonth = document.getElementById('btn-month');
@@ -339,10 +359,10 @@ function renderActivityPage() {
       if (btnYear) btnYear.addEventListener('click', () => openYearPicker());
     }, 0);
 
-    // Сам график
+    // Сам график (без встроенных фильтров)
     const chartDiv = document.createElement('div');
     chartDiv.style.padding = '0 16px 16px 16px';
-    chartDiv.appendChild(renderChart());
+    chartDiv.appendChild(renderChart(true)); // Передаем true, чтобы отключить встроенные фильтры
     c.appendChild(chartDiv);
 
     // Делегирование событий (только один раз)
@@ -377,19 +397,20 @@ function renderActivityPage() {
 }
 
 
-function renderChart() {
+function renderChart(hideFilters = false) {
   const container = document.createElement('div');
   container.className = 'chart-container';
 
-  // 1. Фильтры периодов
-  const periods = [[1, 'День'], [7, 'Неделя'], [30, 'Месяц']];
-  const filterHTML = periods.map(([n, label]) =>
-    '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
-  ).join('');
-  const filterRow = document.createElement('div');
-  filterRow.className = 'period-filter-row';
-  filterRow.innerHTML = filterHTML;
-  container.appendChild(filterRow);
+  if (!hideFilters) {
+    const periods = [[7, '7 дней'], [30, 'Месяц']];
+    const filterHTML = periods.map(([n, label]) =>
+      '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
+    ).join('');
+    const filterRow = document.createElement('div');
+    filterRow.className = 'period-filter-row';
+    filterRow.innerHTML = filterHTML;
+    container.appendChild(filterRow);
+  }
 
   // 2. Формируем список дней
   const days = [];
