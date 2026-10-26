@@ -2472,3 +2472,15 @@ body.first-load .hero-rings {
   color: var(--fg) !important;
   font-weight: 600 !important;
 }
+
+/* === ФИКС ОБРЕЗАННОГО ТЕКСТА В НИЖНИХ КНОПКАХ === */
+.metric-switch {
+  gap: 8px !important; /* Немного уменьшаем расстояние между кнопками */
+}
+.metric-btn {
+  font-size: 14px !important; /* Чуть уменьшаем шрифт, чтобы влезало */
+  padding: 4px 2px !important;
+  white-space: nowrap !important;
+  overflow: visible !important; /* Разрешаем тексту выходить за пределы, если нужно */
+  text-overflow: clip !important; /* Убираем троеточие */
+}
