@@ -2417,3 +2417,9 @@ div[style*="justify-content: space-between"] {
     color: var(--fg) !important;
     font-weight: 600 !important;
 }
+
+/* === ВЕРХНЕЕ МЕНЮ: ОТСТУП 34PX, ПРАВЫЙ КРАЙ НЕ ТРОГАЕМ === */
+.top-filter-row {
+    padding-left: 34px !important;
+    padding-right: 16px !important;
+}
