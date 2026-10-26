@@ -2472,3 +2472,35 @@ div[style*="justify-content: space-between"] {
     color: var(--fg) !important;
     font-weight: 600 !important;
 }
+
+/* === РАВНОМЕРНЫЕ ОТСТУПЫ ВЕРХНЕГО МЕНЮ === */
+.top-filter-row button {
+    display: flex !important;
+    width: auto !important; /* Убираем растягивание на всю ширину */
+    background: transparent !important;
+    border: none !important;
+    color: var(--fg-dim) !important;
+    font-size: 14px !important;
+    padding: 0 !important;
+}
+
+/* 1. "7 дней" — отступ 30px */
+.top-filter-row button:nth-child(1) {
+    padding-left: 30px !important;
+}
+
+/* 2. "Месяц" и 3. "Октябрь" — просто по центру (space-between сам их распределит) */
+.top-filter-row button:nth-child(2),
+.top-filter-row button:nth-child(3) {
+    /* ничего не задаем, они отцентрируются сами */
+}
+
+/* 4. "2026" — без изменений */
+.top-filter-row button:nth-child(4) {
+    /* ничего не задаем */
+}
+
+.top-filter-row button.active {
+    color: var(--fg) !important;
+    font-weight: 600 !important;
+}
