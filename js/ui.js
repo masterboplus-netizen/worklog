@@ -519,9 +519,9 @@ function renderChart(hideFilters = false) {
   const totalForPeriod = days.reduce((acc, d) => acc + (byDay[d] || 0), 0);
   const totalStr = CHART_METRIC === 'duration' ? fmtH(totalForPeriod) : String(totalForPeriod);
   const metrics = [
-    ['duration', '⏱ Время', '⏱ ' + (CHART_METRIC === 'duration' ? totalStr : 'Время')],
-    ['events', '📨 Сообщения', '📨 ' + (CHART_METRIC === 'events' ? totalStr : 'Сообщения')],
-    ['screens', '📸 Скрины', '📸 ' + (CHART_METRIC === 'screens' ? totalStr : 'Скрины')]
+    ['duration', 'Время', CHART_METRIC === 'duration' ? totalStr : 'Время'],
+    ['events', 'Сообщения', CHART_METRIC === 'events' ? totalStr : 'Сообщения'],
+    ['screens', 'Скрины', CHART_METRIC === 'screens' ? totalStr : 'Скрины']
   ];
   const metricHTML = metrics.map(([key, label, labelActive]) =>
     '<button class="metric-btn' + (CHART_METRIC === key ? ' active' : '') + '" data-metric="' + key + '">' + (CHART_METRIC === key ? labelActive : label) + '</button>'
