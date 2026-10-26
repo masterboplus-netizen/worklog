@@ -33,33 +33,37 @@ function renderDiary() {
   const merged = [];
   let i = 0;
   while (i < list.length) {
-    let current = { ...list[i] }; // Копируем, чтобы не менять оригинал
+    let current = { ...list[i] };
     
-    // Проверяем, есть ли следующая сессия на следующий день в 00:00 с тем же проектом и заметкой
-    if (i + 1 < list.length) {
+    // Если это конец дня (23:59)
+    if (current.end === '23:59' && i + 1 < list.length) {
       let next = list[i + 1];
       let isNextDay = new Date(current.date) < new Date(next.date);
-      let isMidnight = current.end === '23:59' && next.start === '00:00';
+      let isMidnight = next.start === '00:00';
       let isSameProject = current.project === next.project;
-      let isSameNote = (current.note || '') === (next.note || '');
 
-      if (isNextDay && isMidnight && isSameProject && isSameNote) {
-        // Склеиваем!
-        current.end = next.end; // Берем время окончания от следующей
+      // Склеиваем, если совпадает проект и время стыкуется
+      if (isNextDay && isMidnight && isSameProject) {
+        current.end = next.end;
         current.duration_min = (current.duration_min || 0) + (next.duration_min || 0);
         current.events = (current.events || 0) + (next.events || 0);
         current.screens = (current.screens || 0) + (next.screens || 0);
-        // Если у следующей заметка была, но у текущей пусто (хотя мы проверили isSameNote)
-        if (!current.note) current.note = next.note;
         
-        i++; // Пропускаем следующую, так как мы её поглотили
+        // Объединяем заметки (если они разные)
+        if (current.note && next.note && current.note !== next.note) {
+            current.note = current.note + '\n' + next.note;
+        } else if (!current.note) {
+            current.note = next.note;
+        }
+        
+        i++; // Пропускаем следующую
       }
     }
     merged.push(current);
     i++;
   }
 
-  // Группируем по дате (по дате НАЧАЛА сессии)
+  // Группируем по дате
   const byDate = {};
   for (const s of merged) {
     if (!byDate[s.date]) byDate[s.date] = [];
@@ -73,7 +77,6 @@ function renderDiary() {
     header.textContent = formatDiaryDate(d);
     c.appendChild(header);
 
-    // Сортируем сессии внутри дня по убыванию времени начала
     const sortedSess = byDate[d].slice().sort((a, b) => (b.start || '').localeCompare(a.start || ''));
     for (const s of sortedSess) {
       const item = document.createElement('div');
@@ -82,7 +85,7 @@ function renderDiary() {
       const timeRange = (s.start || '?') + ' → ' + (s.end || '?');
       const dur = fmtH(s.duration_min || 0);
       const proj = projName[s.project] || s.project || '–';
-      const note = s.note || '';
+      const note = s.note ? s.note.replace(/\n/g, '<br>') : '';
       const evs = s.events || 0;
       const scrs = s.screens || 0;
       const counters = (evs || scrs) ? ('📨 ' + evs + ' · 📸 ' + scrs) : '';
