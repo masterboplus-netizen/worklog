@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+<style>
+  .top-filter-row, .metric-switch { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 0 !important; width: 100% !important; padding: 0 16px !important; box-sizing: border-box !important; margin: 0 0 16px 0 !important; }
+  .period-btn, .metric-btn, .month-btn, .year-btn { font-size: 14px !important; font-weight: 500 !important; padding: 4px 0 !important; background: transparent !important; border: none !important; color: var(--fg-dim) !important; text-align: center !important; width: 100% !important; }
+  .period-btn.active, .metric-btn.active { color: var(--fg) !important; font-weight: 600 !important; }
+</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0d1117">
