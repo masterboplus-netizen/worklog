@@ -51,6 +51,8 @@ async function init() {
         if (l) l.remove();
         renderDashboard(); 
         showScreen('dashboard'); 
+        const tabs = document.querySelector('.tabs');
+        if (tabs) tabs.style.display = 'flex'; // Страховка
       }
       else { 
         localStorage.removeItem(PIN_KEY); 

@@ -58,7 +58,7 @@
   <div class="footer-line">Хераборина v<span id="app-version">...</span></div>
   <div class="footer-authors">Product of Andrey Sorokin · Design & idea Merkulova Karina</div>
 
-<nav class="tabs" style="display: none;">
+<nav class="tabs" style="display: flex;">
   <button id="tab-dashboard" class="tab tab-active" data-tab="dashboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Дашборд</button>
   <button id="tab-diary" class="tab" data-tab="diary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M4 4h12a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M4 4v16"/></svg>Дневник</button>
   <button id="tab-projects" class="tab" data-tab="projects"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M3 7h18v13H3z"/><path d="M3 7l2-4h14l2 4"/><path d="M12 11v6"/></svg>Проекты</button>
@@ -69,7 +69,7 @@
 <script src="js/ui.js?v=205"></script>
 <script src="js/chart.js?v=204"></script>
 <script src="js/auth.js?v=204"></script>
-<script src="app.js?v=205"></script>
+<script src="app.js?v=206"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=205', { updateViaCache: 'none' }).catch(function(){});
