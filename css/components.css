@@ -2423,3 +2423,19 @@ div[style*="justify-content: space-between"] {
     padding-left: 34px !important;
     padding-right: 16px !important;
 }
+
+/* === ВЫРАВНИВАНИЕ ТЕКСТА ВНУТРИ КНОПОК === */
+.top-filter-row button {
+    text-align: left !important;
+    justify-content: flex-start !important;
+    display: flex !important;
+}
+.top-filter-row button:nth-child(2),
+.top-filter-row button:nth-child(3) {
+    text-align: center !important;
+    justify-content: center !important;
+}
+.top-filter-row button:nth-child(4) {
+    text-align: right !important;
+    justify-content: flex-end !important;
+}
