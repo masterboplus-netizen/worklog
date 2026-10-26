@@ -323,7 +323,9 @@ function renderActivityPage() {
 
     // --- НОВЫЙ БЛОК ФИЛЬТРОВ (в одну строку) ---
     const topFilterRow = document.createElement('div');
-    topFilterRow.className = 'top-filter-row'; // Жесткий класс
+    topFilterRow.className = 'top-filter-row';
+    // ЖЕСТКИЕ ИНЛАЙН-СТИЛИ (перебивают любой CSS)
+    topFilterRow.style.cssText = 'display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 0 !important; width: 100% !important; padding: 0 16px !important; box-sizing: border-box !important; margin: 0 0 16px 0 !important; align-items: center !important;';
 
     // 1. Кнопки периодов (7 дней / Месяц)
     const periods = [[7, '7 дней'], [30, 'Месяц']];
