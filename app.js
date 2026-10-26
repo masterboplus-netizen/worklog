@@ -150,11 +150,20 @@ function showCreators() {
     modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;';
     modal.innerHTML = `
       <div style="background: var(--bg2); padding: 24px; border-radius: 16px; text-align: center; max-width: 85%; border: 1px solid var(--border);">
-        <h2 style="color: var(--accent); margin-bottom: 16px; font-size: 20px;">Создатели проекта</h2>
-        <p style="color: var(--fg); margin-bottom: 8px; font-size: 16px;">Product of Andrey Sorokin</p>
-        <p style="color: var(--fg-dim); margin-bottom: 20px; font-size: 14px;">Design & idea Merkulova Karina</p>
-        <div style="color: var(--fg-dim); font-size: 12px; margin-bottom: 16px;">Хераборина v1.0</div>
-        <button onclick="document.getElementById('creators-modal').remove()" class="pulse-btn" style="background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%;">Закрыть</button>
+        <h2 style="color: var(--accent); margin-bottom: 24px; font-size: 20px; font-weight: 500;">Создатели проекта</h2>
+        
+        <div style="margin-bottom: 16px;">
+          <div style="color: var(--fg); font-size: 16px; font-weight: 400; margin-bottom: 4px;">Product owner</div>
+          <div style="color: var(--fg-dim); font-size: 14px;">Andrey Sorokin</div>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <div style="color: var(--fg); font-size: 16px; font-weight: 400; margin-bottom: 4px;">Design & idea</div>
+          <div style="color: var(--fg-dim); font-size: 14px;">Merkulova Karina</div>
+        </div>
+
+        <div style="color: var(--fg-dim); font-size: 12px; margin-bottom: 16px;">Хераборина v7.7.124x</div>
+        <button onclick="document.getElementById('creators-modal').remove()" class="pulse-btn" style="background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%;">Закрыть</button>
       </div>
     `;
     document.body.appendChild(modal);
