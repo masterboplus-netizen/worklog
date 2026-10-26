@@ -2396,3 +2396,31 @@ body.first-load .hero-rings {
 .month-btn:active, .year-btn:active {
   opacity: 0.7;
 }
+
+/* === ЕДИНЫЙ СТИЛЬ ДЛЯ ВСЕХ ФИЛЬТРОВ === */
+.period-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important; /* Неактивные — серые */
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  padding: 4px 8px !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  transition: color 0.2s !important;
+}
+.period-btn.active {
+  color: var(--accent) !important; /* Активная — синяя */
+  font-weight: 600 !important;
+}
+.period-filter-row {
+  display: flex !important;
+  gap: 12px !important; /* Расстояние между 7 дней и Месяц */
+  margin: 0 !important;
+  align-items: center !important;
+}
+/* Убираем жесткие ограничения ширины, которые были раньше */
+.period-btn {
+  max-width: none !important;
+  flex: 0 0 auto !important;
+}
