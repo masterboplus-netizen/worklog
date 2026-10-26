@@ -2374,3 +2374,46 @@ div[style*="justify-content: space-between"] {
     color: var(--fg) !important;
     font-weight: 600 !important;
 }
+
+/* === ВЕРХНЕЕ МЕНЮ: СТРОГО ПО ГРАНИЦАМ СТОЛБИКОВ === */
+.top-filter-row {
+    display: flex !important;
+    width: 100% !important;
+    /* 16px (край экрана) + 30px (ось Y) = 46px. Текст начнется ровно над столбиками */
+    padding: 0 16px 0 46px !important; 
+    box-sizing: border-box !important;
+    margin: 0 0 16px 0 !important;
+}
+
+.top-filter-row button {
+    flex: 1 1 0;
+    background: transparent !important;
+    border: none !important;
+    color: var(--fg-dim) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    padding: 0 !important; /* Убираем отступы внутри кнопок */
+    white-space: nowrap !important;
+    display: flex !important;
+}
+
+/* 1. "7 дней" — строго к левой границе столбиков */
+.top-filter-row button:nth-child(1) {
+    justify-content: flex-start !important;
+}
+
+/* 2. "Месяц" и 3. "Октябрь" — по центру */
+.top-filter-row button:nth-child(2),
+.top-filter-row button:nth-child(3) {
+    justify-content: center !important;
+}
+
+/* 4. "2026" — строго к правому краю графика (16px) */
+.top-filter-row button:nth-child(4) {
+    justify-content: flex-end !important;
+}
+
+.top-filter-row button.active {
+    color: var(--fg) !important;
+    font-weight: 600 !important;
+}
