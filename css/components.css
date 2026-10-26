@@ -2484,3 +2484,16 @@ body.first-load .hero-rings {
   overflow: visible !important; /* Разрешаем тексту выходить за пределы, если нужно */
   text-overflow: clip !important; /* Убираем троеточие */
 }
+
+/* === ВЫРАВНИВАНИЕ ШРИФТА ВЕРХНИХ И НИЖНИХ КНОПОК === */
+.period-btn, .metric-btn {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+.period-btn.active, .metric-btn.active {
+  font-weight: 600 !important;
+}
+.month-btn, .year-btn {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
