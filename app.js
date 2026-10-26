@@ -81,14 +81,29 @@ function setupTabs() {
 
 
 function showJoke() {
-  const modal = document.getElementById('joke-modal');
-  if (modal) {
-    modal.classList.remove('hidden');
-    setTimeout(() => {
-      modal.style.opacity = '1';
-      modal.querySelector('div').style.transform = 'scale(1)';
-    }, 10);
+  let modal = document.getElementById('joke-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'joke-modal';
+    modal.className = 'hidden';
+    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;';
+    modal.innerHTML = `
+      <div style="background: var(--bg2); padding: 30px; border-radius: 16px; text-align: center; max-width: 85%; border: 1px solid var(--accent); transform: scale(0.8); transition: transform 0.3s;">
+        <div style="font-size: 36px; font-weight: bold; color: var(--accent); margin-bottom: 20px; letter-spacing: 2px;">Б#@%!</div>
+        <h2 style="color: var(--accent); margin-bottom: 15px; font-size: 22px;">Хватит заниматься Херобориной!</h2>
+        <div style="font-size: 48px; margin-bottom: 20px; display: inline-block; animation: laughAnim 0.8s infinite;">🤣</div>
+        <div style="font-size: 28px; font-weight: bold; margin-bottom: 15px; color: var(--fg);">ИДИ РАБОТАТЬ!</div>
+        <div style="font-size: 48px; margin-bottom: 20px; display: inline-block; animation: shakeAnim 0.6s infinite;">😡</div>
+        <button onclick="closeJoke()" class="pulse-btn" style="background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%;">Хорошо!</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
   }
+  modal.classList.remove('hidden');
+  setTimeout(() => {
+    modal.style.opacity = '1';
+    modal.querySelector('div').style.transform = 'scale(1)';
+  }, 10);
 }
 
 window.closeJoke = function closeJoke() {
