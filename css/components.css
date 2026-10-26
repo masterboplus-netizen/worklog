@@ -2334,3 +2334,35 @@ body.first-load .hero-rings {
   text-align: center;
   min-width: 0;
 }
+
+/* === ФИКС: Одинаковый размер кнопок метрик и фильтров === */
+.period-filter-row {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-bottom: 12px !important;
+}
+.period-btn {
+  flex: 1 !important;
+  max-width: 100px !important;
+  text-align: center !important;
+  padding: 8px 0 !important;
+}
+
+.metric-switch {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  margin-top: 12px !important;
+}
+.metric-btn {
+  flex: 1 !important;
+  max-width: 120px !important;
+  text-align: center !important;
+  padding: 8px 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
