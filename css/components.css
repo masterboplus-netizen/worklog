@@ -2424,3 +2424,26 @@ body.first-load .hero-rings {
   max-width: none !important;
   flex: 0 0 auto !important;
 }
+
+/* === НИЖНИЕ КНОПКИ В СТИЛЕ ВЕРХНИХ === */
+.metric-switch {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  margin-top: 16px !important;
+}
+.metric-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  padding: 4px 8px !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  transition: color 0.2s !important;
+}
+.metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
