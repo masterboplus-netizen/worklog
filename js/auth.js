@@ -52,7 +52,6 @@ async function tryUnlock(pin) {
 async function submitPin(pin) {
   const ok = await tryUnlock(pin);
   if (ok) {
-    localStorage.setItem(PIN_KEY, pin);
     const l = document.getElementById('loading');
     if (l) l.remove();
     renderDashboard();
@@ -66,7 +65,6 @@ async function submitPin(pin) {
 }
 
 function lock() {
-  localStorage.removeItem(PIN_KEY);
   DATA = null;
   PIN_BUF = '';
   updatePinDisplay();

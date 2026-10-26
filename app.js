@@ -43,27 +43,12 @@ async function init() {
 
   setupTabs();
 
-  const saved = localStorage.getItem(PIN_KEY);
-  if (saved) {
-    tryUnlock(saved).then(ok => {
-      if (ok) { 
-        const l = document.getElementById('loading');
-        if (l) l.remove();
-        renderDashboard(); 
-        showScreen('dashboard'); 
-        const tabs = document.querySelector('.tabs');
-        if (tabs) tabs.style.display = 'flex'; // Страховка
-      }
-      else { 
-        localStorage.removeItem(PIN_KEY); 
-        showScreen('pin-screen'); 
-      }
-    });
-  } else {
-    const loadingEl = document.getElementById('loading');
-    if (loadingEl) loadingEl.classList.remove('hidden');
+  // Всегда показываем окно загрузки, затем экран PIN
+  const loadingEl = document.getElementById('loading');
+  if (loadingEl) {
+    loadingEl.classList.remove('hidden');
     setTimeout(() => {
-      if (loadingEl) loadingEl.classList.add('hidden');
+      loadingEl.classList.add('hidden');
       showScreen('pin-screen');
     }, 1000);
   }
