@@ -2281,3 +2281,41 @@ div[style*="justify-content: space-between"] {
   text-align: center !important;
   white-space: nowrap !important;
 }
+
+/* ========================================= */
+/* === АБСОЛЮТНОЕ ВЫРАВНИВАНИЕ МЕНЮ === */
+/* ========================================= */
+
+/* 1. Одинаковый шрифт для ВСЕХ кнопок */
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 4px 0 !important; /* Убираем боковые отступы, чтобы сетка работала */
+}
+
+/* Активные кнопки чуть жирнее, но того же размера */
+.period-btn.active, .metric-btn.active {
+  font-weight: 600 !important;
+}
+
+/* 2. Одинаковые контейнеры (сетка 4 колонки) */
+.top-filter-row, .metric-switch {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 0 !important; /* Убираем зазоры, чтобы края сошлись */
+  width: 100% !important;
+  padding: 0 16px !important; /* Одинаковый отступ по краям */
+  box-sizing: border-box !important;
+  margin: 0 0 12px 0 !important;
+}
+
+/* 3. Заставляем внутренние группы верхнего меню подчиняться сетке */
+.period-filter-row, .month-year-filter {
+  display: contents !important;
+}
+
+/* 4. Текст строго по центру своей ячейки */
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  text-align: center !important;
+  width: 100% !important;
+}
