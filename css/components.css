@@ -2257,3 +2257,27 @@ div[style*="justify-content: space-between"] {
   flex: 1 !important; /* Каждая кнопка периода тоже равная */
   text-align: center !important;
 }
+
+/* === ЖЕСТКАЯ СЕТКА ДЛЯ ВЕРХНЕГО И НИЖНЕГО МЕНЮ === */
+.top-filter-row, .metric-switch {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important; /* 4 равные колонки */
+  gap: 8px !important;
+  width: 100% !important;
+  padding: 0 16px !important;
+  box-sizing: border-box !important;
+  align-items: center !important;
+  justify-items: center !important;
+}
+
+/* Убираем старые флекс-контейнеры внутри верхнего меню, чтобы они не мешали */
+.period-filter-row, .month-year-filter {
+  display: contents !important; /* Заставляет кнопки участвовать в общей сетке */
+}
+
+/* Текст в кнопках по центру */
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  width: 100% !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
