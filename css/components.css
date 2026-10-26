@@ -2224,7 +2224,7 @@ div[style*="justify-content: space-between"] {
   padding: 4px 0 !important;
   cursor: pointer !important;
   font-family: inherit !important;
-  text-align: center !important;
+  text-align: left !important;
   width: 100% !important;
 }
 
@@ -2273,7 +2273,7 @@ div[style*="justify-content: space-between"] {
   padding: 4px 0 !important;
   cursor: pointer !important;
   font-family: inherit !important;
-  text-align: center !important;
+  text-align: left !important;
   width: 100% !important;
 }
 
