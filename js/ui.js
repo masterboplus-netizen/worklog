@@ -18,7 +18,7 @@ function renderDiary() {
   c.innerHTML = '';
 
   const list = (window.DATA.sessions || []).slice().sort((a, b) =>
-    (b.date + (b.start || '')).localeCompare(a.date + (a.start || ''))
+    (a.date + (a.start || '')).localeCompare(b.date + (b.start || ''))
   );
 
   if (!list.length) {
@@ -29,9 +29,39 @@ function renderDiary() {
   const projName = {};
   for (const p of window.DATA.projects || []) projName[p.id] = p.name;
 
-  // Группируем по дате (без склейки)
+  // === СКЛЕЙКА НОЧНЫХ СЕССИЙ ===
+  const merged = [];
+  let i = 0;
+  while (i < list.length) {
+    let current = { ...list[i] }; // Копируем, чтобы не менять оригинал
+    
+    // Проверяем, есть ли следующая сессия на следующий день в 00:00 с тем же проектом и заметкой
+    if (i + 1 < list.length) {
+      let next = list[i + 1];
+      let isNextDay = new Date(current.date) < new Date(next.date);
+      let isMidnight = current.end === '23:59' && next.start === '00:00';
+      let isSameProject = current.project === next.project;
+      let isSameNote = (current.note || '') === (next.note || '');
+
+      if (isNextDay && isMidnight && isSameProject && isSameNote) {
+        // Склеиваем!
+        current.end = next.end; // Берем время окончания от следующей
+        current.duration_min = (current.duration_min || 0) + (next.duration_min || 0);
+        current.events = (current.events || 0) + (next.events || 0);
+        current.screens = (current.screens || 0) + (next.screens || 0);
+        // Если у следующей заметка была, но у текущей пусто (хотя мы проверили isSameNote)
+        if (!current.note) current.note = next.note;
+        
+        i++; // Пропускаем следующую, так как мы её поглотили
+      }
+    }
+    merged.push(current);
+    i++;
+  }
+
+  // Группируем по дате (по дате НАЧАЛА сессии)
   const byDate = {};
-  for (const s of list) {
+  for (const s of merged) {
     if (!byDate[s.date]) byDate[s.date] = [];
     byDate[s.date].push(s);
   }
@@ -43,11 +73,12 @@ function renderDiary() {
     header.textContent = formatDiaryDate(d);
     c.appendChild(header);
 
+    // Сортируем сессии внутри дня по убыванию времени начала
     const sortedSess = byDate[d].slice().sort((a, b) => (b.start || '').localeCompare(a.start || ''));
     for (const s of sortedSess) {
       const item = document.createElement('div');
       item.className = 'diary-item';
-      
+
       const timeRange = (s.start || '?') + ' → ' + (s.end || '?');
       const dur = fmtH(s.duration_min || 0);
       const proj = projName[s.project] || s.project || '–';
@@ -55,7 +86,7 @@ function renderDiary() {
       const evs = s.events || 0;
       const scrs = s.screens || 0;
       const counters = (evs || scrs) ? ('📨 ' + evs + ' · 📸 ' + scrs) : '';
-      
+
       item.innerHTML =
         '<div class="diary-time">' + timeRange + ' · <span class="diary-dur">' + dur + '</span></div>' +
         '<div class="diary-proj">' + proj + '</div>' +
@@ -65,9 +96,6 @@ function renderDiary() {
     }
   }
 }
-
-
-
 
 function formatDiaryDate(iso) {
   const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
