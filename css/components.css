@@ -2504,3 +2504,36 @@ div[style*="justify-content: space-between"] {
     color: var(--fg) !important;
     font-weight: 600 !important;
 }
+
+/* === НИЖНЕЕ МЕНЮ МЕТРИК === */
+.metric-switch {
+    display: flex !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
+    margin: 16px 0 0 0 !important;
+    align-items: center !important;
+}
+
+.metric-switch .metric-btn {
+    display: flex !important;
+    width: auto !important;
+    background: transparent !important;
+    border: none !important;
+    color: var(--fg-dim) !important;
+    font-size: 14px !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+}
+
+/* 1. "Время" — отступ 30px (ось Y) */
+.metric-switch .metric-btn:nth-child(1) {
+    padding-left: 30px !important;
+}
+
+/* Активная метрика */
+.metric-switch .metric-btn.active {
+    color: var(--fg) !important;
+    font-weight: 600 !important;
+}
