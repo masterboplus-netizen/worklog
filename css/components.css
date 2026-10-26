@@ -2518,3 +2518,16 @@ body.first-load .hero-rings {
 .period-filter-row {
   margin-top: 0 !important;
 }
+
+/* === УБИРАЕМ СТРЕЛКИ И ЖИРНОСТЬ У МЕСЯЦА/ГОДА === */
+.month-btn::after, .year-btn::after {
+  content: none !important; /* Убираем стрелки ▼ */
+}
+.month-btn, .year-btn {
+  font-weight: 500 !important; /* Убираем жирность, делаем как у остальных */
+  color: var(--fg-dim) !important; /* Делаем их серыми, как неактивные кнопки */
+}
+/* Если месяц/год активны (выбраны), делаем их белыми */
+.month-btn:active, .year-btn:active, .month-btn:focus, .year-btn:focus {
+  color: var(--fg) !important;
+}
