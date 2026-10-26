@@ -44,7 +44,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  
+
 }
 .pin-pad button {
   aspect-ratio: 1;
@@ -116,7 +116,7 @@
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  
+
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -315,7 +315,6 @@
 
 /* === Вкладки (Дашборд / Дневник) === */
 
-
   border-bottom: 2px solid transparent;
   transition: all 0.15s;
   -webkit-tap-highlight-color: transparent;
@@ -389,7 +388,7 @@
 /* === Фазы проекта === */
 .phases {
   margin-top: 12px;
-  
+
   padding-top: 8px;
 }
 .phase {
@@ -450,25 +449,6 @@
   margin-left: 8px;
   vertical-align: middle;
 }
-.period-btn {
-  background: var(--bg3);
-  color: var(--fg-dim);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 3px 10px;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: inherit;
-}
-.period-btn:hover {
-  color: var(--fg);
-  border-color: var(--fg-dim);
-}
-.period-btn.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
 
 /* === Chart v2: сетка, оси, столбики, переключатель метрики === */
 .chart-bars {
@@ -518,30 +498,6 @@
 
 .chart-bar:hover { opacity: 0.75; }
 
-.metric-switch {
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-.metric-btn {
-  background: var(--bg3);
-  color: var(--fg-dim);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: inherit;
-}
-.metric-btn:hover { color: var(--fg); border-color: var(--fg-dim); }
-.metric-btn.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
-
 /* === Chart v3: тултип + активная метрика + подписи дат === */
 
 .chart-tooltip {
@@ -554,11 +510,6 @@
   color: var(--fg);
   text-align: center;
   display: inline-block;
-}
-
-.metric-btn.active {
-  font-weight: 600;
-  letter-spacing: 0.3px;
 }
 
 /* === Chart v3.1: labels внутри barsWrap === */
@@ -575,7 +526,6 @@
 
 /* === Chart v4: labels-row (синхронно с barsWrap) === */
 
-
 .chart-labels-row 
 .chart-labels-row 
 
@@ -586,7 +536,7 @@
 .hero-main {
   display: flex;
   justify-content: center;
-  
+
 }
 
 .ring-svg {
@@ -880,10 +830,10 @@
 }
 .pin-sub {
   font-size: 13px;
-  
+
 }
 .pin-display {
-  
+
 }
 .pin-pad {
   gap: 6px;
@@ -1114,8 +1064,6 @@
 
 /* === Analytics project button === */
 
-
-
 /* === Analytics sheet (5 blocks) === */
 .analytics-sheet {
   max-height: 90vh;
@@ -1208,18 +1156,9 @@
 
 /* === Project analytics button (справа, под прогрессом) === */
 
-
-
-
 /* === Project actions: 2 кнопки в ряд === */
 
-
-
-
-
 /* === Project btn: фикс. высота, выравнивание === */
-
-
 
 /* === Project btn svg: выравнивание === */
 
@@ -1361,8 +1300,6 @@ body { padding-bottom: 70px; }
   background: linear-gradient(to top, var(--bg3) 0%, transparent 100%);
 }
 
-
-
 /* === Month nav (активность) === */
 .month-nav {
   display: inline-flex;
@@ -1408,7 +1345,6 @@ body { padding-bottom: 70px; }
   flex-shrink: 0;
 }
 
-
 /* === Phase arrow → скобки (chevron) === */
 .phase-arrow {
   display: inline-block;
@@ -1422,7 +1358,6 @@ body { padding-bottom: 70px; }
 
 /* === Month picker === */
 
-.month-btn:active { background: var(--accent); }
 .month-picker {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1455,46 +1390,8 @@ body { padding-bottom: 70px; }
 }
 
 /* === Month btn справа от Активность === */
-.month-btn {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  color: var(--fg);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: inherit;
-  margin-left: auto;
-  white-space: nowrap;
-}
-.month-btn:active { background: var(--accent); }
 
 /* === Period filter вниз === */
-
-.period-filter-row .period-btn {
-  background: var(--bg3);
-  color: var(--fg-dim);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 12px;
-  cursor: pointer;
-  font-family: inherit;
-}
-.period-filter-row .period-btn.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
-
-/* === Period filter справа === */
-.period-filter-row {
-  display: flex;
-  gap: 4px;
-  margin: 8px 0;
-  justify-content: flex-end;
-}
 
 /* === Month/year: без рамки, большой шрифт === */
 .month-year-wrap {
@@ -1514,10 +1411,6 @@ body { padding-bottom: 70px; }
   background: var(--bg3);
 }
 
-
-
-
-
 #content-projects { padding-top: 16px; }
 
 /* Нижняя навигация */
@@ -1527,7 +1420,7 @@ body { padding-bottom: 70px; }
     left: 0;
     right: 0;
     background: var(--bg);
-    
+
     display: flex;
     justify-content: space-around;
     padding: 10px 0;
@@ -1555,8 +1448,6 @@ body { padding-bottom: 70px; }
     stroke-width: 2.5;
 }
 body { padding-bottom: 70px; }
-
-
 
 /* Анимации для пасхалки */
 .laughing-emoji {
@@ -1635,7 +1526,6 @@ body.first-load .hero-rings {
 
 /* Отключаем анимацию, если это не первый раз */
 
-
 /* Меняем местами кнопки (Аналитика слева, Открыть справа) */
 .project-actions {
     display: flex;
@@ -1663,9 +1553,6 @@ body.first-load .hero-rings {
 .accordion-content.open { display: block; }
 .accordion-content.closed { display: none; }
 
-
-
-
 /* =========================================
    ЧИСТАЯ ЛЕГЕНДА ГРАФИКА (ФИНАЛ)
    ========================================= */
@@ -1673,7 +1560,6 @@ body.first-load .hero-rings {
   position: relative;
   overflow: visible !important;
 }
-
 
 .bar-label {
   position: absolute;
@@ -1709,9 +1595,6 @@ body.first-load .hero-rings {
   border: none; /* убираем рамку */
   padding: 0;
 }
-
-
-
 
 /* === Ярко-зеленый столбик при тапе === */
 .chart-bar.selected {
@@ -1736,20 +1619,15 @@ body.first-load .hero-rings {
   padding: 0;
 }
 
-
-
-
-
 /* === Страница Активности (чистый стиль, без ломки графика) === */
 #content-activity {
   display: block !important;
-  
+
   padding: 16px;
   padding-bottom: 100px;
   background: var(--bg);
   box-sizing: border-box;
 }
-
 
 /* === Поднимаем график наверх === */
 #content-activity {
@@ -1761,7 +1639,6 @@ body.first-load .hero-rings {
   margin-top: 10px !important;
   padding-top: 0 !important;
 }
-
 
 /* === Легенда графика: не наезжает на кнопки === */
 .chart-bar 
@@ -1786,7 +1663,6 @@ body.first-load .hero-rings {
 #content-activity .chart-bars {
   margin-top: 40px !important; /* Отодвигаем график от кнопок */
 }
-
 
 /* === Экран загрузки с логотипом === */
 #loading {
@@ -1824,7 +1700,6 @@ body.first-load .hero-rings {
   font-size: 20px;
   font-weight: 600;
 }
-
 
 /* === Футер на экране загрузки === */
 #loading .loading-footer {
@@ -1934,8 +1809,6 @@ body.first-load .hero-rings {
   justify-content: center;
 }
 
-
-
 .chart-label {
   flex: 1; /* Каждая дата занимает равную долю (как и столбик) */
   display: flex;
@@ -1943,7 +1816,6 @@ body.first-load .hero-rings {
   align-items: center;
   text-align: center;
 }
-
 
 /* === ФИКС: Идеальное выравнивание столбиков и дат === */
 /* Контейнер со столбиками */
@@ -1963,7 +1835,6 @@ body.first-load .hero-rings {
 
 /* Контейнер с датами (должен иметь такой же отступ слева, как ось Y) */
 
-
 /* Каждая дата */
 .chart-label {
   flex: 1 !important;
@@ -1972,7 +1843,6 @@ body.first-load .hero-rings {
   align-items: center;
   text-align: center;
 }
-
 
 /* ========================================= */
 /* ========================================= */
@@ -2025,12 +1895,9 @@ body.first-load .hero-rings {
 
 /* 5. Строка с подписями */
 
-
 /* 6. Пустышка, которая сдвигает даты ровно на ширину оси Y (30px) */
 
-
 /* 7. Контейнер с датами (занимает всё оставшееся место) */
-
 
 /* 8. Сама дата (равная доля, как и столбик) */
 .chart-label {
@@ -2041,7 +1908,6 @@ body.first-load .hero-rings {
   text-align: center;
   min-width: 0;
 }
-
 
 /* ========================================= */
 /* ========================================= */
@@ -2095,12 +1961,9 @@ body.first-load .hero-rings {
 
 /* Строка подписей (имеет тот же отступ слева, что и ось Y) */
 
-
 /* Отступ под ось Y */
 
-
 /* Контейнер с датами (занимает всё место после оси Y) */
-
 
 /* Сама дата */
 .chart-label {
@@ -2119,75 +1982,10 @@ body.first-load .hero-rings {
 .lbl-dow { font-size: 9px; opacity: 0.6; }
 
 /* Кнопки периодов и метрик */
-.period-filter-row {
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-
-.period-btn {
-  background: var(--bg3);
-  color: var(--fg-dim);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.period-btn.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
-
-.metric-switch {
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.metric-btn {
-  background: var(--bg3);
-  color: var(--fg-dim);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.metric-btn.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
 
 /* === ТОЧНАЯ ПРАВКА: Сдвиг контейнера с датами влево === */
 
-
 /* === Кнопки месяца и года === */
-.month-year-filter {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-.month-btn, .year-btn {
-  background: var(--bg3);
-  color: var(--fg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 14px;
-  cursor: pointer;
-}
-.month-btn:active, .year-btn:active {
-  background: var(--border);
-}
-
 
 /* === РАБОЧИЙ ГРАФИК === */
 .chart-bars {
@@ -2237,9 +2035,6 @@ body.first-load .hero-rings {
 }
 .chart-bar.empty { background: transparent; pointer-events: none; }
 
-
-
-
 .chart-label {
   flex: 1;
   display: flex;
@@ -2254,18 +2049,7 @@ body.first-load .hero-rings {
 .lbl-date { font-size: 10px; }
 .lbl-dow { font-size: 9px; opacity: 0.6; }
 
-.period-filter-row { display: flex; justify-content: flex-end; gap: 6px; margin-bottom: 16px; }
-.period-btn { background: var(--bg3); color: var(--fg-dim); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; cursor: pointer; }
-.period-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-.metric-switch { display: flex; gap: 6px; justify-content: center; margin-top: 16px; }
-.metric-btn { background: var(--bg3); color: var(--fg-dim); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: 12px; cursor: pointer; }
-.metric-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
 /* Кнопки месяца/года */
-.month-year-filter { display: flex; justify-content: center; gap: 10px; margin-bottom: 12px; }
-.month-btn, .year-btn { background: var(--bg3); color: var(--fg); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 14px; cursor: pointer; }
-
-
 
 /* === Легенда и выделение столбика === */
 
@@ -2297,10 +2081,7 @@ body.first-load .hero-rings {
 
 /* === Сдвиг дат влево на 10px === */
 
-
 /* === Корректировка сдвига дат (итог: -4px) === */
-
-
 
 /* ========================================= */
 /* === ФИНАЛЬНОЕ ВЫРАВНИВАНИЕ ДАТ (v15) === */
@@ -2336,201 +2117,32 @@ body.first-load .hero-rings {
 }
 
 /* === ФИКС: Одинаковый размер кнопок метрик и фильтров === */
-.period-filter-row {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  width: 100% !important;
-  margin-bottom: 12px !important;
-}
-.period-btn {
-  flex: 1 !important;
-  max-width: 100px !important;
-  text-align: center !important;
-  padding: 8px 0 !important;
-}
-
-.metric-switch {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  width: 100% !important;
-  margin-top: 12px !important;
-}
-.metric-btn {
-  flex: 1 !important;
-  max-width: 120px !important;
-  text-align: center !important;
-  padding: 8px 0 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
 
 /* === КРАСИВЫЕ КНОПКИ МЕСЯЦА И ГОДА === */
-.month-year-filter {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 12px;
-}
-.month-btn, .year-btn {
-  background: transparent !important;
-  border: none !important;
-  color: var(--fg) !important;
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  padding: 4px 8px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 4px !important;
-  cursor: pointer !important;
-  font-family: inherit !important;
-}
-.month-btn::after, .year-btn::after {
-  content: '▼';
-  font-size: 10px;
-  opacity: 0.5;
-  margin-top: 2px;
-}
-.month-btn:active, .year-btn:active {
-  opacity: 0.7;
-}
 
 /* === ЕДИНЫЙ СТИЛЬ ДЛЯ ВСЕХ ФИЛЬТРОВ === */
-.period-btn {
-  background: transparent !important;
-  border: none !important;
-  color: var(--fg-dim) !important; /* Неактивные — серые */
-  font-size: 16px !important;
-  font-weight: 500 !important;
-  padding: 4px 8px !important;
-  cursor: pointer !important;
-  font-family: inherit !important;
-  transition: color 0.2s !important;
-}
-.period-btn.active {
-  color: var(--accent) !important; /* Активная — синяя */
-  font-weight: 600 !important;
-}
-.period-filter-row {
-  display: flex !important;
-  gap: 12px !important; /* Расстояние между 7 дней и Месяц */
-  margin: 0 !important;
-  align-items: center !important;
-}
+
 /* Убираем жесткие ограничения ширины, которые были раньше */
-.period-btn {
-  max-width: none !important;
-  flex: 0 0 auto !important;
-}
 
 /* === НИЖНИЕ КНОПКИ В СТИЛЕ ВЕРХНИХ === */
-.metric-switch {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 16px !important;
-  margin-top: 16px !important;
-}
-.metric-btn {
-  background: transparent !important;
-  border: none !important;
-  color: var(--fg-dim) !important;
-  font-size: 15px !important;
-  font-weight: 500 !important;
-  padding: 4px 8px !important;
-  cursor: pointer !important;
-  font-family: inherit !important;
-  transition: color 0.2s !important;
-}
-.metric-btn.active {
-  color: var(--fg) !important;
-  font-weight: 600 !important;
-}
 
 /* === ЖЕСТКИЙ ФИКС НИЖНИХ КНОПОК (текстовый стиль) === */
-.metric-switch {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 16px !important;
-  margin-top: 16px !important;
-  background: transparent !important;
-}
-.metric-btn {
-  background: transparent !important;
-  border: none !important;
-  color: var(--fg-dim) !important;
-  font-size: 15px !important;
-  font-weight: 500 !important;
-  padding: 4px 8px !important;
-  cursor: pointer !important;
-  font-family: inherit !important;
-  box-shadow: none !important;
-  outline: none !important;
-}
-.metric-btn.active {
-  color: var(--fg) !important;
-  font-weight: 600 !important;
-}
 
 /* === ФИКС ОБРЕЗАННОГО ТЕКСТА В НИЖНИХ КНОПКАХ === */
-.metric-switch {
-  gap: 8px !important; /* Немного уменьшаем расстояние между кнопками */
-}
-.metric-btn {
-  font-size: 14px !important; /* Чуть уменьшаем шрифт, чтобы влезало */
-  padding: 4px 2px !important;
-  white-space: nowrap !important;
-  overflow: visible !important; /* Разрешаем тексту выходить за пределы, если нужно */
-  text-overflow: clip !important; /* Убираем троеточие */
-}
 
 /* === ВЫРАВНИВАНИЕ ШРИФТА ВЕРХНИХ И НИЖНИХ КНОПОК === */
-.period-btn, .metric-btn {
-  font-size: 15px !important;
-  font-weight: 500 !important;
-}
-.period-btn.active, .metric-btn.active {
-  font-weight: 600 !important;
-}
-.month-btn, .year-btn {
-  font-size: 15px !important;
-  font-weight: 500 !important;
-}
 
 /* === 4 КНОПКИ В РЯД === */
-.metric-switch {
-  gap: 4px !important; /* Уменьшаем расстояние */
-}
-.metric-btn {
-  font-size: 13px !important; /* Уменьшаем шрифт, чтобы влезло 4 кнопки */
-  padding: 4px 2px !important;
-}
 
 /* === ЕДИНЫЙ ОТСТУП СВЕРХУ ДЛЯ ВСЕХ ВКЛАДОК === */
 #content, #content-diary, #content-projects, #content-activity {
   padding-top: 16px !important;
 }
 /* Убираем лишние отступы внутри графиков */
-.month-year-filter {
-  margin-top: 0 !important;
-}
-.period-filter-row {
-  margin-top: 0 !important;
-}
 
 /* === УБИРАЕМ СТРЕЛКИ И ЖИРНОСТЬ У МЕСЯЦА/ГОДА === */
-.month-btn::after, .year-btn::after {
-  content: none !important; /* Убираем стрелки ▼ */
-}
-.month-btn, .year-btn {
-  font-weight: 500 !important; /* Убираем жирность, делаем как у остальных */
-  color: var(--fg-dim) !important; /* Делаем их серыми, как неактивные кнопки */
-}
+
 /* Если месяц/год активны (выбраны), делаем их белыми */
-.month-btn:active, .year-btn:active, .month-btn:focus, .year-btn:focus {
-  color: var(--fg) !important;
-}
 
 /* === ЦЕНТРОВКА ВЕРХНЕГО МЕНЮ === */
 div[style*="justify-content: space-between"] {
@@ -2538,14 +2150,6 @@ div[style*="justify-content: space-between"] {
   gap: 16px !important;
 }
 /* Чтобы фильтры не прилипали к краям, даем им отступ */
-.period-filter-row {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-.month-year-filter {
-  margin: 0 !important;
-  padding: 0 !important;
-}
 
 /* === ФИНАЛЬНАЯ ЦЕНТРОВКА (ПЕРЕБИВАЕТ ВСЕ) === */
 .top-filter-row {
@@ -2555,13 +2159,70 @@ div[style*="justify-content: space-between"] {
   gap: 24px !important;
   padding: 0 16px 12px 16px !important;
 }
+
+
+/* ========================================= */
+/* === ЧИСТЫЕ КНОПКИ ГРАФИКА (ФИНАЛ) === */
+/* ========================================= */
+
+/* Контейнер верхней панели */
+.top-filter-row {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding: 0 16px 12px 16px !important;
+}
+
+/* Группа кнопок периодов (7 дней / Месяц) */
 .period-filter-row {
   display: flex !important;
-  gap: 12px !important;
+  gap: 8px !important;
   margin: 0 !important;
 }
+
+/* Группа месяца и года */
 .month-year-filter {
   display: flex !important;
   gap: 8px !important;
   margin: 0 !important;
+}
+
+/* Общий стиль для всех верхних кнопок */
+.period-btn, .month-btn, .year-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  padding: 4px 8px !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+}
+.period-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
+
+/* Нижние кнопки (Время / Сообщения / Скрины / Задачи) */
+.metric-switch {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  margin-top: 16px !important;
+}
+.metric-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 4px 4px !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  white-space: nowrap !important;
+}
+.metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
 }
