@@ -2546,3 +2546,22 @@ div[style*="justify-content: space-between"] {
   margin: 0 !important;
   padding: 0 !important;
 }
+
+/* === ФИНАЛЬНАЯ ЦЕНТРОВКА (ПЕРЕБИВАЕТ ВСЕ) === */
+.top-filter-row {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 24px !important;
+  padding: 0 16px 12px 16px !important;
+}
+.period-filter-row {
+  display: flex !important;
+  gap: 12px !important;
+  margin: 0 !important;
+}
+.month-year-filter {
+  display: flex !important;
+  gap: 8px !important;
+  margin: 0 !important;
+}
