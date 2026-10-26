@@ -162,8 +162,8 @@ function showCreators() {
           <div style="color: var(--fg-dim); font-size: 14px;">Merkulova Karina</div>
         </div>
 
-        <div style="color: var(--fg-dim); font-size: 12px; margin-bottom: 16px;">Хераборина v7.7.124x</div>
-        <button onclick="document.getElementById('creators-modal').remove()" class="pulse-btn" style="background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%;">Закрыть</button>
+        <div style="color: var(--fg-dim); font-size: 12px; margin-bottom: 24px;">Хераборина v7.7.124x</div>
+        <button onclick="document.getElementById('creators-modal').remove()" class="pulse-btn" style="background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%;">Спасибо</button>
       </div>
     `;
     document.body.appendChild(modal);
