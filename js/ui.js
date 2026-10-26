@@ -439,6 +439,7 @@ function renderChart(hideFilters = false) {
     if (CHART_METRIC === 'duration') v = ss.duration_min || 0;
     else if (CHART_METRIC === 'events') v = ss.events || 0;
     else if (CHART_METRIC === 'screens') v = ss.screens || 0;
+    else if (CHART_METRIC === 'tasks') v = ss.tasks_done || 0;
     byDay[ss.date] = (byDay[ss.date] || 0) + v;
   }
 
@@ -521,7 +522,8 @@ function renderChart(hideFilters = false) {
   const metrics = [
     ['duration', 'Время', 'Время'],
     ['events', 'Сообщения', 'Сообщения'],
-    ['screens', 'Скрины', 'Скрины']
+    ['screens', 'Скрины', 'Скрины'],
+    ['tasks', 'Задачи', 'Задачи']
   ];
   const metricHTML = metrics.map(([key, label, labelActive]) =>
     '<button class="metric-btn' + (CHART_METRIC === key ? ' active' : '') + '" data-metric="' + key + '">' + (CHART_METRIC === key ? labelActive : label) + '</button>'

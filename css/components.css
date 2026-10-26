@@ -2497,3 +2497,12 @@ body.first-load .hero-rings {
   font-size: 15px !important;
   font-weight: 500 !important;
 }
+
+/* === 4 КНОПКИ В РЯД === */
+.metric-switch {
+  gap: 4px !important; /* Уменьшаем расстояние */
+}
+.metric-btn {
+  font-size: 13px !important; /* Уменьшаем шрифт, чтобы влезло 4 кнопки */
+  padding: 4px 2px !important;
+}
