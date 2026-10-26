@@ -2505,7 +2505,8 @@ div[style*="justify-content: space-between"] {
     font-weight: 600 !important;
 }
 
-/* === НИЖНЕЕ МЕНЮ МЕТРИК === */
+
+/* === НИЖНЕЕ МЕНЮ МЕТРИК (ЧИСТЫЕ ПРАВИЛА) === */
 .metric-switch {
     display: flex !important;
     justify-content: space-between !important;
@@ -2518,7 +2519,7 @@ div[style*="justify-content: space-between"] {
 
 .metric-switch .metric-btn {
     display: flex !important;
-    width: auto !important;
+    width: auto !important; /* Авто-ширина для space-between */
     background: transparent !important;
     border: none !important;
     color: var(--fg-dim) !important;
@@ -2527,12 +2528,11 @@ div[style*="justify-content: space-between"] {
     white-space: nowrap !important;
 }
 
-/* 1. "Время" — отступ 30px (ось Y) */
+/* 1. "Время" — сдвиг на 30px (ось Y) */
 .metric-switch .metric-btn:nth-child(1) {
     padding-left: 30px !important;
 }
 
-/* Активная метрика */
 .metric-switch .metric-btn.active {
     color: var(--fg) !important;
     font-weight: 600 !important;
