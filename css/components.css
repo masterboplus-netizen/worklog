@@ -2152,13 +2152,7 @@ div[style*="justify-content: space-between"] {
 /* Чтобы фильтры не прилипали к краям, даем им отступ */
 
 /* === ФИНАЛЬНАЯ ЦЕНТРОВКА (ПЕРЕБИВАЕТ ВСЕ) === */
-.top-filter-row {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  gap: 24px !important;
-  padding: 0 16px 12px 16px !important;
-}
+
 
 
 /* ========================================= */
@@ -2166,156 +2160,84 @@ div[style*="justify-content: space-between"] {
 /* ========================================= */
 
 /* Контейнер верхней панели */
-.top-filter-row {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  gap: 16px !important;
-  padding: 0 16px 12px 16px !important;
-}
+
 
 /* Группа кнопок периодов (7 дней / Месяц) */
-.period-filter-row {
-  display: flex !important;
-  gap: 8px !important;
-  margin: 0 !important;
-}
+
 
 /* Группа месяца и года */
-.month-year-filter {
-  display: flex !important;
-  gap: 8px !important;
-  margin: 0 !important;
-}
+
 
 /* Общий стиль для всех верхних кнопок */
-.period-btn, .month-btn, .year-btn {
-  background: transparent !important;
-  border: none !important;
-  color: var(--fg-dim) !important;
-  font-size: 15px !important;
-  font-weight: 500 !important;
-  padding: 4px 8px !important;
-  cursor: pointer !important;
-  font-family: inherit !important;
-}
-.period-btn.active {
-  color: var(--fg) !important;
-  font-weight: 600 !important;
-}
+
+
 
 /* Нижние кнопки (Время / Сообщения / Скрины / Задачи) */
-.metric-switch {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 12px !important;
-  margin-top: 16px !important;
-}
-.metric-btn {
-  background: transparent !important;
-  border: none !important;
-  color: var(--fg-dim) !important;
-  font-size: 14px !important;
-  font-weight: 500 !important;
-  padding: 4px 4px !important;
-  cursor: pointer !important;
-  font-family: inherit !important;
-  white-space: nowrap !important;
-}
-.metric-btn.active {
-  color: var(--fg) !important;
-  font-weight: 600 !important;
-}
+
+
+
 
 /* === ЕДИНАЯ СЕТКА ДЛЯ ВЕРХНЕГО И НИЖНЕГО МЕНЮ === */
-.top-filter-row {
-  display: flex !important;
-  justify-content: space-around !important; /* Равномерно распределяем */
-  align-items: center !important;
-  padding: 0 16px 12px 16px !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
-.period-filter-row, .month-year-filter {
-  display: flex !important;
-  gap: 8px !important;
-  margin: 0 !important;
-}
-.metric-switch {
-  display: flex !important;
-  justify-content: space-around !important; /* Как в верхнем меню */
-  width: 100% !important;
-  padding: 0 16px !important;
-  box-sizing: border-box !important;
-  margin-top: 16px !important;
-}
-.metric-btn {
-  flex: 1 !important; /* Каждая кнопка занимает равную долю */
-  text-align: center !important;
-}
-.period-btn {
-  flex: 1 !important; /* Каждая кнопка периода тоже равная */
-  text-align: center !important;
-}
+
+
+
+
+
 
 /* === ЖЕСТКАЯ СЕТКА ДЛЯ ВЕРХНЕГО И НИЖНЕГО МЕНЮ === */
-.top-filter-row, .metric-switch {
-  display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important; /* 4 равные колонки */
-  gap: 8px !important;
-  width: 100% !important;
-  padding: 0 16px !important;
-  box-sizing: border-box !important;
-  align-items: center !important;
-  justify-items: center !important;
-}
+
 
 /* Убираем старые флекс-контейнеры внутри верхнего меню, чтобы они не мешали */
-.period-filter-row, .month-year-filter {
-  display: contents !important; /* Заставляет кнопки участвовать в общей сетке */
-}
+
 
 /* Текст в кнопках по центру */
-.period-btn, .metric-btn, .month-btn, .year-btn {
-  width: 100% !important;
-  text-align: center !important;
-  white-space: nowrap !important;
-}
+
 
 /* ========================================= */
 /* === АБСОЛЮТНОЕ ВЫРАВНИВАНИЕ МЕНЮ === */
 /* ========================================= */
 
 /* 1. Одинаковый шрифт для ВСЕХ кнопок */
-.period-btn, .metric-btn, .month-btn, .year-btn {
-  font-size: 14px !important;
-  font-weight: 500 !important;
-  padding: 4px 0 !important; /* Убираем боковые отступы, чтобы сетка работала */
-}
+
 
 /* Активные кнопки чуть жирнее, но того же размера */
-.period-btn.active, .metric-btn.active {
-  font-weight: 600 !important;
-}
+
 
 /* 2. Одинаковые контейнеры (сетка 4 колонки) */
+
+
+/* 3. Заставляем внутренние группы верхнего меню подчиняться сетке */
+
+
+/* 4. Текст строго по центру своей ячейки */
+
+
+/* === ИДЕАЛЬНАЯ СЕТКА 4x1 === */
 .top-filter-row, .metric-switch {
   display: grid !important;
   grid-template-columns: repeat(4, 1fr) !important;
-  gap: 0 !important; /* Убираем зазоры, чтобы края сошлись */
+  gap: 0 !important;
   width: 100% !important;
-  padding: 0 16px !important; /* Одинаковый отступ по краям */
+  padding: 0 16px !important;
   box-sizing: border-box !important;
-  margin: 0 0 12px 0 !important;
+  margin: 0 0 16px 0 !important;
+  align-items: center !important;
 }
 
-/* 3. Заставляем внутренние группы верхнего меню подчиняться сетке */
-.period-filter-row, .month-year-filter {
-  display: contents !important;
-}
-
-/* 4. Текст строго по центру своей ячейки */
 .period-btn, .metric-btn, .month-btn, .year-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 4px 0 !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
   text-align: center !important;
   width: 100% !important;
+}
+
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
 }

@@ -330,26 +330,15 @@ function renderActivityPage() {
     const periodHTML = periods.map(([n, label]) =>
       '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
     ).join('');
-    const periodDiv = document.createElement('div');
-    periodDiv.className = 'period-filter-row';
-    periodDiv.style.margin = '0';
-    periodDiv.innerHTML = periodHTML;
-    topFilterRow.appendChild(periodDiv);
+    topFilterRow.innerHTML = periodHTML;
 
-    // 2. Кнопки месяца и года (без стрелочек)
     const d = new Date();
     d.setMonth(d.getMonth() + CHART_OFFSET_MONTHS);
     const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
     
-    const dateDiv = document.createElement('div');
-    dateDiv.className = 'month-year-filter';
-    dateDiv.style.margin = '0';
-    dateDiv.style.gap = '8px';
-    dateDiv.style.display = 'flex';
-    dateDiv.innerHTML = 
+    topFilterRow.innerHTML += 
       '<button class="month-btn" id="btn-month">' + months[d.getMonth()] + '</button>' +
       '<button class="year-btn" id="btn-year">' + d.getFullYear() + '</button>';
-    topFilterRow.appendChild(dateDiv);
 
     c.appendChild(topFilterRow);
 
