@@ -132,7 +132,13 @@ function renderHeroRings() {
   function _fmtH2(min) { return Math.floor(min / 60) + 'ч<br>' + (min % 60) + 'м'; }
   let timeVal = MINI_TIME_PERIOD === 'avg' ? fmtH(t.avgPerDay) : (MINI_TIME_PERIOD === 'all' ? _fmtH2(t.total) : _fmtH2(_sumRange(_sessions, MINI_TIME_PERIOD, 'duration_min')));
   
-  let heroValue = t.todayMin, heroLabel = 'Сегодня', heroSub = 'Цель ' + fmtH(DAILY_GOAL_MIN) + ' · ' + Math.round(t.todayMin / DAILY_GOAL_MIN * 100) + '%';
+  // Если цель не задана вручную, используем среднее время/день
+  let currentGoal = DAILY_GOAL_MIN;
+  if (t.avgPerDay > 0 && HERO_MODE === 'today') {
+    currentGoal = t.avgPerDay;
+  }
+
+  let heroValue = t.todayMin, heroLabel = 'Сегодня', heroSub = 'Цель ' + fmtH(currentGoal) + ' · ' + Math.round(t.todayMin / currentGoal * 100) + '%';
   if (HERO_MODE === 'last') {
     const sorted = (window.DATA.sessions || []).slice().sort((a, b) => (b.date + (b.end || '')).localeCompare(a.date + (a.end || '')));
     const lastSess = sorted[0];
@@ -140,7 +146,7 @@ function renderHeroRings() {
     heroLabel = 'Последняя сессия';
     heroSub = lastSess ? (lastSess.date.slice(8, 10) + '.' + lastSess.date.slice(5, 7)) : '';
   }
-  const pctDur = Math.round(heroValue / DAILY_GOAL_MIN * 100);
+  const pctDur = Math.round(heroValue / currentGoal * 100);
 
   const ringColor = pctDur >= 100 ? 'var(--green)' : 'var(--accent)';
   const div = document.createElement('div');
