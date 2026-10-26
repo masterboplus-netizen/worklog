@@ -2286,3 +2286,39 @@ div[style*="justify-content: space-between"] {
 .period-filter-row, .month-year-filter {
   display: contents !important;
 }
+
+/* === СТИРАЕМ ВСЁ СТАРОЕ === */
+.top-filter-row, .metric-switch,
+.period-filter-row, .month-year-filter,
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  all: unset !important; /* Сбрасываем абсолютно все стили */
+}
+
+/* === НОВАЯ ЧИСТАЯ СЕТКА === */
+.top-filter-row, .metric-switch {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  width: 100% !important;
+  padding: 0 16px !important;
+  box-sizing: border-box !important;
+  margin: 0 0 16px 0 !important;
+  align-items: center !important;
+}
+
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  display: block !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--fg-dim) !important;
+  text-align: left !important; /* Текст влево */
+  padding: 4px 0 !important;
+  cursor: pointer !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
