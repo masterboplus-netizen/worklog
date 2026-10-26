@@ -522,6 +522,7 @@ function renderChart(hideFilters = false) {
   
   const metricBar = document.createElement('div');
   metricBar.className = 'metric-switch';
+  metricBar.style.cssText = 'display: flex !important; justify-content: space-between !important; width: 100% !important; padding: 0 16px !important; box-sizing: border-box !important; margin: 16px 0 0 0 !important; align-items: center !important;';
   metricBar.innerHTML = metricHTML;
   container.appendChild(metricBar);
 
