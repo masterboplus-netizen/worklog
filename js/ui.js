@@ -1,7 +1,6 @@
 
 // --- МОДУЛЬ: UI (Отрисовка) ---
 let HERO_MODE = 'today';
-let JOKE_SHOWN_LEVEL = 0; // 0 = не показано, 1 = 25%, 2 = 50%, 3 = 75%, 4 = 100%
 let MINI_MSG_PERIOD = 'day';
 let MINI_SCR_PERIOD = 'day';
 let MINI_TIME_PERIOD = 'avg';
@@ -142,12 +141,6 @@ function renderHeroRings() {
     heroSub = lastSess ? (lastSess.date.slice(8, 10) + '.' + lastSess.date.slice(5, 7)) : '';
   }
   const pctDur = Math.round(heroValue / DAILY_GOAL_MIN * 100);
-
-  // === АВТО-ПАСХАЛКА ===
-  if (pctDur >= 25 && JOKE_SHOWN_LEVEL === 0) { JOKE_SHOWN_LEVEL = 1; showJoke(); }
-  else if (pctDur >= 50 && JOKE_SHOWN_LEVEL === 1) { JOKE_SHOWN_LEVEL = 2; showJoke(); }
-  else if (pctDur >= 75 && JOKE_SHOWN_LEVEL === 2) { JOKE_SHOWN_LEVEL = 3; showJoke(); }
-  else if (pctDur >= 100 && JOKE_SHOWN_LEVEL === 3) { JOKE_SHOWN_LEVEL = 4; showJoke(); }
 
   const ringColor = pctDur >= 100 ? 'var(--green)' : 'var(--accent)';
   const div = document.createElement('div');

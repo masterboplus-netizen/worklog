@@ -63,6 +63,8 @@ function setupTabs() {
   if (tabDiary) tabDiary.addEventListener('click', () => switchTab('diary'));
   if (tabProjects) tabProjects.addEventListener('click', () => switchTab('projects'));
   if (tabActivity) tabActivity.addEventListener('click', () => switchTab('activity'));
+  const tabProfile = document.getElementById('tab-profile');
+  if (tabProfile) tabProfile.addEventListener('click', showJoke);
 }
 
 
