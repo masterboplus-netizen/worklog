@@ -2531,3 +2531,18 @@ body.first-load .hero-rings {
 .month-btn:active, .year-btn:active, .month-btn:focus, .year-btn:focus {
   color: var(--fg) !important;
 }
+
+/* === ЦЕНТРОВКА ВЕРХНЕГО МЕНЮ === */
+div[style*="justify-content: space-between"] {
+  justify-content: center !important;
+  gap: 16px !important;
+}
+/* Чтобы фильтры не прилипали к краям, даем им отступ */
+.period-filter-row {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.month-year-filter {
+  margin: 0 !important;
+  padding: 0 !important;
+}
