@@ -473,29 +473,23 @@ function renderActivityPage() {
     if (!c) return;
     c.innerHTML = '';
 
-    // Заголовок убран, начинаем сразу с фильтров (отступ задан в стилях)
-
-
-    // --- НОВЫЙ БЛОК ФИЛЬТРОВ (в одну строку) ---
+    // --- ВЕРХНИЕ ФИЛЬТРЫ (кнопки-таблетки) ---
     const topFilterRow = document.createElement('div');
-    topFilterRow.className = 'top-filter-row';
-    // ЖЕСТКИЕ ИНЛАЙН-СТИЛИ (перебивают любой CSS)
-    topFilterRow.style.cssText = 'display: flex !important; justify-content: space-between !important; width: 100% !important; padding: 0 16px !important; box-sizing: border-box !important; margin: 0 0 16px 0 !important; align-items: center !important;';
+    topFilterRow.style.cssText = 'display:flex; gap:8px; margin-bottom:16px; overflow-x: auto; padding-bottom: 4px;';
 
-    // 1. Кнопки периодов (7 дней / Месяц)
     const periods = [[7, '7 дней'], [30, 'Месяц']];
     const periodHTML = periods.map(([n, label]) =>
-      '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
+      '<button class="cal-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '" style="white-space:nowrap;">' + label + '</button>'
     ).join('');
     topFilterRow.innerHTML = periodHTML;
 
     const d = new Date();
     d.setMonth(d.getMonth() + CHART_OFFSET_MONTHS);
     const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-    
+
     topFilterRow.innerHTML += 
-      '<button class="month-btn" id="btn-month">' + months[d.getMonth()] + '</button>' +
-      '<button class="year-btn" id="btn-year">' + d.getFullYear() + '</button>';
+      '<button class="cal-btn" id="btn-month" style="white-space:nowrap;">' + months[d.getMonth()] + '</button>' +
+      '<button class="cal-btn" id="btn-year" style="white-space:nowrap;">' + d.getFullYear() + '</button>';
 
     c.appendChild(topFilterRow);
 
@@ -506,36 +500,34 @@ function renderActivityPage() {
       if (btnYear) btnYear.addEventListener('click', () => openYearPicker());
     }, 0);
 
-    // Сам график (без встроенных фильтров)
+    // Сам график
     const chartDiv = document.createElement('div');
     chartDiv.style.padding = '0 16px 16px 16px';
-    chartDiv.appendChild(renderChart(true)); // Передаем true, чтобы отключить встроенные фильтры
+    chartDiv.appendChild(renderChart(true));
     c.appendChild(chartDiv);
 
-    // Делегирование событий (только один раз)
+    // Делегирование событий
     if (!c._delegated) {
         c._delegated = true;
         c.addEventListener('click', (e) => {
-            const periodBtn = e.target.closest('.period-btn');
-            if (periodBtn) {
+            const periodBtn = e.target.closest('.cal-btn');
+            if (periodBtn && periodBtn.dataset.period) {
                 CHART_PERIOD = parseInt(periodBtn.dataset.period, 10);
                 CHART_SELECTED = null;
                 renderActivityPage();
                 return;
             }
-            const metricBtn = e.target.closest('.metric-btn');
-            if (metricBtn) {
+            const metricBtn = e.target.closest('.cal-btn');
+            if (metricBtn && metricBtn.dataset.metric) {
                 CHART_METRIC = metricBtn.dataset.metric;
                 CHART_SELECTED = null;
                 renderActivityPage();
                 return;
             }
-            // ТАП НА СТОЛБИК
             const bar = e.target.closest('.chart-bar');
             if (bar) {
                 const wasSelected = bar.classList.contains('selected');
                 CHART_SELECTED = wasSelected ? null : bar.dataset.date;
-                // ПЕРЕРИСОВЫВАЕМ ГРАФИК, ЧТОБЫ ПОКАЗАТЬ ЛЕГЕНДУ
                 renderActivityPage();
                 return;
             }
@@ -543,21 +535,9 @@ function renderActivityPage() {
     }
 }
 
-
 function renderChart(hideFilters = false) {
   const container = document.createElement('div');
   container.className = 'chart-container';
-
-  if (!hideFilters) {
-    const periods = [[7, '7 дней'], [30, 'Месяц']];
-    const filterHTML = periods.map(([n, label]) =>
-      '<button class="period-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '">' + label + '</button>'
-    ).join('');
-    const filterRow = document.createElement('div');
-    filterRow.className = 'period-filter-row';
-    filterRow.innerHTML = filterHTML;
-    container.appendChild(filterRow);
-  }
 
   // 2. Формируем список дней
   const days = [];
@@ -589,7 +569,7 @@ function renderChart(hideFilters = false) {
     byDay[ss.date] = (byDay[ss.date] || 0) + v;
   }
 
-  // 4. Строим график (Ось Y + Столбики)
+  // 4. Строим график
   const maxVal = Math.max(1, ...days.map(d => byDay[d] || 0));
   let top = 60;
   if (maxVal > 60) top = Math.ceil(maxVal / 60) * 60;
@@ -598,7 +578,6 @@ function renderChart(hideFilters = false) {
   const chartBars = document.createElement('div');
   chartBars.className = 'chart-bars';
 
-  // Ось Y
   const yAxis = document.createElement('div');
   yAxis.className = 'chart-y-axis';
   let yAxisHTML = '';
@@ -610,10 +589,9 @@ function renderChart(hideFilters = false) {
   yAxis.innerHTML = yAxisHTML;
   chartBars.appendChild(yAxis);
 
-  // Столбики
   const barsWrap = document.createElement('div');
   barsWrap.className = 'chart-bars-wrap';
-  
+
   for (const d of days) {
     const val = byDay[d] || 0;
     const h = val ? Math.max(2, Math.round(val / top * 100)) : 0;
@@ -632,17 +610,14 @@ function renderChart(hideFilters = false) {
   chartBars.appendChild(barsWrap);
   container.appendChild(chartBars);
 
-  // 5. Подписи дат (Синхронизированы со столбиками)
+  // 5. Подписи дат
   const labelsRow = document.createElement('div');
   labelsRow.className = 'chart-labels-row';
-
   const spacer = document.createElement('div');
   spacer.className = 'chart-spacer';
   labelsRow.appendChild(spacer);
-
   const labelsWrap = document.createElement('div');
   labelsWrap.className = 'chart-labels';
-
   const isShort = days.length <= 14;
   const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 
@@ -650,40 +625,33 @@ function renderChart(hideFilters = false) {
     const lbl = document.createElement('div');
     lbl.className = 'chart-label';
     const dayNum = parseInt(d.slice(8, 10), 10);
-    
-    // Показываем все даты для коротких периодов, для месяца — только 1, 5, 10, 15...
     if (isShort || dayNum === 1 || dayNum % 5 === 0) {
       const dow = dowNames[new Date(d + 'T00:00:00').getDay()];
       lbl.innerHTML = '<div class="lbl-date">' + dayNum + '</div><div class="lbl-dow">' + dow + '</div>';
     }
     labelsWrap.appendChild(lbl);
   }
-  
   labelsRow.appendChild(labelsWrap);
   container.appendChild(labelsRow);
 
-  // 6. Кнопки метрик
-  const totalForPeriod = days.reduce((acc, d) => acc + (byDay[d] || 0), 0);
-  const totalStr = CHART_METRIC === 'duration' ? fmtH(totalForPeriod) : String(totalForPeriod);
+  // 6. Нижние кнопки (кнопки-таблетки)
   const metrics = [
-    ['duration', 'Время', 'Время'],
-    ['events', 'Сообщения', 'Сообщения'],
-    ['screens', 'Скрины', 'Скрины'],
-    ['tasks', 'Задачи', 'Задачи']
+    ['duration', 'Время'],
+    ['events', 'Сообщения'],
+    ['screens', 'Скрины'],
+    ['tasks', 'Задачи']
   ];
-  const metricHTML = metrics.map(([key, label, labelActive]) =>
-    '<button class="metric-btn' + (CHART_METRIC === key ? ' active' : '') + '" data-metric="' + key + '">' + (CHART_METRIC === key ? labelActive : label) + '</button>'
+  const metricHTML = metrics.map(([key, label]) =>
+    '<button class="cal-btn' + (CHART_METRIC === key ? ' active' : '') + '" data-metric="' + key + '" style="white-space:nowrap;">' + label + '</button>'
   ).join('');
-  
+
   const metricBar = document.createElement('div');
-  metricBar.className = 'metric-switch';
-  metricBar.style.cssText = 'display: flex !important; width: 100% !important; padding: 0 16px !important; box-sizing: border-box !important; margin: 16px 0 0 0 !important; align-items: center !important;';
+  metricBar.style.cssText = 'display:flex; gap:8px; margin: 16px 0 0 0; overflow-x: auto; padding-bottom: 4px;';
   metricBar.innerHTML = metricHTML;
   container.appendChild(metricBar);
 
   return container;
 }
-
 
 function renderDashboard() {
   if (!window.DATA) return;
