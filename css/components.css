@@ -2447,11 +2447,11 @@ div[style*="justify-content: space-between"] {
   aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
   padding-top: 8px; border-radius: 8px; cursor: pointer; position: relative;
 }
-.cal-day.today { background: var(--bg3); border: 1px solid var(--accent); }
+.cal-day.today { font-weight: 700; color: var(--accent); }
 .cal-num { font-size: 14px; font-weight: 500; color: var(--fg); }
 .cal-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; }
 
 .cal-day.selected {
   background: var(--bg3);
-  border: 1px solid var(--accent);
+  border: 2px solid var(--accent) !important;
 }

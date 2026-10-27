@@ -243,14 +243,14 @@ function renderDiary() {
   });
   
   document.getElementById('cal-prev').addEventListener('click', () => { 
-    if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET -= 12; 
+    if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET--; 
     else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30;
     else CALENDAR_OFFSET--; 
     CALENDAR_SELECTED_DAY = null;
     renderDiary(); 
   });
   document.getElementById('cal-next').addEventListener('click', () => { 
-    if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET += 12; 
+    if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET++; 
     else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30;
     else CALENDAR_OFFSET++; 
     CALENDAR_SELECTED_DAY = null;
