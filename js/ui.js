@@ -164,10 +164,9 @@ function renderDiary() {
       num.textContent = d.getDate();
       dayCell.appendChild(num);
 
-      // ВЫДЕЛЕНИЕ
+      // ВЫДЕЛЕНИЕ (через класс в CSS, чтобы не было дублей стилей)
       if (dateStr === CALENDAR_SELECTED_DAY) {
-        dayCell.style.background = 'var(--bg3)';
-        dayCell.style.border = '1px solid var(--accent)';
+        dayCell.classList.add('selected');
       }
       
       // Делаем цифру некликабельной, чтобы клик всегда попадал в dayCell

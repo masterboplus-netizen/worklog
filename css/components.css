@@ -2450,3 +2450,8 @@ div[style*="justify-content: space-between"] {
 .cal-day.today { background: var(--bg3); border: 1px solid var(--accent); }
 .cal-num { font-size: 14px; font-weight: 500; color: var(--fg); }
 .cal-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; }
+
+.cal-day.selected {
+  background: var(--bg3);
+  border: 1px solid var(--accent);
+}
