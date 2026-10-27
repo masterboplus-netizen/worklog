@@ -106,11 +106,11 @@ function renderDiary() {
   if (CALENDAR_VIEW === 'year') {
     grid.style.display = 'none'; // Скрываем основную сетку
     const yearGrid = document.createElement('div');
-    yearGrid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px;';
+    yearGrid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 8px; margin-bottom: 100px; padding: 0 8px;';
     
     for (let m = 0; m < 12; m++) {
       const mDiv = document.createElement('div');
-      mDiv.innerHTML = '<div style="font-size:12px;color:var(--fg-dim);margin-bottom:4px;text-align:center;">' + months[m].slice(0,3) + '</div>';
+      mDiv.innerHTML = '<div style="font-size:11px;color:var(--fg-dim);margin-bottom:6px;text-align:center;text-transform:uppercase;letter-spacing:0.5px;">' + months[m].slice(0,3) + '</div>';
       const miniGrid = document.createElement('div');
       miniGrid.style.cssText = 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;';
       
@@ -123,9 +123,11 @@ function renderDiary() {
       }
       for (let d = new Date(mStart); d <= mEnd; d.setDate(d.getDate() + 1)) {
         const ds = _localDate(d);
-        let dotColor = 'transparent';
-        if (dayStats[ds]) dotColor = 'var(--accent)';
-        miniGrid.innerHTML += `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:50%; background:${dotColor}; opacity:${dotColor==='transparent'?0:1}"></div>`;
+        const isActive = !!dayStats[ds];
+        miniGrid.innerHTML += `<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:16px; font-size:8px; line-height:1; color:${isActive ? 'var(--fg)' : 'var(--fg-dim)'}; position:relative;">
+          ${d.getDate()}
+          ${isActive ? '<div style="width:3px; height:3px; background:var(--accent); border-radius:50%; position:absolute; bottom:-2px;"></div>' : ''}
+        </div>`;
       }
       mDiv.appendChild(miniGrid);
       yearGrid.appendChild(mDiv);
