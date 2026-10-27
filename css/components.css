@@ -2323,220 +2323,61 @@ div[style*="justify-content: space-between"] {
   font-weight: 600 !important;
 }
 
-/* === ВЕРХНЕЕ МЕНЮ: ПО ТВОЕМУ МАКЕТУ === */
-.top-filter-row {
-    display: flex !important;
+
+/* ========================================= */
+/* === ЧИСТОЕ ВЫРАВНИВАНИЕ МЕНЮ (ФИНАЛ) === */
+/* ========================================= */
+
+/* Оба меню в одну жесткую сетку */
+.top-filter-row, 
+.metric-switch {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
     width: 100% !important;
-    /* Отступ слева 46px (ось Y + отступ), справа 16px (как у графика) */
-    padding: 0 16px 0 46px !important; 
+    padding: 0 16px !important;
     box-sizing: border-box !important;
     margin: 0 0 16px 0 !important;
     align-items: center !important;
 }
 
-.top-filter-row button {
+/* Сами кнопки */
+.period-btn, .month-btn, .year-btn, .metric-btn {
+    display: flex !important;
     background: transparent !important;
     border: none !important;
     color: var(--fg-dim) !important;
     font-size: 14px !important;
     font-weight: 500 !important;
-    padding: 6px 0 !important;
+    padding: 4px 0 !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    width: 100% !important;
     white-space: nowrap !important;
 }
 
-/* 1. "7 дней" - влево */
-.top-filter-row button:nth-child(1) {
-    flex: 1 1 0;
-    text-align: left !important;
-    display: flex !important;
+/* 1-я кнопка (7 дней / Время) - сдвиг на 30px и прижатие влево */
+.top-filter-row button:nth-child(1),
+.metric-switch button:nth-child(1) {
+    padding-left: 30px !important;
     justify-content: flex-start !important;
 }
 
-/* 2. "Месяц" и 3. "Октябрь" - по центру */
+/* 2-я и 3-я кнопки - по центру */
 .top-filter-row button:nth-child(2),
-.top-filter-row button:nth-child(3) {
-    flex: 1 1 0;
-    text-align: center !important;
-    display: flex !important;
+.top-filter-row button:nth-child(3),
+.metric-switch button:nth-child(2),
+.metric-switch button:nth-child(3) {
     justify-content: center !important;
 }
 
-/* 4. "2026" - вправо */
-.top-filter-row button:nth-child(4) {
-    flex: 1 1 0;
-    text-align: right !important;
-    display: flex !important;
+/* 4-я кнопка (2026 / Задачи) - прижатие вправо */
+.top-filter-row button:nth-child(4),
+.metric-switch button:nth-child(4) {
     justify-content: flex-end !important;
 }
 
 /* Активный цвет */
-.top-filter-row button.active {
-    color: var(--fg) !important;
-    font-weight: 600 !important;
-}
-
-/* === ВЕРХНЕЕ МЕНЮ: СТРОГО ПО ГРАНИЦАМ СТОЛБИКОВ === */
-.top-filter-row {
-    display: flex !important;
-    width: 100% !important;
-    /* 16px (край экрана) + 30px (ось Y) = 46px. Текст начнется ровно над столбиками */
-    padding: 0 16px 0 46px !important; 
-    box-sizing: border-box !important;
-    margin: 0 0 16px 0 !important;
-}
-
-.top-filter-row button {
-    flex: 1 1 0;
-    background: transparent !important;
-    border: none !important;
-    color: var(--fg-dim) !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    padding: 0 !important; /* Убираем отступы внутри кнопок */
-    white-space: nowrap !important;
-    display: flex !important;
-}
-
-/* 1. "7 дней" — строго к левой границе столбиков */
-.top-filter-row button:nth-child(1) {
-    justify-content: flex-start !important;
-}
-
-/* 2. "Месяц" и 3. "Октябрь" — по центру */
-.top-filter-row button:nth-child(2),
-.top-filter-row button:nth-child(3) {
-    justify-content: center !important;
-}
-
-/* 4. "2026" — строго к правому краю графика (16px) */
-.top-filter-row button:nth-child(4) {
-    justify-content: flex-end !important;
-}
-
-.top-filter-row button.active {
-    color: var(--fg) !important;
-    font-weight: 600 !important;
-}
-
-/* === ВЕРХНЕЕ МЕНЮ: ОТСТУП 34PX, ПРАВЫЙ КРАЙ НЕ ТРОГАЕМ === */
-.top-filter-row {
-    padding-left: 34px !important;
-    padding-right: 16px !important;
-}
-
-/* === ВЫРАВНИВАНИЕ ТЕКСТА ВНУТРИ КНОПОК === */
-.top-filter-row button {
-    text-align: left !important;
-    justify-content: flex-start !important;
-    display: flex !important;
-}
-.top-filter-row button:nth-child(2),
-.top-filter-row button:nth-child(3) {
-    text-align: center !important;
-    justify-content: center !important;
-}
-.top-filter-row button:nth-child(4) {
-    text-align: right !important;
-    justify-content: flex-end !important;
-}
-
-/* === ВЫРАВНИВАНИЕ КНОПОК ВЕРХНЕГО МЕНЮ === */
-.top-filter-row button {
-    display: flex !important;
-    width: 100% !important;
-    background: transparent !important;
-    border: none !important;
-    color: var(--fg-dim) !important;
-    font-size: 14px !important;
-    padding: 0 !important;
-}
-
-/* 1. "7 дней" — отступ 30px (ось Y) */
-.top-filter-row button:nth-child(1) {
-    padding-left: 30px !important;
-    justify-content: flex-start !important;
-}
-
-/* 2. "Месяц" и 3. "Октябрь" — по центру */
-.top-filter-row button:nth-child(2),
-.top-filter-row button:nth-child(3) {
-    justify-content: center !important;
-}
-
-/* 4. "2026" — прижато к правому краю (как было) */
-.top-filter-row button:nth-child(4) {
-    justify-content: flex-end !important;
-}
-
-.top-filter-row button.active {
-    color: var(--fg) !important;
-    font-weight: 600 !important;
-}
-
-/* === РАВНОМЕРНЫЕ ОТСТУПЫ ВЕРХНЕГО МЕНЮ === */
-.top-filter-row button {
-    display: flex !important;
-    width: auto !important; /* Убираем растягивание на всю ширину */
-    background: transparent !important;
-    border: none !important;
-    color: var(--fg-dim) !important;
-    font-size: 14px !important;
-    padding: 0 !important;
-}
-
-/* 1. "7 дней" — отступ 30px */
-.top-filter-row button:nth-child(1) {
-    padding-left: 30px !important;
-}
-
-/* 2. "Месяц" и 3. "Октябрь" — просто по центру (space-between сам их распределит) */
-.top-filter-row button:nth-child(2),
-.top-filter-row button:nth-child(3) {
-    /* ничего не задаем, они отцентрируются сами */
-}
-
-/* 4. "2026" — без изменений */
-.top-filter-row button:nth-child(4) {
-    /* ничего не задаем */
-}
-
-.top-filter-row button.active {
-    color: var(--fg) !important;
-    font-weight: 600 !important;
-}
-
-
-
-/* === НИЖНЕЕ МЕНЮ: РАВНЫЕ ЯЧЕЙКИ === */
-.metric-switch .metric-btn {
-    flex: 1 1 0 !important; /* Все ячейки абсолютно одинаковой ширины */
-    display: flex !important;
-    background: transparent !important;
-    border: none !important;
-    color: var(--fg-dim) !important;
-    font-size: 14px !important;
-    padding: 0 !important;
-    white-space: nowrap !important;
-}
-
-/* 1. "Время" — прижимаем влево (с отступом 30px на ось) */
-.metric-switch .metric-btn:nth-child(1) {
-    padding-left: 30px !important;
-    justify-content: flex-start !important;
-}
-
-/* 2. "Сообщения" и 3. "Скрины" — по центру */
-.metric-switch .metric-btn:nth-child(2),
-.metric-switch .metric-btn:nth-child(3) {
-    justify-content: center !important;
-}
-
-/* 4. "Задачи" — прижимаем вправо */
-.metric-switch .metric-btn:nth-child(4) {
-    justify-content: flex-end !important;
-}
-
-.metric-switch .metric-btn.active {
+.period-btn.active, .metric-btn.active {
     color: var(--fg) !important;
     font-weight: 600 !important;
 }
