@@ -14,6 +14,7 @@ const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц',
 
 let CALENDAR_VIEW = 'month';
 let CALENDAR_OFFSET = 0;
+let CALENDAR_SELECTED_DAY = null;
 
 function renderDiary() {
   const c = document.getElementById('content-diary');
@@ -136,6 +137,13 @@ function renderDiary() {
         const hasData = !!dayStats[ds];
         miniGrid.innerHTML += `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:9px; border-radius:50%; background:${hasData ? 'var(--accent)' : 'transparent'}; color:${hasData ? '#fff' : 'var(--fg-dim)'}">${d.getDate()}</div>`;
       }
+      mDiv.style.cursor = 'pointer';
+      mDiv.addEventListener('click', () => {
+        CALENDAR_VIEW = 'month';
+        CALENDAR_OFFSET = m - new Date().getMonth();
+        CALENDAR_SELECTED_DAY = null;
+        renderDiary();
+      });
       mDiv.appendChild(miniGrid);
       grid.appendChild(mDiv);
     }
@@ -160,6 +168,18 @@ function renderDiary() {
         dot.className = 'cal-dot';
         dayCell.appendChild(dot);
       }
+      
+      // ВЫДЕЛЕНИЕ И КЛИК
+      if (dateStr === CALENDAR_SELECTED_DAY) {
+        dayCell.style.background = 'var(--bg3)';
+        dayCell.style.border = '1px solid var(--accent)';
+      }
+      dayCell.addEventListener('click', () => {
+        if (CALENDAR_SELECTED_DAY === dateStr) CALENDAR_SELECTED_DAY = null;
+        else CALENDAR_SELECTED_DAY = dateStr;
+        renderDiary();
+      });
+      
       grid.appendChild(dayCell);
     }
     c.appendChild(grid);
@@ -169,11 +189,17 @@ function renderDiary() {
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '24px';
   
-  const filteredSessions = (window.DATA.sessions || []).filter(s => {
+  let filteredSessions = (window.DATA.sessions || []).filter(s => {
     const sd = new Date(s.date + 'T00:00:00');
     if (CALENDAR_VIEW === 'year') return sd.getFullYear() === startDate.getFullYear();
     return sd >= startDate && sd <= endDate;
-  }).sort((a, b) => (b.date + (b.start||'')).localeCompare(a.date + (a.start||'')));
+  });
+  
+  if (CALENDAR_SELECTED_DAY) {
+    filteredSessions = filteredSessions.filter(s => s.date === CALENDAR_SELECTED_DAY);
+  }
+  
+  filteredSessions.sort((a, b) => (b.date + (b.start||'')).localeCompare(a.date + (a.start||'')));
 
   if (filteredSessions.length === 0) {
     listDiv.innerHTML = '<div class="empty" style="padding:20px 0;">Нет записей за этот период</div>';
@@ -204,6 +230,7 @@ function renderDiary() {
     btn.addEventListener('click', () => {
       CALENDAR_VIEW = btn.dataset.view;
       CALENDAR_OFFSET = 0;
+      CALENDAR_SELECTED_DAY = null;
       renderDiary();
     });
   });
@@ -212,12 +239,14 @@ function renderDiary() {
     if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET -= 12; 
     else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30;
     else CALENDAR_OFFSET--; 
+    CALENDAR_SELECTED_DAY = null;
     renderDiary(); 
   });
   document.getElementById('cal-next').addEventListener('click', () => { 
     if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET += 12; 
     else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30;
     else CALENDAR_OFFSET++; 
+    CALENDAR_SELECTED_DAY = null;
     renderDiary(); 
   });
 }
