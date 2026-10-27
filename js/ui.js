@@ -874,3 +874,232 @@ function openAnalyticsSheet(projectId) {
     if (e.target === overlay) overlay.remove();
   });
 }
+
+
+// === НОВАЯ ЛЕНТА ГРАФИКА (V2) ===
+let CHART_STATE_V2 = { metric: 'duration', selectedDay: null, currentMonth: null, currentYear: null };
+
+function renderActivityPageV2() {
+    const c = document.getElementById('content-activity');
+    if (!c || !window.DATA) return;
+    c.innerHTML = '';
+
+    // 1. НАВИГАЦИЯ (ТЕКСТ)
+    const navRow = document.createElement('div');
+    navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:16px; margin-bottom: 16px; font-size:20px; font-weight:600; color:var(--fg);';
+    
+    const monthSpan = document.createElement('span');
+    monthSpan.id = 'chart-month-label';
+    monthSpan.style.cssText = 'cursor:pointer;';
+    const yearSpan = document.createElement('span');
+    yearSpan.id = 'chart-year-label';
+    yearSpan.style.cssText = 'cursor:pointer;';
+
+    if (!CHART_STATE_V2.currentMonth) {
+        const now = new Date();
+        CHART_STATE_V2.currentMonth = now.getMonth();
+        CHART_STATE_V2.currentYear = now.getFullYear();
+    }
+
+    const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+    monthSpan.textContent = months[CHART_STATE_V2.currentMonth];
+    yearSpan.textContent = CHART_STATE_V2.currentYear;
+
+    monthSpan.addEventListener('click', () => openMonthPicker());
+    yearSpan.addEventListener('click', () => openYearPicker());
+
+    navRow.appendChild(monthSpan);
+    navRow.appendChild(yearSpan);
+    c.appendChild(navRow);
+
+    // 2. ЛЕНТА
+    const scrollContainer = document.createElement('div');
+    scrollContainer.className = 'tl-container';
+    scrollContainer.id = 'tl-scroll';
+    
+    let firstSessionDate = new Date();
+    if (window.DATA.sessions && window.DATA.sessions.length > 0) {
+        const sorted = window.DATA.sessions.slice().sort((a, b) => a.date.localeCompare(b.date));
+        firstSessionDate = new Date(sorted[0].date + 'T00:00:00');
+    }
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    let iterDate = new Date(firstSessionDate);
+    const allDates = [];
+    
+    while (iterDate <= today) {
+        const dateStr = _localDate(iterDate);
+        allDates.push(dateStr);
+
+        const col = document.createElement('div');
+        col.className = 'tl-col';
+        col.dataset.date = dateStr;
+
+        const barDiv = document.createElement('div');
+        barDiv.className = 'tl-bar';
+        
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'tl-label';
+        const dayNum = iterDate.getDate();
+        const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+        labelDiv.innerHTML = `<div>${dayNum}</div><div style="font-size:9px;opacity:0.6;">${dowNames[iterDate.getDay()]}</div>`;
+
+        col.appendChild(barDiv);
+        col.appendChild(labelDiv);
+        scrollContainer.appendChild(col);
+
+        iterDate.setDate(iterDate.getDate() + 1);
+    }
+
+    c.appendChild(scrollContainer);
+
+    // 3. НИЖНИЕ КНОПКИ
+    const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
+    const metricHTML = metrics.map(([key, label]) =>
+        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 6px 4px; font-size: 13px;">' + label + '</button>'
+    ).join('');
+
+    const metricBar = document.createElement('div');
+    metricBar.style.cssText = 'display:flex; gap:8px; margin: 16px 16px; justify-content: space-between;';
+    metricBar.innerHTML = metricHTML;
+    c.appendChild(metricBar);
+
+    // 4. ЛОГИКА
+    const updateChart = () => {
+        const scrollLeft = scrollContainer.scrollLeft;
+        const containerWidth = scrollContainer.clientWidth;
+        const colWidth = 44 + 8;
+
+        const startIndex = Math.floor(scrollLeft / colWidth);
+        const endIndex = Math.min(allDates.length - 1, Math.ceil((scrollLeft + containerWidth) / colWidth));
+
+        if (allDates[startIndex]) {
+            const d = new Date(allDates[startIndex] + 'T00:00:00');
+            monthSpan.textContent = months[d.getMonth()];
+            yearSpan.textContent = d.getFullYear();
+            CHART_STATE_V2.currentMonth = d.getMonth();
+            CHART_STATE_V2.currentYear = d.getFullYear();
+        }
+
+        let maxVal = 0;
+        for (let i = startIndex; i <= endIndex && i < allDates.length; i++) {
+            const dateStr = allDates[i];
+            let v = 0;
+            for (const sess of window.DATA.sessions || []) {
+                if (sess.date === dateStr) {
+                    if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
+                    else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
+                    else if (CHART_STATE_V2.metric === 'screens') v += sess.screens || 0;
+                    else if (CHART_STATE_V2.metric === 'tasks') v += sess.tasks_done || 0;
+                }
+            }
+            if (v > maxVal) maxVal = v;
+        }
+        if (maxVal === 0) maxVal = CHART_STATE_V2.metric === 'duration' ? 720 : 10;
+
+        const cols = scrollContainer.querySelectorAll('.tl-col');
+        cols.forEach(col => {
+            const dateStr = col.dataset.date;
+            let v = 0;
+            for (const sess of window.DATA.sessions || []) {
+                if (sess.date === dateStr) {
+                    if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
+                    else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
+                    else if (CHART_STATE_V2.metric === 'screens') v += sess.screens || 0;
+                    else if (CHART_STATE_V2.metric === 'tasks') v += sess.tasks_done || 0;
+                }
+            }
+            const h = v ? Math.max(2, Math.round(v / maxVal * 100)) : 0;
+            col.querySelector('.tl-bar').style.height = h + '%';
+            
+            if (dateStr === CHART_STATE_V2.selectedDay) {
+                const bar = col.querySelector('.tl-bar');
+                bar.classList.add('selected');
+                const oldLbl = bar.querySelector('.tl-legend');
+                if (oldLbl) oldLbl.remove();
+                const text = CHART_STATE_V2.metric === 'duration' ? fmtH(v) : String(v);
+                const legend = document.createElement('div');
+                legend.className = 'tl-legend';
+                legend.textContent = text;
+                bar.appendChild(legend);
+            }
+        });
+    };
+
+    scrollContainer.addEventListener('scroll', () => {
+        clearTimeout(scrollContainer._scrollTimeout);
+        scrollContainer._scrollTimeout = setTimeout(() => {
+            if (CHART_STATE_V2.selectedDay) {
+                CHART_STATE_V2.selectedDay = null;
+                scrollContainer.querySelectorAll('.tl-bar').forEach(b => {
+                    b.classList.remove('selected');
+                    const lbl = b.querySelector('.tl-legend');
+                    if (lbl) lbl.remove();
+                });
+            }
+            updateChart();
+        }, 100);
+    });
+
+    scrollContainer.addEventListener('click', (e) => {
+        const col = e.target.closest('.tl-col');
+        if (!col) return;
+        
+        const dateStr = col.dataset.date;
+        const bar = col.querySelector('.tl-bar');
+
+        if (CHART_STATE_V2.selectedDay === dateStr) {
+            CHART_STATE_V2.selectedDay = null;
+            bar.classList.remove('selected');
+            const lbl = bar.querySelector('.tl-legend');
+            if (lbl) lbl.remove();
+            return;
+        }
+
+        scrollContainer.querySelectorAll('.tl-bar').forEach(b => {
+            b.classList.remove('selected');
+            const lbl = b.querySelector('.tl-legend');
+            if (lbl) lbl.remove();
+        });
+
+        CHART_STATE_V2.selectedDay = dateStr;
+        bar.classList.add('selected');
+
+        let v = 0;
+        for (const sess of window.DATA.sessions || []) {
+            if (sess.date === dateStr) {
+                if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
+                else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
+                else if (CHART_STATE_V2.metric === 'screens') v += sess.screens || 0;
+                else if (CHART_STATE_V2.metric === 'tasks') v += sess.tasks_done || 0;
+            }
+        }
+        const text = CHART_STATE_V2.metric === 'duration' ? fmtH(v) : String(v);
+        const legend = document.createElement('div');
+        legend.className = 'tl-legend';
+        legend.textContent = text;
+        bar.appendChild(legend);
+    });
+
+    c.querySelectorAll('.cal-btn[data-metric]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            CHART_STATE_V2.metric = btn.dataset.metric;
+            const currentScroll = scrollContainer.scrollLeft;
+            renderActivityPageV2();
+            setTimeout(() => {
+                const newScroll = document.getElementById('tl-scroll');
+                if (newScroll) {
+                    newScroll.scrollLeft = currentScroll;
+                    updateChart();
+                }
+            }, 50);
+        });
+    });
+
+    setTimeout(() => {
+        scrollContainer.scrollTo({ left: scrollContainer.scrollWidth, behavior: 'smooth' });
+        setTimeout(() => { updateChart(); }, 600);
+    }, 100);
+}
