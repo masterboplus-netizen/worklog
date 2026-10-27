@@ -132,11 +132,8 @@ function renderHeroRings() {
   function _fmtH2(min) { return Math.floor(min / 60) + 'ч<br>' + (min % 60) + 'м'; }
   let timeVal = MINI_TIME_PERIOD === 'avg' ? fmtH(t.avgPerDay) : (MINI_TIME_PERIOD === 'all' ? _fmtH2(t.total) : _fmtH2(_sumRange(_sessions, MINI_TIME_PERIOD, 'duration_min')));
   
-  // Если цель не задана вручную, используем среднее время/день
-  let currentGoal = DAILY_GOAL_MIN;
-  if (t.avgPerDay > 0 && HERO_MODE === 'today') {
-    currentGoal = t.avgPerDay;
-  }
+  // Цель всегда равна среднему времени/день (если оно есть)
+  let currentGoal = t.avgPerDay > 0 ? t.avgPerDay : DAILY_GOAL_MIN;
 
   let heroValue = t.todayMin, heroLabel = 'Сегодня', heroSub = 'Цель ' + fmtH(currentGoal) + ' · ' + Math.round(t.todayMin / currentGoal * 100) + '%';
   if (HERO_MODE === 'last') {
