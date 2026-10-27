@@ -128,7 +128,7 @@ function switchTab(name) {
       const t = document.getElementById('tab-projects'); if (t) t.classList.add('tab-active');
     } else if (name === 'activity') {
       const c = document.getElementById('content-activity');
-      if (c) { c.classList.remove('hidden'); renderActivityPage(); }
+      if (c) { c.classList.remove('hidden'); if (typeof renderActivityPageV2 === 'function') { renderActivityPageV2(); } else { renderActivityPage(); } }
       const t = document.getElementById('tab-activity'); if (t) t.classList.add('tab-active');
     } else {
       const c = document.getElementById('content');
