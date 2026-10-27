@@ -20,32 +20,48 @@ function renderDiary() {
   if (!c || !window.DATA) return;
   c.innerHTML = '';
 
-  // Заголовок и фильтры
+  // === ШАПКА КАЛЕНДАРЯ ===
   const topBar = document.createElement('div');
   topBar.className = 'calendar-top';
+  topBar.style.cssText = 'margin-bottom: 16px;';
   
+  // 1. Фильтры (Неделя / Месяц / Год / 30 дней)
   const filters = document.createElement('div');
-  filters.className = 'calendar-filters';
+  filters.style.cssText = 'display:flex; gap:8px; margin-bottom:16px; overflow-x: auto; padding-bottom: 4px;';
   filters.innerHTML = `
-    <button class="cal-btn ${CALENDAR_VIEW === 'week' ? 'active' : ''}" data-view="week">Неделя</button>
-    <button class="cal-btn ${CALENDAR_VIEW === 'month' ? 'active' : ''}" data-view="month">Месяц</button>
-    <button class="cal-btn ${CALENDAR_VIEW === 'year' ? 'active' : ''}" data-view="year">Год</button>
-    <button class="cal-btn ${CALENDAR_VIEW === '30days' ? 'active' : ''}" data-view="30days">30 дней</button>
+    <button class="cal-btn ${CALENDAR_VIEW === 'week' ? 'active' : ''}" data-view="week" style="white-space:nowrap;">Неделя</button>
+    <button class="cal-btn ${CALENDAR_VIEW === 'month' ? 'active' : ''}" data-view="month" style="white-space:nowrap;">Месяц</button>
+    <button class="cal-btn ${CALENDAR_VIEW === 'year' ? 'active' : ''}" data-view="year" style="white-space:nowrap;">Год</button>
+    <button class="cal-btn ${CALENDAR_VIEW === '30days' ? 'active' : ''}" data-view="30days" style="white-space:nowrap;">30 дней</button>
   `;
   topBar.appendChild(filters);
 
-  const title = document.createElement('h2');
-  title.className = 'calendar-title'; title.style.display = CALENDAR_VIEW === 'year' ? 'none' : 'block';
-  title.style.cssText = 'font-size: 24px; font-weight: 600; margin: 16px 0 8px;';
+  // 2. Навигация: [<-] Месяц Год [->]
+  const navRow = document.createElement('div');
+  navRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
+  
+  const prevBtn = document.createElement('button');
+  prevBtn.id = 'cal-prev';
+  prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+  prevBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); padding:8px; cursor:pointer;';
+  
+  const nextBtn = document.createElement('button');
+  nextBtn.id = 'cal-next';
+  nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+  nextBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); padding:8px; cursor:pointer;';
+
+  const title = document.createElement('div');
+  title.style.cssText = 'font-size:20px; font-weight:600; color:var(--fg); text-align:center;';
   
   const now = new Date();
   let currentDisplayDate = new Date(now.getFullYear(), now.getMonth() + (CALENDAR_VIEW === 'month' ? CALENDAR_OFFSET : 0), now.getDate() + (CALENDAR_VIEW === 'week' ? CALENDAR_OFFSET * 7 : (CALENDAR_VIEW === '30days' ? CALENDAR_OFFSET : 0)) + (CALENDAR_VIEW === 'year' ? CALENDAR_OFFSET * 30 : 0));
   
   const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-  if (CALENDAR_VIEW === 'month') {
+  
+  if (CALENDAR_VIEW === 'year') {
+    title.textContent = currentDisplayDate.getFullYear();
+  } else if (CALENDAR_VIEW === 'month') {
     title.textContent = months[currentDisplayDate.getMonth()] + ' ' + currentDisplayDate.getFullYear();
-  } else if (CALENDAR_VIEW === 'year') {
-    title.textContent = currentDisplayDate.getFullYear() + ' год';
   } else if (CALENDAR_VIEW === '30days') {
     const end = new Date(currentDisplayDate);
     end.setDate(end.getDate() + 29);
@@ -57,12 +73,11 @@ function renderDiary() {
     endOfWeek.setDate(startOfWeek.getDate() + 6);
     title.textContent = startOfWeek.getDate() + ' ' + months[startOfWeek.getMonth()].slice(0,3) + ' – ' + endOfWeek.getDate() + ' ' + months[endOfWeek.getMonth()].slice(0,3);
   }
-  topBar.appendChild(title);
 
-  const nav = document.createElement('div');
-  nav.className = 'calendar-nav';
-  nav.innerHTML = `<button class="cal-nav-btn" id="cal-prev">←</button><button class="cal-nav-btn" id="cal-next">→</button>`;
-  topBar.appendChild(nav);
+  navRow.appendChild(prevBtn);
+  navRow.appendChild(title);
+  navRow.appendChild(nextBtn);
+  topBar.appendChild(navRow);
 
   c.appendChild(topBar);
 
