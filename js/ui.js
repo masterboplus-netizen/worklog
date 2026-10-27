@@ -473,52 +473,82 @@ function renderActivityPage() {
     if (!c) return;
     c.innerHTML = '';
 
-    // --- ВЕРХНИЕ ФИЛЬТРЫ (кнопки-таблетки) ---
-    const topFilterRow = document.createElement('div');
-    topFilterRow.style.cssText = 'display:flex; gap:8px; margin-bottom:16px; overflow-x: auto; padding-bottom: 4px;';
-
+    // 1. ВЕРХНИЕ ФИЛЬТРЫ (только 7 дней и Месяц)
+    const filters = document.createElement('div');
+    filters.style.cssText = 'display:flex; gap:8px; margin-bottom:16px; padding: 0 16px;';
+    
     const periods = [[7, '7 дней'], [30, 'Месяц']];
-    const periodHTML = periods.map(([n, label]) =>
-      '<button class="cal-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '" style="white-space:nowrap;">' + label + '</button>'
+    filters.innerHTML = periods.map(([n, label]) =>
+      '<button class="cal-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '" style="flex:1; text-align:center;">' + label + '</button>'
     ).join('');
-    topFilterRow.innerHTML = periodHTML;
+    
+    c.appendChild(filters);
 
+    // 2. НАВИГАЦИЯ ПО ДАТЕ (как в календаре: [<-] Октябрь 2026 [->])
+    const navRow = document.createElement('div');
+    navRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding: 0 16px; margin-bottom: 16px;';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.id = 'chart-prev';
+    prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+    prevBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); padding:8px; cursor:pointer;';
+
+    const nextBtn = document.createElement('button');
+    nextBtn.id = 'chart-next';
+    nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+    nextBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); padding:8px; cursor:pointer;';
+
+    const title = document.createElement('div');
+    title.style.cssText = 'font-size:20px; font-weight:600; color:var(--fg); text-align:center; cursor:pointer;';
+    
     const d = new Date();
     d.setMonth(d.getMonth() + CHART_OFFSET_MONTHS);
     const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+    title.textContent = months[d.getMonth()] + ' ' + d.getFullYear();
 
-    topFilterRow.innerHTML += 
-      '<button class="cal-btn" id="btn-month" style="white-space:nowrap;">' + months[d.getMonth()] + '</button>' +
-      '<button class="cal-btn" id="btn-year" style="white-space:nowrap;">' + d.getFullYear() + '</button>';
+    // Клик по заголовку открывает выбор месяца (как в календаре)
+    title.addEventListener('click', () => openMonthPicker());
 
-    c.appendChild(topFilterRow);
+    navRow.appendChild(prevBtn);
+    navRow.appendChild(title);
+    navRow.appendChild(nextBtn);
+    c.appendChild(navRow);
 
-    setTimeout(() => {
-      const btnMonth = document.getElementById('btn-month');
-      const btnYear = document.getElementById('btn-year');
-      if (btnMonth) btnMonth.addEventListener('click', () => openMonthPicker());
-      if (btnYear) btnYear.addEventListener('click', () => openYearPicker());
-    }, 0);
-
-    // Сам график
+    // 3. САМ ГРАФИК
     const chartDiv = document.createElement('div');
     chartDiv.style.padding = '0 16px 16px 16px';
     chartDiv.appendChild(renderChart(true));
     c.appendChild(chartDiv);
 
-    // Делегирование событий
+    // 4. ОБРАБОТЧИКИ
+    prevBtn.addEventListener('click', () => {
+      // Если выбран режим "Месяц" (30 дней) - листаем на месяц назад
+      if (CHART_PERIOD === 30) CHART_OFFSET_MONTHS--;
+      else CHART_OFFSET_MONTHS--; // Для 7 дней тоже сдвигаем на месяц (так как в графике смотрятся 7 дней от текущего)
+      CHART_SELECTED = null;
+      renderActivityPage();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (CHART_PERIOD === 30) CHART_OFFSET_MONTHS++;
+      else CHART_OFFSET_MONTHS++;
+      CHART_SELECTED = null;
+      renderActivityPage();
+    });
+
+    // Делегирование событий (для кнопок периодов и метрик)
     if (!c._delegated) {
         c._delegated = true;
         c.addEventListener('click', (e) => {
-            const periodBtn = e.target.closest('.cal-btn');
-            if (periodBtn && periodBtn.dataset.period) {
+            const periodBtn = e.target.closest('.cal-btn[data-period]');
+            if (periodBtn) {
                 CHART_PERIOD = parseInt(periodBtn.dataset.period, 10);
                 CHART_SELECTED = null;
                 renderActivityPage();
                 return;
             }
-            const metricBtn = e.target.closest('.cal-btn');
-            if (metricBtn && metricBtn.dataset.metric) {
+            const metricBtn = e.target.closest('.cal-btn[data-metric]');
+            if (metricBtn) {
                 CHART_METRIC = metricBtn.dataset.metric;
                 CHART_SELECTED = null;
                 renderActivityPage();
@@ -529,7 +559,6 @@ function renderActivityPage() {
                 const wasSelected = bar.classList.contains('selected');
                 CHART_SELECTED = wasSelected ? null : bar.dataset.date;
                 renderActivityPage();
-                return;
             }
         });
     }
