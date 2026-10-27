@@ -35,7 +35,7 @@ function renderDiary() {
   topBar.appendChild(filters);
 
   const title = document.createElement('h2');
-  title.className = 'calendar-title';
+  title.className = 'calendar-title'; title.style.display = CALENDAR_VIEW === 'year' ? 'none' : 'block';
   title.style.cssText = 'font-size: 24px; font-weight: 600; margin: 16px 0 8px;';
   
   const now = new Date();
@@ -130,7 +130,7 @@ function renderDiary() {
       mDiv.appendChild(miniGrid);
       yearGrid.appendChild(mDiv);
     }
-    c.insertBefore(yearGrid, listDiv); // Вставляем перед списком
+    c.appendChild(yearGrid); // Вставляем в конец
   } else {
     // Добавляем пустые ячейки до первого дня
     const firstDow = startDate.getDay() === 0 ? 6 : startDate.getDay() - 1;
