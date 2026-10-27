@@ -313,12 +313,7 @@
   .metrics { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* === Вкладки (Дашборд / Дневник) === */
-
-  border-bottom: 2px solid transparent;
-  transition: all 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
+/* === Вкладки === */
 .tab.tab-active {
   color: var(--accent);
   border-bottom-color: var(--accent);
@@ -518,16 +513,8 @@
   align-items: flex-end;
 }
 
-/* === Chart v3.2: labels под bars, фиксированный отступ слева === */
-
-/* === Chart v3.3: labels под bars (одно чистое правило) === */
-
-/* === Chart v3.4: финальные labels === */
-
 /* === Chart v4: labels-row (синхронно с barsWrap) === */
 
-.chart-labels-row 
-.chart-labels-row 
 
 /* === Hero Rings (v5) === */
 .hero-rings {
@@ -659,10 +646,6 @@
   cursor: default;
   pointer-events: none;
 }
-
-/* === Chart labels (v9): дата + день недели === */
-
-/* === Month labels: мелкий шрифт === */
 
 /* === Chart labels (final) === */
 
@@ -1062,8 +1045,6 @@
   background: linear-gradient(to top, var(--bg3) 0%, transparent 100%);
 }
 
-/* === Analytics project button === */
-
 /* === Analytics sheet (5 blocks) === */
 .analytics-sheet {
   max-height: 90vh;
@@ -1150,18 +1131,6 @@
   margin-bottom: 0;
 }
 
-/* === Project analytics button (shifted) === */
-
-/* === Project analytics button (прямоугольная, по центру) === */
-
-/* === Project analytics button (справа, под прогрессом) === */
-
-/* === Project actions: 2 кнопки в ряд === */
-
-/* === Project btn: фикс. высота, выравнивание === */
-
-/* === Project btn svg: выравнивание === */
-
 /* === Project actions (final, clean) === */
 .project-actions {
   display: flex;
@@ -1217,18 +1186,6 @@
   top: 0;
   z-index: 100;
   background: var(--bg);
-}
-.tabs {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: transparent;
-    display: flex;
-    justify-content: space-around;
-    padding: 8px 0;
-    z-index: 100;
-    margin: 0;
 }
 .tab {
     flex: 1;
@@ -1389,10 +1346,6 @@ body { padding-bottom: 70px; }
   gap: 6px;
 }
 
-/* === Month btn справа от Активность === */
-
-/* === Period filter вниз === */
-
 /* === Month/year: без рамки, большой шрифт === */
 .month-year-wrap {
   margin-left: auto;
@@ -1412,119 +1365,6 @@ body { padding-bottom: 70px; }
 }
 
 #content-projects { padding-top: 16px; }
-
-/* Нижняя навигация */
-.tabs {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--bg);
-
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    z-index: 100;
-    margin: 0;
-}
-.tabs .tab {
-    background: none;
-    border: none;
-    color: var(--fg-dim);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 11px;
-    gap: 4px;
-    cursor: pointer;
-    font-family: inherit;
-}
-.tabs .tab.tab-active {
-    color: var(--accent);
-}
-.tabs .tab svg {
-    width: 22px;
-    height: 22px;
-    stroke-width: 2.5;
-}
-body { padding-bottom: 70px; }
-
-/* Анимации для пасхалки */
-.laughing-emoji {
-    display: inline-block !important;
-    animation: laughAnim 0.8s infinite !important;
-}
-@keyframes laughAnim {
-    0% { transform: scale(1) rotate(0deg); }
-    25% { transform: scale(1.15) rotate(5deg); }
-    50% { transform: scale(1) rotate(0deg); }
-    75% { transform: scale(1.15) rotate(-5deg); }
-    100% { transform: scale(1) rotate(0deg); }
-}
-
-.angry-emoji {
-    display: inline-block !important;
-    animation: shakeAnim 0.6s infinite !important;
-}
-@keyframes shakeAnim {
-    0% { transform: rotate(0deg); }
-    20% { transform: rotate(15deg); }
-    40% { transform: rotate(-15deg); }
-    60% { transform: rotate(10deg); }
-    80% { transform: rotate(-10deg); }
-    100% { transform: rotate(0deg); }
-}
-
-/* Анимация пульсации для кнопки */
-.pulse-btn {
-    animation: pulse 1.5s infinite;
-}
-@keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74, 158, 255, 0.7); }
-    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(74, 158, 255, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74, 158, 255, 0); }
-}
-
-/* Отступ для маленьких кругов, чтобы не прилипали */
-.rings-grid {
-    margin-top: 20px !important;
-}
-
-/* Опускаем маленькие круги вместе с подписями */
-.hero-mini {
-    margin-top: 30px !important;
-}
-
-/* Анимация вылета для маленьких кругов */
-body.first-load .hero-mini .mini-block {
-    opacity: 0;
-    animation: slideInLeft 0.5s ease-out forwards;
-}
-
-/* Задержки для каждого блока (слева направо) */
-.hero-mini .mini-block:nth-child(1) { animation-delay: 0.1s; }
-.hero-mini .mini-block:nth-child(2) { animation-delay: 0.3s; }
-.hero-mini .mini-block:nth-child(3) { animation-delay: 0.5s; }
-
-@keyframes slideInLeft {
-    0% {
-        opacity: 0;
-        transform: translateX(-50px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* Анимация для большого круга */
-body.first-load .hero-rings {
-    opacity: 0;
-    animation: slideInLeft 0.6s ease-out forwards;
-    animation-delay: 0s;
-}
-
-/* Отключаем анимацию, если это не первый раз */
 
 /* Меняем местами кнопки (Аналитика слева, Открыть справа) */
 .project-actions {
@@ -1799,43 +1639,7 @@ body.first-load .hero-rings {
 .chart-bars-wrap {
   display: flex;
   align-items: flex-end;
-  justify-content: space-between; /* Равномерно распределяем столбики */
-  padding: 0;
-}
-
-.chart-col {
-  flex: 1; /* Каждый столбик занимает равную долю */
-  display: flex;
-  justify-content: center;
-}
-
-.chart-label {
-  flex: 1; /* Каждая дата занимает равную долю (как и столбик) */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-/* === ФИКС: Идеальное выравнивание столбиков и дат === */
-/* Контейнер со столбиками */
-.chart-bars-wrap {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between !important;
-  padding: 0 !important;
-}
-
-/* Каждый столбик */
-.chart-col {
-  flex: 1 !important;
-  display: flex;
-  justify-content: center;
-}
-
-/* Контейнер с датами (должен иметь такой же отступ слева, как ось Y) */
-
-/* Каждая дата */
+  justify-content: space-between; /* Каждая дата */
 .chart-label {
   flex: 1 !important;
   display: flex;
@@ -1844,60 +1648,6 @@ body.first-load .hero-rings {
   text-align: center;
 }
 
-/* ========================================= */
-/* ========================================= */
-
-/* 1. Общий контейнер графика */
-.chart-bars {
-  display: flex;
-  gap: 0;
-  margin: 12px 0 4px;
-  height: 180px;
-}
-
-/* 2. Ось Y (фиксированная ширина 30px) */
-.chart-y-axis {
-  width: 30px;
-  min-width: 30px;
-  padding-right: 4px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  font-size: 10px;
-  color: var(--fg-dim);
-  text-align: right;
-  box-sizing: border-box;
-}
-
-/* 3. Область со столбиками (начинается сразу после оси Y) */
-.chart-bars-wrap {
-  flex: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  border-left: 1px solid var(--border);
-  background-image: linear-gradient(to top, var(--border) 1px, transparent 1px);
-  background-size: 100% 25%;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-/* 4. Столбики (равномерно) */
-.chart-col {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  min-width: 0;
-}
-
-/* 5. Строка с подписями */
-
-/* 6. Пустышка, которая сдвигает даты ровно на ширину оси Y (30px) */
-
-/* 7. Контейнер с датами (занимает всё оставшееся место) */
 
 /* 8. Сама дата (равная доля, как и столбик) */
 .chart-label {
@@ -1909,83 +1659,6 @@ body.first-load .hero-rings {
   min-width: 0;
 }
 
-/* ========================================= */
-/* ========================================= */
-
-/* Общий контейнер */
-.chart-container {
-  margin: 12px 0;
-}
-
-/* Строка с осью Y и столбиками */
-.chart-bars {
-  display: flex;
-  height: 180px;
-}
-
-/* Ось Y (слева) */
-.chart-y-axis {
-  width: 30px;
-  min-width: 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  font-size: 10px;
-  color: var(--fg-dim);
-  text-align: right;
-  padding-right: 4px;
-  box-sizing: border-box;
-}
-
-/* Область со столбиками */
-.chart-bars-wrap {
-  flex: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  border-left: 1px solid var(--border);
-  background-image: linear-gradient(to top, var(--border) 1px, transparent 1px);
-  background-size: 100% 25%;
-  box-sizing: border-box;
-}
-
-/* Колонка столбика */
-.chart-col {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  min-width: 0;
-}
-
-/* Строка подписей (имеет тот же отступ слева, что и ось Y) */
-
-/* Отступ под ось Y */
-
-/* Контейнер с датами (занимает всё место после оси Y) */
-
-/* Сама дата */
-.chart-label {
-  flex: 1;
-  text-align: center;
-  font-size: 9px;
-  color: var(--fg-dim);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  line-height: 1.1;
-  min-width: 0;
-}
-
-.lbl-date { font-size: 10px; }
-.lbl-dow { font-size: 9px; opacity: 0.6; }
-
-/* Кнопки периодов и метрик */
-
-/* === ТОЧНАЯ ПРАВКА: Сдвиг контейнера с датами влево === */
-
-/* === Кнопки месяца и года === */
 
 /* === РАБОЧИЙ ГРАФИК === */
 .chart-bars {
@@ -2049,10 +1722,6 @@ body.first-load .hero-rings {
 .lbl-date { font-size: 10px; }
 .lbl-dow { font-size: 9px; opacity: 0.6; }
 
-/* Кнопки месяца/года */
-
-/* === Легенда и выделение столбика === */
-
 /* Плашка с цифрой (без рамки, просто текст) */
 
 .bar-label {
@@ -2079,13 +1748,6 @@ body.first-load .hero-rings {
   transition: all 0.2s ease;
 }
 
-/* === Сдвиг дат влево на 10px === */
-
-/* === Корректировка сдвига дат (итог: -4px) === */
-
-/* ========================================= */
-/* === ФИНАЛЬНОЕ ВЫРАВНИВАНИЕ ДАТ (v15) === */
-/* ========================================= */
 
 .chart-labels-row {
   display: flex;
@@ -2116,100 +1778,15 @@ body.first-load .hero-rings {
   min-width: 0;
 }
 
-/* === ФИКС: Одинаковый размер кнопок метрик и фильтров === */
-
-/* === КРАСИВЫЕ КНОПКИ МЕСЯЦА И ГОДА === */
-
-/* === ЕДИНЫЙ СТИЛЬ ДЛЯ ВСЕХ ФИЛЬТРОВ === */
-
-/* Убираем жесткие ограничения ширины, которые были раньше */
-
-/* === НИЖНИЕ КНОПКИ В СТИЛЕ ВЕРХНИХ === */
-
-/* === ЖЕСТКИЙ ФИКС НИЖНИХ КНОПОК (текстовый стиль) === */
-
-/* === ФИКС ОБРЕЗАННОГО ТЕКСТА В НИЖНИХ КНОПКАХ === */
-
-/* === ВЫРАВНИВАНИЕ ШРИФТА ВЕРХНИХ И НИЖНИХ КНОПОК === */
-
-/* === 4 КНОПКИ В РЯД === */
-
 /* === ЕДИНЫЙ ОТСТУП СВЕРХУ ДЛЯ ВСЕХ ВКЛАДОК === */
 #content, #content-diary, #content-projects, #content-activity {
   padding-top: 16px !important;
 }
-/* Убираем лишние отступы внутри графиков */
-
-/* === УБИРАЕМ СТРЕЛКИ И ЖИРНОСТЬ У МЕСЯЦА/ГОДА === */
-
-/* Если месяц/год активны (выбраны), делаем их белыми */
-
 /* === ЦЕНТРОВКА ВЕРХНЕГО МЕНЮ === */
 div[style*="justify-content: space-between"] {
   justify-content: center !important;
   gap: 16px !important;
 }
-/* Чтобы фильтры не прилипали к краям, даем им отступ */
-
-/* === ФИНАЛЬНАЯ ЦЕНТРОВКА (ПЕРЕБИВАЕТ ВСЕ) === */
-
-
-
-/* ========================================= */
-/* === ЧИСТЫЕ КНОПКИ ГРАФИКА (ФИНАЛ) === */
-/* ========================================= */
-
-/* Контейнер верхней панели */
-
-
-/* Группа кнопок периодов (7 дней / Месяц) */
-
-
-/* Группа месяца и года */
-
-
-/* Общий стиль для всех верхних кнопок */
-
-
-
-/* Нижние кнопки (Время / Сообщения / Скрины / Задачи) */
-
-
-
-
-/* === ЕДИНАЯ СЕТКА ДЛЯ ВЕРХНЕГО И НИЖНЕГО МЕНЮ === */
-
-
-
-
-
-
-/* === ЖЕСТКАЯ СЕТКА ДЛЯ ВЕРХНЕГО И НИЖНЕГО МЕНЮ === */
-
-
-/* Убираем старые флекс-контейнеры внутри верхнего меню, чтобы они не мешали */
-
-
-/* Текст в кнопках по центру */
-
-
-/* ========================================= */
-/* === АБСОЛЮТНОЕ ВЫРАВНИВАНИЕ МЕНЮ === */
-/* ========================================= */
-
-/* 1. Одинаковый шрифт для ВСЕХ кнопок */
-
-
-/* Активные кнопки чуть жирнее, но того же размера */
-
-
-/* 2. Одинаковые контейнеры (сетка 4 колонки) */
-
-
-/* 3. Заставляем внутренние группы верхнего меню подчиняться сетке */
-
-
-/* 4. Текст строго по центру своей ячейки */
 
 
 /* === ИДЕАЛЬНАЯ СЕТКА 4x1 === */
@@ -2246,10 +1823,6 @@ div[style*="justify-content: space-between"] {
   color: var(--fg) !important;
   font-weight: 600 !important;
 }
-
-/* === ОДИНАКОВЫЙ ОТСТУП СВЕРХУ И СНИЗУ ГРАФИКА === */
-
-
 
 /* === ИДЕАЛЬНАЯ СЕТКА С ВЫРАВНИВАНИЕМ ПО ЛЕВОМУ КРАЮ ГРАФИКА === */
 .top-filter-row, .metric-switch {
@@ -2324,9 +1897,6 @@ div[style*="justify-content: space-between"] {
 }
 
 
-/* ========================================= */
-/* === ЧИСТОЕ ВЫРАВНИВАНИЕ МЕНЮ (ФИНАЛ) === */
-/* ========================================= */
 
 /* Оба меню в одну жесткую сетку */
 .top-filter-row, 
