@@ -1639,7 +1639,8 @@ body { padding-bottom: 70px; }
 .chart-bars-wrap {
   display: flex;
   align-items: flex-end;
-  justify-content: space-between; /* Каждая дата */
+  justify-content: space-between;
+}
 .chart-label {
   flex: 1 !important;
   display: flex;
@@ -2020,6 +2021,8 @@ div[style*="justify-content: space-between"] {
 .cal-day.today { font-weight: 700; color: var(--accent); }
 .cal-num { font-size: 14px; font-weight: 500; color: var(--fg); }
 .cal-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; }
+
+
 
 .cal-day.selected {
   background: var(--bg3);
