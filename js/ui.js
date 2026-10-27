@@ -138,6 +138,7 @@ function renderDiary() {
         miniGrid.innerHTML += `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:9px; border-radius:50%; background:${hasData ? 'var(--accent)' : 'transparent'}; color:${hasData ? '#fff' : 'var(--fg-dim)'}">${d.getDate()}</div>`;
       }
       mDiv.style.cursor = 'pointer';
+      miniGrid.style.pointerEvents = 'none';
       mDiv.addEventListener('click', () => {
         CALENDAR_VIEW = 'month';
         CALENDAR_OFFSET = m - new Date().getMonth();
@@ -163,18 +164,25 @@ function renderDiary() {
       num.textContent = d.getDate();
       dayCell.appendChild(num);
 
-      if (dayStats[dateStr]) {
-        const dot = document.createElement('div');
-        dot.className = 'cal-dot';
-        dayCell.appendChild(dot);
-      }
-      
-      // ВЫДЕЛЕНИЕ И КЛИК
+      // ВЫДЕЛЕНИЕ
       if (dateStr === CALENDAR_SELECTED_DAY) {
         dayCell.style.background = 'var(--bg3)';
         dayCell.style.border = '1px solid var(--accent)';
       }
-      dayCell.addEventListener('click', () => {
+      
+      // Делаем цифру некликабельной, чтобы клик всегда попадал в dayCell
+      num.style.pointerEvents = 'none';
+      
+      if (dayStats[dateStr]) {
+        const dot = document.createElement('div');
+        dot.className = 'cal-dot';
+        dot.style.pointerEvents = 'none'; // Точка тоже не перехватывает клик
+        dayCell.appendChild(dot);
+      }
+      
+      // КЛИК
+      dayCell.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (CALENDAR_SELECTED_DAY === dateStr) CALENDAR_SELECTED_DAY = null;
         else CALENDAR_SELECTED_DAY = dateStr;
         renderDiary();
