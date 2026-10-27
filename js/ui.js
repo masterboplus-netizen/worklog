@@ -470,235 +470,216 @@ function renderProjects() {
 
 function renderActivityPage() {
     const c = document.getElementById('content-activity');
-    if (!c || !window.DATA) return;
+    if (!c) return;
     c.innerHTML = '';
 
-    // 1. НАВИГАЦИЯ (ТЕКСТ)
-    const navRow = document.createElement('div');
-    navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:16px; margin-bottom: 16px; font-size:20px; font-weight:600; color:var(--fg);';
+    // 1. ВЕРХНИЕ ФИЛЬТРЫ (только 7 дней и Месяц)
+    const filters = document.createElement('div');
+    filters.style.cssText = 'display:flex; gap:8px; margin-bottom:16px; padding: 0 16px;';
     
-    const monthSpan = document.createElement('span');
-    monthSpan.id = 'chart-month-label';
-    monthSpan.style.cssText = 'cursor:pointer;';
-    const yearSpan = document.createElement('span');
-    yearSpan.id = 'chart-year-label';
-    yearSpan.style.cssText = 'cursor:pointer;';
+    const periods = [[7, '7 дней'], [30, 'Месяц']];
+    filters.innerHTML = periods.map(([n, label]) =>
+      '<button class="cal-btn' + (CHART_PERIOD === n ? ' active' : '') + '" data-period="' + n + '" style="flex:1; text-align:center;">' + label + '</button>'
+    ).join('');
+    
+    c.appendChild(filters);
 
-    if (!CHART_STATE.currentMonth) {
-        const now = new Date();
-        CHART_STATE.currentMonth = now.getMonth();
-        CHART_STATE.currentYear = now.getFullYear();
-    }
+    // 2. НАВИГАЦИЯ ПО ДАТЕ (как в календаре: [<-] Октябрь 2026 [->])
+    const navRow = document.createElement('div');
+    navRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding: 0 16px; margin-bottom: 16px;';
 
+    const prevBtn = document.createElement('button');
+    prevBtn.id = 'chart-prev';
+    prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+    prevBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); padding:8px; cursor:pointer;';
+
+    const nextBtn = document.createElement('button');
+    nextBtn.id = 'chart-next';
+    nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+    nextBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); padding:8px; cursor:pointer;';
+
+    const title = document.createElement('div');
+    title.style.cssText = 'font-size:20px; font-weight:600; color:var(--fg); text-align:center; cursor:pointer;';
+    
+    const d = new Date();
+    d.setMonth(d.getMonth() + CHART_OFFSET_MONTHS);
     const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-    monthSpan.textContent = months[CHART_STATE.currentMonth];
-    yearSpan.textContent = CHART_STATE.currentYear;
+    title.textContent = months[d.getMonth()] + ' ' + d.getFullYear();
 
-    monthSpan.addEventListener('click', () => openMonthPicker());
-    yearSpan.addEventListener('click', () => openYearPicker());
+    // Клик по заголовку открывает выбор месяца (как в календаре)
+    title.addEventListener('click', () => openMonthPicker());
 
-    navRow.appendChild(monthSpan);
-    navRow.appendChild(yearSpan);
+    navRow.appendChild(prevBtn);
+    navRow.appendChild(title);
+    navRow.appendChild(nextBtn);
     c.appendChild(navRow);
 
-    // 2. ЛЕНТА
-    const scrollContainer = document.createElement('div');
-    scrollContainer.className = 'tl-container';
-    scrollContainer.id = 'tl-scroll';
-    
-    let firstSessionDate = new Date();
-    if (window.DATA.sessions && window.DATA.sessions.length > 0) {
-        const sorted = window.DATA.sessions.slice().sort((a, b) => a.date.localeCompare(b.date));
-        firstSessionDate = new Date(sorted[0].date + 'T00:00:00');
+    // 3. САМ ГРАФИК
+    const chartDiv = document.createElement('div');
+    chartDiv.style.padding = '0 16px 16px 16px';
+    chartDiv.appendChild(renderChart(true));
+    c.appendChild(chartDiv);
+
+    // 4. ОБРАБОТЧИКИ
+    prevBtn.addEventListener('click', () => {
+      // Если выбран режим "Месяц" (30 дней) - листаем на месяц назад
+      if (CHART_PERIOD === 30) CHART_OFFSET_MONTHS--;
+      else CHART_OFFSET_MONTHS--; // Для 7 дней тоже сдвигаем на месяц (так как в графике смотрятся 7 дней от текущего)
+      CHART_SELECTED = null;
+      renderActivityPage();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (CHART_PERIOD === 30) CHART_OFFSET_MONTHS++;
+      else CHART_OFFSET_MONTHS++;
+      CHART_SELECTED = null;
+      renderActivityPage();
+    });
+
+    // Делегирование событий (для кнопок периодов и метрик)
+    if (!c._delegated) {
+        c._delegated = true;
+        c.addEventListener('click', (e) => {
+            const periodBtn = e.target.closest('.cal-btn[data-period]');
+            if (periodBtn) {
+                CHART_PERIOD = parseInt(periodBtn.dataset.period, 10);
+                CHART_SELECTED = null;
+                renderActivityPage();
+                return;
+            }
+            const metricBtn = e.target.closest('.cal-btn[data-metric]');
+            if (metricBtn) {
+                CHART_METRIC = metricBtn.dataset.metric;
+                CHART_SELECTED = null;
+                renderActivityPage();
+                return;
+            }
+            const bar = e.target.closest('.chart-bar');
+            if (bar) {
+                const wasSelected = bar.classList.contains('selected');
+                CHART_SELECTED = wasSelected ? null : bar.dataset.date;
+                renderActivityPage();
+            }
+        });
     }
-    const today = new Date();
-    today.setHours(0,0,0,0);
-
-    let iterDate = new Date(firstSessionDate);
-    const allDates = [];
-    
-    while (iterDate <= today) {
-        const dateStr = _localDate(iterDate);
-        allDates.push(dateStr);
-
-        const col = document.createElement('div');
-        col.className = 'tl-col';
-        col.dataset.date = dateStr;
-
-        const barDiv = document.createElement('div');
-        barDiv.className = 'tl-bar';
-        
-        const labelDiv = document.createElement('div');
-        labelDiv.className = 'tl-label';
-        const dayNum = iterDate.getDate();
-        const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
-        labelDiv.innerHTML = `<div>${dayNum}</div><div style="font-size:9px;opacity:0.6;">${dowNames[iterDate.getDay()]}</div>`;
-
-        col.appendChild(barDiv);
-        col.appendChild(labelDiv);
-        scrollContainer.appendChild(col);
-
-        iterDate.setDate(iterDate.getDate() + 1);
-    }
-
-    c.appendChild(scrollContainer);
-
-    // 3. НИЖНИЕ КНОПКИ
-    const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
-    const metricHTML = metrics.map(([key, label]) =>
-        '<button class="cal-btn' + (CHART_STATE.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 6px 4px; font-size: 13px;">' + label + '</button>'
-    ).join('');
-
-    const metricBar = document.createElement('div');
-    metricBar.style.cssText = 'display:flex; gap:8px; margin: 16px 16px; justify-content: space-between;';
-    metricBar.innerHTML = metricHTML;
-    c.appendChild(metricBar);
-
-    // 4. ЛОГИКА
-    const updateChart = () => {
-        const scrollLeft = scrollContainer.scrollLeft;
-        const containerWidth = scrollContainer.clientWidth;
-        const colWidth = 44 + 8;
-
-        const startIndex = Math.floor(scrollLeft / colWidth);
-        const endIndex = Math.min(allDates.length - 1, Math.ceil((scrollLeft + containerWidth) / colWidth));
-
-        if (allDates[startIndex]) {
-            const d = new Date(allDates[startIndex] + 'T00:00:00');
-            monthSpan.textContent = months[d.getMonth()];
-            yearSpan.textContent = d.getFullYear();
-            CHART_STATE.currentMonth = d.getMonth();
-            CHART_STATE.currentYear = d.getFullYear();
-        }
-
-        let maxVal = 0;
-        for (let i = startIndex; i <= endIndex && i < allDates.length; i++) {
-            const dateStr = allDates[i];
-            let v = 0;
-            for (const sess of window.DATA.sessions || []) {
-                if (sess.date === dateStr) {
-                    if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
-                    else if (CHART_STATE.metric === 'events') v += sess.events || 0;
-                    else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
-                    else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
-                }
-            }
-            if (v > maxVal) maxVal = v;
-        }
-        if (maxVal === 0) maxVal = CHART_STATE.metric === 'duration' ? 720 : 10;
-
-        const cols = scrollContainer.querySelectorAll('.tl-col');
-        cols.forEach(col => {
-            const dateStr = col.dataset.date;
-            let v = 0;
-            for (const sess of window.DATA.sessions || []) {
-                if (sess.date === dateStr) {
-                    if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
-                    else if (CHART_STATE.metric === 'events') v += sess.events || 0;
-                    else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
-                    else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
-                }
-            }
-            const h = v ? Math.max(2, Math.round(v / maxVal * 100)) : 0;
-            col.querySelector('.tl-bar').style.height = h + '%';
-            
-            if (dateStr === CHART_STATE.selectedDay) {
-                const bar = col.querySelector('.tl-bar');
-                bar.classList.add('selected');
-                const oldLbl = bar.querySelector('.tl-legend');
-                if (oldLbl) oldLbl.remove();
-                const text = CHART_STATE.metric === 'duration' ? fmtH(v) : String(v);
-                const legend = document.createElement('div');
-                legend.className = 'tl-legend';
-                legend.textContent = text;
-                bar.appendChild(legend);
-            }
-        });
-    };
-
-    scrollContainer.addEventListener('scroll', () => {
-        clearTimeout(scrollContainer._scrollTimeout);
-        scrollContainer._scrollTimeout = setTimeout(() => {
-            if (CHART_STATE.selectedDay) {
-                CHART_STATE.selectedDay = null;
-                scrollContainer.querySelectorAll('.tl-bar').forEach(b => {
-                    b.classList.remove('selected');
-                    const lbl = b.querySelector('.tl-legend');
-                    if (lbl) lbl.remove();
-                });
-            }
-            updateChart();
-        }, 100);
-    });
-
-    scrollContainer.addEventListener('click', (e) => {
-        const col = e.target.closest('.tl-col');
-        if (!col) return;
-        
-        const dateStr = col.dataset.date;
-        const bar = col.querySelector('.tl-bar');
-
-        if (CHART_STATE.selectedDay === dateStr) {
-            CHART_STATE.selectedDay = null;
-            bar.classList.remove('selected');
-            const lbl = bar.querySelector('.tl-legend');
-            if (lbl) lbl.remove();
-            return;
-        }
-
-        scrollContainer.querySelectorAll('.tl-bar').forEach(b => {
-            b.classList.remove('selected');
-            const lbl = b.querySelector('.tl-legend');
-            if (lbl) lbl.remove();
-        });
-
-        CHART_STATE.selectedDay = dateStr;
-        bar.classList.add('selected');
-
-        let v = 0;
-        for (const sess of window.DATA.sessions || []) {
-            if (sess.date === dateStr) {
-                if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
-                else if (CHART_STATE.metric === 'events') v += sess.events || 0;
-                else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
-                else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
-            }
-        }
-        const text = CHART_STATE.metric === 'duration' ? fmtH(v) : String(v);
-        const legend = document.createElement('div');
-        legend.className = 'tl-legend';
-        legend.textContent = text;
-        bar.appendChild(legend);
-    });
-
-    c.querySelectorAll('.cal-btn[data-metric]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            CHART_STATE.metric = btn.dataset.metric;
-            const currentScroll = scrollContainer.scrollLeft;
-            renderActivityPage();
-            setTimeout(() => {
-                const newScroll = document.getElementById('tl-scroll');
-                if (newScroll) {
-                    newScroll.scrollLeft = currentScroll;
-                    updateChart();
-                }
-            }, 50);
-        });
-    });
-
-    setTimeout(() => {
-        scrollContainer.scrollTo({ left: scrollContainer.scrollWidth, behavior: 'smooth' });
-        setTimeout(() => { updateChart(); }, 600);
-    }, 100);
 }
 
-function renderDashboard() {
-  if (!window.DATA) return;
-  const c = document.getElementById('content');
-  if (!c) return;
-  c.innerHTML = '';
-  c.appendChild(renderHeroRings());
+function renderChart(hideFilters = false) {
+  const container = document.createElement('div');
+  container.className = 'chart-container';
+
+  // 2. Формируем список дней
+  const days = [];
+  const now = new Date();
+  now.setMonth(now.getMonth() + CHART_OFFSET_MONTHS);
+
+  if (CHART_PERIOD === 30) {
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const lastDay = new Date(year, month + 1, 0);
+    for (let i = 0; i < lastDay.getDate(); i++) {
+      days.push(_localDate(new Date(year, month, i + 1)));
+    }
+  } else {
+    const totalDays = CHART_PERIOD === 1 ? 1 : CHART_PERIOD;
+    for (let i = totalDays - 1; i >= 0; i--) {
+      days.push(_localDate(new Date(now - i * 86400000)));
+    }
+  }
+
+  // 3. Считаем значения
+  const byDay = {};
+  for (const ss of window.DATA.sessions || []) {
+    let v = 0;
+    if (CHART_METRIC === 'duration') v = ss.duration_min || 0;
+    else if (CHART_METRIC === 'events') v = ss.events || 0;
+    else if (CHART_METRIC === 'screens') v = ss.screens || 0;
+    else if (CHART_METRIC === 'tasks') v = ss.tasks_done || 0;
+    byDay[ss.date] = (byDay[ss.date] || 0) + v;
+  }
+
+  // 4. Строим график
+  const maxVal = Math.max(1, ...days.map(d => byDay[d] || 0));
+  let top = 60;
+  if (maxVal > 60) top = Math.ceil(maxVal / 60) * 60;
+  const step = top / 4;
+
+  const chartBars = document.createElement('div');
+  chartBars.className = 'chart-bars';
+
+  const yAxis = document.createElement('div');
+  yAxis.className = 'chart-y-axis';
+  let yAxisHTML = '';
+  for (let i = 4; i >= 0; i--) {
+    const val = step * i;
+    const label = CHART_METRIC === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
+    yAxisHTML += '<div class="chart-grid-line"><span>' + label + '</span></div>';
+  }
+  yAxis.innerHTML = yAxisHTML;
+  chartBars.appendChild(yAxis);
+
+  const barsWrap = document.createElement('div');
+  barsWrap.className = 'chart-bars-wrap';
+
+  for (const d of days) {
+    const val = byDay[d] || 0;
+    const h = val ? Math.max(2, Math.round(val / top * 100)) : 0;
+    const isSel = CHART_SELECTED === d;
+    const lblText = val ? (CHART_METRIC === 'duration' ? (Math.floor(val/60) + 'ч ' + (val%60) + 'м') : String(val)) : '';
+
+    const col = document.createElement('div');
+    col.className = 'chart-col';
+    col.innerHTML = 
+      '<div class="chart-bar' + (val ? '' : ' empty') + (isSel ? ' selected' : '') + '" ' +
+      'data-date="' + d + '" style="height:' + h + '%">' +
+        ((isSel && lblText) ? '<div class="bar-label">' + lblText + '</div>' : '') +
+      '</div>';
+    barsWrap.appendChild(col);
+  }
+  chartBars.appendChild(barsWrap);
+  container.appendChild(chartBars);
+
+  // 5. Подписи дат
+  const labelsRow = document.createElement('div');
+  labelsRow.className = 'chart-labels-row';
+  const spacer = document.createElement('div');
+  spacer.className = 'chart-spacer';
+  labelsRow.appendChild(spacer);
+  const labelsWrap = document.createElement('div');
+  labelsWrap.className = 'chart-labels';
+  const isShort = days.length <= 14;
+  const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+
+  for (const d of days) {
+    const lbl = document.createElement('div');
+    lbl.className = 'chart-label';
+    const dayNum = parseInt(d.slice(8, 10), 10);
+    if (isShort || dayNum === 1 || dayNum % 5 === 0) {
+      const dow = dowNames[new Date(d + 'T00:00:00').getDay()];
+      lbl.innerHTML = '<div class="lbl-date">' + dayNum + '</div><div class="lbl-dow">' + dow + '</div>';
+    }
+    labelsWrap.appendChild(lbl);
+  }
+  labelsRow.appendChild(labelsWrap);
+  container.appendChild(labelsRow);
+
+  // 6. Нижние кнопки (кнопки-таблетки)
+  const metrics = [
+    ['duration', 'Время'],
+    ['events', 'Сообщения'],
+    ['screens', 'Скрины'],
+    ['tasks', 'Задачи']
+  ];
+    const metricHTML = metrics.map(([key, label]) =>
+    '<button class="cal-btn' + (CHART_METRIC === key ? ' active' : '') + '" data-metric="' + key + '" style="flex: 1 1 0; min-width: 0; padding: 6px 2px !important; font-size: 12px !important; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
+  ).join('');
+
+  const metricBar = document.createElement('div');
+  metricBar.style.cssText = 'display:flex; gap:8px; margin: 16px 0 0 0; overflow-x: auto; padding-bottom: 4px;';
+  metricBar.innerHTML = metricHTML;
+  container.appendChild(metricBar);
+
+  return container;
 }
 
 function renderDashboard() {
