@@ -670,8 +670,8 @@ function renderChart(hideFilters = false) {
     ['screens', 'Скрины'],
     ['tasks', 'Задачи']
   ];
-  const metricHTML = metrics.map(([key, label]) =>
-    '<button class="cal-btn' + (CHART_METRIC === key ? ' active' : '') + '" data-metric="' + key + '" style="white-space:nowrap;">' + label + '</button>'
+    const metricHTML = metrics.map(([key, label]) =>
+    '<button class="cal-btn' + (CHART_METRIC === key ? ' active' : '') + '" data-metric="' + key + '" style="flex: 1 1 0; min-width: 0; padding: 6px 2px !important; font-size: 12px !important; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
   ).join('');
 
   const metricBar = document.createElement('div');
