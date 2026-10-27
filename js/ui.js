@@ -29,6 +29,8 @@ function renderDiary() {
   filters.innerHTML = `
     <button class="cal-btn ${CALENDAR_VIEW === 'week' ? 'active' : ''}" data-view="week">Неделя</button>
     <button class="cal-btn ${CALENDAR_VIEW === 'month' ? 'active' : ''}" data-view="month">Месяц</button>
+    <button class="cal-btn ${CALENDAR_VIEW === 'year' ? 'active' : ''}" data-view="year">Год</button>
+    <button class="cal-btn ${CALENDAR_VIEW === '30days' ? 'active' : ''}" data-view="30days">30 дней</button>
   `;
   topBar.appendChild(filters);
 
@@ -37,11 +39,17 @@ function renderDiary() {
   title.style.cssText = 'font-size: 24px; font-weight: 600; margin: 16px 0 8px;';
   
   const now = new Date();
-  let currentDisplayDate = new Date(now.getFullYear(), now.getMonth() + (CALENDAR_VIEW === 'month' ? CALENDAR_OFFSET : 0), now.getDate() + (CALENDAR_VIEW === 'week' ? CALENDAR_OFFSET * 7 : 0));
+  let currentDisplayDate = new Date(now.getFullYear(), now.getMonth() + (CALENDAR_VIEW === 'month' ? CALENDAR_OFFSET : 0), now.getDate() + (CALENDAR_VIEW === 'week' ? CALENDAR_OFFSET * 7 : (CALENDAR_VIEW === '30days' ? CALENDAR_OFFSET : 0)) + (CALENDAR_VIEW === 'year' ? CALENDAR_OFFSET * 30 : 0));
   
   const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
   if (CALENDAR_VIEW === 'month') {
     title.textContent = months[currentDisplayDate.getMonth()] + ' ' + currentDisplayDate.getFullYear();
+  } else if (CALENDAR_VIEW === 'year') {
+    title.textContent = currentDisplayDate.getFullYear() + ' год';
+  } else if (CALENDAR_VIEW === '30days') {
+    const end = new Date(currentDisplayDate);
+    end.setDate(end.getDate() + 29);
+    title.textContent = currentDisplayDate.getDate() + ' ' + months[currentDisplayDate.getMonth()].slice(0,3) + ' – ' + end.getDate() + ' ' + months[end.getMonth()].slice(0,3);
   } else {
     const startOfWeek = new Date(currentDisplayDate);
     startOfWeek.setDate(currentDisplayDate.getDate() - (currentDisplayDate.getDay() === 0 ? 6 : currentDisplayDate.getDay() - 1));
@@ -77,6 +85,10 @@ function renderDiary() {
     const month = currentDisplayDate.getMonth();
     startDate = new Date(year, month, 1);
     endDate = new Date(year, month + 1, 0);
+  } else if (CALENDAR_VIEW === '30days') {
+    startDate = new Date(currentDisplayDate);
+    endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 29);
   } else {
     startDate = new Date(currentDisplayDate);
     startDate.setDate(currentDisplayDate.getDate() - (currentDisplayDate.getDay() === 0 ? 6 : currentDisplayDate.getDay() - 1));
@@ -84,53 +96,82 @@ function renderDiary() {
     endDate.setDate(startDate.getDate() + 6);
   }
 
-  // Добавляем пустые ячейки до первого дня
-  const firstDow = startDate.getDay() === 0 ? 6 : startDate.getDay() - 1;
-  for (let i = 0; i < firstDow; i++) {
-    const empty = document.createElement('div');
-    grid.appendChild(empty);
-  }
-
   // Собираем статистику по дням
   const dayStats = {};
   for (const s of window.DATA.sessions || []) {
     dayStats[s.date] = (dayStats[s.date] || 0) + (s.duration_min || 0);
   }
-
   const todayStr = _localDate(new Date());
 
-  for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-    const dateStr = _localDate(d);
-    const dayCell = document.createElement('div');
-    dayCell.className = 'cal-day';
-    if (dateStr === todayStr) dayCell.classList.add('today');
+  if (CALENDAR_VIEW === 'year') {
+    grid.style.display = 'none'; // Скрываем основную сетку
+    const yearGrid = document.createElement('div');
+    yearGrid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px;';
     
-    const num = document.createElement('div');
-    num.className = 'cal-num';
-    num.textContent = d.getDate();
-    dayCell.appendChild(num);
-
-    if (dayStats[dateStr]) {
-      const dot = document.createElement('div');
-      dot.className = 'cal-dot';
-      dot.style.background = 'var(--accent)';
-      dayCell.appendChild(dot);
+    for (let m = 0; m < 12; m++) {
+      const mDiv = document.createElement('div');
+      mDiv.innerHTML = '<div style="font-size:12px;color:var(--fg-dim);margin-bottom:4px;text-align:center;">' + months[m].slice(0,3) + '</div>';
+      const miniGrid = document.createElement('div');
+      miniGrid.style.cssText = 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;';
+      
+      const mStart = new Date(currentDisplayDate.getFullYear(), m, 1);
+      const mEnd = new Date(currentDisplayDate.getFullYear(), m + 1, 0);
+      const firstDow = mStart.getDay() === 0 ? 6 : mStart.getDay() - 1;
+      
+      for (let i = 0; i < firstDow; i++) {
+        miniGrid.innerHTML += '<div></div>';
+      }
+      for (let d = new Date(mStart); d <= mEnd; d.setDate(d.getDate() + 1)) {
+        const ds = _localDate(d);
+        let dotColor = 'transparent';
+        if (dayStats[ds]) dotColor = 'var(--accent)';
+        miniGrid.innerHTML += `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:50%; background:${dotColor}; opacity:${dotColor==='transparent'?0:1}"></div>`;
+      }
+      mDiv.appendChild(miniGrid);
+      yearGrid.appendChild(mDiv);
     }
-    grid.appendChild(dayCell);
-  }
+    c.insertBefore(yearGrid, listDiv); // Вставляем перед списком
+  } else {
+    // Добавляем пустые ячейки до первого дня
+    const firstDow = startDate.getDay() === 0 ? 6 : startDate.getDay() - 1;
+    for (let i = 0; i < firstDow; i++) {
+      const empty = document.createElement('div');
+      grid.appendChild(empty);
+    }
 
-  c.appendChild(grid);
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      const dateStr = _localDate(d);
+      const dayCell = document.createElement('div');
+      dayCell.className = 'cal-day';
+      if (dateStr === todayStr) dayCell.classList.add('today');
+      
+      const num = document.createElement('div');
+      num.className = 'cal-num';
+      num.textContent = d.getDate();
+      dayCell.appendChild(num);
+
+      if (dayStats[dateStr]) {
+        const dot = document.createElement('div');
+        dot.className = 'cal-dot';
+        dot.style.background = 'var(--accent)';
+        dayCell.appendChild(dot);
+      }
+      grid.appendChild(dayCell);
+    }
+    c.appendChild(grid);
+  }
 
   // Список сессий (упрощенный, выводим все для выбранного периода)
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '24px';
   
   const filteredSessions = (window.DATA.sessions || []).filter(s => {
+    const sd = new Date(s.date + 'T00:00:00');
     if (CALENDAR_VIEW === 'month') {
-      const sd = new Date(s.date + 'T00:00:00');
       return sd.getFullYear() === currentDisplayDate.getFullYear() && sd.getMonth() === currentDisplayDate.getMonth();
+    } else if (CALENDAR_VIEW === 'year') {
+      return sd.getFullYear() === currentDisplayDate.getFullYear();
     } else {
-      const sd = new Date(s.date + 'T00:00:00');
       return sd >= startDate && sd <= endDate;
     }
   }).sort((a, b) => (b.date + (b.start||'')).localeCompare(a.date + (a.start||'')));
@@ -170,8 +211,18 @@ function renderDiary() {
   
   const prevBtn = document.getElementById('cal-prev');
   const nextBtn = document.getElementById('cal-next');
-  if (prevBtn) prevBtn.addEventListener('click', () => { CALENDAR_OFFSET--; renderDiary(); });
-  if (nextBtn) nextBtn.addEventListener('click', () => { CALENDAR_OFFSET++; renderDiary(); });
+  if (prevBtn) prevBtn.addEventListener('click', () => { 
+    if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET -= 12; 
+    else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30;
+    else CALENDAR_OFFSET--; 
+    renderDiary(); 
+  });
+  if (nextBtn) nextBtn.addEventListener('click', () => { 
+    if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET += 12; 
+    else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30;
+    else CALENDAR_OFFSET++; 
+    renderDiary(); 
+  });
 }
 
 function formatDiaryDate(iso) {
