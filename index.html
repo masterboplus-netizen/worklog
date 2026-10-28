@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<style>
-  .top-filter-row, .metric-switch { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 0 !important; width: 100% !important; padding: 0 16px !important; box-sizing: border-box !important; margin: 0 0 16px 0 !important; }
-  .period-btn, .metric-btn, .month-btn, .year-btn { font-size: 14px !important; font-weight: 500 !important; padding: 4px 0 !important; background: transparent !important; border: none !important; color: var(--fg-dim) !important; text-align: center !important; width: 100% !important; }
-  .period-btn.active, .metric-btn.active { color: var(--fg) !important; font-weight: 600 !important; }
-</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#0d1117">
@@ -16,28 +11,24 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="css/base.css?v=189">
-<link rel="stylesheet" href="css/components.css?v=310">
+<link rel="stylesheet" href="css/components.css?v=311">
 </head>
 <body>
 <div id="app"></div>
 
-<div id="pin-screen" class="screen">
-<div class="pin-box">
-<img src="icon.svg" alt="" class="pin-logo">
-<h1>Хераборина</h1>
-<p class="pin-sub">Введи PIN</p>
-<div id="pin-display" class="pin-display"></div>
-<div class="pin-pad">
-<button data-d="1">1</button><button data-d="2">2</button><button data-d="3">3</button>
-<button data-d="4">4</button><button data-d="5">5</button><button data-d="6">6</button>
-<button data-d="7">7</button><button data-d="8">8</button><button data-d="9">9</button>
-<button data-d="clear" class="pin-fn">C</button><button data-d="0">0</button><button data-d="del" class="pin-fn">⌫</button>
-</div>
-<div id="pin-error" class="pin-error"></div>
-<p class="pin-hint">PIN не хранится на сервере.<br>Данные расшифровываются локально.</p>
-</div>
+<!-- Экран СЕЙФА -->
+<div id="scroll-pin-screen" class="screen active">
+  <div id="safe-dial-container">
+    <div class="safe-dial-hitbox" id="safe-dial-hitbox"></div>
+    <div id="safe-dial-touch-effect"></div>
+    <svg width="220" height="220" viewBox="0 0 220 220" style="position: absolute; top: 0; left: 0;">
+      <circle cx="110" cy="110" r="100" fill="none" stroke="rgba(255, 165, 0, 0.1)" stroke-width="10" />
+      <circle id="safe-dial-ring" cx="110" cy="110" r="100" fill="none" stroke="#FFA500" stroke-width="10" stroke-dasharray="0 1000" />
+    </svg>
+  </div>
 </div>
 
+<!-- Дашборд (скрыт по умолчанию) -->
 <div id="dashboard" class="screen hidden">
 <header class="topbar">
   <div class="logo" id="logo-btn" style="cursor: pointer;">
@@ -70,11 +61,7 @@
 <div id="loading" class="screen hidden">
 <div class="spinner"></div>
 <p>Расшифровка…</p>
-<div class="footer" style="margin-top: auto; padding-bottom: 20px; text-align: center; color: var(--fg-dim); font-size: 11px; width: 100%;">
-  <div class="footer-line">Хераборина v<span id="app-version">...</span></div>
-  <div class="footer-authors">Product of Andrey Sorokin · Design & idea Merkulova Karina</div>
-</div> <!-- Закрываем footer -->
-</div> <!-- Закрываем #loading -->
+</div>
 
 <nav class="tabs" style="display: flex;">
   <button id="tab-dashboard" class="tab tab-active" data-tab="dashboard"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Дашборд</button>
@@ -83,50 +70,16 @@
   <button id="tab-activity" class="tab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>График</button>
   <button id="tab-profile" class="tab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Профиль</button>
 </nav>
-</div>
 
 <script src="crypto.js?v=204"></script>
 <script src="js/ui.js?v=288"></script>
 <script src="js/chart.js?v=222"></script>
 <script src="js/auth.js?v=205"></script>
-<script src="app.js?v=288"></script>
+<script src="app.js?v=290"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=205', { updateViaCache: 'none' }).catch(function(){});
 }
 </script>
-
-
-
-</div>
-
-
-
-</div>
-
-
-<div id="scroll-pin-screen" class="screen">
-  <!-- Только кольцо, без логотипов и текста -->
-  
-    <div id="safe-dial-container">
-      <!-- Невидимая зона для удобного захвата -->
-      <div class="safe-dial-hitbox" id="safe-dial-hitbox"></div>
-      
-      <!-- Эффект лупы -->
-      <div id="safe-dial-touch-effect"></div>
-      
-      <!-- Само кольцо -->
-      <svg width="220" height="220" viewBox="0 0 220 220" style="position: absolute; top: 0; left: 0;">
-        <!-- Фоновое кольцо -->
-        <circle cx="110" cy="110" r="100" fill="none" stroke="rgba(255, 165, 0, 0.1)" stroke-width="10" />
-        <!-- Активное кольцо -->
-        <circle id="safe-dial-ring" cx="110" cy="110" r="100" fill="none" stroke="#FFA500" stroke-width="10" stroke-dasharray="0 1000" />
-      </svg>
-    </div>
-    
-    </svg>
-  </div>
-</div>
-
 </body>
 </html>

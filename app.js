@@ -22,10 +22,7 @@ if (document.readyState === 'loading') {
 }
 
 async function init() {
-  setupPinPad();
   
-  const btnLock = $('#btn-lock');
-  if (btnLock) btnLock.addEventListener('click', lock);
   
   const btnHeart = $('#btn-heart');
   if (btnHeart) btnHeart.addEventListener('click', showCreators);

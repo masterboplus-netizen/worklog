@@ -1,15 +1,7 @@
 /* Worklog — стили компонентов */
 
-#pin-screen {
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-.pin-box {
-  text-align: center;
-  max-width: 340px;
-  width: 100%;
-}
+
+
 .pin-logo { width: 80px; height: 80px; margin-bottom: 12px; }
 .pin-box h1 {
   font-size: 28px;
@@ -40,12 +32,7 @@
   transform: scale(1.1);
 }
 
-.pin-pad {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
 
-}
 .pin-pad button {
   aspect-ratio: 1;
   border: 1px solid var(--border);
@@ -791,10 +778,7 @@
 }
 
 /* === PIN-пад: компактнее (v10) === */
-.pin-box {
-  max-width: 340px;
-  padding: 16px;
-}
+
 .pin-logo {
   width: 56px;
   height: 56px;
@@ -811,11 +795,7 @@
 .pin-display {
 
 }
-.pin-pad {
-  gap: 6px;
-  max-width: 320px;
-  margin: 0 auto;
-}
+
 .pin-pad button {
   font-size: 22px;
   border-radius: 10px;
@@ -827,10 +807,7 @@
 }
 
 /* === PIN-пад: ещё меньше (v11) === */
-.pin-box {
-  max-width: 280px;
-  padding: 10px;
-}
+
 .pin-logo {
   width: 40px;
   height: 40px;
@@ -847,11 +824,7 @@
 .pin-display {
   margin-bottom: 12px;
 }
-.pin-pad {
-  gap: 4px;
-  max-width: 260px;
-  margin: 0 auto;
-}
+
 .pin-pad button {
   font-size: 18px;
   border-radius: 8px;
@@ -869,11 +842,7 @@
 }
 
 /* === PIN-пад: восьмиугольники, вплотную (v12) === */
-.pin-pad {
-  gap: 0;
-  max-width: 320px;
-  margin: 0 auto;
-}
+
 .pin-pad button {
   font-size: 24px;
   min-height: 78px;
@@ -1550,7 +1519,7 @@ body { padding-bottom: 70px; }
 }
 
 /* ЖЕСТКИЙ ФИКС ДЛЯ PIN */
-#pin-screen { position: relative; z-index: 1000; background: var(--bg); height: 100vh; }
+
 
 /* === ФИКС: Выравнивание графика === */
 .chart-bars {
@@ -2695,10 +2664,69 @@ html, body {
 #scroll-pin-screen.active { display: flex; }
 
 /* Контейнер кольца */
+
+
+/* === КОЛЬЦО: ВЫРАВНИВАНИЕ И ЭФФЕКТЫ === */
+
+
+/* Эффект "взятия" кольца (появление сферы под пальцем) */
+
+#safe-dial-touch-effect.active {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+/* Само кольцо (всегда оранжевое) */
+#safe-dial-ring {
+  transition: stroke 0.1s, filter 0.1s;
+  filter: drop-shadow(0 0 4px rgba(255, 165, 0, 0.5));
+}
+
+/* === КОЛЬЦО: УМЕНЬШЕНО И С ОТСТУПАМИ === */
 #safe-dial-container {
   position: relative;
-  width: 280px;
-  height: 280px;
-  margin-bottom: 20vh; /* Отступ от низа экрана (зона клавиатуры) */
-  touch-action: none; /* Отключаем скролл страницы при кручении */
+  width: 220px; /* Уменьшили размер */
+  height: 220px;
+  margin-right: 20px; /* Отступ от правого края */
+  margin-bottom: 40px; /* Отступ от нижнего края */
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Эффект "лупы" под пальцем */
+#safe-dial-touch-effect {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(255, 165, 0, 0.8) 0%, rgba(255, 165, 0, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none; /* Не мешает кликам */
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+  opacity: 0;
+  z-index: 100; /* Поверх кольца */
+  box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+}
+#safe-dial-touch-effect.active {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+/* Само кольцо (всегда оранжевое) */
+#safe-dial-ring {
+  transition: stroke 0.1s, filter 0.1s;
+  filter: drop-shadow(0 0 4px rgba(255, 165, 0, 0.5));
+}
+
+/* Делаем внешнюю область активной (невидимая рамка) */
+.safe-dial-hitbox {
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  right: -40px;
+  bottom: -40px;
+  border-radius: 50%;
+  z-index: 1; /* Чтобы перехватывать касания */
 }
