@@ -96,6 +96,8 @@ function initSafeDial() {
   let isDragging = false;
   let currentSector = -1;
   let holdTimer = null;
+  let hasMoved = false; // Флаг: двигал ли пользователь палец
+  let SAFE_INPUTS = [];
 
   const getAngle = (x, y) => {
     const rect = container.getBoundingClientRect();
@@ -117,14 +119,17 @@ function initSafeDial() {
     
     if (sector !== currentSector) {
       currentSector = sector;
+      hasMoved = true; // Если сектор сменился, значит, пользователь двигал пальцем
+      
       const circumference = 2 * Math.PI * SAFE_RADIUS;
       ring.style.strokeDasharray = (circumference / SAFE_SECTORS) + ' 1000';
       ring.style.strokeDashoffset = -(sector * (circumference / SAFE_SECTORS));
       
-      const zoneIndex = SAFE_PIN.length;
+      const zoneIndex = SAFE_INPUTS.length;
+      let isCorrect = false;
+      
       if (zoneIndex < TARGET_ZONES.length) {
         const zone = TARGET_ZONES[zoneIndex];
-        let isCorrect = false;
         if (zone.end === 360) {
           if (angle >= zone.start || angle <= 0) isCorrect = true;
         } else {
@@ -143,27 +148,34 @@ function initSafeDial() {
       if (holdTimer) clearTimeout(holdTimer);
       
       holdTimer = setTimeout(() => {
-        if (SAFE_PIN.length < 3) {
-          SAFE_PIN += sector;
+        if (SAFE_INPUTS.length < 3 && hasMoved) {
+          SAFE_INPUTS.push(isCorrect);
           
-          if (SAFE_PIN.length === 3) {
+          if (SAFE_INPUTS.length === 3) {
             setTimeout(() => {
-              const pin = '201186';
-              tryUnlock(pin).then(ok => {
-                if (ok) {
-                  document.getElementById('scroll-pin-screen').classList.remove('active');
-                  const l = document.getElementById('loading');
-                  if (l) l.remove();
-                  showScreen('dashboard');
-                  renderDashboard();
-                } else {
-                  alert('Неверный код');
-                  SAFE_PIN = '';
-                  ring.style.strokeDasharray = '0 1000';
-                  ring.style.filter = 'drop-shadow(0 0 6px rgba(255, 165, 0, 0.6))';
-                  ring.style.stroke = '#FFA500';
-                }
-              });
+              const allCorrect = SAFE_INPUTS.every(val => val === true);
+              
+              if (allCorrect) {
+                const pin = '201186';
+                tryUnlock(pin).then(ok => {
+                  if (ok) {
+                    document.getElementById('scroll-pin-screen').classList.remove('active');
+                    const l = document.getElementById('loading');
+                    if (l) l.remove();
+                    showScreen('dashboard');
+                    renderDashboard();
+                  } else {
+                    alert('Ошибка расшифровки');
+                    SAFE_INPUTS = [];
+                  }
+                });
+              } else {
+                alert('Неверный код! Попробуй еще раз.');
+                SAFE_INPUTS = [];
+                ring.style.strokeDasharray = '0 1000';
+                ring.style.filter = 'drop-shadow(0 0 6px rgba(255, 165, 0, 0.6))';
+                ring.style.stroke = '#FFA500';
+              }
             }, 300);
           }
         }
@@ -174,6 +186,8 @@ function initSafeDial() {
   hitbox.addEventListener('touchstart', (e) => {
     e.preventDefault();
     isDragging = true;
+    hasMoved = false; // Сбрасываем флаг при новом касании
+    SAFE_INPUTS = []; // И сбрасываем массив ввода
     touchEffect.classList.add('active');
     const rect = container.getBoundingClientRect();
     processMove(e.touches[0].clientX, e.touches[0].clientY, rect);
