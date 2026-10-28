@@ -2375,3 +2375,21 @@ body {
   overflow-y: visible !important; /* Возвращаем видимость календарю */
   padding-bottom: 80px !important; /* Оставляем отступ, чтобы меню не перекрывало низ */
 }
+
+/* === ВОЗВРАЩАЕМ НОРМАЛЬНЫЙ СКРОЛЛ === */
+html, body {
+  height: auto !important;
+  overflow: auto !important; /* Разрешаем скролл */
+}
+
+#dashboard {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
+}
+
+#content, #content-diary, #content-projects, #content-activity {
+  height: auto !important;
+  overflow-y: visible !important; /* Контент больше не обрезается */
+  padding-bottom: 80px !important; /* Отступ, чтобы меню не перекрывало последний элемент */
+}
