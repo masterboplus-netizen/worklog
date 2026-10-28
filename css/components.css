@@ -2698,3 +2698,37 @@ html, body {
   transition: stroke 0.1s, filter 0.1s;
   filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.8)); /* Постоянное свечение */
 }
+
+/* === ВОЗВРАЩАЕМ СТИЛИ PIN-КЛАВИАТУРЫ === */
+.pin-pad {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+  max-width: 280px !important;
+  margin: 0 auto 20px auto !important;
+}
+
+.pin-pad button {
+  aspect-ratio: 1 !important;
+  border: 1px solid var(--border) !important;
+  background: var(--bg) !important;
+  color: var(--fg) !important;
+  font-size: 24px !important;
+  font-weight: 500 !important;
+  border-radius: 50% !important; /* Круглые кнопки */
+  cursor: pointer !important;
+  transition: all 0.1s !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.pin-pad button:active {
+  background: var(--bg3) !important;
+  transform: scale(0.95) !important;
+}
+
+.pin-pad .pin-fn {
+  color: var(--fg-dim) !important;
+  font-size: 20px !important;
+}
