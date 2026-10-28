@@ -2442,17 +2442,29 @@ html, body {
 
 
 /* === ВИДИМОЕ ДЫХАНИЕ КОЛЕЦ === */
-@keyframes breathe {
-  0% { stroke-width: var(--base-width); }
+
   50% { stroke-width: calc(var(--base-width) + 2px); }
   100% { stroke-width: var(--base-width); }
 }
 
-.ring-progress {
-  animation: breathe 3s infinite ease-in-out;
-  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
-}
+
 
 /* Задаем базовую толщину для всех колец */
-.mini-ring .ring-progress { --base-width: 7px; }
-.ring-wrap .ring-progress { --base-width: 14px; }
+.mini-ring 
+.ring-wrap 
+
+/* === ПУЛЬСАЦИЯ ЧЕРЕЗ МАСШТАБ (РАБОТАЕТ ВЕЗДЕ) === */
+@keyframes pulseScale {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); } /* Увеличиваем на 2% */
+  100% { transform: scale(1); }
+}
+
+.ring-progress {
+  /* transform-origin: center; чтобы масштабировалось от центра */
+  transform-origin: center;
+  animation: pulseScale 2s infinite ease-in-out;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
+  /* Убеждаемся, что нет старых фильтров */
+  filter: none !important; 
+}
