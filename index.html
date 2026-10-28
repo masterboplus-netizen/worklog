@@ -16,7 +16,7 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="css/base.css?v=189">
-<link rel="stylesheet" href="css/components.css?v=307">
+<link rel="stylesheet" href="css/components.css?v=308">
 </head>
 <body>
 <div id="app"></div>
@@ -89,7 +89,7 @@
 <script src="js/ui.js?v=288"></script>
 <script src="js/chart.js?v=222"></script>
 <script src="js/auth.js?v=205"></script>
-<script src="app.js?v=275"></script>
+<script src="app.js?v=276"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=205', { updateViaCache: 'none' }).catch(function(){});
@@ -116,11 +116,10 @@ if ('serviceWorker' in navigator) {
       <circle id="safe-dial-ring" cx="140" cy="140" r="130" fill="none" stroke="#FFA500" stroke-width="10" stroke-dasharray="0 1000" />
     </svg>
     <!-- Индикатор ввода -->
-    <div id="safe-dial-indicator" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 40px; font-weight: 600; color: #fff;">0</div>
+    
   </div>
 
-  <div class="safe-dots" id="safe-dots" style="display: flex; justify-content: center; gap: 12px; margin-bottom: 30px;">
-    <div class="safe-dot"></div>
+  
     <div class="safe-dot"></div>
     <div class="safe-dot"></div>
   </div>

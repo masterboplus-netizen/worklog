@@ -151,8 +151,6 @@ const SAFE_CENTER = { x: 140, y: 140 };
 function initSafeDial() {
   const container = document.getElementById('safe-dial-container');
   const ring = document.getElementById('safe-dial-ring');
-  const indicator = document.getElementById('safe-dial-indicator');
-  const dots = document.querySelectorAll('.safe-dot');
   
   if (!container) return;
   
@@ -178,7 +176,6 @@ function initSafeDial() {
     // Если сектор изменился
     if (sector !== currentSector) {
       currentSector = sector;
-      indicator.textContent = sector; // Просто показываем номер сектора
       
       // Анимация вспышки
       ring.style.strokeDasharray = (SAFE_SECTORS > 0 ? (2 * Math.PI * SAFE_RADIUS) / SAFE_SECTORS : 0) + ' 1000';
@@ -193,10 +190,6 @@ function initSafeDial() {
           SAFE_PIN += sector;
           if (navigator.vibrate) navigator.vibrate(50); // Вибрация
           
-          // Заполняем точку
-          if (dots[SAFE_PIN.length - 1]) {
-            dots[SAFE_PIN.length - 1].classList.add('filled');
-          }
           
           // Если ввели 3 числа, сбрасываем кольцо
           if (SAFE_PIN.length === 3) {
@@ -231,7 +224,6 @@ function initSafeDial() {
 
   // Сброс при старте
   SAFE_PIN = '';
-  dots.forEach(d => d.classList.remove('filled'));
   indicator.textContent = '0';
   ring.style.strokeDasharray = '0 1000';
 }

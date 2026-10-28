@@ -2708,16 +2708,5 @@ html, body {
 }
 
 /* === СЛЕПОЙ СЕЙФ === */
-.safe-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: transparent;
-  border: 2px solid var(--border);
-  transition: all 0.2s;
-}
-.safe-dot.filled {
-  background: #FFA500;
-  border-color: #FFA500;
-  box-shadow: 0 0 8px #FFA500;
-}
+
+
