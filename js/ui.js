@@ -361,12 +361,10 @@ function renderHeroRings() {
   let scrRaw = MINI_SCR_PERIOD === 'day' ? _sumRange(sessions, 'day', 'screens') : scrVal;
   let pctScr = Math.min(100, Math.round(scrRaw / maxScr * 100));
 
-  // 3. Задачи (с учетом периода)
+  // 3. Задачи (относительно рекорда)
+  const maxTasks = Math.max(1, ...sessions.map(s => s.tasks_done || 0));
   const tasksVal = _sumRange(_sessions, MINI_TASKS_PERIOD, 'tasks_done');
-  const totalTasks = sessions.reduce((acc, s) => acc + (s.tasks_done || 0), 0);
-  const avgTasksPerDay = totalTasks / uniqueDays;
-  const tasksGoal = avgTasksPerDay > 0 ? avgTasksPerDay : 3;
-  let pctTasks = Math.min(100, Math.round(tasksVal / tasksGoal * 100));
+  let pctTasks = Math.min(100, Math.round(tasksVal / maxTasks * 100));
 
   const div = document.createElement('div');
   div.className = 'hero-rings';
