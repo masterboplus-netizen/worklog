@@ -2413,3 +2413,12 @@ html, body {
 .ring-svg circle {
   transition: all 0.3s ease;
 }
+
+/* === АНИМАЦИЯ КОЛЕЦ (OFFSET) И СИЯНИЕ === */
+.ring-progress {
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease !important;
+  filter: drop-shadow(0 0 8px currentColor) !important;
+}
+.ring-svg circle {
+  transition: stroke 0.3s ease;
+}

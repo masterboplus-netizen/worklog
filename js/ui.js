@@ -304,9 +304,14 @@ function renderRingSVG(percent, size, strokeWidth, color) {
   const c = 2 * Math.PI * r;
   const p = Math.max(0, Math.min(100, percent));
   const dash = c * p / 100;
+  const offset = c - dash; // Смещение: при 0% равно длине окружности, при 100% равно 0
+  
+  // data-target-offset - это куда мы будем анимировать
   return '<svg width="' + size + '" height="' + size + '" class="ring-svg">' +
     '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--bg3)" stroke-width="' + strokeWidth + '"/>' +
-    '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" stroke-dasharray="' + dash + ' ' + c + '" stroke-linecap="round" transform="rotate(-90 ' + size/2 + ' ' + size/2 + ')"/>' +
+    '<circle class="ring-progress" cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" ' +
+    'stroke-dasharray="' + c + '" stroke-dashoffset="' + c + '" data-target-offset="' + offset + '" ' +
+    'stroke-linecap="round" transform="rotate(-90 ' + size/2 + ' ' + size/2 + ')"/>' +
     '</svg>';
 }
 
@@ -1162,15 +1167,17 @@ function renderDashboard() {
   c.innerHTML = '';
   c.appendChild(renderHeroRings());
 
-  // Принудительный запуск анимации для всех колец
-  setTimeout(() => {
-    document.querySelectorAll('.ring-progress').forEach(circle => {
-      const targetDash = circle.getAttribute('data-target-dash');
-      const circumference = circle.getAttribute('data-circumference');
-      if (targetDash && circumference) {
-        // Устанавливаем правильную длину с CSS-переходом
-        circle.style.strokeDasharray = targetDash + ' ' + circumference;
-      }
-    });
-  }, 100); // Небольшая задержка, чтобы DOM успел отрисоваться
+  // Запуск анимации через requestAnimationFrame
+  requestAnimationFrame(() => {
+    // Небольшая задержка, чтобы браузер отрисовал стартовое состояние
+    setTimeout(() => {
+      document.querySelectorAll('.ring-progress').forEach(circle => {
+        const targetOffset = circle.getAttribute('data-target-offset');
+        if (targetOffset !== null) {
+          // Плавно сдвигаем offset к целевому значению
+          circle.style.strokeDashoffset = targetOffset;
+        }
+      });
+    }, 50);
+  });
 }
