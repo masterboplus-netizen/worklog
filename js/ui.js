@@ -24,7 +24,7 @@ function renderDiary() {
   // 1. ШАПКА
   const topBar = document.createElement('div');
   topBar.style.cssText = 'margin-bottom: 16px;';
-  
+
   // Фильтры
   const filters = document.createElement('div');
   filters.style.cssText = 'display:flex; gap:8px; margin-bottom:16px; overflow-x: auto; padding-bottom: 4px;';
@@ -36,28 +36,18 @@ function renderDiary() {
   `;
   topBar.appendChild(filters);
 
-  // Навигация: [<-] Название [->]
+  // Навигация (только заголовок, без стрелок)
   const navRow = document.createElement('div');
-  navRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
-  
-  const prevBtn = document.createElement('button');
-  prevBtn.id = 'cal-prev';
-  prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
-  prevBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); padding:8px; cursor:pointer;';
-  
-  const nextBtn = document.createElement('button');
-  nextBtn.id = 'cal-next';
-  nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
-  nextBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); padding:8px; cursor:pointer;';
+  navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; padding: 8px 0;';
 
   const title = document.createElement('div');
-  title.style.cssText = 'font-size:20px; font-weight:600; color:var(--fg); text-align:center;';
-  
+  title.style.cssText = 'font-size:20px; font-weight:600; color:var(--fg); text-align:center; cursor:pointer;';
+
   const now = new Date();
   let currentDisplayDate = new Date(now.getFullYear(), now.getMonth() + (CALENDAR_VIEW === 'month' ? CALENDAR_OFFSET : 0), now.getDate() + (CALENDAR_VIEW === 'week' ? CALENDAR_OFFSET * 7 : (CALENDAR_VIEW === '30days' ? CALENDAR_OFFSET : 0)));
-  
+
   const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-  
+
   if (CALENDAR_VIEW === 'year') {
     title.textContent = currentDisplayDate.getFullYear() + ' год';
   } else if (CALENDAR_VIEW === 'month') {
@@ -74,11 +64,35 @@ function renderDiary() {
     title.textContent = startOfWeek.getDate() + ' ' + months[startOfWeek.getMonth()].slice(0,3) + ' – ' + endOfWeek.getDate() + ' ' + months[endOfWeek.getMonth()].slice(0,3);
   }
 
-  navRow.appendChild(prevBtn);
   navRow.appendChild(title);
-  navRow.appendChild(nextBtn);
   topBar.appendChild(navRow);
   c.appendChild(topBar);
+
+  // СВАЙП-ОБРАБОТЧИК
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const handleSwipe = () => {
+    const threshold = 50;
+    if (touchEndX < touchStartX - threshold) {
+      // Свайп влево -> следующий
+      if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET++; 
+      else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30;
+      else CALENDAR_OFFSET++; 
+      CALENDAR_SELECTED_DAY = null;
+      renderDiary();
+    }
+    if (touchEndX > touchStartX + threshold) {
+      // Свайп вправо -> предыдущий
+      if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET--; 
+      else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30;
+      else CALENDAR_OFFSET--; 
+      CALENDAR_SELECTED_DAY = null;
+      renderDiary();
+    }
+  };
+
+  c.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+  c.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, {passive: true});
 
   // 2. СЕТКА
   const grid = document.createElement('div');
@@ -126,11 +140,11 @@ function renderDiary() {
       mDiv.innerHTML = '<div style="font-size:12px;color:var(--fg-dim);margin-bottom:4px;text-align:center;">' + months[m].slice(0,3) + '</div>';
       const miniGrid = document.createElement('div');
       miniGrid.style.cssText = 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;';
-      
+
       const mStart = new Date(currentDisplayDate.getFullYear(), m, 1);
       const mEnd = new Date(currentDisplayDate.getFullYear(), m + 1, 0);
       const firstDow = mStart.getDay() === 0 ? 6 : mStart.getDay() - 1;
-      
+
       for (let i = 0; i < firstDow; i++) miniGrid.innerHTML += '<div></div>';
       for (let d = new Date(mStart); d <= mEnd; d.setDate(d.getDate() + 1)) {
         const ds = _localDate(d);
@@ -157,36 +171,35 @@ function renderDiary() {
       const dateStr = _localDate(d);
       const dayCell = document.createElement('div');
       dayCell.className = 'cal-day';
-      if (dateStr === todayStr) dayCell.classList.add('today');
       
+      // Проверка "Сегодня"
+      if (dateStr === todayStr) dayCell.classList.add('today');
+
       const num = document.createElement('div');
       num.className = 'cal-num';
       num.textContent = d.getDate();
       dayCell.appendChild(num);
 
-      // ВЫДЕЛЕНИЕ (через класс в CSS, чтобы не было дублей стилей)
       if (dateStr === CALENDAR_SELECTED_DAY) {
         dayCell.classList.add('selected');
       }
-      
-      // Делаем цифру некликабельной, чтобы клик всегда попадал в dayCell
+
       num.style.pointerEvents = 'none';
-      
+
       if (dayStats[dateStr]) {
         const dot = document.createElement('div');
         dot.className = 'cal-dot';
-        dot.style.pointerEvents = 'none'; // Точка тоже не перехватывает клик
+        dot.style.pointerEvents = 'none';
         dayCell.appendChild(dot);
       }
-      
-      // КЛИК
+
       dayCell.addEventListener('click', (e) => {
         e.stopPropagation();
         if (CALENDAR_SELECTED_DAY === dateStr) CALENDAR_SELECTED_DAY = null;
         else CALENDAR_SELECTED_DAY = dateStr;
         renderDiary();
       });
-      
+
       grid.appendChild(dayCell);
     }
     c.appendChild(grid);
@@ -195,17 +208,17 @@ function renderDiary() {
   // 3. СПИСОК СЕССИЙ
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '24px';
-  
+
   let filteredSessions = (window.DATA.sessions || []).filter(s => {
     const sd = new Date(s.date + 'T00:00:00');
     if (CALENDAR_VIEW === 'year') return sd.getFullYear() === startDate.getFullYear();
     return sd >= startDate && sd <= endDate;
   });
-  
+
   if (CALENDAR_SELECTED_DAY) {
     filteredSessions = filteredSessions.filter(s => s.date === CALENDAR_SELECTED_DAY);
   }
-  
+
   filteredSessions.sort((a, b) => (b.date + (b.start||'')).localeCompare(a.date + (a.start||'')));
 
   if (filteredSessions.length === 0) {
@@ -213,15 +226,16 @@ function renderDiary() {
   } else {
     const projName = {};
     for (const p of window.DATA.projects || []) projName[p.id] = p.name;
-    
+
     for (const s of filteredSessions) {
       const item = document.createElement('div');
       item.className = 'diary-item';
       const timeRange = (s.start || '?') + ' → ' + (s.end || '?');
       const dur = fmtH(s.duration_min || 0);
       const proj = projName[s.project] || s.project || '–';
-      const note = s.note ? s.note.replace(/\n/g, '<br>') : '';
-      
+      const note = s.note ? s.note.replace(/
+/g, '<br>') : '';
+
       item.innerHTML =
         '<div class="diary-date" style="margin-top:0; border:none; padding:0; margin-bottom:4px;">' + formatDiaryDate(s.date) + '</div>' +
         '<div class="diary-time">' + timeRange + ' · <span class="diary-dur">' + dur + '</span></div>' +
@@ -232,7 +246,7 @@ function renderDiary() {
   }
   c.appendChild(listDiv);
 
-  // 4. ОБРАБОТЧИКИ
+  // 4. ОБРАБОТЧИКИ КНОПОК
   c.querySelectorAll('.cal-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       CALENDAR_VIEW = btn.dataset.view;
@@ -240,21 +254,6 @@ function renderDiary() {
       CALENDAR_SELECTED_DAY = null;
       renderDiary();
     });
-  });
-  
-  document.getElementById('cal-prev').addEventListener('click', () => { 
-    if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET--; 
-    else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30;
-    else CALENDAR_OFFSET--; 
-    CALENDAR_SELECTED_DAY = null;
-    renderDiary(); 
-  });
-  document.getElementById('cal-next').addEventListener('click', () => { 
-    if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET++; 
-    else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30;
-    else CALENDAR_OFFSET++; 
-    CALENDAR_SELECTED_DAY = null;
-    renderDiary(); 
   });
 }
 
