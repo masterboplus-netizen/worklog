@@ -912,10 +912,24 @@ function renderActivityPageV2() {
     navRow.appendChild(yearSpan);
     c.appendChild(navRow);
 
-    // 2. ЛЕНТА
+    // 2. ГРАФИК (Ось Y + Лента)
+    const chartWrapper = document.createElement('div');
+    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 250px; position: relative;';
+
+    // Ось Y
+    const yAxis = document.createElement('div');
+    yAxis.id = 'tl-y-axis';
+    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; padding-bottom: 30px; padding-top: 10px;';
+    
+    // Лента
     const scrollContainer = document.createElement('div');
     scrollContainer.className = 'tl-container';
     scrollContainer.id = 'tl-scroll';
+    scrollContainer.style.flex = '1';
+    scrollContainer.style.padding = '10px 0 0 0';
+    
+    chartWrapper.appendChild(yAxis);
+    chartWrapper.appendChild(scrollContainer);
     
     let firstSessionDate = new Date();
     if (window.DATA.sessions && window.DATA.sessions.length > 0) {
@@ -952,16 +966,16 @@ function renderActivityPageV2() {
         iterDate.setDate(iterDate.getDate() + 1);
     }
 
-    c.appendChild(scrollContainer);
+    c.appendChild(chartWrapper);
 
     // 3. НИЖНИЕ КНОПКИ
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     const metricHTML = metrics.map(([key, label]) =>
-        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 6px 4px; font-size: 13px;">' + label + '</button>'
+        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 4px 2px; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
     ).join('');
 
     const metricBar = document.createElement('div');
-    metricBar.style.cssText = 'display:flex; gap:8px; margin: 16px 16px; justify-content: space-between;';
+    metricBar.style.cssText = 'display:flex; gap:4px; margin: 16px 8px; justify-content: space-between; box-sizing: border-box;';
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
 
@@ -997,6 +1011,16 @@ function renderActivityPageV2() {
             if (v > maxVal) maxVal = v;
         }
         if (maxVal === 0) maxVal = CHART_STATE_V2.metric === 'duration' ? 720 : 10;
+
+        // Отрисовываем Ось Y (5 значений сверху вниз)
+        let yHTML = '';
+        const step = maxVal / 4;
+        for (let i = 4; i >= 0; i--) {
+            const val = step * i;
+            const lbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(Math.round(val));
+            yHTML += '<div>' + lbl + '</div>';
+        }
+        yAxis.innerHTML = yHTML;
 
         const cols = scrollContainer.querySelectorAll('.tl-col');
         cols.forEach(col => {
