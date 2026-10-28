@@ -2251,3 +2251,29 @@ div[style*="justify-content: space-between"] {
   background: var(--accent);
   border-radius: 50%;
 }
+
+/* === Плавающий тултип над столбиком === */
+.floating-tooltip {
+  position: absolute;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  text-align: center;
+  pointer-events: none;
+  z-index: 50;
+  transform: translateX(-50%);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  white-space: nowrap;
+}
+.floating-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px 5px 0;
+  border-style: solid;
+  border-color: var(--bg3) transparent transparent transparent;
+}

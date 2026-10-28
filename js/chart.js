@@ -156,12 +156,29 @@ function renderActivityPageV2() {
 
             if (dateStr === CHART_STATE.selectedDay) {
                 col.querySelector('.tl-bar').classList.add('selected');
+                
+                // Показываем тултип
                 const text = CHART_STATE.metric === 'duration' ? fmtH(v) : String(v);
                 const d = new Date(dateStr + 'T00:00:00');
                 const monthsShort = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
                 const dowNamesShort = ['вс','пн','вт','ср','чт','пт','сб'];
                 const dateStrFormat = d.getDate() + ' ' + monthsShort[d.getMonth()] + ', ' + dowNamesShort[d.getDay()];
-                legendBar.textContent = dateStrFormat + ' — ' + text;
+                
+                tooltip.innerHTML = `<div style="font-weight:600;color:var(--fg);margin-bottom:2px;">${text}</div><div style="font-size:10px;color:var(--fg-dim);">${dateStrFormat}</div>`;
+                tooltip.style.display = 'block';
+                
+                // Позиционируем тултип над столбиком
+                const colRect = col.getBoundingClientRect();
+                const containerRect = scrollContainer.getBoundingClientRect();
+                
+                // Вычисляем позицию относительно scrollContainer
+                const leftPos = colRect.left - containerRect.left + (colRect.width / 2);
+                const barHeightPx = (parseFloat(col.querySelector('.tl-bar').style.height) / 100) * (containerRect.height - 32); 
+                const topPos = containerRect.height - 32 - barHeightPx - 45; // 32 - высота подписей дат, 45 - высота тултипа
+
+                tooltip.style.left = leftPos + 'px';
+                tooltip.style.top = topPos + 'px';
+                
             } else {
                 col.querySelector('.tl-bar').classList.remove('selected');
             }
@@ -173,7 +190,7 @@ function renderActivityPageV2() {
         scrollContainer._scrollTimeout = setTimeout(() => {
             if (CHART_STATE.selectedDay) {
                 CHART_STATE.selectedDay = null;
-                legendBar.textContent = '';
+                tooltip.style.display = 'none';
             }
             updateChart();
         }, 100);
@@ -185,7 +202,7 @@ function renderActivityPageV2() {
         const dateStr = col.dataset.date;
         if (CHART_STATE.selectedDay === dateStr) {
             CHART_STATE.selectedDay = null;
-            legendBar.textContent = '';
+            tooltip.style.display = 'none';
             updateChart();
             return;
         }
@@ -198,7 +215,7 @@ function renderActivityPageV2() {
             e.stopPropagation();
             CHART_STATE.metric = btn.dataset.metric;
             CHART_STATE.selectedDay = null;
-            legendBar.textContent = '';
+            tooltip.style.display = 'none';
             const currentScroll = scrollContainer.scrollLeft;
             renderActivityPageV2();
             setTimeout(() => {
