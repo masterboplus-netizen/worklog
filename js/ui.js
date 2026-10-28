@@ -884,7 +884,7 @@ function renderActivityPageV2() {
     if (!c || !window.DATA) return;
     c.innerHTML = '';
 
-    // 1. НАВИГАЦИЯ (ТЕКСТ)
+    // 1. НАВИГАЦИЯ
     const navRow = document.createElement('div');
     navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:16px; margin-bottom: 16px; font-size:20px; font-weight:600; color:var(--fg);';
     
@@ -914,7 +914,7 @@ function renderActivityPageV2() {
 
     // 2. ГРАФИК (Ось Y + Лента)
     const chartWrapper = document.createElement('div');
-    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 260px; position: relative; padding-bottom: 30px;';
+    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 260px; position: relative; padding-bottom: 30px; box-sizing: border-box;';
 
     // Ось Y
     const yAxis = document.createElement('div');
@@ -928,10 +928,29 @@ function renderActivityPageV2() {
     scrollContainer.style.flex = '1';
     scrollContainer.style.padding = '0';
     scrollContainer.style.margin = '0';
-    
+
     chartWrapper.appendChild(yAxis);
     chartWrapper.appendChild(scrollContainer);
-    
+    c.appendChild(chartWrapper);
+
+    // 3. ЛЕГЕНДА (Фиксированная строка)
+    const legendBar = document.createElement('div');
+    legendBar.id = 'tl-legend-bar';
+    legendBar.style.cssText = 'height: 24px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent); margin-top: 8px; margin-bottom: 8px;';
+    c.appendChild(legendBar);
+
+    // 4. НИЖНИЕ КНОПКИ
+    const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
+    const metricHTML = metrics.map(([key, label]) =>
+        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 4px 2px; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
+    ).join('');
+
+    const metricBar = document.createElement('div');
+    metricBar.style.cssText = 'display:flex; gap:4px; margin: 0 8px 16px 8px; justify-content: space-between; box-sizing: border-box;';
+    metricBar.innerHTML = metricHTML;
+    c.appendChild(metricBar);
+
+    // 5. ГЕНЕРАЦИЯ ЛЕНТЫ
     let firstSessionDate = new Date();
     if (window.DATA.sessions && window.DATA.sessions.length > 0) {
         const sorted = window.DATA.sessions.slice().sort((a, b) => a.date.localeCompare(b.date));
@@ -942,7 +961,7 @@ function renderActivityPageV2() {
 
     let iterDate = new Date(firstSessionDate);
     const allDates = [];
-    
+
     while (iterDate <= today) {
         const dateStr = _localDate(iterDate);
         allDates.push(dateStr);
@@ -950,9 +969,8 @@ function renderActivityPageV2() {
         const col = document.createElement('div');
         col.className = 'tl-col';
         col.dataset.date = dateStr;
-        col.style.position = 'relative'; // Важно для позиционирования легенды
+        col.style.position = 'relative';
 
-        // Верхняя часть (для столбика и легенды)
         const topSpace = document.createElement('div');
         topSpace.style.cssText = 'flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative;';
 
@@ -960,7 +978,6 @@ function renderActivityPageV2() {
         barDiv.className = 'tl-bar';
         topSpace.appendChild(barDiv);
 
-        // Нижняя часть (для даты)
         const labelDiv = document.createElement('div');
         labelDiv.className = 'tl-label';
         const dayNum = iterDate.getDate();
@@ -974,24 +991,11 @@ function renderActivityPageV2() {
         iterDate.setDate(iterDate.getDate() + 1);
     }
 
-    c.appendChild(chartWrapper);
-
-    // 3. НИЖНИЕ КНОПКИ
-    const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
-    const metricHTML = metrics.map(([key, label]) =>
-        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 4px 0; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
-    ).join('');
-
-    const metricBar = document.createElement('div');
-    metricBar.style.cssText = 'display:flex; gap:4px; margin: 16px 8px; justify-content: space-between; box-sizing: border-box;';
-    metricBar.innerHTML = metricHTML;
-    c.appendChild(metricBar);
-
-    // 4. ЛОГИКА
+    // 6. ЛОГИКА ОБНОВЛЕНИЯ
     const updateChart = () => {
         const scrollLeft = scrollContainer.scrollLeft;
         const containerWidth = scrollContainer.clientWidth;
-        const colWidth = 44 + 8;
+        const colWidth = 40;
 
         const startIndex = Math.floor(scrollLeft / colWidth);
         const endIndex = Math.min(allDates.length - 1, Math.ceil((scrollLeft + containerWidth) / colWidth));
@@ -1020,7 +1024,7 @@ function renderActivityPageV2() {
         }
         if (maxVal === 0) maxVal = CHART_STATE_V2.metric === 'duration' ? 720 : 10;
 
-        // Отрисовываем Ось Y (5 значений сверху вниз)
+        // Отрисовка Оси Y
         let yHTML = '';
         const step = maxVal / 4;
         for (let i = 4; i >= 0; i--) {
@@ -1030,6 +1034,7 @@ function renderActivityPageV2() {
         }
         yAxis.innerHTML = yHTML;
 
+        // Отрисовка столбиков и легенды
         const cols = scrollContainer.querySelectorAll('.tl-col');
         cols.forEach(col => {
             const dateStr = col.dataset.date;
@@ -1046,80 +1051,60 @@ function renderActivityPageV2() {
             col.querySelector('.tl-bar').style.height = h + '%';
             
             if (dateStr === CHART_STATE_V2.selectedDay) {
-                const bar = col.querySelector('.tl-bar');
-                bar.classList.add('selected');
-                const oldLbl = bar.querySelector('.tl-legend');
-                if (oldLbl) oldLbl.remove();
-                const text = CHART_STATE_V2.metric === 'duration' ? fmtH(v) : String(v);
-                const legend = document.createElement('div');
-                legend.className = 'tl-legend';
-                legend.textContent = text;
+                col.querySelector('.tl-bar').classList.add('selected');
                 
+                // Записываем текст в фиксированную строку
+                const text = CHART_STATE_V2.metric === 'duration' ? fmtH(v) : String(v);
+                const d = new Date(dateStr + 'T00:00:00');
+                const monthsShort = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+                const dowNamesShort = ['вс','пн','вт','ср','чт','пт','сб'];
+                const dateStrFormat = d.getDate() + ' ' + monthsShort[d.getMonth()] + ', ' + dowNamesShort[d.getDay()];
+                
+                legendBar.textContent = dateStrFormat + ' — ' + text;
+            } else {
+                col.querySelector('.tl-bar').classList.remove('selected');
             }
         });
     };
 
+    // Слушаем скролл
     scrollContainer.addEventListener('scroll', () => {
         clearTimeout(scrollContainer._scrollTimeout);
         scrollContainer._scrollTimeout = setTimeout(() => {
             if (CHART_STATE_V2.selectedDay) {
                 CHART_STATE_V2.selectedDay = null;
-                scrollContainer.querySelectorAll('.tl-bar').forEach(b => {
-                    b.classList.remove('selected');
-                    const lbl = b.querySelector('.tl-legend');
-                    if (lbl) lbl.remove();
-                });
+                legendBar.textContent = '';
             }
             updateChart();
         }, 100);
     });
 
+    // Клик
     scrollContainer.addEventListener('click', (e) => {
         const col = e.target.closest('.tl-col');
         if (!col) return;
         
         const dateStr = col.dataset.date;
-        const bar = col.querySelector('.tl-bar');
 
         if (CHART_STATE_V2.selectedDay === dateStr) {
             CHART_STATE_V2.selectedDay = null;
-            bar.classList.remove('selected');
-            const lbl = bar.querySelector('.tl-legend');
-            if (lbl) lbl.remove();
+            legendBar.textContent = '';
+            updateChart();
             return;
         }
 
-        scrollContainer.querySelectorAll('.tl-bar').forEach(b => {
-            b.classList.remove('selected');
-            const lbl = b.querySelector('.tl-legend');
-            if (lbl) lbl.remove();
-        });
-
         CHART_STATE_V2.selectedDay = dateStr;
-        bar.classList.add('selected');
-
-        let v = 0;
-        for (const sess of window.DATA.sessions || []) {
-            if (sess.date === dateStr) {
-                if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
-                else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
-                else if (CHART_STATE_V2.metric === 'screens') v += sess.screens || 0;
-                else if (CHART_STATE_V2.metric === 'tasks') v += sess.tasks_done || 0;
-            }
-        }
-        const text = CHART_STATE_V2.metric === 'duration' ? fmtH(v) : String(v);
-        const legend = document.createElement('div');
-        legend.className = 'tl-legend';
-        legend.style.top = '-35px'; // Поднимаем выше
-        legend.style.zIndex = '100';
-        legend.textContent = text;
-        
+        updateChart();
     });
 
+    // Смена метрики
     c.querySelectorAll('.cal-btn[data-metric]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             CHART_STATE_V2.metric = btn.dataset.metric;
+            CHART_STATE_V2.selectedDay = null;
+            legendBar.textContent = '';
+            
             const currentScroll = scrollContainer.scrollLeft;
             renderActivityPageV2();
             setTimeout(() => {
@@ -1132,6 +1117,7 @@ function renderActivityPageV2() {
         });
     });
 
+    // Анимация входа
     setTimeout(() => {
         scrollContainer.scrollTo({ left: scrollContainer.scrollWidth, behavior: 'smooth' });
         setTimeout(() => { updateChart(); }, 600);
