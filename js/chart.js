@@ -39,6 +39,13 @@ function renderActivityPageV2() {
     const scrollContainer = document.createElement('div');
     scrollContainer.className = 'tl-container';
     scrollContainer.id = 'tl-scroll';
+    scrollContainer.style.position = 'relative'; // Важно для позиционирования тултипа
+
+    // Создаем тултип и сразу кладем его внутрь контейнера скролла
+    const tooltip = document.createElement('div');
+    tooltip.className = 'floating-tooltip';
+    tooltip.style.display = 'none';
+    scrollContainer.appendChild(tooltip);
 
     chartWrapper.appendChild(yAxis);
     chartWrapper.appendChild(scrollContainer);
