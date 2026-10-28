@@ -197,7 +197,10 @@ function renderActivityPageV2() {
                 const colIndex = Array.from(cols).indexOf(targetCol);
                 
                 // Центр столбика по X (относительно контейнера скролла)
-                const leftPos = (colIndex * colWidth) + (colWidth / 2);
+                let leftPos = (colIndex * colWidth) + (colWidth / 2);
+        const tooltipWidth = 80;
+        if (leftPos - tooltipWidth / 2 < 0) leftPos = tooltipWidth / 2;
+        if (leftPos + tooltipWidth / 2 > scrollContainer.clientWidth) leftPos = scrollContainer.clientWidth - tooltipWidth / 2;
                 
                 // Высота столбика по Y
                 const barHeightPx = (parseFloat(bar.style.height) / 100) * (scrollContainer.clientHeight - 32); 
@@ -215,10 +218,7 @@ function renderActivityPageV2() {
     scrollContainer.addEventListener('scroll', () => {
         clearTimeout(scrollContainer._scrollTimeout);
         scrollContainer._scrollTimeout = setTimeout(() => {
-            if (CHART_STATE.selectedDay) {
-                CHART_STATE.selectedDay = null;
-                tooltip.style.display = 'none';
-            }
+            // Убрали сброс выделения при скролле! Тултип не будет моргать.
             updateChart();
         }, 100);
     });
