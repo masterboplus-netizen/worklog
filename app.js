@@ -142,15 +142,28 @@ function switchTab(name) {
 
 
 
-// === ЛОГИКА СЛЕПОГО СЕЙФА (ТОЛЬКО КОЛЬЦО) ===
+
+// === ЛОГИКА СЛЕПОГО СЕЙФА (С ПРОВЕРКОЙ ОБЛАСТЕЙ) ===
 let SAFE_PIN = '';
-const SAFE_SECTORS = 12; // 12 секторов
+const SAFE_SECTORS = 12;
 const SAFE_RADIUS = 130;
+
+// Твои правильные области (в градусах)
+// 5-6 часов: 150-180 град.
+// 11-12 часов: 330-360 (или 0) град.
+// 2-3 часа: 60-90 град.
+const TARGET_ZONES = [
+  { start: 150, end: 180 }, // 1-я точка
+  { start: 330, end: 360 }, // 2-я точка (360 это 0)
+  { start: 60, end: 90 }    // 3-я точка
+];
 
 function initSafeDial() {
   const container = document.getElementById('safe-dial-container');
   const ring = document.getElementById('safe-dial-ring');
-  if (!container || !ring) return;
+  const touchEffect = document.getElementById('safe-dial-touch-effect');
+  
+  if (!container || !ring || !touchEffect) return;
   
   let isDragging = false;
   let currentSector = -1;
@@ -165,18 +178,40 @@ function initSafeDial() {
     return angle;
   };
 
-  const processMove = (x, y) => {
+  const processMove = (x, y, rect) => {
+    const touchX = x - rect.left;
+    const touchY = y - rect.top;
+    touchEffect.style.left = touchX + 'px';
+    touchEffect.style.top = touchY + 'px';
+
     const angle = getAngle(x, y);
     const sector = Math.floor(angle / (360 / SAFE_SECTORS));
     
     if (sector !== currentSector) {
       currentSector = sector;
       
-      // Визуальный отклик: подсвечиваем сектор
-      const sectorAngle = 360 / SAFE_SECTORS;
       const circumference = 2 * Math.PI * SAFE_RADIUS;
       ring.style.strokeDasharray = (circumference / SAFE_SECTORS) + ' 1000';
       ring.style.strokeDashoffset = -(sector * (circumference / SAFE_SECTORS));
+      
+      // Меняем цвет в зависимости от того, попал ли в правильную зону
+      const zoneIndex = SAFE_PIN.length; // 0, 1 или 2
+      if (zoneIndex < TARGET_ZONES.length) {
+        const zone = TARGET_ZONES[zoneIndex];
+        // Проверяем, попадает ли текущий угол в нужный интервал
+        let isCorrect = false;
+        if (zone.end === 360) {
+          if (angle >= zone.start || angle <= 0) isCorrect = true;
+        } else {
+          if (angle >= zone.start && angle <= zone.end) isCorrect = true;
+        }
+        
+        if (isCorrect) {
+            ring.style.filter = 'drop-shadow(0 0 8px rgba(0, 255, 0, 0.8)) brightness(1.2)'; // Зеленый
+        } else {
+            ring.style.filter = 'drop-shadow(0 0 8px rgba(255, 0, 0, 0.8)) brightness(1.2)'; // Красный
+        }
+      }
       
       if (holdTimer) clearTimeout(holdTimer);
       
@@ -186,9 +221,15 @@ function initSafeDial() {
           SAFE_PIN += sector;
           if (navigator.vibrate) navigator.vibrate(50);
           
-          // Если ввели 3 числа, сбрасываем
+          // Если ввели 3 числа, проверяем
           if (SAFE_PIN.length === 3) {
-            setTimeout(() => { ring.style.strokeDasharray = '0 1000'; }, 300);
+            // Тут мы просто покажем алерт, что ввод завершен (для теста)
+            setTimeout(() => { 
+              alert('Код введен! Сектора: ' + SAFE_PIN);
+              SAFE_PIN = '';
+              ring.style.strokeDasharray = '0 1000'; 
+              ring.style.filter = 'drop-shadow(0 0 4px rgba(255, 165, 0, 0.5))';
+            }, 300);
           }
         }
       }, 600);
@@ -198,27 +239,26 @@ function initSafeDial() {
   container.addEventListener('touchstart', (e) => {
     e.preventDefault();
     isDragging = true;
-    processMove(e.touches[0].clientX, e.touches[0].clientY);
+    touchEffect.classList.add('active');
+    const rect = container.getBoundingClientRect();
+    processMove(e.touches[0].clientX, e.touches[0].clientY, rect);
   }, { passive: false });
 
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
     if (!isDragging) return;
-    processMove(e.touches[0].clientX, e.touches[0].clientY);
+    const rect = container.getBoundingClientRect();
+    processMove(e.touches[0].clientX, e.touches[0].clientY, rect);
   }, { passive: false });
 
   const endDrag = () => {
     isDragging = false;
+    touchEffect.classList.remove('active');
     if (holdTimer) clearTimeout(holdTimer);
   };
 
   container.addEventListener('touchend', endDrag);
   container.addEventListener('touchcancel', endDrag);
-}
-
-// Кнопку «Войти» мы убрали, но функция осталась для отладки
-window.checkScrollPin = async function() {
-  alert('Введено: ' + SAFE_PIN);
 }
 
 function showCreators() {
