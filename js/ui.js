@@ -919,7 +919,7 @@ function renderActivityPageV2() {
     // Ось Y
     const yAxis = document.createElement('div');
     yAxis.id = 'tl-y-axis';
-    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 200px; margin-top: 10px;';
+    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 40px; padding-top: 10px;';
     
     // Лента
     const scrollContainer = document.createElement('div');
@@ -1053,7 +1053,7 @@ function renderActivityPageV2() {
                 const legend = document.createElement('div');
                 legend.className = 'tl-legend';
                 legend.textContent = text;
-                bar.parentNode.appendChild(legend);
+                bar.appendChild(legend);
             }
         });
     };
@@ -1112,7 +1112,7 @@ function renderActivityPageV2() {
         legend.style.top = '-35px'; // Поднимаем выше
         legend.style.zIndex = '100';
         legend.textContent = text;
-        bar.parentNode.appendChild(legend);
+        bar.appendChild(legend);
     });
 
     c.querySelectorAll('.cal-btn[data-metric]').forEach(btn => {

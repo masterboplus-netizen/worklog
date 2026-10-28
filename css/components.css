@@ -2056,13 +2056,14 @@ div[style*="justify-content: space-between"] {
 .tl-container {
   display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
   padding: 0; gap: 0; scrollbar-width: none; -ms-overflow-style: none;
-  scroll-behavior: smooth; height: 260px;
+  scroll-behavior: smooth; height: 260px; width: calc(42px * 7); /* ровно 7 столбиков */
+  margin: 0 auto;
 }
 .tl-container::-webkit-scrollbar { display: none; }
 
 .tl-col {
   scroll-snap-align: start; 
-  min-width: 44px; flex: 0 0 44px; /* Ширина колонки */
+  min-width: 42px; flex: 0 0 42px; /* Ширина колонки */
   display: flex; flex-direction: column; 
   height: 100%; position: relative; cursor: pointer;
 }
