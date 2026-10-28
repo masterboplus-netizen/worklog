@@ -51,10 +51,6 @@ function renderActivityPageV2() {
     chartWrapper.appendChild(scrollContainer);
     c.appendChild(chartWrapper);
 
-    const legendBar = document.createElement('div');
-    legendBar.id = 'tl-legend-bar';
-    legendBar.className = 'chart-legend-v4';
-    c.appendChild(legendBar);
 
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     const metricHTML = metrics.map(([key, label]) =>

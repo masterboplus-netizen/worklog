@@ -2277,3 +2277,12 @@ div[style*="justify-content: space-between"] {
   border-style: solid;
   border-color: var(--bg3) transparent transparent transparent;
 }
+
+/* === ФИКС: Убираем лишний пустой отступ внизу графика === */
+#content-activity {
+  padding-bottom: 20px !important; /* Было 100px, из-за этого была пустота */
+}
+/* На всякий случай скрываем старые легенды */
+.chart-legend-v4, #tl-legend-bar {
+  display: none !important;
+}
