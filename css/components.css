@@ -526,14 +526,7 @@
 
 }
 
-.ring-svg {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
+
 .ring-center {
   position: absolute;
   top: 0; left: 0;
@@ -2462,8 +2455,7 @@ html, body {
 
 
 /* === БЕЗОПАСНАЯ ПУЛЬСАЦИЯ (БЕЗ РАЗЛЕТАЮЩИХСЯ КОЛЕЦ) === */
-@keyframes safePulse {
-  0% { opacity: 0.7; }
+
   50% { opacity: 1; }
   100% { opacity: 0.7; }
 }
@@ -2471,19 +2463,24 @@ html, body {
 
 
 /* === ЧИСТАЯ ПУЛЬСАЦИЯ (ПРОЗРАЧНОСТЬ) === */
-@keyframes safePulse {
-  0% { opacity: 0.7; }
+
   50% { opacity: 1; }
   100% { opacity: 0.7; }
 }
 
-.ring-progress {
-  animation: safePulse 2.5s infinite ease-in-out;
-  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
-}
+
 
 /* Поворачиваем сам SVG-контейнер, чтобы прогресс начинался сверху */
-.ring-svg {
-  transform: rotate(-90deg) !important;
-  transform-origin: center !important;
+
+
+/* === ФИНАЛЬНАЯ ПУЛЬСАЦИЯ (ТОЛЬКО ПРОЗРАЧНОСТЬ) === */
+@keyframes subtlePulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.ring-progress {
+  animation: subtlePulse 3s infinite ease-in-out;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
 }
