@@ -2432,19 +2432,27 @@ html, body {
   100% { opacity: 0.85; }
 }
 
-.ring-progress {
-  animation: ringPulse 3s infinite ease-in-out;
-  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
-}
+
 
 /* === ФИНАЛЬНАЯ ЧИСТАЯ ПУЛЬСАЦИЯ === */
-@keyframes cleanPulse {
-  0% { opacity: 0.85; }
+
   50% { opacity: 1; }
   100% { opacity: 0.85; }
 }
-.ring-progress {
-  animation: cleanPulse 3s infinite ease-in-out !important;
-  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease !important;
-  filter: none !important; /* Убиваем любые тени */
+
+
+/* === ВИДИМОЕ ДЫХАНИЕ КОЛЕЦ === */
+@keyframes breathe {
+  0% { stroke-width: var(--base-width); }
+  50% { stroke-width: calc(var(--base-width) + 2px); }
+  100% { stroke-width: var(--base-width); }
 }
+
+.ring-progress {
+  animation: breathe 3s infinite ease-in-out;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
+}
+
+/* Задаем базовую толщину для всех колец */
+.mini-ring .ring-progress { --base-width: 7px; }
+.ring-wrap .ring-progress { --base-width: 14px; }
