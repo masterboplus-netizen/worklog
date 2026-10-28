@@ -141,16 +141,17 @@ function switchTab(name) {
 
 
 
+
 // === ЛОГИКА СЛЕПОГО СЕЙФА (РАБОЧАЯ) ===
 let SAFE_PIN = '';
 const SAFE_SECTORS = 12;
-const SAFE_RADIUS = 100; // Уменьшили радиус под новое кольцо (220px)
+const SAFE_RADIUS = 100; // Радиус кольца (220px / 2 - 10px)
 
-// Правильные зоны (просто для визуала)
+// Правильные зоны (5-6ч, 11-12ч, 2-3ч)
 const TARGET_ZONES = [
-  { start: 150, end: 180 }, // 5-6 часов
-  { start: 330, end: 360 }, // 11-12 часов
-  { start: 60, end: 90 }    // 2-3 часа
+  { start: 150, end: 180 }, // 1-я точка
+  { start: 330, end: 360 }, // 2-я точка
+  { start: 60, end: 90 }    // 3-я точка
 ];
 
 function initSafeDial() {
@@ -164,7 +165,6 @@ function initSafeDial() {
   let isDragging = false;
   let currentSector = -1;
   let holdTimer = null;
-  let hasVibrated = false; // Флаг: вибрировали ли мы уже в этой зоне
 
   const getAngle = (x, y) => {
     const rect = container.getBoundingClientRect();
@@ -176,6 +176,7 @@ function initSafeDial() {
   };
 
   const processMove = (x, y, rect) => {
+    // Двигаем лупу
     const touchX = x - rect.left;
     const touchY = y - rect.top;
     touchEffect.style.left = touchX + 'px';
@@ -186,12 +187,13 @@ function initSafeDial() {
     
     if (sector !== currentSector) {
       currentSector = sector;
-      hasVibrated = false; // Сбрасываем флаг при переходе в новый сектор
       
+      // Крутим кольцо
       const circumference = 2 * Math.PI * SAFE_RADIUS;
       ring.style.strokeDasharray = (circumference / SAFE_SECTORS) + ' 1000';
       ring.style.strokeDashoffset = -(sector * (circumference / SAFE_SECTORS));
       
+      // Красим в зависимости от правильности
       const zoneIndex = SAFE_PIN.length;
       if (zoneIndex < TARGET_ZONES.length) {
         const zone = TARGET_ZONES[zoneIndex];
@@ -203,32 +205,28 @@ function initSafeDial() {
         }
         
         if (isCorrect) {
-            ring.style.filter = 'drop-shadow(0 0 8px rgba(0, 255, 0, 0.8)) brightness(1.2)';
-            
-            // ВИБРАЦИЯ ПРИ ВХОДЕ В ЗОНУ (сработает сразу, пока палец на экране)
-            if (!hasVibrated && 'vibrate' in navigator) {
-              try { navigator.vibrate(20); } catch(e) {}
-              hasVibrated = true;
-            }
+            ring.style.filter = 'drop-shadow(0 0 12px rgba(0, 255, 0, 1)) brightness(1.5)';
+            ring.style.stroke = '#00FF00'; // Зеленый
         } else {
             ring.style.filter = 'drop-shadow(0 0 8px rgba(255, 0, 0, 0.8)) brightness(1.2)';
+            ring.style.stroke = '#FF0000'; // Красный
         }
       }
       
       if (holdTimer) clearTimeout(holdTimer);
       
+      // Фиксация
       holdTimer = setTimeout(() => {
         if (SAFE_PIN.length < 3) {
           SAFE_PIN += sector;
           
           if (SAFE_PIN.length === 3) {
             setTimeout(() => {
-              const pin = '201186';
+              const pin = '201186'; // Пароль
               
               tryUnlock(pin).then(ok => {
                 if (ok) {
                   document.getElementById('scroll-pin-screen').classList.remove('active');
-                  document.getElementById('pin-screen').classList.add('hidden');
                   const l = document.getElementById('loading');
                   if (l) l.remove();
                   showScreen('dashboard');
@@ -237,7 +235,8 @@ function initSafeDial() {
                   alert('Неверный код');
                   SAFE_PIN = '';
                   ring.style.strokeDasharray = '0 1000';
-                  ring.style.filter = 'drop-shadow(0 0 4px rgba(255, 165, 0, 0.5))';
+                  ring.style.filter = 'drop-shadow(0 0 6px rgba(255, 165, 0, 0.6))';
+                  ring.style.stroke = '#FFA500';
                 }
               });
             }, 300);
@@ -268,14 +267,46 @@ function initSafeDial() {
     if (holdTimer) clearTimeout(holdTimer);
     setTimeout(() => {
         ring.style.strokeDasharray = '0 1000';
-        ring.style.filter = 'drop-shadow(0 0 4px rgba(255, 165, 0, 0.5))';
+        ring.style.filter = 'drop-shadow(0 0 6px rgba(255, 165, 0, 0.6))';
+        ring.style.stroke = '#FFA500';
     }, 300);
   };
 
   hitbox.addEventListener('touchend', endDrag);
   hitbox.addEventListener('touchcancel', endDrag);
 }
+
 function showCreators() {
+  // Удаляем старую модалку, если она есть
+  const old = document.getElementById('creators-modal');
+  if (old) old.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'creators-modal';
+  modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;';
+  modal.innerHTML = `
+    <div style="background: var(--bg2); padding: 24px; border-radius: 16px; text-align: center; max-width: 85%; border: 1px solid var(--border);">
+      <h2 style="color: var(--accent); margin-bottom: 24px; font-size: 20px; font-weight: 500;">Создатели проекта</h2>
+
+      <div style="margin-bottom: 16px;">
+        <div style="color: var(--fg); font-size: 16px; font-weight: 400; margin-bottom: 4px;">Product owner</div>
+        <div style="color: var(--fg-dim); font-size: 14px;">Andrey Sorokin</div>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <div style="color: var(--fg); font-size: 16px; font-weight: 400; margin-bottom: 4px;">Design & idea</div>
+        <div style="color: var(--fg-dim); font-size: 14px;">Karina Merkulova</div>
+      </div>
+
+      <div style="color: var(--fg-dim); font-size: 12px; margin-bottom: 24px;">Хераборина v7.8.0</div>
+      <button onclick="document.getElementById('creators-modal').remove()" class="pulse-btn" style="background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%;">Спасибо</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  setTimeout(() => { modal.style.opacity = '1'; }, 10);
+}
+
+ {
   // Удаляем старую модалку, если она есть, чтобы всегда создавать свежую
   const old = document.getElementById('creators-modal');
   if (old) old.remove();

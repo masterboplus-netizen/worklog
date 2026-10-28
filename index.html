@@ -11,12 +11,13 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="css/base.css?v=189">
-<link rel="stylesheet" href="css/components.css?v=311">
+<link rel="stylesheet" href="css/components.css?v=312">
 </head>
 <body>
 <div id="app"></div>
 
 <!-- Экран СЕЙФА -->
+
 <div id="scroll-pin-screen" class="screen active">
   <div id="safe-dial-container">
     <div class="safe-dial-hitbox" id="safe-dial-hitbox"></div>
@@ -27,6 +28,7 @@
     </svg>
   </div>
 </div>
+
 
 <!-- Дашборд (скрыт по умолчанию) -->
 <div id="dashboard" class="screen hidden">
@@ -75,7 +77,7 @@
 <script src="js/ui.js?v=288"></script>
 <script src="js/chart.js?v=222"></script>
 <script src="js/auth.js?v=205"></script>
-<script src="app.js?v=290"></script>
+<script src="app.js?v=291"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=205', { updateViaCache: 'none' }).catch(function(){});

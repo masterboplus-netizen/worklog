@@ -2651,16 +2651,7 @@ html, body {
 
 
 /* === ЭКРАН СЕЙФА (ТОЛЬКО КОЛЬЦО) === */
-#scroll-pin-screen {
-  display: none;
-  align-items: flex-end; /* Прижимаем к низу */
-  justify-content: center;
-  height: 100vh;
-  background: var(--bg);
-  position: fixed;
-  top: 0; left: 0; width: 100%;
-  z-index: 2000;
-}
+
 #scroll-pin-screen.active { display: flex; }
 
 /* Контейнер кольца */
@@ -2683,32 +2674,10 @@ html, body {
 }
 
 /* === КОЛЬЦО: УМЕНЬШЕНО И С ОТСТУПАМИ === */
-#safe-dial-container {
-  position: relative;
-  width: 220px; /* Уменьшили размер */
-  height: 220px;
-  margin-right: 20px; /* Отступ от правого края */
-  margin-bottom: 40px; /* Отступ от нижнего края */
-  touch-action: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 
 /* Эффект "лупы" под пальцем */
-#safe-dial-touch-effect {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  background: radial-gradient(circle, rgba(255, 165, 0, 0.8) 0%, rgba(255, 165, 0, 0) 70%);
-  border-radius: 50%;
-  pointer-events: none; /* Не мешает кликам */
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-  opacity: 0;
-  z-index: 100; /* Поверх кольца */
-  box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
-}
+
 #safe-dial-touch-effect.active {
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
@@ -2721,12 +2690,64 @@ html, body {
 }
 
 /* Делаем внешнюю область активной (невидимая рамка) */
+
+
+/* === СЕЙФ: ИДЕАЛЬНЫЕ СТИЛИ === */
+#scroll-pin-screen {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--bg);
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  z-index: 2000;
+  padding: 20px; /* Отступы по краям */
+  box-sizing: border-box;
+}
+#scroll-pin-screen.active { display: flex; }
+
+#safe-dial-container {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Центрируем */
+  margin: auto;
+}
+
+/* Невидимая зона для пальца */
 .safe-dial-hitbox {
   position: absolute;
-  top: -40px;
-  left: -40px;
-  right: -40px;
-  bottom: -40px;
+  top: -50px; left: -50px; right: -50px; bottom: -50px;
   border-radius: 50%;
-  z-index: 1; /* Чтобы перехватывать касания */
+  z-index: 10;
+}
+
+/* Лупа под пальцем */
+#safe-dial-touch-effect {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, rgba(255, 165, 0, 0.9) 0%, rgba(255, 165, 0, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+  opacity: 0;
+  z-index: 100;
+  box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+}
+#safe-dial-touch-effect.active {
+  transform: translate(-50%, -50%) scale(1.5);
+  opacity: 1;
+}
+
+/* Само кольцо */
+#safe-dial-ring {
+  transition: stroke 0.1s, filter 0.1s;
+  filter: drop-shadow(0 0 6px rgba(255, 165, 0, 0.6));
 }
