@@ -2490,21 +2490,35 @@ html, body {
 
 
 /* === ВИДИМОЕ ДЫХАНИЕ (ТОЛЩИНА) === */
-@keyframes breathWidth {
-  0% { stroke-width: var(--base-sw); }
+
   50% { stroke-width: calc(var(--base-sw) + 2px); }
   100% { stroke-width: var(--base-sw); }
 }
 
-.ring-progress {
-  animation: breathWidth 2.5s infinite ease-in-out;
+
+
+/* Задаем базовую толщину для каждого размера кольца */
+.mini-ring 
+.ring-wrap 
+
+/* === ДЫХАНИЕ ДЛЯ МАЛЫХ КОЛЕЦ === */
+@keyframes breatheMini {
+  0% { stroke-width: 7px; }
+  50% { stroke-width: 9px; }
+  100% { stroke-width: 7px; }
+}
+.mini-ring .ring-progress {
+  animation: breatheMini 2.5s infinite ease-in-out;
   transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
 }
 
-/* Задаем базовую толщину для каждого размера кольца */
-.mini-ring .ring-progress {
-  --base-sw: 7px;
+/* === ДЫХАНИЕ ДЛЯ БОЛЬШОГО КОЛЬЦА === */
+@keyframes breatheBig {
+  0% { stroke-width: 14px; }
+  50% { stroke-width: 18px; }
+  100% { stroke-width: 14px; }
 }
 .ring-wrap .ring-progress {
-  --base-sw: 14px;
+  animation: breatheBig 2.5s infinite ease-in-out;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
 }
