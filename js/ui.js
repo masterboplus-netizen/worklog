@@ -68,31 +68,41 @@ function renderDiary() {
   topBar.appendChild(navRow);
   c.appendChild(topBar);
 
-  // СВАЙП-ОБРАБОТЧИК
+  // СВАЙП-ОБРАБОТЧИК (Безопасный)
   let touchStartX = 0;
-  let touchEndX = 0;
-  const handleSwipe = () => {
-    const threshold = 50;
-    if (touchEndX < touchStartX - threshold) {
-      // Свайп влево -> следующий
-      if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET++; 
-      else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30;
-      else CALENDAR_OFFSET++; 
-      CALENDAR_SELECTED_DAY = null;
-      renderDiary();
-    }
-    if (touchEndX > touchStartX + threshold) {
-      // Свайп вправо -> предыдущий
-      if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET--; 
-      else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30;
-      else CALENDAR_OFFSET--; 
-      CALENDAR_SELECTED_DAY = null;
-      renderDiary();
-    }
-  };
+  let touchStartY = 0;
+  let isSwiping = false;
 
-  c.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
-  c.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, {passive: true});
+  c.addEventListener('touchstart', e => { 
+    touchStartX = e.changedTouches[0].screenX; 
+    touchStartY = e.changedTouches[0].screenY;
+    isSwiping = false;
+  }, {passive: true});
+
+  c.addEventListener('touchmove', e => {
+    if (isSwiping) return;
+    const diffX = e.changedTouches[0].screenX - touchStartX;
+    const diffY = e.changedTouches[0].screenY - touchStartY;
+    
+    // Если движение больше по горизонтали, чем по вертикали (чтобы не мешать скроллу)
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+      isSwiping = true; // Блокируем повторные срабатывания
+      
+      if (diffX < 0) {
+        // Свайп влево -> следующий
+        if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET++; 
+        else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30;
+        else CALENDAR_OFFSET++; 
+      } else {
+        // Свайп вправо -> предыдущий
+        if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET--; 
+        else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30;
+        else CALENDAR_OFFSET--; 
+      }
+      CALENDAR_SELECTED_DAY = null;
+      renderDiary();
+    }
+  }, {passive: true});
 
   // 2. СЕТКА
   const grid = document.createElement('div');
