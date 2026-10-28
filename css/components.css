@@ -2673,3 +2673,36 @@ html, body {
   width: 100%;
   max-width: 200px;
 }
+
+/* === САМЫЙ ЖЕСТКИЙ ФИКС КНОПОК МЕТРИК === */
+.chart-metrics-row-v4 {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important; /* Ровно 4 колонки */
+  gap: 8px !important;
+  margin: 16px !important;
+  width: calc(100% - 32px) !important;
+  box-sizing: border-box !important;
+}
+
+.chart-metric-btn {
+  width: 100% !important;
+  text-align: center !important;
+  padding: 10px 0 !important; /* Убираем боковые отступы, чтобы текст влез */
+  font-size: 11px !important; /* Чуть меньше шрифт */
+  background: var(--bg2) !important;
+  border: 1px solid transparent !important;
+  border-radius: 20px !important;
+  color: var(--fg) !important;
+  white-space: nowrap !important; /* Запрещаем перенос строк */
+  font-weight: 500 !important;
+  overflow: hidden !important; /* Скрываем всё, что не влезло */
+  text-overflow: ellipsis !important; /* Но добавляем троеточие */
+  display: block !important;
+  box-sizing: border-box !important;
+}
+
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
+}
