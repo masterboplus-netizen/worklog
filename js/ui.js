@@ -36,12 +36,22 @@ function renderDiary() {
   `;
   topBar.appendChild(filters);
 
-  // Навигация (только заголовок, без стрелок)
+  // Навигация: [<-] Название [->]
   const navRow = document.createElement('div');
-  navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; padding: 8px 0;';
+  navRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
+
+  const prevBtn = document.createElement('button');
+  prevBtn.id = 'cal-prev';
+  prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+  prevBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); padding:8px; cursor:pointer;';
+
+  const nextBtn = document.createElement('button');
+  nextBtn.id = 'cal-next';
+  nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+  nextBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); padding:8px; cursor:pointer;';
 
   const title = document.createElement('div');
-  title.style.cssText = 'font-size:20px; font-weight:600; color:var(--fg); text-align:center; cursor:pointer;';
+  title.style.cssText = 'font-size:20px; font-weight:600; color:var(--fg); text-align:center;';
 
   const now = new Date();
   let currentDisplayDate = new Date(now.getFullYear(), now.getMonth() + (CALENDAR_VIEW === 'month' ? CALENDAR_OFFSET : 0), now.getDate() + (CALENDAR_VIEW === 'week' ? CALENDAR_OFFSET * 7 : (CALENDAR_VIEW === '30days' ? CALENDAR_OFFSET : 0)));
@@ -64,20 +74,12 @@ function renderDiary() {
     title.textContent = startOfWeek.getDate() + ' ' + months[startOfWeek.getMonth()].slice(0,3) + ' – ' + endOfWeek.getDate() + ' ' + months[endOfWeek.getMonth()].slice(0,3);
   }
 
+  navRow.appendChild(prevBtn);
   navRow.appendChild(title);
+  navRow.appendChild(nextBtn);
   topBar.appendChild(navRow);
   c.appendChild(topBar);
 
-  // СВАЙП-ОБРАБОТЧИК (Безопасный)
-  let touchStartX = 0;
-  let touchStartY = 0;
-  let isSwiping = false;
-
-  c.addEventListener('touchstart', e => { 
-    touchStartX = e.changedTouches[0].screenX; 
-    touchStartY = e.changedTouches[0].screenY;
-    isSwiping = false;
-  }, {passive: true});
 
   c.addEventListener('touchmove', e => {
     if (isSwiping) return;
@@ -263,6 +265,25 @@ function renderDiary() {
       CALENDAR_SELECTED_DAY = null;
       renderDiary();
     });
+  });
+
+  // Обработчики стрелок
+  const prev = document.getElementById('cal-prev');
+  if (prev) prev.addEventListener('click', () => { 
+    if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET--; 
+    else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30;
+    else CALENDAR_OFFSET--; 
+    CALENDAR_SELECTED_DAY = null;
+    renderDiary(); 
+  });
+  
+  const next = document.getElementById('cal-next');
+  if (next) next.addEventListener('click', () => { 
+    if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET++; 
+    else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30;
+    else CALENDAR_OFFSET++; 
+    CALENDAR_SELECTED_DAY = null;
+    renderDiary(); 
   });
 }
 
