@@ -312,7 +312,7 @@ function renderRingSVG(percent, size, strokeWidth, color) {
     '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--bg3)" stroke-width="' + strokeWidth + '"/>' +
     '<circle class="ring-progress" cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" ' +
     'stroke-dasharray="' + c + '" stroke-dashoffset="' + c + '" data-target-offset="' + offset + '" ' +
-    'stroke-linecap="round" transform="rotate(-90 ' + size/2 + ' ' + size/2 + ')"/>' +
+    'stroke-linecap="round" style="transform-origin: ' + (size/2) + 'px ' + (size/2) + 'px; transform: rotate(-90deg);"/>' +
     '</svg>';
 }
 
