@@ -2052,17 +2052,7 @@ div[style*="justify-content: space-between"] {
 
 
 
-/* === НОВАЯ ЛЕНТА ГРАФИКА (TIME LINE) - FLEXBOX === */
-.tl-container {
-  display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding: 0; gap: 0; scrollbar-width: none; -ms-overflow-style: none;
-  scroll-behavior: smooth; height: 100%; width: 100%; align-items: flex-end;
-}
-.tl-container::-webkit-scrollbar { display: none; }
-
-.tl-col {
-  scroll-snap-align: start; 
-  min-width: 40px; flex: 0 0 40px; /* Ширина колонки */
+/* Ширина колонки */
   display: flex; flex-direction: column; 
   height: 100%; position: relative; cursor: pointer;
   overflow: visible !important; /* Важно! Чтобы легенда не обрезалась */
@@ -2114,4 +2104,36 @@ div[style*="justify-content: space-between"] {
   height: 1px;
   background: rgba(255,255,255,0.1);
   pointer-events: none;
+}
+
+
+/* === ЛЕНТА ГРАФИКА (ЧИСТАЯ ВЕРСИЯ) === */
+.tl-container {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 0; gap: 0; scrollbar-width: none; -ms-overflow-style: none;
+  scroll-behavior: smooth; height: 100%; width: 100%; align-items: flex-end;
+}
+.tl-container::-webkit-scrollbar { display: none; }
+
+.tl-col {
+  scroll-snap-align: start; min-width: 40px; flex: 0 0 40px;
+  display: flex; flex-direction: column; height: 100%; position: relative; cursor: pointer;
+  overflow: visible !important;
+}
+
+.tl-bar {
+  width: 100%; max-width: 24px; background: var(--accent);
+  border-radius: 4px 4px 0 0; transition: height 0.3s ease, background 0.2s;
+  position: relative;
+}
+.tl-bar.selected { background: #00ff00 !important; box-shadow: 0 0 10px rgba(0, 255, 0, 0.6); }
+
+.tl-label {
+  height: 40px; flex-shrink: 0;
+  display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+  font-size: 10px; color: var(--fg-dim); line-height: 1.1; padding-top: 8px;
+}
+
+.tl-bar:focus, .tl-col:focus, .tl-bar:active, .tl-col:active {
+  outline: none !important; -webkit-tap-highlight-color: transparent !important;
 }
