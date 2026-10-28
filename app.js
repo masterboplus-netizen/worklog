@@ -167,6 +167,7 @@ function initSafeDial() {
   let isDragging = false;
   let currentSector = -1;
   let holdTimer = null;
+  let hasVibrated = false; // Флаг: вибрировали ли мы уже в этой зоне
 
   const getAngle = (x, y) => {
     const rect = container.getBoundingClientRect();
@@ -175,13 +176,6 @@ function initSafeDial() {
     let angle = Math.atan2(y - cy, x - cx) * 180 / Math.PI;
     if (angle < 0) angle += 360;
     return angle;
-  };
-
-  const vibratePhone = (pattern) => {
-    // Проверяем поддержку и вызываем вибрацию
-    if ('vibrate' in navigator) {
-      try { navigator.vibrate(pattern); } catch(e) {}
-    }
   };
 
   const processMove = (x, y, rect) => {
@@ -195,6 +189,7 @@ function initSafeDial() {
     
     if (sector !== currentSector) {
       currentSector = sector;
+      hasVibrated = false; // Сбрасываем флаг при переходе в новый сектор
       
       const circumference = 2 * Math.PI * SAFE_RADIUS;
       ring.style.strokeDasharray = (circumference / SAFE_SECTORS) + ' 1000';
@@ -212,8 +207,12 @@ function initSafeDial() {
         
         if (isCorrect) {
             ring.style.filter = 'drop-shadow(0 0 8px rgba(0, 255, 0, 0.8)) brightness(1.2)';
-            // Вибрация СРАЗУ при попадании в зону (пока палец на экране)
-            vibratePhone(30); 
+            
+            // ВИБРАЦИЯ ПРИ ВХОДЕ В ЗОНУ (сработает сразу, пока палец на экране)
+            if (!hasVibrated && 'vibrate' in navigator) {
+              try { navigator.vibrate(20); } catch(e) {}
+              hasVibrated = true;
+            }
         } else {
             ring.style.filter = 'drop-shadow(0 0 8px rgba(255, 0, 0, 0.8)) brightness(1.2)';
         }
@@ -308,18 +307,3 @@ function showCreators() {
   document.body.appendChild(modal);
   setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
-
-// === ТЕСТ ВИБРАЦИИ ===
-document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('test-vibe-btn');
-    if (btn) {
-        btn.addEventListener('click', () => {
-            if (navigator.vibrate) {
-                navigator.vibrate([200, 100, 200]); // Двойная вибрация
-                alert('Вибрация вызвана!');
-            } else {
-                alert('Твой браузер не поддерживает вибрацию');
-            }
-        });
-    }
-});
