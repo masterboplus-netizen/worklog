@@ -177,8 +177,14 @@ function initSafeDial() {
     return angle;
   };
 
+  const vibratePhone = (pattern) => {
+    // Проверяем поддержку и вызываем вибрацию
+    if ('vibrate' in navigator) {
+      try { navigator.vibrate(pattern); } catch(e) {}
+    }
+  };
+
   const processMove = (x, y, rect) => {
-    // Двигаем лупу за пальцем (исправлено)
     const touchX = x - rect.left;
     const touchY = y - rect.top;
     touchEffect.style.left = touchX + 'px';
@@ -206,6 +212,8 @@ function initSafeDial() {
         
         if (isCorrect) {
             ring.style.filter = 'drop-shadow(0 0 8px rgba(0, 255, 0, 0.8)) brightness(1.2)';
+            // Вибрация СРАЗУ при попадании в зону (пока палец на экране)
+            vibratePhone(30); 
         } else {
             ring.style.filter = 'drop-shadow(0 0 8px rgba(255, 0, 0, 0.8)) brightness(1.2)';
         }
@@ -217,14 +225,9 @@ function initSafeDial() {
         if (SAFE_PIN.length < 3) {
           SAFE_PIN += sector;
           
-          // ВИБРАЦИЯ (исправлено: теперь точно сработает, если есть поддержка)
-          if (navigator.vibrate) {
-            navigator.vibrate(50);
-          }
-          
           if (SAFE_PIN.length === 3) {
             setTimeout(() => {
-              const pin = '201186'; // Пароль
+              const pin = '201186';
               
               tryUnlock(pin).then(ok => {
                 if (ok) {
@@ -248,11 +251,10 @@ function initSafeDial() {
     }
   };
 
-  // Слушаем ХИТБОКС (внешнюю область) - ИСПРАВЛЕНО
   hitbox.addEventListener('touchstart', (e) => {
     e.preventDefault();
     isDragging = true;
-    touchEffect.classList.add('active'); // Включаем лупу
+    touchEffect.classList.add('active');
     const rect = container.getBoundingClientRect();
     processMove(e.touches[0].clientX, e.touches[0].clientY, rect);
   }, { passive: false });
@@ -266,7 +268,7 @@ function initSafeDial() {
 
   const endDrag = () => {
     isDragging = false;
-    touchEffect.classList.remove('active'); // Выключаем лупу
+    touchEffect.classList.remove('active');
     if (holdTimer) clearTimeout(holdTimer);
     setTimeout(() => {
         ring.style.strokeDasharray = '0 1000';
@@ -277,7 +279,6 @@ function initSafeDial() {
   hitbox.addEventListener('touchend', endDrag);
   hitbox.addEventListener('touchcancel', endDrag);
 }
-
 function showCreators() {
   // Удаляем старую модалку, если она есть, чтобы всегда создавать свежую
   const old = document.getElementById('creators-modal');
