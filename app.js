@@ -122,8 +122,10 @@ function initSafeDial() {
       hasMoved = true; // Если сектор сменился, значит, пользователь двигал пальцем
       
       const circumference = 2 * Math.PI * SAFE_RADIUS;
+      // Сдвигаем на 90 градусов (одна четверть), чтобы начало было с 12 часов
+      const rotateOffset = circumference / 4; 
       ring.style.strokeDasharray = (circumference / SAFE_SECTORS) + ' 1000';
-      ring.style.strokeDashoffset = -(sector * (circumference / SAFE_SECTORS));
+      ring.style.strokeDashoffset = rotateOffset - (sector * (circumference / SAFE_SECTORS));
       
       const zoneIndex = SAFE_INPUTS.length;
       let isCorrect = false;
