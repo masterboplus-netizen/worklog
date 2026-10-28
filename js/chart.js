@@ -141,9 +141,23 @@ function renderActivityPageV2() {
 
         const cols = scrollContainer.querySelectorAll('.tl-col');
         
-        // 1. Сначала сбрасываем выделение со ВСЕХ столбиков
+        // 1. Сначала сбрасываем выделение и СЧИТАЕМ ВЫСОТУ
         cols.forEach(col => {
             col.querySelector('.tl-bar').classList.remove('selected');
+            
+            const dateStr = col.dataset.date;
+            let v = 0;
+            for (const sess of window.DATA.sessions || []) {
+                if (sess.date === dateStr) {
+                    if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
+                    else if (CHART_STATE.metric === 'events') v += sess.events || 0;
+                    else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
+                    else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
+                }
+            }
+            // Восстанавливаем высоту столбика!
+            const h = v ? Math.max(2, Math.round(v / maxVal * 100)) : 0;
+            col.querySelector('.tl-bar').style.height = h + '%';
         });
 
         // 2. Если есть выбранный день, выделяем только его и показываем тултип
