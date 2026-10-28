@@ -141,29 +141,25 @@ function switchTab(name) {
 
 
 
-// === ЛОГИКА СЛЕПОГО СЕЙФА ===
+
+// === ЛОГИКА СЛЕПОГО СЕЙФА (ТОЛЬКО КОЛЬЦО) ===
 let SAFE_PIN = '';
-let SAFE_TARGET = '201186'; // Пароль (20-11-86)
-const SAFE_SECTORS = 12; // 12 секторов (как часы)
+const SAFE_SECTORS = 12; // 12 секторов
 const SAFE_RADIUS = 130;
-const SAFE_CENTER = { x: 140, y: 140 };
 
 function initSafeDial() {
   const container = document.getElementById('safe-dial-container');
   const ring = document.getElementById('safe-dial-ring');
-  
-  if (!container) return;
+  if (!container || !ring) return;
   
   let isDragging = false;
   let currentSector = -1;
   let holdTimer = null;
-  let lastX = 0, lastY = 0;
 
   const getAngle = (x, y) => {
     const rect = container.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
-    // atan2 возвращает от -PI до PI, переводим в 0-360
     let angle = Math.atan2(y - cy, x - cx) * 180 / Math.PI;
     if (angle < 0) angle += 360;
     return angle;
@@ -173,27 +169,26 @@ function initSafeDial() {
     const angle = getAngle(x, y);
     const sector = Math.floor(angle / (360 / SAFE_SECTORS));
     
-    // Если сектор изменился
     if (sector !== currentSector) {
       currentSector = sector;
       
-      // Анимация вспышки
-      ring.style.strokeDasharray = (SAFE_SECTORS > 0 ? (2 * Math.PI * SAFE_RADIUS) / SAFE_SECTORS : 0) + ' 1000';
-      ring.style.strokeDashoffset = -(sector * (2 * Math.PI * SAFE_RADIUS) / SAFE_SECTORS);
+      // Визуальный отклик: подсвечиваем сектор
+      const sectorAngle = 360 / SAFE_SECTORS;
+      const circumference = 2 * Math.PI * SAFE_RADIUS;
+      ring.style.strokeDasharray = (circumference / SAFE_SECTORS) + ' 1000';
+      ring.style.strokeDashoffset = -(sector * (circumference / SAFE_SECTORS));
       
-      // Сброс таймера фиксации
       if (holdTimer) clearTimeout(holdTimer);
       
-      // Таймер: если палец задержался на 600мс, фиксируем
+      // Фиксация при задержке
       holdTimer = setTimeout(() => {
         if (SAFE_PIN.length < 3) {
           SAFE_PIN += sector;
-          if (navigator.vibrate) navigator.vibrate(50); // Вибрация
+          if (navigator.vibrate) navigator.vibrate(50);
           
-          
-          // Если ввели 3 числа, сбрасываем кольцо
+          // Если ввели 3 числа, сбрасываем
           if (SAFE_PIN.length === 3) {
-            ring.style.strokeDasharray = '0 1000';
+            setTimeout(() => { ring.style.strokeDasharray = '0 1000'; }, 300);
           }
         }
       }, 600);
@@ -203,15 +198,13 @@ function initSafeDial() {
   container.addEventListener('touchstart', (e) => {
     e.preventDefault();
     isDragging = true;
-    const touch = e.touches[0];
-    processMove(touch.clientX, touch.clientY);
+    processMove(e.touches[0].clientX, e.touches[0].clientY);
   }, { passive: false });
 
   container.addEventListener('touchmove', (e) => {
     e.preventDefault();
     if (!isDragging) return;
-    const touch = e.touches[0];
-    processMove(touch.clientX, touch.clientY);
+    processMove(e.touches[0].clientX, e.touches[0].clientY);
   }, { passive: false });
 
   const endDrag = () => {
@@ -221,30 +214,11 @@ function initSafeDial() {
 
   container.addEventListener('touchend', endDrag);
   container.addEventListener('touchcancel', endDrag);
-
-  // Сброс при старте
-  SAFE_PIN = '';
-  indicator.textContent = '0';
-  ring.style.strokeDasharray = '0 1000';
 }
 
+// Кнопку «Войти» мы убрали, но функция осталась для отладки
 window.checkScrollPin = async function() {
-  const err = document.getElementById('scroll-pin-error');
-  if (err) err.textContent = '';
-  
-  if (SAFE_PIN.length < 3) {
-    if (err) err.textContent = 'Введи 3 числа';
-    return;
-  }
-  
-  // Проверяем, совпадает ли SAFE_PIN с зашифрованным ключом
-  // Внимание: для этого нужно, чтобы SAFE_PIN собирал числа правильно.
-  // Пока что выведем alert для проверки.
-  alert('Ты ввел сектора: ' + SAFE_PIN.split('').join(' - '));
-  
-  // Заглушка для проверки (потом поменяем на tryUnlock)
-  // const ok = await tryUnlock('201186');
-  // ...
+  alert('Введено: ' + SAFE_PIN);
 }
 
 function showCreators() {

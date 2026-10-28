@@ -2588,31 +2588,12 @@ html, body {
 
 
 /* === ЭКРАН КРУТИЛОК === */
-#scroll-pin-screen {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: var(--bg);
-  position: fixed;
-  top: 0; left: 0; width: 100%;
-  z-index: 2000;
-}
+
 #scroll-pin-screen.active { display: flex; }
 
-.scroll-pin-box {
-  text-align: center;
-  width: 100%;
-  max-width: 340px;
-}
 
-.scroll-wheels-container {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  position: relative;
-  margin-bottom: 30px;
-}
+
+
 
 /* Рамка по центру */
 .scroll-wheels-container::before {
@@ -2661,18 +2642,7 @@ html, body {
   height: 60px;
 }
 
-.scroll-pin-btn {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  padding: 12px 32px;
-  border-radius: 24px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  max-width: 200px;
-}
+
 
 /* === САМЫЙ ЖЕСТКИЙ ФИКС КНОПОК МЕТРИК === */
 .chart-metrics-row-v4 {
@@ -2710,3 +2680,25 @@ html, body {
 /* === СЛЕПОЙ СЕЙФ === */
 
 
+
+/* === ЭКРАН СЕЙФА (ТОЛЬКО КОЛЬЦО) === */
+#scroll-pin-screen {
+  display: none;
+  align-items: flex-end; /* Прижимаем к низу */
+  justify-content: center;
+  height: 100vh;
+  background: var(--bg);
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  z-index: 2000;
+}
+#scroll-pin-screen.active { display: flex; }
+
+/* Контейнер кольца */
+#safe-dial-container {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin-bottom: 20vh; /* Отступ от низа экрана (зона клавиатуры) */
+  touch-action: none; /* Отключаем скролл страницы при кручении */
+}
