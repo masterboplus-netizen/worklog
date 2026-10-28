@@ -2304,3 +2304,35 @@ div[style*="justify-content: space-between"] {
   width: 100% !important;
   margin-top: auto !important;
 }
+
+/* === ПРЯЧЕМ СТАРЫЙ ЭКРАН ЗАГРУЗКИ === */
+#loading {
+  display: none !important;
+}
+
+/* === ФИКС ПУСТОТЫ И СКРОЛЛА === */
+html, body {
+  height: 100%;
+  overflow: hidden; /* Отключаем глобальный скролл */
+}
+
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Контейнеры вкладок: скролл только внутри, без лишней пустоты */
+#content, #content-diary, #content-projects, #content-activity {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 20px !important; /* Небольшой отступ, чтобы контент не прилипал к меню */
+}
+
+/* Убираем любые жесткие min-height, которые тянут страницу */
+#content-activity {
+  min-height: 0 !important;
+  height: auto !important;
+}

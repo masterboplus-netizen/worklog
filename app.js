@@ -43,15 +43,10 @@ async function init() {
 
   setupTabs();
 
-  // Всегда показываем окно загрузки, затем экран PIN
+  // Сразу показываем экран PIN, без старого экрана загрузки
   const loadingEl = document.getElementById('loading');
-  if (loadingEl) {
-    loadingEl.classList.remove('hidden');
-    setTimeout(() => {
-      loadingEl.classList.add('hidden');
-      showScreen('pin-screen');
-    }, 1000);
-  }
+  if (loadingEl) loadingEl.classList.add('hidden');
+  showScreen('pin-screen');
 }
 
 function setupTabs() {
