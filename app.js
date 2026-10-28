@@ -218,13 +218,35 @@ function initSafeDial() {
       // Фиксация при задержке
       holdTimer = setTimeout(() => {
         if (SAFE_PIN.length < 3) {
+          // Проверяем, попал ли пользователь в правильную зону
+          const zoneIndex = SAFE_PIN.length;
+          let isCorrect = false;
+          
+          if (zoneIndex < TARGET_ZONES.length) {
+            const zone = TARGET_ZONES[zoneIndex];
+            if (zone.end === 360) {
+              if (angle >= zone.start || angle <= 0) isCorrect = true;
+            } else {
+              if (angle >= zone.start && angle <= zone.end) isCorrect = true;
+            }
+          }
+          
           SAFE_PIN += sector;
-          if (navigator.vibrate) navigator.vibrate(50);
+          
+          // ВИБРАЦИЯ
+          if (navigator.vibrate) {
+            if (isCorrect) {
+              navigator.vibrate(50); // Короткая вибрация за правильную точку
+            } else {
+              navigator.vibrate([50, 50, 50]); // Тройная вибрация (ошибка)
+            }
+          }
           
           // Если ввели 3 числа, проверяем
           if (SAFE_PIN.length === 3) {
-            // Тут мы просто покажем алерт, что ввод завершен (для теста)
             setTimeout(() => { 
+              if (navigator.vibrate) navigator.vibrate([100, 50, 100]); // Двойная вибрация (успех/провал)
+              
               alert('Код введен! Сектора: ' + SAFE_PIN);
               SAFE_PIN = '';
               ring.style.strokeDasharray = '0 1000'; 
