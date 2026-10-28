@@ -950,6 +950,7 @@ function renderActivityPageV2() {
         const col = document.createElement('div');
         col.className = 'tl-col';
         col.dataset.date = dateStr;
+        col.style.position = 'relative'; // Важно для позиционирования легенды
 
         // Верхняя часть (для столбика и легенды)
         const topSpace = document.createElement('div');
@@ -1053,7 +1054,7 @@ function renderActivityPageV2() {
                 const legend = document.createElement('div');
                 legend.className = 'tl-legend';
                 legend.textContent = text;
-                bar.appendChild(legend);
+                
             }
         });
     };
@@ -1112,7 +1113,7 @@ function renderActivityPageV2() {
         legend.style.top = '-35px'; // Поднимаем выше
         legend.style.zIndex = '100';
         legend.textContent = text;
-        bar.appendChild(legend);
+        
     });
 
     c.querySelectorAll('.cal-btn[data-metric]').forEach(btn => {

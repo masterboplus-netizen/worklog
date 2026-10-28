@@ -2063,7 +2063,7 @@ div[style*="justify-content: space-between"] {
 
 .tl-col {
   scroll-snap-align: start; 
-  min-width: 42px; flex: 0 0 42px; /* Ширина колонки */
+  min-width: 40px; flex: 0 0 40px; /* Ширина колонки */
   display: flex; flex-direction: column; 
   height: 100%; position: relative; cursor: pointer;
 }
@@ -2083,7 +2083,7 @@ div[style*="justify-content: space-between"] {
 }
 
 .tl-legend {
-  position: absolute; top: -24px; left: 50%; transform: translateX(-50%);
+  position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
   color: var(--accent); font-size: 12px; font-weight: 600;
   white-space: nowrap; text-shadow: 0 0 4px rgba(0,0,0,0.9);
   pointer-events: none; z-index: 10;
