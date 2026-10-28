@@ -77,7 +77,7 @@ function switchTab(name) {
 // === ЛОГИКА СЕЙФА ===
 let SAFE_PIN = '';
 const SAFE_SECTORS = 12;
-const SAFE_RADIUS = 100;
+const SAFE_RADIUS = 90;
 
 const TARGET_ZONES = [
   { start: 150, end: 180 },
@@ -137,10 +137,10 @@ function initSafeDial() {
         }
         
         if (isCorrect) {
-            ring.style.filter = 'drop-shadow(0 0 12px rgba(0, 255, 0, 1)) brightness(1.5)';
+            ring.style.filter = 'drop-shadow(0 0 15px rgba(0, 255, 0, 1)) brightness(1.8)';
             ring.style.stroke = '#00FF00';
         } else {
-            ring.style.filter = 'drop-shadow(0 0 8px rgba(255, 0, 0, 0.8)) brightness(1.2)';
+            ring.style.filter = 'drop-shadow(0 0 15px rgba(255, 0, 0, 1)) brightness(1.8)';
             ring.style.stroke = '#FF0000';
         }
       }
