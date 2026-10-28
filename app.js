@@ -308,3 +308,18 @@ function showCreators() {
   document.body.appendChild(modal);
   setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
+
+// === ТЕСТ ВИБРАЦИИ ===
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('test-vibe-btn');
+    if (btn) {
+        btn.addEventListener('click', () => {
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200]); // Двойная вибрация
+                alert('Вибрация вызвана!');
+            } else {
+                alert('Твой браузер не поддерживает вибрацию');
+            }
+        });
+    }
+});
