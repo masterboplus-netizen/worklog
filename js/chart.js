@@ -1,4 +1,4 @@
-// === МОДУЛЬ: ГРАФИК (ЧИСТАЯ ВЕРСИЯ V3) ===
+// === МОДУЛЬ: ГРАФИК (ЧИСТАЯ ВЕРСИЯ V4) ===
 let CHART_STATE = { metric: 'duration', selectedDay: null, currentMonth: null, currentYear: null };
 
 function renderActivityPageV2() {
@@ -6,9 +6,8 @@ function renderActivityPageV2() {
     if (!c || !window.DATA) return;
     c.innerHTML = '';
 
-    // 1. НАВИГАЦИЯ
     const navRow = document.createElement('div');
-    navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:16px; margin-bottom: 16px; font-size:20px; font-weight:600; color:var(--fg);';
+    navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:16px; margin-bottom: 24px; font-size:20px; font-weight:600; color:var(--fg);';
 
     const monthSpan = document.createElement('span');
     monthSpan.id = 'chart-month-label';
@@ -27,51 +26,39 @@ function renderActivityPageV2() {
     monthSpan.textContent = months[CHART_STATE.currentMonth];
     yearSpan.textContent = CHART_STATE.currentYear;
 
-    monthSpan.addEventListener('click', () => openMonthPicker());
-    yearSpan.addEventListener('click', () => openYearPicker());
-
     navRow.appendChild(monthSpan);
     navRow.appendChild(yearSpan);
     c.appendChild(navRow);
 
-    // 2. ГРАФИК
     const chartWrapper = document.createElement('div');
-    chartWrapper.style.cssText = 'display: flex; width: 100%; height: 240px; position: relative; padding-bottom: 30px; box-sizing: border-box;';
+    chartWrapper.className = 'chart-wrapper-v4';
 
-    // Ось Y (3 значения)
     const yAxis = document.createElement('div');
-    yAxis.style.cssText = 'width: 45px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 30px; padding-top: 0;';
+    yAxis.className = 'chart-y-axis-v4';
 
-    // Лента
     const scrollContainer = document.createElement('div');
     scrollContainer.className = 'tl-container';
     scrollContainer.id = 'tl-scroll';
-    scrollContainer.style.flex = '1';
-    scrollContainer.style.padding = '0';
-    scrollContainer.style.margin = '0';
 
     chartWrapper.appendChild(yAxis);
     chartWrapper.appendChild(scrollContainer);
     c.appendChild(chartWrapper);
 
-    // 3. ЛЕГЕНДА
     const legendBar = document.createElement('div');
     legendBar.id = 'tl-legend-bar';
-    legendBar.style.cssText = 'height: 24px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent); margin: 8px 0;';
+    legendBar.className = 'chart-legend-v4';
     c.appendChild(legendBar);
 
-    // 4. КНОПКИ (Полные названия)
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     const metricHTML = metrics.map(([key, label]) =>
-        '<button class="cal-btn' + (CHART_STATE.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 6px 0; font-size: 10px; white-space: nowrap;">' + label + '</button>'
+        '<button class="cal-btn chart-metric-btn' + (CHART_STATE.metric === key ? ' active' : '') + '" data-metric="' + key + '">' + label + '</button>'
     ).join('');
 
     const metricBar = document.createElement('div');
-    metricBar.style.cssText = 'display:flex; gap:4px; margin: 0 8px 16px 8px; justify-content: space-between; box-sizing: border-box;';
+    metricBar.className = 'chart-metrics-row-v4';
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
 
-    // 5. ГЕНЕРАЦИЯ ЛЕНТЫ
     let firstSessionDate = new Date();
     if (window.DATA.sessions && window.DATA.sessions.length > 0) {
         const sorted = window.DATA.sessions.slice().sort((a, b) => a.date.localeCompare(b.date));
@@ -90,15 +77,12 @@ function renderActivityPageV2() {
         const col = document.createElement('div');
         col.className = 'tl-col';
         col.dataset.date = dateStr;
-        col.style.position = 'relative';
-        col.style.outline = 'none';
 
-        const topSpace = document.createElement('div');
-        topSpace.style.cssText = 'flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative;';
-
+        const barWrap = document.createElement('div');
+        barWrap.className = 'tl-bar-wrap';
         const barDiv = document.createElement('div');
         barDiv.className = 'tl-bar';
-        topSpace.appendChild(barDiv);
+        barWrap.appendChild(barDiv);
 
         const labelDiv = document.createElement('div');
         labelDiv.className = 'tl-label';
@@ -106,14 +90,13 @@ function renderActivityPageV2() {
         const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
         labelDiv.innerHTML = `<div>${dayNum}</div><div style="font-size:9px;opacity:0.6;">${dowNames[iterDate.getDay()]}</div>`;
 
-        col.appendChild(topSpace);
+        col.appendChild(barWrap);
         col.appendChild(labelDiv);
         scrollContainer.appendChild(col);
 
         iterDate.setDate(iterDate.getDate() + 1);
     }
 
-    // 6. ОБНОВЛЕНИЕ
     const updateChart = () => {
         const scrollLeft = scrollContainer.scrollLeft;
         const containerWidth = scrollContainer.clientWidth;
@@ -146,10 +129,9 @@ function renderActivityPageV2() {
         }
         if (maxVal === 0) maxVal = CHART_STATE.metric === 'duration' ? 720 : 10;
 
-        // Ось Y (3 значения)
         let yHTML = '';
-        const values = [0, maxVal / 2, maxVal];
-        for (let i = 2; i >= 0; i--) {
+        const values = [maxVal, maxVal / 2, 0];
+        for (let i = 0; i < 3; i++) {
             const val = Math.round(values[i]);
             const lbl = CHART_STATE.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
             yHTML += '<div>' + lbl + '</div>';
@@ -210,7 +192,7 @@ function renderActivityPageV2() {
         updateChart();
     });
 
-    c.querySelectorAll('.cal-btn[data-metric]').forEach(btn => {
+    c.querySelectorAll('.chart-metric-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             CHART_STATE.metric = btn.dataset.metric;
