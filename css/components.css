@@ -2395,33 +2395,18 @@ html, body {
 }
 
 /* === Сияние для прогресса колец === */
-.ring-svg circle.ring-progress {
-  filter: drop-shadow(0 0 6px currentColor);
-  transition: stroke-dasharray 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
-}
+.ring-svg circle
 
 /* Усиливаем сияние для главного кольца */
-.ring-wrap .ring-svg circle.ring-progress {
-  filter: drop-shadow(0 0 10px currentColor);
-}
+.ring-wrap .ring-svg circle
 
 /* === ПРИНУДИТЕЛЬНОЕ СИЯНИЕ ДЛЯ КОЛЕЦ === */
-.ring-progress {
-  
-  transition: stroke-dasharray 1.5s ease-out !important;
-}
-.ring-svg circle {
-  transition: all 0.3s ease;
-}
+
+
 
 /* === АНИМАЦИЯ КОЛЕЦ (OFFSET) И СИЯНИЕ === */
-.ring-progress {
-  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease !important;
-  
-}
-.ring-svg circle {
-  transition: stroke 0.3s ease;
-}
+
+
 
 /* === ФИКС: Убираем любые фоны и тени у контейнеров колец === */
 .mini-ring, .ring-wrap {
@@ -2437,12 +2422,19 @@ html, body {
   100% { filter: drop-shadow(0 0 2px currentColor); opacity: 0.9; }
 }
 
+
+
+/* Чтобы пульсация не была слишком навязчивой на малых кольцах */
+.mini-ring 
+
+/* === ПУЛЬСАЦИЯ КОЛЕЦ (ЧИСТАЯ, БЕЗ DROP-SHADOW) === */
+@keyframes ringPulse {
+  0% { opacity: 0.85; }
+  50% { opacity: 1; }
+  100% { opacity: 0.85; }
+}
+
 .ring-progress {
   animation: ringPulse 3s infinite ease-in-out;
   transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
-}
-
-/* Чтобы пульсация не была слишком навязчивой на малых кольцах */
-.mini-ring .ring-progress {
-  animation-duration: 4s; 
 }

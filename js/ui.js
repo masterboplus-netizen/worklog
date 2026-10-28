@@ -307,6 +307,7 @@ function renderRingSVG(percent, size, strokeWidth, color) {
   const dash = c * p / 100;
   const offset = c - dash;
   
+  // Абсолютно чистый SVG, никаких фильтров
   return '<svg width="' + size + '" height="' + size + '" class="ring-svg" style="overflow: visible;">' +
     '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--bg3)" stroke-width="' + strokeWidth + '"/>' +
     '<circle class="ring-progress" cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" ' +
@@ -350,19 +351,15 @@ function renderHeroRings() {
   // --- Считаем проценты для малых колец (через среднее) ---
   const uniqueDays = new Set(sessions.map(s => s.date)).size || 1;
 
-  // 1. Сообщения
-  const totalMsgs = sessions.reduce((acc, s) => acc + (s.events || 0), 0);
-  const avgMsgsPerDay = totalMsgs / uniqueDays;
-  const msgGoal = avgMsgsPerDay > 0 ? avgMsgsPerDay : 100;
+  // 1. Сообщения (относительно рекорда)
+  const maxMsg = Math.max(1, ...sessions.map(s => s.events || 0));
   let msgRaw = MINI_MSG_PERIOD === 'day' ? _sumRange(sessions, 'day', 'events') : msgVal;
-  let pctMsg = Math.min(100, Math.round(msgRaw / msgGoal * 100));
+  let pctMsg = Math.min(100, Math.round(msgRaw / maxMsg * 100));
 
-  // 2. Скрины
-  const totalScrs = sessions.reduce((acc, s) => acc + (s.screens || 0), 0);
-  const avgScrsPerDay = totalScrs / uniqueDays;
-  const scrGoal = avgScrsPerDay > 0 ? avgScrsPerDay : 10;
+  // 2. Скрины (относительно рекорда)
+  const maxScr = Math.max(1, ...sessions.map(s => s.screens || 0));
   let scrRaw = MINI_SCR_PERIOD === 'day' ? _sumRange(sessions, 'day', 'screens') : scrVal;
-  let pctScr = Math.min(100, Math.round(scrRaw / scrGoal * 100));
+  let pctScr = Math.min(100, Math.round(scrRaw / maxScr * 100));
 
   // 3. Задачи (с учетом периода)
   const tasksVal = _sumRange(_sessions, MINI_TASKS_PERIOD, 'tasks_done');
