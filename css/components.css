@@ -2404,3 +2404,12 @@ html, body {
 .ring-wrap .ring-svg circle.ring-progress {
   filter: drop-shadow(0 0 10px currentColor);
 }
+
+/* === ПРИНУДИТЕЛЬНОЕ СИЯНИЕ ДЛЯ КОЛЕЦ === */
+.ring-progress {
+  filter: drop-shadow(0 0 8px currentColor) !important;
+  transition: stroke-dasharray 1.5s ease-out !important;
+}
+.ring-svg circle {
+  transition: all 0.3s ease;
+}

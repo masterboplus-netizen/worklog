@@ -718,13 +718,6 @@ function renderChart(hideFilters = false) {
   return container;
 }
 
-function renderDashboard() {
-  if (!window.DATA) return;
-  const c = document.getElementById('content');
-  if (!c) return;
-  c.innerHTML = '';
-  c.appendChild(renderHeroRings());
-}
 
 
 // === ШТОРКА ВЫБОРА МЕСЯЦА ===
@@ -1160,4 +1153,24 @@ function renderActivityPageV2() {
         scrollContainer.scrollTo({ left: scrollContainer.scrollWidth, behavior: 'smooth' });
         setTimeout(() => { updateChart(); }, 600);
     }, 100);
+}
+// === ОБНОВЛЕННЫЙ DASHBOARD С АНИМАЦИЕЙ ===
+function renderDashboard() {
+  if (!window.DATA) return;
+  const c = document.getElementById('content');
+  if (!c) return;
+  c.innerHTML = '';
+  c.appendChild(renderHeroRings());
+
+  // Принудительный запуск анимации для всех колец
+  setTimeout(() => {
+    document.querySelectorAll('.ring-progress').forEach(circle => {
+      const targetDash = circle.getAttribute('data-target-dash');
+      const circumference = circle.getAttribute('data-circumference');
+      if (targetDash && circumference) {
+        // Устанавливаем правильную длину с CSS-переходом
+        circle.style.strokeDasharray = targetDash + ' ' + circumference;
+      }
+    });
+  }, 100); // Небольшая задержка, чтобы DOM успел отрисоваться
 }
