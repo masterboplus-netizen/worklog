@@ -233,8 +233,7 @@ function renderDiary() {
       const timeRange = (s.start || '?') + ' → ' + (s.end || '?');
       const dur = fmtH(s.duration_min || 0);
       const proj = projName[s.project] || s.project || '–';
-      const note = s.note ? s.note.replace(/
-/g, '<br>') : '';
+      const note = s.note ? s.note.replace(/\n/g, '<br>') : '';
 
       item.innerHTML =
         '<div class="diary-date" style="margin-top:0; border:none; padding:0; margin-bottom:4px;">' + formatDiaryDate(s.date) + '</div>' +
