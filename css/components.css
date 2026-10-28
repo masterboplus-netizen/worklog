@@ -2057,7 +2057,7 @@ div[style*="justify-content: space-between"] {
 }
 .tl-container::-webkit-scrollbar { display: none; }
 .tl-col {
-  scroll-snap-align: start; min-width: 44px; flex: 0 0 44px;
+  scroll-snap-align: start; min-width: 38px; flex: 0 0 38px;
   display: flex; flex-direction: column; justify-content: flex-end;
   align-items: center; height: 100%; position: relative; cursor: pointer;
 }
