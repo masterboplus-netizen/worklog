@@ -2454,17 +2454,22 @@ html, body {
 .ring-wrap 
 
 /* === ПУЛЬСАЦИЯ ЧЕРЕЗ МАСШТАБ (РАБОТАЕТ ВЕЗДЕ) === */
-@keyframes pulseScale {
-  0% { transform: scale(1); }
+
   50% { transform: scale(1.02); } /* Увеличиваем на 2% */
   100% { transform: scale(1); }
 }
 
+
+
+/* === БЕЗОПАСНАЯ ПУЛЬСАЦИЯ (БЕЗ РАЗЛЕТАЮЩИХСЯ КОЛЕЦ) === */
+@keyframes safePulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
 .ring-progress {
-  /* transform-origin: center; чтобы масштабировалось от центра */
-  transform-origin: center;
-  animation: pulseScale 2s infinite ease-in-out;
+  animation: safePulse 2.5s infinite ease-in-out;
   transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
-  /* Убеждаемся, что нет старых фильтров */
-  filter: none !important; 
+  transform: none !important; /* На всякий случай убиваем старые трансформации */
 }
