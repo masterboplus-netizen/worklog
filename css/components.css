@@ -2148,7 +2148,7 @@ div[style*="justify-content: space-between"] {
 .tl-label { height: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 10px; color: var(--fg-dim); line-height: 1.1; flex-shrink: 0; }
 .chart-legend-v4 { height: 24px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
 .chart-metrics-row-v4 { display: flex; gap: 6px; margin: 0 16px; justify-content: space-between; }
-.chart-metric-btn { flex: 1; text-align: center; padding: 8px 0; font-size: 12px; white-space: nowrap; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; color: var(--fg); overflow: hidden; text-overflow: ellipsis; transition: all 0.2s; }
+.chart-metric-btn { flex: 1; text-align: center; padding: 8px 2px; font-size: 11px; white-space: nowrap; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; color: var(--fg); overflow: hidden; text-overflow: ellipsis; transition: all 0.2s; }
 .chart-metric-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 /* === Починка нижнего меню === */
 .tabs { display: flex; justify-content: space-around; align-items: center; padding: 8px 4px 20px 4px; background: var(--bg); border-top: 1px solid var(--border); position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; }
