@@ -63,7 +63,7 @@ function renderActivityPageV2() {
     // 4. КНОПКИ (Полные названия)
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     const metricHTML = metrics.map(([key, label]) =>
-        '<button class="cal-btn' + (CHART_STATE.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 6px 0; font-size: 12px; white-space: nowrap;">' + label + '</button>'
+        '<button class="cal-btn' + (CHART_STATE.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 6px 0; font-size: 10px; white-space: nowrap;">' + label + '</button>'
     ).join('');
 
     const metricBar = document.createElement('div');
