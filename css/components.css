@@ -2049,31 +2049,44 @@ div[style*="justify-content: space-between"] {
 }
 
 
-/* === НОВАЯ ЛЕНТА ГРАФИКА (TIME LINE) === */
+
+
+
+/* === НОВАЯ ЛЕНТА ГРАФИКА (TIME LINE) - FLEXBOX === */
 .tl-container {
   display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding: 10px 16px 30px 16px; gap: 8px; scrollbar-width: none; -ms-overflow-style: none;
-  scroll-behavior: smooth; height: 260px; align-items: flex-end; padding-bottom: 40px;
+  padding: 0; gap: 0; scrollbar-width: none; -ms-overflow-style: none;
+  scroll-behavior: smooth; height: 260px;
 }
 .tl-container::-webkit-scrollbar { display: none; }
+
 .tl-col {
-  scroll-snap-align: start; min-width: 34px; flex: 0 0 34px;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  align-items: center; height: 100%; position: relative; cursor: pointer;
+  scroll-snap-align: start; 
+  min-width: 44px; flex: 0 0 44px; /* Ширина колонки */
+  display: flex; flex-direction: column; 
+  height: 100%; position: relative; cursor: pointer;
 }
+
 .tl-bar {
   width: 100%; max-width: 28px; background: var(--accent);
   border-radius: 4px 4px 0 0; transition: height 0.3s ease, background 0.2s;
   position: relative;
 }
 .tl-bar.selected { background: #00ff00 !important; box-shadow: 0 0 10px rgba(0, 255, 0, 0.6); }
+
 .tl-label {
-  font-size: 10px; color: var(--fg-dim); text-align: center;
-  line-height: 1.1; position: absolute; bottom: -35px; width: 100%;
+  height: 40px; /* Фиксированная высота под дату */
+  flex-shrink: 0;
+  display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+  font-size: 10px; color: var(--fg-dim); line-height: 1.1; padding-top: 8px;
 }
+
 .tl-legend {
   position: absolute; top: -24px; left: 50%; transform: translateX(-50%);
   color: var(--accent); font-size: 12px; font-weight: 600;
   white-space: nowrap; text-shadow: 0 0 4px rgba(0,0,0,0.9);
   pointer-events: none; z-index: 10;
 }
+
+/* Кнопки внизу */
+.cal-btn { padding: 4px 2px !important; font-size: 11px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

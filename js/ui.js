@@ -951,16 +951,22 @@ function renderActivityPageV2() {
         col.className = 'tl-col';
         col.dataset.date = dateStr;
 
+        // Верхняя часть (для столбика и легенды)
+        const topSpace = document.createElement('div');
+        topSpace.style.cssText = 'flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative;';
+
         const barDiv = document.createElement('div');
         barDiv.className = 'tl-bar';
-        
+        topSpace.appendChild(barDiv);
+
+        // Нижняя часть (для даты)
         const labelDiv = document.createElement('div');
         labelDiv.className = 'tl-label';
         const dayNum = iterDate.getDate();
         const dowNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
         labelDiv.innerHTML = `<div>${dayNum}</div><div style="font-size:9px;opacity:0.6;">${dowNames[iterDate.getDay()]}</div>`;
 
-        col.appendChild(barDiv);
+        col.appendChild(topSpace);
         col.appendChild(labelDiv);
         scrollContainer.appendChild(col);
 
@@ -1047,7 +1053,7 @@ function renderActivityPageV2() {
                 const legend = document.createElement('div');
                 legend.className = 'tl-legend';
                 legend.textContent = text;
-                bar.appendChild(legend);
+                bar.parentNode.appendChild(legend);
             }
         });
     };
@@ -1106,7 +1112,7 @@ function renderActivityPageV2() {
         legend.style.top = '-35px'; // Поднимаем выше
         legend.style.zIndex = '100';
         legend.textContent = text;
-        bar.appendChild(legend);
+        bar.parentNode.appendChild(legend);
     });
 
     c.querySelectorAll('.cal-btn[data-metric]').forEach(btn => {
