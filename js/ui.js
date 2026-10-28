@@ -914,19 +914,20 @@ function renderActivityPageV2() {
 
     // 2. ГРАФИК (Ось Y + Лента)
     const chartWrapper = document.createElement('div');
-    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 250px; position: relative;';
+    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 260px; position: relative; padding-bottom: 30px;';
 
     // Ось Y
     const yAxis = document.createElement('div');
     yAxis.id = 'tl-y-axis';
-    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; padding-bottom: 30px; padding-top: 10px;';
+    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 200px; margin-top: 10px;';
     
     // Лента
     const scrollContainer = document.createElement('div');
     scrollContainer.className = 'tl-container';
     scrollContainer.id = 'tl-scroll';
     scrollContainer.style.flex = '1';
-    scrollContainer.style.padding = '10px 0 0 0';
+    scrollContainer.style.padding = '0';
+    scrollContainer.style.margin = '0';
     
     chartWrapper.appendChild(yAxis);
     chartWrapper.appendChild(scrollContainer);
@@ -971,7 +972,7 @@ function renderActivityPageV2() {
     // 3. НИЖНИЕ КНОПКИ
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     const metricHTML = metrics.map(([key, label]) =>
-        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 4px 2px; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
+        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 4px 0; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
     ).join('');
 
     const metricBar = document.createElement('div');
@@ -1016,8 +1017,8 @@ function renderActivityPageV2() {
         let yHTML = '';
         const step = maxVal / 4;
         for (let i = 4; i >= 0; i--) {
-            const val = step * i;
-            const lbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(Math.round(val));
+            const val = Math.round(step * i);
+            const lbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(val / 60) + 'ч ' + (val % 60) + 'м') : String(val);
             yHTML += '<div>' + lbl + '</div>';
         }
         yAxis.innerHTML = yHTML;

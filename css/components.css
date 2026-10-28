@@ -2052,9 +2052,8 @@ div[style*="justify-content: space-between"] {
 /* === НОВАЯ ЛЕНТА ГРАФИКА (TIME LINE) === */
 .tl-container {
   display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding: 16px; gap: 8px; scrollbar-width: none; -ms-overflow-style: none;
-  scroll-behavior: smooth; height: 250px; align-items: flex-end;
-  padding-bottom: 30px;
+  padding: 10px 16px 30px 16px; gap: 8px; scrollbar-width: none; -ms-overflow-style: none;
+  scroll-behavior: smooth; height: 230px; align-items: flex-end;
 }
 .tl-container::-webkit-scrollbar { display: none; }
 .tl-col {
