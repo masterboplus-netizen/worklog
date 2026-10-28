@@ -1553,7 +1553,7 @@ body { padding-bottom: 70px; }
 
 /* Добавляем отступ контенту, чтобы меню не перекрывало текст */
 #content, #content-diary, #content-projects, #content-activity {
-  padding-bottom: 90px !important;
+  padding-bottom: 0px !important; /* Убрали жесткий отступ 90px */
 }
 
 /* ЖЕСТКИЙ ФИКС ДЛЯ PIN */
