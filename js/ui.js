@@ -4,6 +4,7 @@ let HERO_MODE = 'today';
 let MINI_MSG_PERIOD = 'day';
 let MINI_SCR_PERIOD = 'day';
 let MINI_TIME_PERIOD = 'avg';
+let MINI_TASKS_PERIOD = 'day';
 const MINI_PERIODS_MSG = ['day', 'week', 'month', 'all'];
 const MINI_PERIODS_TIME = ['avg', 'week', 'month', 'all'];
 const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц', all: 'Всё', avg: 'Среднее/день'};
@@ -306,7 +307,6 @@ function renderRingSVG(percent, size, strokeWidth, color) {
   const dash = c * p / 100;
   const offset = c - dash;
   
-  // Убрали filter="url(...)", чтобы не было тяжелого свечения
   return '<svg width="' + size + '" height="' + size + '" class="ring-svg" style="overflow: visible;">' +
     '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--bg3)" stroke-width="' + strokeWidth + '"/>' +
     '<circle class="ring-progress" cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" ' +
@@ -364,11 +364,11 @@ function renderHeroRings() {
   let scrRaw = MINI_SCR_PERIOD === 'day' ? _sumRange(sessions, 'day', 'screens') : scrVal;
   let pctScr = Math.min(100, Math.round(scrRaw / scrGoal * 100));
 
-  // 3. Задачи
-  const tasksVal = _sumRange(_sessions, 'day', 'tasks_done');
+  // 3. Задачи (с учетом периода)
+  const tasksVal = _sumRange(_sessions, MINI_TASKS_PERIOD, 'tasks_done');
   const totalTasks = sessions.reduce((acc, s) => acc + (s.tasks_done || 0), 0);
   const avgTasksPerDay = totalTasks / uniqueDays;
-  const tasksGoal = avgTasksPerDay > 0 ? avgTasksPerDay : 3; // Если нет данных, целимся в 3 задачи
+  const tasksGoal = avgTasksPerDay > 0 ? avgTasksPerDay : 3;
   let pctTasks = Math.min(100, Math.round(tasksVal / tasksGoal * 100));
 
   const div = document.createElement('div');
@@ -378,14 +378,14 @@ function renderHeroRings() {
           '<div class="ring-label">' + heroLabel + '</div><div class="ring-value">' + fmtH(heroValue) + '</div><div class="ring-sub">' + heroSub + '</div></div></div></div>' +
     '<div class="hero-mini"><div class="mini-block" data-mini="msg"><div class="mini-label"><div class="mini-lbl-title">Сообщения</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_MSG_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctMsg, 92, 7, getProgressColor(pctMsg)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + msgVal + '</div></div></div></div>' +
       '<div class="mini-block" data-mini="scr"><div class="mini-label"><div class="mini-lbl-title">Скрины</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_SCR_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctScr, 92, 7, getProgressColor(pctScr)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + scrVal + '</div></div></div></div>' +
-      '<div class="mini-block" data-mini="tasks"><div class="mini-label"><div class="mini-lbl-title">Задачи</div><div class="mini-lbl-period">День</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctTasks, 92, 7, getProgressColor(pctTasks)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + tasksVal + '</div></div></div></div></div>';
+      '<div class="mini-block" data-mini="tasks"><div class="mini-label"><div class="mini-lbl-title">Задачи</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_TASKS_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctTasks, 92, 7, getProgressColor(pctTasks)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + tasksVal + '</div></div></div></div></div>';
 
   div.querySelector('#hero-ring').addEventListener('click', () => { HERO_MODE = HERO_MODE === 'today' ? 'last' : 'today'; renderDashboard(); });
   div.querySelectorAll('.mini-block').forEach((block, index) => {
     block.querySelector('.mini-ring').addEventListener('click', () => {
       if (index === 0) MINI_MSG_PERIOD = MINI_PERIODS_MSG[(MINI_PERIODS_MSG.indexOf(MINI_MSG_PERIOD) + 1) % MINI_PERIODS_MSG.length];
       else if (index === 1) MINI_SCR_PERIOD = MINI_PERIODS_MSG[(MINI_PERIODS_MSG.indexOf(MINI_SCR_PERIOD) + 1) % MINI_PERIODS_MSG.length];
-      // Для задач период пока не меняем, или можно добавить свою логику
+      else if (index === 2) MINI_TASKS_PERIOD = MINI_PERIODS_MSG[(MINI_PERIODS_MSG.indexOf(MINI_TASKS_PERIOD) + 1) % MINI_PERIODS_MSG.length];
       renderDashboard();
     });
   });
