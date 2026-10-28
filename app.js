@@ -138,30 +138,31 @@ function switchTab(name) {
 
 
 function showCreators() {
-  let modal = document.getElementById('creators-modal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'creators-modal';
-    modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;';
-    modal.innerHTML = `
-      <div style="background: var(--bg2); padding: 24px; border-radius: 16px; text-align: center; max-width: 85%; border: 1px solid var(--border);">
-        <h2 style="color: var(--accent); margin-bottom: 24px; font-size: 20px; font-weight: 500;">Создатели проекта</h2>
-        
-        <div style="margin-bottom: 16px;">
-          <div style="color: var(--fg); font-size: 16px; font-weight: 400; margin-bottom: 4px;">Product owner</div>
-          <div style="color: var(--fg-dim); font-size: 14px;">Andrey Sorokin</div>
-        </div>
+  // Удаляем старую модалку, если она есть, чтобы всегда создавать свежую
+  const old = document.getElementById('creators-modal');
+  if (old) old.remove();
 
-        <div style="margin-bottom: 24px;">
-          <div style="color: var(--fg); font-size: 16px; font-weight: 400; margin-bottom: 4px;">Design & idea</div>
-          <div style="color: var(--fg-dim); font-size: 14px;">Merkulova Karina</div>
-        </div>
+  const modal = document.createElement('div');
+  modal.id = 'creators-modal';
+  modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;';
+  modal.innerHTML = `
+    <div style="background: var(--bg2); padding: 24px; border-radius: 16px; text-align: center; max-width: 85%; border: 1px solid var(--border);">
+      <h2 style="color: var(--accent); margin-bottom: 24px; font-size: 20px; font-weight: 500;">Создатели проекта</h2>
 
-        <div style="color: var(--fg-dim); font-size: 12px; margin-bottom: 24px;">Хераборина v7.7.124x</div>
-        <button onclick="document.getElementById('creators-modal').remove()" class="pulse-btn" style="background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%;">Спасибо</button>
+      <div style="margin-bottom: 16px;">
+        <div style="color: var(--fg); font-size: 16px; font-weight: 400; margin-bottom: 4px;">Product owner</div>
+        <div style="color: var(--fg-dim); font-size: 14px;">Andrey Sorokin</div>
       </div>
-    `;
-    document.body.appendChild(modal);
-  }
+
+      <div style="margin-bottom: 24px;">
+        <div style="color: var(--fg); font-size: 16px; font-weight: 400; margin-bottom: 4px;">Design & idea</div>
+        <div style="color: var(--fg-dim); font-size: 14px;">Karina Merkulova</div>
+      </div>
+
+      <div style="color: var(--fg-dim); font-size: 12px; margin-bottom: 24px;">Хераборина v7.8.0</div>
+      <button onclick="document.getElementById('creators-modal').remove()" class="pulse-btn" style="background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%;">Спасибо</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
   setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
