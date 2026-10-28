@@ -1970,20 +1970,14 @@ div[style*="justify-content: space-between"] {
   display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 20px;
 }
 .cal-dow { text-align: center; font-size: 12px; color: var(--fg-dim); padding-bottom: 8px; }
-.cal-day {
-  aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-  padding-top: 8px; border-radius: 8px; cursor: pointer; position: relative;
-}
+
 .cal-day.today { font-weight: 700; color: var(--accent); }
 .cal-num { font-size: 14px; font-weight: 500; color: var(--fg); }
 .cal-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; }
 
 
 
-.cal-day.selected {
-  background: var(--bg3);
-  border: 2px solid var(--accent) !important;
-}
+
 
 
 /* === НОВЫЕ КНОПКИ ГРАФИКА === */
@@ -2200,16 +2194,7 @@ div[style*="justify-content: space-between"] {
 }
 
 /* === Стили для календаря (круглые выделения) === */
-.cal-day {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  aspect-ratio: 1;
-  cursor: pointer;
-  border-radius: 50%; /* Делаем ячейку круглой */
-  transition: background 0.2s;
-}
+
 .cal-day .cal-num {
   display: flex;
   justify-content: center;
@@ -2223,17 +2208,10 @@ div[style*="justify-content: space-between"] {
 }
 
 /* Сегодняшний день (серый кружок) */
-.cal-day.today .cal-num {
-  background: var(--bg3);
-  font-weight: 600;
-}
+
 
 /* Выделенный день (синяя обводка) */
-.cal-day.selected .cal-num {
-  border: 2px solid var(--accent);
-  color: var(--accent);
-  font-weight: 600;
-}
+
 
 /* Точка о наличии записей */
 .cal-dot {
@@ -2539,4 +2517,67 @@ html, body {
 }
 .ring-wrap .ring-progress {
   animation: breatheBig 2s infinite ease-in-out;
+}
+
+/* === ФИКС КАЛЕНДАРЯ === */
+
+.cal-day .cal-num {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: var(--fg);
+  transition: all 0.2s;
+}
+
+/* Сегодняшний день (Яркий серый кружок) */
+
+
+/* Выделенный день (синяя обводка, только на самой цифре) */
+
+
+/* Убираем любые лишние рамки у ячейки */
+
+
+/* === АБСОЛЮТНЫЙ ФИКС КАЛЕНДАРЯ === */
+.cal-day {
+  position: relative !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  aspect-ratio: 1 !important;
+  cursor: pointer !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.cal-day .cal-num {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  font-size: 14px !important;
+  color: var(--fg) !important;
+  transition: all 0.2s !important;
+  border: 2px solid transparent !important; /* Сброс обводки */
+}
+
+/* Сегодня (яркий серый) */
+.cal-day.today .cal-num {
+  background: rgba(255, 255, 255, 0.2) !important; 
+  font-weight: 700 !important;
+  color: #fff !important;
+}
+
+/* Выбранный день (только синяя обводка) */
+.cal-day.selected .cal-num {
+  border: 2px solid var(--accent) !important;
+  color: var(--accent) !important;
+  background: transparent !important; /* Убираем фон при выделении */
 }
