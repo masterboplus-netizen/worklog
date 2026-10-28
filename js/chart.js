@@ -192,7 +192,7 @@ function renderActivityPageV2() {
                 const dateStrFormat = d.getDate() + ' ' + monthsShort[d.getMonth()] + ', ' + dowNamesShort[d.getDay()];
                 
                 // Формируем контент тултипа
-                tooltip.innerHTML = `<div style="font-weight:600;color:var(--fg);margin-bottom:2px;">${text}</div><div style="font-size:10px;color:var(--fg-dim);">${dateStrFormat}</div>`;
+                tooltip.innerHTML = `<div style="font-weight:600;color:var(--fg);">${text}</div>`;
                 tooltip.style.display = 'block';
                 
                 // Позиционируем тултип
