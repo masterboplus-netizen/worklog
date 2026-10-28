@@ -2182,3 +2182,20 @@ div[style*="justify-content: space-between"] {
 .tab.tab-active {
   color: var(--accent) !important;
 }
+
+/* === Финальный стиль кнопок метрик (Таблетки) === */
+.chart-metrics-row-v4 {
+  gap: 8px !important; /* Чуть больше расстояния между кнопками */
+}
+.chart-metric-btn {
+  border-radius: 20px !important; /* Сильное закругление (таблетка) */
+  padding: 10px 0 !important;
+  font-weight: 500 !important;
+  border: 1px solid transparent !important; /* Убираем резкую рамку */
+  background: var(--bg2) !important;
+}
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important; /* Легкая тень для объема */
+}
