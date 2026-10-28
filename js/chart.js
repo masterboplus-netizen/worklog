@@ -163,6 +163,50 @@ function renderActivityPageV2() {
             col.querySelector('.tl-bar').style.height = h + '%';
         });
 
+        // Принудительно скрываем тултип перед новым отображением
+        tooltip.style.display = 'none';
+
+        // Если есть выбранный день, показываем тултип
+        if (CHART_STATE.selectedDay) {
+            const targetCol = scrollContainer.querySelector(`.tl-col[data-date="${CHART_STATE.selectedDay}"]`);
+            if (targetCol) {
+                const bar = targetCol.querySelector('.tl-bar');
+                bar.classList.add('selected');
+                
+                let v = 0;
+                for (const sess of window.DATA.sessions || []) {
+                    if (sess.date === CHART_STATE.selectedDay) {
+                        if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
+                        else if (CHART_STATE.metric === 'events') v += sess.events || 0;
+                        else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
+                        else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
+                    }
+                }
+                
+                const text = CHART_STATE.metric === 'duration' ? fmtH(v) : String(v);
+                
+                tooltip.innerHTML = `<div style="font-weight:600;color:var(--fg);">${text}</div>`;
+                tooltip.style.display = 'block';
+                
+                // Позиционируем
+                const colWidth = scrollContainer.clientWidth / 7;
+                const colIndex = Array.from(cols).indexOf(targetCol);
+                let leftPos = (colIndex * colWidth) + (colWidth / 2);
+                
+                // Умный сдвиг, чтобы не вылезать за края
+                const tooltipWidth = 60;
+                if (leftPos - tooltipWidth / 2 < 0) leftPos = tooltipWidth / 2;
+                if (leftPos + tooltipWidth / 2 > scrollContainer.clientWidth) leftPos = scrollContainer.clientWidth - tooltipWidth / 2;
+                
+                const barHeightPx = (parseFloat(bar.style.height) / 100) * (scrollContainer.clientHeight - 32); 
+                let topPos = scrollContainer.clientHeight - 32 - barHeightPx - 40;
+                if (topPos < 0) topPos = scrollContainer.clientHeight - 32 - 20;
+
+                tooltip.style.left = leftPos + 'px';
+                tooltip.style.top = topPos + 'px';
+            }
+        }
+
         // 2. Если есть выбранный день, выделяем только его и показываем тултип
         if (CHART_STATE.selectedDay) {
             const targetCol = scrollContainer.querySelector(`.tl-col[data-date="${CHART_STATE.selectedDay}"]`);
@@ -226,13 +270,17 @@ function renderActivityPageV2() {
     scrollContainer.addEventListener('click', (e) => {
         const col = e.target.closest('.tl-col');
         if (!col) return;
+        
         const dateStr = col.dataset.date;
+
+        // Если кликнули на уже выбранный столбик — закрываем тултип
         if (CHART_STATE.selectedDay === dateStr) {
             CHART_STATE.selectedDay = null;
-            tooltip.style.display = 'none';
             updateChart();
             return;
         }
+        
+        // Иначе — выбираем новый
         CHART_STATE.selectedDay = dateStr;
         updateChart();
     });
