@@ -16,7 +16,7 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="css/base.css?v=189">
-<link rel="stylesheet" href="css/components.css?v=309">
+<link rel="stylesheet" href="css/components.css?v=310">
 </head>
 <body>
 <div id="app"></div>
@@ -89,7 +89,7 @@
 <script src="js/ui.js?v=288"></script>
 <script src="js/chart.js?v=222"></script>
 <script src="js/auth.js?v=205"></script>
-<script src="app.js?v=280"></script>
+<script src="app.js?v=282"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=205', { updateViaCache: 'none' }).catch(function(){});
@@ -107,13 +107,23 @@ if ('serviceWorker' in navigator) {
 
 <div id="scroll-pin-screen" class="screen">
   <!-- Только кольцо, без логотипов и текста -->
-  <div id="safe-dial-container" style="position: relative; width: 280px; height: 280px; margin-top: 60vh;">
-    <svg width="280" height="280" viewBox="0 0 280 280" style="position: absolute; top: 0; left: 0;">
-      <!-- Фоновое кольцо (тонкое и темное) -->
-      <circle cx="140" cy="140" r="130" fill="none" stroke="rgba(255, 165, 0, 0.1)" stroke-width="10" />
-      <!-- Активное кольцо (оранжевое) -->
-      <circle id="safe-dial-ring" cx="140" cy="140" r="130" fill="none" stroke="#FFA500" stroke-width="10" stroke-dasharray="0 1000" />
+  
+    <div id="safe-dial-container">
+      <!-- Невидимая зона для удобного захвата -->
+      <div class="safe-dial-hitbox" id="safe-dial-hitbox"></div>
+      
+      <!-- Эффект лупы -->
       <div id="safe-dial-touch-effect"></div>
+      
+      <!-- Само кольцо -->
+      <svg width="220" height="220" viewBox="0 0 220 220" style="position: absolute; top: 0; left: 0;">
+        <!-- Фоновое кольцо -->
+        <circle cx="110" cy="110" r="100" fill="none" stroke="rgba(255, 165, 0, 0.1)" stroke-width="10" />
+        <!-- Активное кольцо -->
+        <circle id="safe-dial-ring" cx="110" cy="110" r="100" fill="none" stroke="#FFA500" stroke-width="10" stroke-dasharray="0 1000" />
+      </svg>
+    </div>
+    
     </svg>
   </div>
 </div>

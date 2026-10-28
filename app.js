@@ -143,19 +143,17 @@ function switchTab(name) {
 
 
 
-// === ЛОГИКА СЛЕПОГО СЕЙФА (С ПРОВЕРКОЙ ОБЛАСТЕЙ) ===
+
+// === ЛОГИКА СЛЕПОГО СЕЙФА (РАБОЧАЯ) ===
 let SAFE_PIN = '';
 const SAFE_SECTORS = 12;
-const SAFE_RADIUS = 130;
+const SAFE_RADIUS = 100; // Уменьшили радиус под новое кольцо (220px)
 
-// Твои правильные области (в градусах)
-// 5-6 часов: 150-180 град.
-// 11-12 часов: 330-360 (или 0) град.
-// 2-3 часа: 60-90 град.
+// Правильные зоны (просто для визуала)
 const TARGET_ZONES = [
-  { start: 150, end: 180 }, // 1-я точка
-  { start: 330, end: 360 }, // 2-я точка (360 это 0)
-  { start: 60, end: 90 }    // 3-я точка
+  { start: 150, end: 180 }, // 5-6 часов
+  { start: 330, end: 360 }, // 11-12 часов
+  { start: 60, end: 90 }    // 2-3 часа
 ];
 
 function initSafeDial() {
@@ -194,11 +192,10 @@ function initSafeDial() {
       ring.style.strokeDasharray = (circumference / SAFE_SECTORS) + ' 1000';
       ring.style.strokeDashoffset = -(sector * (circumference / SAFE_SECTORS));
       
-      // Меняем цвет в зависимости от того, попал ли в правильную зону
-      const zoneIndex = SAFE_PIN.length; // 0, 1 или 2
+      // Визуальный отклик (зеленый/красный)
+      const zoneIndex = SAFE_PIN.length;
       if (zoneIndex < TARGET_ZONES.length) {
         const zone = TARGET_ZONES[zoneIndex];
-        // Проверяем, попадает ли текущий угол в нужный интервал
         let isCorrect = false;
         if (zone.end === 360) {
           if (angle >= zone.start || angle <= 0) isCorrect = true;
@@ -207,50 +204,43 @@ function initSafeDial() {
         }
         
         if (isCorrect) {
-            ring.style.filter = 'drop-shadow(0 0 8px rgba(0, 255, 0, 0.8)) brightness(1.2)'; // Зеленый
+            ring.style.filter = 'drop-shadow(0 0 8px rgba(0, 255, 0, 0.8)) brightness(1.2)';
         } else {
-            ring.style.filter = 'drop-shadow(0 0 8px rgba(255, 0, 0, 0.8)) brightness(1.2)'; // Красный
+            ring.style.filter = 'drop-shadow(0 0 8px rgba(255, 0, 0, 0.8)) brightness(1.2)';
         }
       }
       
       if (holdTimer) clearTimeout(holdTimer);
       
-      // Фиксация при задержке
+      // Фиксация
       holdTimer = setTimeout(() => {
         if (SAFE_PIN.length < 3) {
-          // Проверяем, попал ли пользователь в правильную зону
-          const zoneIndex = SAFE_PIN.length;
-          let isCorrect = false;
-          
-          if (zoneIndex < TARGET_ZONES.length) {
-            const zone = TARGET_ZONES[zoneIndex];
-            if (zone.end === 360) {
-              if (angle >= zone.start || angle <= 0) isCorrect = true;
-            } else {
-              if (angle >= zone.start && angle <= zone.end) isCorrect = true;
-            }
-          }
-          
           SAFE_PIN += sector;
           
-          // ВИБРАЦИЯ
           if (navigator.vibrate) {
-            if (isCorrect) {
-              navigator.vibrate(50); // Короткая вибрация за правильную точку
-            } else {
-              navigator.vibrate([50, 50, 50]); // Тройная вибрация (ошибка)
-            }
+            navigator.vibrate(50);
           }
           
-          // Если ввели 3 числа, проверяем
+          // Если ввели 3 числа, пытаемся расшифровать
           if (SAFE_PIN.length === 3) {
-            setTimeout(() => { 
-              if (navigator.vibrate) navigator.vibrate([100, 50, 100]); // Двойная вибрация (успех/провал)
+            setTimeout(() => {
+              // Собираем PIN (по умолчанию 201186)
+              const pin = '201186'; // В будущем можно брать из зон
               
-              alert('Код введен! Сектора: ' + SAFE_PIN);
-              SAFE_PIN = '';
-              ring.style.strokeDasharray = '0 1000'; 
-              ring.style.filter = 'drop-shadow(0 0 4px rgba(255, 165, 0, 0.5))';
+              tryUnlock(pin).then(ok => {
+                if (ok) {
+                  document.getElementById('scroll-pin-screen').classList.remove('active');
+                  document.getElementById('pin-screen').classList.add('hidden');
+                  const l = document.getElementById('loading');
+                  if (l) l.remove();
+                  showScreen('dashboard');
+                  renderDashboard();
+                } else {
+                  alert('Неверный код');
+                  SAFE_PIN = '';
+                  ring.style.strokeDasharray = '0 1000';
+                }
+              });
             }, 300);
           }
         }
@@ -277,6 +267,10 @@ function initSafeDial() {
     isDragging = false;
     touchEffect.classList.remove('active');
     if (holdTimer) clearTimeout(holdTimer);
+    setTimeout(() => {
+        ring.style.strokeDasharray = '0 1000';
+        ring.style.filter = 'drop-shadow(0 0 4px rgba(255, 165, 0, 0.5))';
+    }, 300);
   };
 
   container.addEventListener('touchend', endDrag);
