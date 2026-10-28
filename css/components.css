@@ -2474,8 +2474,7 @@ html, body {
 
 
 /* === ФИНАЛЬНАЯ ПУЛЬСАЦИЯ (ТОЛЬКО ПРОЗРАЧНОСТЬ) === */
-@keyframes subtlePulse {
-  0% { opacity: 0.8; }
+
   50% { opacity: 1; }
   100% { opacity: 0.8; }
 }
@@ -2483,4 +2482,18 @@ html, body {
 .ring-progress {
   animation: subtlePulse 3s infinite ease-in-out;
   transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
+}
+
+/* === ЧИСТАЯ ПУЛЬСАЦИЯ === */
+@keyframes cleanPulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.ring-progress {
+  animation: cleanPulse 3s infinite ease-in-out;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
+  /* Убираем любые трансформации из CSS, чтобы не мешать SVG */
+  transform: none !important;
 }

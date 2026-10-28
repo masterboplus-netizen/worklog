@@ -307,12 +307,12 @@ function renderRingSVG(percent, size, strokeWidth, color) {
   const dash = c * p / 100;
   const offset = c - dash;
   
-  // Возвращаем чистый SVG с поворотом на -90 градусов (начало с 12 часов)
-  return '<svg width="' + size + '" height="' + size + '" class="ring-svg" style="overflow: visible; transform: rotate(-90deg);">' +
+  // Вращаем только сам круг, чтобы прогресс начинался ровно сверху (12 часов)
+  return '<svg width="' + size + '" height="' + size + '" class="ring-svg" style="overflow: visible;">' +
     '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--bg3)" stroke-width="' + strokeWidth + '"/>' +
     '<circle class="ring-progress" cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" ' +
     'stroke-dasharray="' + c + '" stroke-dashoffset="' + c + '" data-target-offset="' + offset + '" ' +
-    'stroke-linecap="round"/>' +
+    'stroke-linecap="round" transform="rotate(-90 ' + size/2 + ' ' + size/2 + ')"/>' +
     '</svg>';
 }
 
