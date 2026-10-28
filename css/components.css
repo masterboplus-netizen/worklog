@@ -2429,3 +2429,20 @@ html, body {
   box-shadow: none !important;
   overflow: visible !important;
 }
+
+/* === ПУЛЬСАЦИЯ КОЛЕЦ (ВМЕСТО СВЕЧЕНИЯ) === */
+@keyframes ringPulse {
+  0% { filter: drop-shadow(0 0 2px currentColor); opacity: 0.9; }
+  50% { filter: drop-shadow(0 0 8px currentColor); opacity: 1; }
+  100% { filter: drop-shadow(0 0 2px currentColor); opacity: 0.9; }
+}
+
+.ring-progress {
+  animation: ringPulse 3s infinite ease-in-out;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
+}
+
+/* Чтобы пульсация не была слишком навязчивой на малых кольцах */
+.mini-ring .ring-progress {
+  animation-duration: 4s; 
+}
