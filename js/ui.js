@@ -352,7 +352,10 @@ function renderHeroRings() {
   const uniqueDays = new Set(sessions.map(s => s.date)).size || 1;
 
   // 1. Сообщения (относительно рекорда)
-  const maxMsg = Math.max(1, ...sessions.map(s => s.events || 0));
+  let maxMsg = 1;
+  for (const s of sessions) {
+    if ((s.events || 0) > maxMsg) maxMsg = s.events || 0;
+  }
   let msgRaw = MINI_MSG_PERIOD === 'day' ? _sumRange(sessions, 'day', 'events') : msgVal;
   let pctMsg = Math.min(100, Math.round(msgRaw / maxMsg * 100));
 
