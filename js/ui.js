@@ -914,12 +914,12 @@ function renderActivityPageV2() {
 
     // 2. ГРАФИК (Ось Y + Лента)
     const chartWrapper = document.createElement('div');
-    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 260px; position: relative; padding-bottom: 30px; box-sizing: border-box;';
+    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 260px; position: relative; box-sizing: border-box;';
 
     // Ось Y
     const yAxis = document.createElement('div');
     yAxis.id = 'tl-y-axis';
-    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 38px; padding-top: 10px;';
+    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 30px; padding-top: 0;';
     
     // Лента
     const scrollContainer = document.createElement('div');
@@ -928,6 +928,7 @@ function renderActivityPageV2() {
     scrollContainer.style.flex = '1';
     scrollContainer.style.padding = '0';
     scrollContainer.style.margin = '0';
+    scrollContainer.style.height = '100%';
 
     chartWrapper.appendChild(yAxis);
     chartWrapper.appendChild(scrollContainer);

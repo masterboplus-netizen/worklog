@@ -2056,8 +2056,7 @@ div[style*="justify-content: space-between"] {
 .tl-container {
   display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
   padding: 0; gap: 0; scrollbar-width: none; -ms-overflow-style: none;
-  scroll-behavior: smooth; height: 260px; width: calc(42px * 7); /* ровно 7 столбиков */
-  margin: 0 auto;
+  scroll-behavior: smooth; height: 100%; width: 100%; align-items: flex-end;
 }
 .tl-container::-webkit-scrollbar { display: none; }
 
@@ -2096,4 +2095,23 @@ div[style*="justify-content: space-between"] {
 .tl-col:focus, .tl-col:active, .tl-bar:focus, .tl-bar:active {
   outline: none !important;
   -webkit-tap-highlight-color: transparent !important;
+}
+
+.tl-col::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: 10%;
+  height: 1px;
+  background: rgba(255,255,255,0.03);
+  pointer-events: none;
+}
+.tl-col::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 30px;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  pointer-events: none;
 }
