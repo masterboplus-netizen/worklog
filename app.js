@@ -19,10 +19,19 @@ async function init() {
 
   setupTabs();
 
-  // Показываем PIN-экран
+  // СРАЗУ ОТКРЫВАЕМ ДАШБОРД (без PIN)
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
-  showScreen('pin-screen');
+  
+  // Загружаем данные (расшифровываем с нашим паролем)
+  tryUnlock('201186').then(ok => {
+    if (ok) {
+      showScreen('dashboard');
+      renderDashboard();
+    } else {
+      alert('Ошибка загрузки данных');
+    }
+  });
 }
 
 if (document.readyState === 'loading') {
