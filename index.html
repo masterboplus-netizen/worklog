@@ -16,7 +16,7 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="css/base.css?v=189">
-<link rel="stylesheet" href="css/components.css?v=306">
+<link rel="stylesheet" href="css/components.css?v=307">
 </head>
 <body>
 <div id="app"></div>
@@ -89,7 +89,7 @@
 <script src="js/ui.js?v=288"></script>
 <script src="js/chart.js?v=222"></script>
 <script src="js/auth.js?v=205"></script>
-<script src="app.js?v=274"></script>
+<script src="app.js?v=275"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=205', { updateViaCache: 'none' }).catch(function(){});
@@ -97,14 +97,32 @@ if ('serviceWorker' in navigator) {
 </script>
 
 
+
+</div>
+
+
 <div id="scroll-pin-screen" class="screen">
 <div class="scroll-pin-box">
   <img src="icon.svg" alt="" class="pin-logo">
   <h1>Хераборина</h1>
-  <p class="pin-sub" style="margin-bottom: 20px;">Крути числа</p>
+  <p class="pin-sub" style="margin-bottom: 20px;">Слепой сейф</p>
   
-  <div class="scroll-wheels-container" id="wheels-container">
-    <!-- Сюда JS вставит барабаны -->
+  <!-- Контейнер для кольца -->
+  <div id="safe-dial-container" style="position: relative; width: 280px; height: 280px; margin: 0 auto 20px auto;">
+    <svg width="280" height="280" viewBox="0 0 280 280" style="position: absolute; top: 0; left: 0;">
+      <!-- Фоновое кольцо (тонкое) -->
+      <circle cx="140" cy="140" r="130" fill="none" stroke="rgba(255, 165, 0, 0.1)" stroke-width="10" />
+      <!-- Активное кольцо (оранжевое) -->
+      <circle id="safe-dial-ring" cx="140" cy="140" r="130" fill="none" stroke="#FFA500" stroke-width="10" stroke-dasharray="0 1000" />
+    </svg>
+    <!-- Индикатор ввода -->
+    <div id="safe-dial-indicator" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 40px; font-weight: 600; color: #fff;">0</div>
+  </div>
+
+  <div class="safe-dots" id="safe-dots" style="display: flex; justify-content: center; gap: 12px; margin-bottom: 30px;">
+    <div class="safe-dot"></div>
+    <div class="safe-dot"></div>
+    <div class="safe-dot"></div>
   </div>
   
   <button class="scroll-pin-btn" onclick="checkScrollPin()">Войти</button>

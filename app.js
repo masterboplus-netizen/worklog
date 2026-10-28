@@ -43,12 +43,12 @@ async function init() {
 
   setupTabs();
 
-  // Сразу показываем экран с крутилками
+  // Сразу показываем сейф
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
   document.getElementById('pin-screen').classList.add('hidden');
   document.getElementById('scroll-pin-screen').classList.add('active');
-  initScrollPin();
+  initSafeDial();
 }
 
 function setupTabs() {
@@ -140,96 +140,119 @@ function switchTab(name) {
 
 
 
-// === ЛОГИКА КРУТИЛОК ===
-const WHEEL_NUMBERS = [11, 12, 20, 47, 54, 77, 86, 93, 99, 15, 33, 61, 42, 88, 23, 71];
 
-function initScrollPin() {
-  const container = document.getElementById('wheels-container');
+// === ЛОГИКА СЛЕПОГО СЕЙФА ===
+let SAFE_PIN = '';
+let SAFE_TARGET = '201186'; // Пароль (20-11-86)
+const SAFE_SECTORS = 12; // 12 секторов (как часы)
+const SAFE_RADIUS = 130;
+const SAFE_CENTER = { x: 140, y: 140 };
+
+function initSafeDial() {
+  const container = document.getElementById('safe-dial-container');
+  const ring = document.getElementById('safe-dial-ring');
+  const indicator = document.getElementById('safe-dial-indicator');
+  const dots = document.querySelectorAll('.safe-dot');
+  
   if (!container) return;
-  container.innerHTML = '';
+  
+  let isDragging = false;
+  let currentSector = -1;
+  let holdTimer = null;
+  let lastX = 0, lastY = 0;
 
-  for (let i = 0; i < 3; i++) {
-    const wheel = document.createElement('div');
-    wheel.className = 'scroll-wheel';
+  const getAngle = (x, y) => {
+    const rect = container.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    // atan2 возвращает от -PI до PI, переводим в 0-360
+    let angle = Math.atan2(y - cy, x - cx) * 180 / Math.PI;
+    if (angle < 0) angle += 360;
+    return angle;
+  };
+
+  const processMove = (x, y) => {
+    const angle = getAngle(x, y);
+    const sector = Math.floor(angle / (360 / SAFE_SECTORS));
     
-    const spacerTop = document.createElement('div');
-    spacerTop.className = 'wheel-spacer';
-    wheel.appendChild(spacerTop);
-
-    const shuffled = [...WHEEL_NUMBERS].sort(() => Math.random() - 0.5);
-    
-    shuffled.forEach(num => {
-      const item = document.createElement('div');
-      item.className = 'wheel-item';
-      item.textContent = num;
-      wheel.appendChild(item);
-    });
-
-    const spacerBottom = document.createElement('div');
-    spacerBottom.className = 'wheel-spacer';
-    wheel.appendChild(spacerBottom);
-
-    wheel.addEventListener('scroll', () => {
-      const items = wheel.querySelectorAll('.wheel-item');
-      const wheelRect = wheel.getBoundingClientRect();
-      const centerY = wheelRect.top + wheelRect.height / 2;
+    // Если сектор изменился
+    if (sector !== currentSector) {
+      currentSector = sector;
+      indicator.textContent = sector; // Просто показываем номер сектора
       
-      let closest = null;
-      let minDist = Infinity;
+      // Анимация вспышки
+      ring.style.strokeDasharray = (SAFE_SECTORS > 0 ? (2 * Math.PI * SAFE_RADIUS) / SAFE_SECTORS : 0) + ' 1000';
+      ring.style.strokeDashoffset = -(sector * (2 * Math.PI * SAFE_RADIUS) / SAFE_SECTORS);
       
-      items.forEach(item => {
-        const rect = item.getBoundingClientRect();
-        const dist = Math.abs((rect.top + rect.height / 2) - centerY);
-        if (dist < minDist) {
-          minDist = dist;
-          closest = item;
+      // Сброс таймера фиксации
+      if (holdTimer) clearTimeout(holdTimer);
+      
+      // Таймер: если палец задержался на 600мс, фиксируем
+      holdTimer = setTimeout(() => {
+        if (SAFE_PIN.length < 3) {
+          SAFE_PIN += sector;
+          if (navigator.vibrate) navigator.vibrate(50); // Вибрация
+          
+          // Заполняем точку
+          if (dots[SAFE_PIN.length - 1]) {
+            dots[SAFE_PIN.length - 1].classList.add('filled');
+          }
+          
+          // Если ввели 3 числа, сбрасываем кольцо
+          if (SAFE_PIN.length === 3) {
+            ring.style.strokeDasharray = '0 1000';
+          }
         }
-      });
-      
-      items.forEach(it => it.classList.remove('active'));
-      if (closest) closest.classList.add('active');
-    });
+      }, 600);
+    }
+  };
 
-    container.appendChild(wheel);
+  container.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    isDragging = true;
+    const touch = e.touches[0];
+    processMove(touch.clientX, touch.clientY);
+  }, { passive: false });
 
-    setTimeout(() => {
-      wheel.scrollTo({ top: 60, behavior: 'auto' });
-    }, 10);
-  }
+  container.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    processMove(touch.clientX, touch.clientY);
+  }, { passive: false });
+
+  const endDrag = () => {
+    isDragging = false;
+    if (holdTimer) clearTimeout(holdTimer);
+  };
+
+  container.addEventListener('touchend', endDrag);
+  container.addEventListener('touchcancel', endDrag);
+
+  // Сброс при старте
+  SAFE_PIN = '';
+  dots.forEach(d => d.classList.remove('filled'));
+  indicator.textContent = '0';
+  ring.style.strokeDasharray = '0 1000';
 }
 
 window.checkScrollPin = async function() {
-  const wheels = document.querySelectorAll('.scroll-wheel');
-  const selected = [];
-  wheels.forEach(w => {
-    const active = w.querySelector('.wheel-item.active');
-    if (active) selected.push(active.textContent);
-  });
-  
-  const pin = selected.join('');
   const err = document.getElementById('scroll-pin-error');
   if (err) err.textContent = '';
   
-  if (!pin || pin.length < 4) return;
-  
-  const ok = await tryUnlock(pin);
-  
-  if (ok) {
-    document.getElementById('scroll-pin-screen').classList.remove('active');
-    document.getElementById('pin-screen').classList.add('hidden');
-    const l = document.getElementById('loading');
-    if (l) l.remove();
-    
-    showScreen('dashboard');
-    renderDashboard();
-  } else {
-    if (err) err.textContent = 'Неверный код';
-    const container = document.getElementById('wheels-container');
-    container.style.transform = 'translateX(-5px)';
-    setTimeout(() => container.style.transform = 'translateX(5px)', 50);
-    setTimeout(() => container.style.transform = 'translateX(0)', 100);
-    document.querySelectorAll('.scroll-wheel').forEach(w => w.scrollTo({ top: 60, behavior: 'smooth' }));
+  if (SAFE_PIN.length < 3) {
+    if (err) err.textContent = 'Введи 3 числа';
+    return;
   }
+  
+  // Проверяем, совпадает ли SAFE_PIN с зашифрованным ключом
+  // Внимание: для этого нужно, чтобы SAFE_PIN собирал числа правильно.
+  // Пока что выведем alert для проверки.
+  alert('Ты ввел сектора: ' + SAFE_PIN.split('').join(' - '));
+  
+  // Заглушка для проверки (потом поменяем на tryUnlock)
+  // const ok = await tryUnlock('201186');
+  // ...
 }
 
 function showCreators() {
