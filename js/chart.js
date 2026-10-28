@@ -50,11 +50,15 @@ function renderActivityPageV2() {
     scrollContainer.style.flex = '1';
     scrollContainer.style.position = 'relative';
 
-    // Создаем тултип
-    const tooltip = document.createElement('div');
-    tooltip.className = 'floating-tooltip';
-    tooltip.style.display = 'none';
-    scrollContainer.appendChild(tooltip);
+    // Создаем тултип (вне scrollContainer, чтобы не обрезался)
+    let tooltip = document.getElementById('global-chart-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.id = 'global-chart-tooltip';
+        tooltip.className = 'floating-tooltip';
+        tooltip.style.display = 'none';
+        document.body.appendChild(tooltip);
+    }
 
     chartWrapper.appendChild(yAxis);
     chartWrapper.appendChild(scrollContainer);
@@ -217,23 +221,21 @@ function renderActivityPageV2() {
             tooltip.innerHTML = `<div style="font-weight:600;color:var(--fg);">${text}</div>`;
             tooltip.style.display = 'block';
 
-            // Позиционируем
-            const colWidth = scrollContainer.clientWidth / 7;
-            const cols = scrollContainer.querySelectorAll('.tl-col');
-            const colIndex = Array.from(cols).indexOf(targetCol);
-            let leftPos = (colIndex * colWidth) + (colWidth / 2);
-
-            const tooltipWidth = 60;
-            if (leftPos - tooltipWidth / 2 < 0) leftPos = tooltipWidth / 2;
-            if (leftPos + tooltipWidth / 2 > scrollContainer.clientWidth) leftPos = scrollContainer.clientWidth - tooltipWidth / 2;
-
+            // Позиционируем относительно документа
+            const rect = targetCol.getBoundingClientRect();
             const bar = targetCol.querySelector('.tl-bar');
-            const barHeightPx = (parseFloat(bar.style.height) / 100) * (scrollContainer.clientHeight - 32); 
-            let topPos = scrollContainer.clientHeight - 32 - barHeightPx - 40;
-            if (topPos < 0) topPos = scrollContainer.clientHeight - 32 - 20;
+            
+            // Центр столбика по X (глобальные координаты)
+            let leftPos = rect.left + (rect.width / 2) + window.scrollX;
+            
+            // Высота столбика (глобальные координаты)
+            const barHeightPx = bar.getBoundingClientRect().height;
+            let topPos = rect.top + (rect.height - barHeightPx) - 40 + window.scrollY;
 
+            tooltip.style.position = 'absolute';
             tooltip.style.left = leftPos + 'px';
             tooltip.style.top = topPos + 'px';
+            tooltip.style.transform = 'translateX(-50%)';
         }
     });
 

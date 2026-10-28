@@ -2097,7 +2097,7 @@ div[style*="justify-content: space-between"] {
 .tl-bar.empty { background: transparent; cursor: default; pointer-events: none; }
 .tl-label { height: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 10px; color: var(--fg-dim); line-height: 1.1; flex-shrink: 0; }
 .chart-legend-v4 { height: 24px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
-.chart-metrics-row-v4 { display: flex; gap: 6px; margin: 0 16px; justify-content: space-between; }
+
 
 .chart-metric-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 /* === Починка нижнего меню === */
@@ -2107,26 +2107,8 @@ div[style*="justify-content: space-between"] {
 .tab.tab-active { color: var(--accent); background: rgba(74, 158, 255, 0.1); }
 
 /* === ИДЕАЛЬНЫЕ КНОПКИ ГРАФИКА (GRID) === */
-.chart-metrics-row-v4 {
-  display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
-  gap: 6px !important;
-  margin: 0 16px 16px 16px !important;
-  width: calc(100% - 32px) !important;
-  box-sizing: border-box !important;
-}
-.chart-metric-btn {
-  width: 100% !important;
-  text-align: center !important;
-  padding: 10px 0 !important;
-  font-size: 12px !important;
-  background: var(--bg2) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 8px !important;
-  color: var(--fg) !important;
-  transition: all 0.2s !important;
-  white-space: nowrap !important;
-}
+
+
 .chart-metric-btn.active {
   background: var(--accent) !important;
   color: #fff !important;
@@ -2171,16 +2153,8 @@ div[style*="justify-content: space-between"] {
 }
 
 /* === Финальный стиль кнопок метрик (Таблетки) === */
-.chart-metrics-row-v4 {
-  gap: 8px !important; /* Чуть больше расстояния между кнопками */
-}
-.chart-metric-btn {
-  border-radius: 20px !important; /* Сильное закругление (таблетка) */
-  padding: 10px 0 !important;
-  font-weight: 500 !important;
-  border: 1px solid transparent !important; /* Убираем резкую рамку */
-  background: var(--bg2) !important;
-}
+
+
 .chart-metric-btn.active {
   background: var(--accent) !important;
   color: #fff !important;
@@ -2580,4 +2554,32 @@ html, body {
   border: 2px solid var(--accent) !important;
   color: var(--accent) !important;
   background: transparent !important; /* Убираем фон при выделении */
+}
+
+/* === ИДЕАЛЬНАЯ СЕТКА ДЛЯ КНОПОК === */
+.chart-metrics-row-v4 {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+  margin: 16px 8px 16px 8px !important;
+  width: calc(100% - 16px) !important;
+  box-sizing: border-box !important;
+}
+.chart-metric-btn {
+  width: 100% !important;
+  text-align: center !important;
+  padding: 10px 0 !important;
+  font-size: 12px !important;
+  background: var(--bg2) !important;
+  border: 1px solid transparent !important;
+  border-radius: 20px !important;
+  color: var(--fg) !important;
+  transition: all 0.2s !important;
+  white-space: nowrap !important;
+  font-weight: 500 !important;
+}
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
 }
