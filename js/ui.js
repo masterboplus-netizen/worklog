@@ -1196,17 +1196,23 @@ function renderDashboard() {
   c.innerHTML = '';
   c.appendChild(renderHeroRings());
 
-  // Запуск анимации через requestAnimationFrame
+  // Принудительный сброс колец в 0 перед запуском анимации
+  const circles = document.querySelectorAll('.ring-progress');
+  circles.forEach(circle => {
+    circle.style.transition = 'none'; // Отключаем плавность на мгновение
+    circle.style.strokeDashoffset = circle.getAttribute('stroke-dasharray'); // Ставим в 0
+  });
+
+  // Запускаем анимацию через requestAnimationFrame
   requestAnimationFrame(() => {
-    // Небольшая задержка, чтобы браузер отрисовал стартовое состояние
     setTimeout(() => {
-      document.querySelectorAll('.ring-progress').forEach(circle => {
+      circles.forEach(circle => {
         const targetOffset = circle.getAttribute('data-target-offset');
         if (targetOffset !== null) {
-          // Плавно сдвигаем offset к целевому значению
-          circle.style.strokeDashoffset = targetOffset;
+          circle.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1)'; // Включаем плавность
+          circle.style.strokeDashoffset = targetOffset; // Едем к цели
         }
       });
-    }, 50);
+    }, 50); // Небольшая задержка
   });
 }
