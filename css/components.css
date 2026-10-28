@@ -2479,21 +2479,32 @@ html, body {
   100% { opacity: 0.8; }
 }
 
-.ring-progress {
-  animation: subtlePulse 3s infinite ease-in-out;
-  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
-}
+
 
 /* === ЧИСТАЯ ПУЛЬСАЦИЯ === */
-@keyframes cleanPulse {
-  0% { opacity: 0.8; }
+
   50% { opacity: 1; }
   100% { opacity: 0.8; }
 }
 
+
+
+/* === ВИДИМОЕ ДЫХАНИЕ (ТОЛЩИНА) === */
+@keyframes breathWidth {
+  0% { stroke-width: var(--base-sw); }
+  50% { stroke-width: calc(var(--base-sw) + 2px); }
+  100% { stroke-width: var(--base-sw); }
+}
+
 .ring-progress {
-  animation: cleanPulse 3s infinite ease-in-out;
+  animation: breathWidth 2.5s infinite ease-in-out;
   transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
-  /* Убираем любые трансформации из CSS, чтобы не мешать SVG */
-  transform: none !important;
+}
+
+/* Задаем базовую толщину для каждого размера кольца */
+.mini-ring .ring-progress {
+  --base-sw: 7px;
+}
+.ring-wrap .ring-progress {
+  --base-sw: 14px;
 }
