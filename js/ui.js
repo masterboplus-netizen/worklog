@@ -304,12 +304,20 @@ function renderRingSVG(percent, size, strokeWidth, color) {
   const c = 2 * Math.PI * r;
   const p = Math.max(0, Math.min(100, percent));
   const dash = c * p / 100;
-  const offset = c - dash; // Смещение: при 0% равно длине окружности, при 100% равно 0
+  const offset = c - dash;
   
-  // data-target-offset - это куда мы будем анимировать
+  // Уникальный ID для фильтра, чтобы не было конфликтов
+  const filterId = 'glow-' + Math.random().toString(36).substr(2, 9);
+
   return '<svg width="' + size + '" height="' + size + '" class="ring-svg">' +
+    '<defs>' +
+      '<filter id="' + filterId + '" x="-50%" y="-50%" width="200%" height="200%">' +
+        '<feGaussianBlur stdDeviation="4" result="blur" />' +
+        '<feComposite in="SourceGraphic" in2="blur" operator="over" />' +
+      '</filter>' +
+    '</defs>' +
     '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--bg3)" stroke-width="' + strokeWidth + '"/>' +
-    '<circle class="ring-progress" cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" ' +
+    '<circle class="ring-progress" filter="url(#' + filterId + ')" cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" ' +
     'stroke-dasharray="' + c + '" stroke-dashoffset="' + c + '" data-target-offset="' + offset + '" ' +
     'stroke-linecap="round" transform="rotate(-90 ' + size/2 + ' ' + size/2 + ')"/>' +
     '</svg>';

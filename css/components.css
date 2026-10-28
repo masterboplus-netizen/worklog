@@ -2407,7 +2407,7 @@ html, body {
 
 /* === ПРИНУДИТЕЛЬНОЕ СИЯНИЕ ДЛЯ КОЛЕЦ === */
 .ring-progress {
-  filter: drop-shadow(0 0 8px currentColor) !important;
+  
   transition: stroke-dasharray 1.5s ease-out !important;
 }
 .ring-svg circle {
@@ -2417,7 +2417,7 @@ html, body {
 /* === АНИМАЦИЯ КОЛЕЦ (OFFSET) И СИЯНИЕ === */
 .ring-progress {
   transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease !important;
-  filter: drop-shadow(0 0 8px currentColor) !important;
+  
 }
 .ring-svg circle {
   transition: stroke 0.3s ease;
