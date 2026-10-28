@@ -348,7 +348,7 @@ function renderHeroRings() {
   // Цель всегда равна среднему времени/день (если оно есть)
   let currentGoal = t.avgPerDay > 0 ? t.avgPerDay : DAILY_GOAL_MIN;
 
-  let heroValue = t.todayMin, heroLabel = 'Сегодня', heroSub = 'Обычно ' + fmtH(currentGoal) + ' · ' + Math.round(t.todayMin / currentGoal * 100) + '%';
+  let heroValue = t.todayMin, heroLabel = 'Сегодня', heroSub = 'Среднее ' + fmtH(currentGoal) + ' · ' + Math.round(t.todayMin / currentGoal * 100) + '%';
   if (HERO_MODE === 'last') {
     const sorted = (window.DATA.sessions || []).slice().sort((a, b) => (b.date + (b.end || '')).localeCompare(a.date + (a.end || '')));
     const lastSess = sorted[0];
