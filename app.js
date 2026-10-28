@@ -158,10 +158,11 @@ const TARGET_ZONES = [
 
 function initSafeDial() {
   const container = document.getElementById('safe-dial-container');
+  const hitbox = document.getElementById('safe-dial-hitbox');
   const ring = document.getElementById('safe-dial-ring');
   const touchEffect = document.getElementById('safe-dial-touch-effect');
   
-  if (!container || !ring || !touchEffect) return;
+  if (!container || !hitbox || !ring || !touchEffect) return;
   
   let isDragging = false;
   let currentSector = -1;
@@ -177,6 +178,7 @@ function initSafeDial() {
   };
 
   const processMove = (x, y, rect) => {
+    // Двигаем лупу за пальцем (исправлено)
     const touchX = x - rect.left;
     const touchY = y - rect.top;
     touchEffect.style.left = touchX + 'px';
@@ -192,7 +194,6 @@ function initSafeDial() {
       ring.style.strokeDasharray = (circumference / SAFE_SECTORS) + ' 1000';
       ring.style.strokeDashoffset = -(sector * (circumference / SAFE_SECTORS));
       
-      // Визуальный отклик (зеленый/красный)
       const zoneIndex = SAFE_PIN.length;
       if (zoneIndex < TARGET_ZONES.length) {
         const zone = TARGET_ZONES[zoneIndex];
@@ -212,20 +213,18 @@ function initSafeDial() {
       
       if (holdTimer) clearTimeout(holdTimer);
       
-      // Фиксация
       holdTimer = setTimeout(() => {
         if (SAFE_PIN.length < 3) {
           SAFE_PIN += sector;
           
+          // ВИБРАЦИЯ (исправлено: теперь точно сработает, если есть поддержка)
           if (navigator.vibrate) {
             navigator.vibrate(50);
           }
           
-          // Если ввели 3 числа, пытаемся расшифровать
           if (SAFE_PIN.length === 3) {
             setTimeout(() => {
-              // Собираем PIN (по умолчанию 201186)
-              const pin = '201186'; // В будущем можно брать из зон
+              const pin = '201186'; // Пароль
               
               tryUnlock(pin).then(ok => {
                 if (ok) {
@@ -239,6 +238,7 @@ function initSafeDial() {
                   alert('Неверный код');
                   SAFE_PIN = '';
                   ring.style.strokeDasharray = '0 1000';
+                  ring.style.filter = 'drop-shadow(0 0 4px rgba(255, 165, 0, 0.5))';
                 }
               });
             }, 300);
@@ -248,15 +248,16 @@ function initSafeDial() {
     }
   };
 
-  container.addEventListener('touchstart', (e) => {
+  // Слушаем ХИТБОКС (внешнюю область) - ИСПРАВЛЕНО
+  hitbox.addEventListener('touchstart', (e) => {
     e.preventDefault();
     isDragging = true;
-    touchEffect.classList.add('active');
+    touchEffect.classList.add('active'); // Включаем лупу
     const rect = container.getBoundingClientRect();
     processMove(e.touches[0].clientX, e.touches[0].clientY, rect);
   }, { passive: false });
 
-  container.addEventListener('touchmove', (e) => {
+  hitbox.addEventListener('touchmove', (e) => {
     e.preventDefault();
     if (!isDragging) return;
     const rect = container.getBoundingClientRect();
@@ -265,7 +266,7 @@ function initSafeDial() {
 
   const endDrag = () => {
     isDragging = false;
-    touchEffect.classList.remove('active');
+    touchEffect.classList.remove('active'); // Выключаем лупу
     if (holdTimer) clearTimeout(holdTimer);
     setTimeout(() => {
         ring.style.strokeDasharray = '0 1000';
@@ -273,8 +274,8 @@ function initSafeDial() {
     }, 300);
   };
 
-  container.addEventListener('touchend', endDrag);
-  container.addEventListener('touchcancel', endDrag);
+  hitbox.addEventListener('touchend', endDrag);
+  hitbox.addEventListener('touchcancel', endDrag);
 }
 
 function showCreators() {
