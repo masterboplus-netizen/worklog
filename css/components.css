@@ -2205,3 +2205,49 @@ div[style*="justify-content: space-between"] {
   width: calc(100% / 7) !important; /* Ровно 1/7 от ширины контейнера */
   flex: 0 0 calc(100% / 7) !important;
 }
+
+/* === Стили для календаря (круглые выделения) === */
+.cal-day {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1;
+  cursor: pointer;
+  border-radius: 50%; /* Делаем ячейку круглой */
+  transition: background 0.2s;
+}
+.cal-day .cal-num {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: var(--fg);
+  transition: all 0.2s;
+}
+
+/* Сегодняшний день (серый кружок) */
+.cal-day.today .cal-num {
+  background: var(--bg3);
+  font-weight: 600;
+}
+
+/* Выделенный день (синяя обводка) */
+.cal-day.selected .cal-num {
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Точка о наличии записей */
+.cal-dot {
+  position: absolute;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+}
