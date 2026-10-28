@@ -2393,3 +2393,14 @@ html, body {
   overflow-y: visible !important; /* Контент больше не обрезается */
   padding-bottom: 80px !important; /* Отступ, чтобы меню не перекрывало последний элемент */
 }
+
+/* === Сияние для прогресса колец === */
+.ring-svg circle.ring-progress {
+  filter: drop-shadow(0 0 6px currentColor);
+  transition: stroke-dasharray 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
+}
+
+/* Усиливаем сияние для главного кольца */
+.ring-wrap .ring-svg circle.ring-progress {
+  filter: drop-shadow(0 0 10px currentColor);
+}

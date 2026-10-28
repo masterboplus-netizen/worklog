@@ -310,6 +310,13 @@ function renderRingSVG(percent, size, strokeWidth, color) {
     '</svg>';
 }
 
+function getProgressColor(percent) {
+  if (percent < 25) return 'var(--red)';
+  if (percent < 50) return 'var(--yellow)';
+  if (percent < 85) return 'var(--accent)'; // Синий
+  return 'var(--green)'; // Зеленый
+}
+
 function renderHeroRings() {
   const t = calcTotals();
   const sessions = window.DATA.sessions || [];
@@ -332,7 +339,7 @@ function renderHeroRings() {
   }
   const pctDur = Math.round(heroValue / currentGoal * 100);
 
-  const ringColor = pctDur >= 100 ? 'var(--green)' : 'var(--accent)';
+  const ringColor = getProgressColor(pctDur);
   const div = document.createElement('div');
   div.className = 'hero-rings';
   div.innerHTML = '<div class="hero-main"><div class="ring-wrap" style="cursor:pointer" id="hero-ring">' + renderRingSVG(pctDur, 290, 14, ringColor) +
