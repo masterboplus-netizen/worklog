@@ -43,10 +43,12 @@ async function init() {
 
   setupTabs();
 
-  // Возвращаем старый экран PIN
+  // Сразу показываем экран с крутилками
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
-  showScreen('pin-screen');
+  document.getElementById('pin-screen').classList.add('hidden');
+  document.getElementById('scroll-pin-screen').classList.add('active');
+  initScrollPin();
 }
 
 function setupTabs() {
@@ -136,6 +138,99 @@ function switchTab(name) {
 }
 
 
+
+
+// === ЛОГИКА КРУТИЛОК ===
+const WHEEL_NUMBERS = [11, 12, 20, 47, 54, 77, 86, 93, 99, 15, 33, 61, 42, 88, 23, 71];
+
+function initScrollPin() {
+  const container = document.getElementById('wheels-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  for (let i = 0; i < 3; i++) {
+    const wheel = document.createElement('div');
+    wheel.className = 'scroll-wheel';
+    
+    const spacerTop = document.createElement('div');
+    spacerTop.className = 'wheel-spacer';
+    wheel.appendChild(spacerTop);
+
+    const shuffled = [...WHEEL_NUMBERS].sort(() => Math.random() - 0.5);
+    
+    shuffled.forEach(num => {
+      const item = document.createElement('div');
+      item.className = 'wheel-item';
+      item.textContent = num;
+      wheel.appendChild(item);
+    });
+
+    const spacerBottom = document.createElement('div');
+    spacerBottom.className = 'wheel-spacer';
+    wheel.appendChild(spacerBottom);
+
+    wheel.addEventListener('scroll', () => {
+      const items = wheel.querySelectorAll('.wheel-item');
+      const wheelRect = wheel.getBoundingClientRect();
+      const centerY = wheelRect.top + wheelRect.height / 2;
+      
+      let closest = null;
+      let minDist = Infinity;
+      
+      items.forEach(item => {
+        const rect = item.getBoundingClientRect();
+        const dist = Math.abs((rect.top + rect.height / 2) - centerY);
+        if (dist < minDist) {
+          minDist = dist;
+          closest = item;
+        }
+      });
+      
+      items.forEach(it => it.classList.remove('active'));
+      if (closest) closest.classList.add('active');
+    });
+
+    container.appendChild(wheel);
+
+    setTimeout(() => {
+      wheel.scrollTo({ top: 60, behavior: 'auto' });
+    }, 10);
+  }
+}
+
+window.checkScrollPin = async function() {
+  const wheels = document.querySelectorAll('.scroll-wheel');
+  const selected = [];
+  wheels.forEach(w => {
+    const active = w.querySelector('.wheel-item.active');
+    if (active) selected.push(active.textContent);
+  });
+  
+  const pin = selected.join('');
+  const err = document.getElementById('scroll-pin-error');
+  if (err) err.textContent = '';
+  
+  if (!pin || pin.length < 4) return;
+  
+  const ok = await tryUnlock(pin);
+  
+  if (ok) {
+    document.getElementById('scroll-pin-screen').classList.remove('active');
+    document.getElementById('pin-screen').classList.add('hidden');
+    const l = document.getElementById('loading');
+    if (l) l.remove();
+    
+    showScreen('dashboard');
+    renderDashboard();
+  } else {
+    if (err) err.textContent = 'Неверный код';
+    const container = document.getElementById('wheels-container');
+    container.style.transform = 'translateX(-5px)';
+    setTimeout(() => container.style.transform = 'translateX(5px)', 50);
+    setTimeout(() => container.style.transform = 'translateX(0)', 100);
+    document.querySelectorAll('.scroll-wheel').forEach(w => w.scrollTo({ top: 60, behavior: 'smooth' }));
+  }
+}
 
 function showCreators() {
   // Удаляем старую модалку, если она есть, чтобы всегда создавать свежую

@@ -16,7 +16,7 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="css/base.css?v=189">
-<link rel="stylesheet" href="css/components.css?v=304">
+<link rel="stylesheet" href="css/components.css?v=305">
 </head>
 <body>
 <div id="app"></div>
@@ -89,12 +89,28 @@
 <script src="js/ui.js?v=288"></script>
 <script src="js/chart.js?v=222"></script>
 <script src="js/auth.js?v=205"></script>
-<script src="app.js?v=270"></script>
+<script src="app.js?v=274"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=205', { updateViaCache: 'none' }).catch(function(){});
 }
 </script>
+
+
+<div id="scroll-pin-screen" class="screen">
+<div class="scroll-pin-box">
+  <img src="icon.svg" alt="" class="pin-logo">
+  <h1>Хераборина</h1>
+  <p class="pin-sub" style="margin-bottom: 20px;">Крути числа</p>
+  
+  <div class="scroll-wheels-container" id="wheels-container">
+    <!-- Сюда JS вставит барабаны -->
+  </div>
+  
+  <button class="scroll-pin-btn" onclick="checkScrollPin()">Войти</button>
+  <div id="scroll-pin-error" class="pin-error" style="margin-top: 10px;"></div>
+</div>
+</div>
 
 </body>
 </html>
