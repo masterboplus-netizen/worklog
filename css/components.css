@@ -2097,7 +2097,7 @@ div[style*="justify-content: space-between"] {
   -webkit-tap-highlight-color: transparent !important;
 }
 
-.tl-col::before {
+/* .tl-col::before {
   content: '';
   position: absolute;
   left: 0; right: 0;
@@ -2106,7 +2106,7 @@ div[style*="justify-content: space-between"] {
   background: rgba(255,255,255,0.03);
   pointer-events: none;
 }
-.tl-col::after {
+/* .tl-col::after {
   content: '';
   position: absolute;
   left: 0; right: 0;

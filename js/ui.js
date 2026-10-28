@@ -913,15 +913,11 @@ function renderActivityPageV2() {
     c.appendChild(navRow);
 
     // 2. ГРАФИК (Ось Y + Лента)
+    // Обертка для графика
     const chartWrapper = document.createElement('div');
-    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 260px; position: relative; box-sizing: border-box;';
+    chartWrapper.style.cssText = 'display: flex; width: 100%; height: 260px; position: relative; box-sizing: border-box; padding-left: 30px; padding-bottom: 30px;'; // Сдвиг вправо для цифр оси Y
 
-    // Ось Y
-    const yAxis = document.createElement('div');
-    yAxis.id = 'tl-y-axis';
-    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 30px; padding-top: 0;';
-    
-    // Лента
+    // Лента (занимает всё место)
     const scrollContainer = document.createElement('div');
     scrollContainer.className = 'tl-container';
     scrollContainer.id = 'tl-scroll';
@@ -929,8 +925,15 @@ function renderActivityPageV2() {
     scrollContainer.style.padding = '0';
     scrollContainer.style.margin = '0';
     scrollContainer.style.height = '100%';
+    scrollContainer.style.position = 'relative';
 
-    chartWrapper.appendChild(yAxis);
+    // Создаем фиксированные линии сетки и цифры (позади столбиков)
+    const gridOverlay = document.createElement('div');
+    gridOverlay.id = 'tl-grid-overlay';
+    gridOverlay.style.cssText = 'position: absolute; top: 0; bottom: 30px; left: 0; right: 0; pointer-events: none; z-index: 0; display: flex; flex-direction: column; justify-content: space-between;';
+    
+    // Сюда будем записывать HTML для линий при каждом обновлении
+    scrollContainer.appendChild(gridOverlay);
     chartWrapper.appendChild(scrollContainer);
     c.appendChild(chartWrapper);
 
@@ -1026,15 +1029,24 @@ function renderActivityPageV2() {
         }
         if (maxVal === 0) maxVal = CHART_STATE_V2.metric === 'duration' ? 720 : 10;
 
-        // Отрисовка Оси Y
+        // Отрисовка Оси Y (3 значения: 0, 50%, 100%)
+        const values = [0, maxVal / 2, maxVal];
         let yHTML = '';
-        const step = maxVal / 4;
-        for (let i = 4; i >= 0; i--) {
-            const val = Math.round(step * i);
+        
+        // Идем сверху вниз
+        for (let i = 2; i >= 0; i--) {
+            const val = Math.round(values[i]);
             const lbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
-            yHTML += '<div>' + lbl + '</div>';
+            
+            // Рисуем линию и цифру для каждого уровня
+            yHTML += `
+                <div style="position: relative; width: 100%;">
+                    <div style="position: absolute; left: 0; right: 0; top: 0; height: 1px; background: rgba(255,255,255,0.05);"></div>
+                    <div style="position: absolute; right: calc(100% + 8px); top: -6px; font-size: 10px; color: var(--fg-dim); text-align: right; width: 30px;">${lbl}</div>
+                </div>
+            `;
         }
-        yAxis.innerHTML = yHTML;
+        gridOverlay.innerHTML = yHTML;
 
         // Отрисовка столбиков и легенды
         const cols = scrollContainer.querySelectorAll('.tl-col');
