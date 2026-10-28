@@ -972,7 +972,7 @@ function renderActivityPageV2() {
     // 3. НИЖНИЕ КНОПКИ
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     const metricHTML = metrics.map(([key, label]) =>
-        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 4px 0; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
+        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 4px 0; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
     ).join('');
 
     const metricBar = document.createElement('div');
@@ -1018,7 +1018,7 @@ function renderActivityPageV2() {
         const step = maxVal / 4;
         for (let i = 4; i >= 0; i--) {
             const val = Math.round(step * i);
-            const lbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(val / 60) + 'ч ' + (val % 60) + 'м') : String(val);
+            const lbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
             yHTML += '<div>' + lbl + '</div>';
         }
         yAxis.innerHTML = yHTML;
