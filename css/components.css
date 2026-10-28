@@ -2336,3 +2336,24 @@ html, body {
   min-height: 0 !important;
   height: auto !important;
 }
+
+/* === ЧИСТЫЙ ФИКС СКРОЛЛА И ПУСТОТЫ === */
+body {
+  height: 100vh !important;
+  overflow: hidden !important; /* Запрещаем скролл самой страницы */
+}
+
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px) !important; /* Высота экрана минус таб-бар */
+  overflow: hidden;
+}
+
+#content, #content-diary, #content-projects, #content-activity {
+  flex: 1;
+  overflow-y: auto !important; /* Скролл ТОЛЬКО внутри контента */
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 20px !important;
+  height: 100% !important;
+}
