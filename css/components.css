@@ -2199,3 +2199,9 @@ div[style*="justify-content: space-between"] {
   color: #fff !important;
   box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important; /* Легкая тень для объема */
 }
+
+/* === Динамическая ширина столбиков (ровно 7 на экран) === */
+.tl-col {
+  width: calc(100% / 7) !important; /* Ровно 1/7 от ширины контейнера */
+  flex: 0 0 calc(100% / 7) !important;
+}
