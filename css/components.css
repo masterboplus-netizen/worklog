@@ -2357,3 +2357,21 @@ body {
   padding-bottom: 20px !important;
   height: 100% !important;
 }
+
+/* === ОТКАТ ЖЕСТКОГО ОГРАНИЧЕНИЯ === */
+body {
+  overflow: auto !important; /* Разрешаем скролл, если контент не влезает */
+  height: auto !important;
+}
+
+#dashboard {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
+}
+
+#content, #content-diary, #content-projects, #content-activity {
+  height: auto !important;
+  overflow-y: visible !important; /* Возвращаем видимость календарю */
+  padding-bottom: 80px !important; /* Оставляем отступ, чтобы меню не перекрывало низ */
+}
