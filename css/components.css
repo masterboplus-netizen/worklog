@@ -2066,6 +2066,7 @@ div[style*="justify-content: space-between"] {
   min-width: 40px; flex: 0 0 40px; /* Ширина колонки */
   display: flex; flex-direction: column; 
   height: 100%; position: relative; cursor: pointer;
+  overflow: visible !important; /* Важно! Чтобы легенда не обрезалась */
 }
 
 .tl-bar {
