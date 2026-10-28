@@ -306,17 +306,21 @@ function renderRingSVG(percent, size, strokeWidth, color) {
   const dash = c * p / 100;
   const offset = c - dash;
   
-  // Уникальный ID для фильтра, чтобы не было конфликтов
   const filterId = 'glow-' + Math.random().toString(36).substr(2, 9);
 
-  return '<svg width="' + size + '" height="' + size + '" class="ring-svg">' +
+  return '<svg width="' + size + '" height="' + size + '" class="ring-svg" style="overflow: visible;">' +
     '<defs>' +
       '<filter id="' + filterId + '" x="-50%" y="-50%" width="200%" height="200%">' +
-        '<feGaussianBlur stdDeviation="4" result="blur" />' +
-        '<feComposite in="SourceGraphic" in2="blur" operator="over" />' +
+        '<feGaussianBlur stdDeviation="6" result="blur" />' +
+        '<feMerge>' +
+          '<feMergeNode in="blur" />' +
+          '<feMergeNode in="SourceGraphic" />' +
+        '</feMerge>' +
       '</filter>' +
     '</defs>' +
+    // Фоновое кольцо
     '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--bg3)" stroke-width="' + strokeWidth + '"/>' +
+    // Кольцо прогресса с фильтром
     '<circle class="ring-progress" filter="url(#' + filterId + ')" cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" ' +
     'stroke-dasharray="' + c + '" stroke-dashoffset="' + c + '" data-target-offset="' + offset + '" ' +
     'stroke-linecap="round" transform="rotate(-90 ' + size/2 + ' ' + size/2 + ')"/>' +

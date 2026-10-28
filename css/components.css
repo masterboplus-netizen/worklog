@@ -2422,3 +2422,10 @@ html, body {
 .ring-svg circle {
   transition: stroke 0.3s ease;
 }
+
+/* === ФИКС: Убираем любые фоны и тени у контейнеров колец === */
+.mini-ring, .ring-wrap {
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
