@@ -43,10 +43,12 @@ async function init() {
 
   setupTabs();
 
-  // Сразу показываем экран PIN, без старого экрана загрузки
+  // Сразу показываем экран с крутилками, без старого экрана загрузки
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
-  showScreen('pin-screen');
+  document.getElementById('pin-screen').classList.add('hidden');
+  document.getElementById('scroll-pin-screen').classList.add('active');
+  initScrollPin();
 }
 
 function setupTabs() {

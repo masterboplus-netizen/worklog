@@ -2583,3 +2583,6 @@ html, body {
   color: #fff !important;
   box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
 }
+
+/* Скрываем старый PIN-пад, пока используем крутилки */
+#pin-screen { display: none !important; }
