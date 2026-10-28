@@ -919,7 +919,7 @@ function renderActivityPageV2() {
     // Ось Y
     const yAxis = document.createElement('div');
     yAxis.id = 'tl-y-axis';
-    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 40px; padding-top: 10px;';
+    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 38px; padding-top: 10px;';
     
     // Лента
     const scrollContainer = document.createElement('div');
@@ -970,6 +970,7 @@ function renderActivityPageV2() {
         col.className = 'tl-col';
         col.dataset.date = dateStr;
         col.style.position = 'relative';
+        col.style.outline = 'none'; // Убираем рамку фокуса при тапе
 
         const topSpace = document.createElement('div');
         topSpace.style.cssText = 'flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative;';
