@@ -140,49 +140,59 @@ function renderActivityPageV2() {
         yAxis.innerHTML = yHTML;
 
         const cols = scrollContainer.querySelectorAll('.tl-col');
+        
+        // 1. Сначала сбрасываем выделение со ВСЕХ столбиков
         cols.forEach(col => {
-            const dateStr = col.dataset.date;
-            let v = 0;
-            for (const sess of window.DATA.sessions || []) {
-                if (sess.date === dateStr) {
-                    if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
-                    else if (CHART_STATE.metric === 'events') v += sess.events || 0;
-                    else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
-                    else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
-                }
-            }
-            const h = v ? Math.max(2, Math.round(v / maxVal * 100)) : 0;
-            col.querySelector('.tl-bar').style.height = h + '%';
+            col.querySelector('.tl-bar').classList.remove('selected');
+        });
 
-            if (dateStr === CHART_STATE.selectedDay) {
-                col.querySelector('.tl-bar').classList.add('selected');
+        // 2. Если есть выбранный день, выделяем только его и показываем тултип
+        if (CHART_STATE.selectedDay) {
+            const targetCol = scrollContainer.querySelector(`.tl-col[data-date="${CHART_STATE.selectedDay}"]`);
+            if (targetCol) {
+                const bar = targetCol.querySelector('.tl-bar');
+                bar.classList.add('selected');
                 
-                // Показываем тултип
+                // Считаем значение для этого дня
+                let v = 0;
+                for (const sess of window.DATA.sessions || []) {
+                    if (sess.date === CHART_STATE.selectedDay) {
+                        if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
+                        else if (CHART_STATE.metric === 'events') v += sess.events || 0;
+                        else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
+                        else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
+                    }
+                }
+                
                 const text = CHART_STATE.metric === 'duration' ? fmtH(v) : String(v);
-                const d = new Date(dateStr + 'T00:00:00');
+                const d = new Date(CHART_STATE.selectedDay + 'T00:00:00');
                 const monthsShort = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
                 const dowNamesShort = ['вс','пн','вт','ср','чт','пт','сб'];
                 const dateStrFormat = d.getDate() + ' ' + monthsShort[d.getMonth()] + ', ' + dowNamesShort[d.getDay()];
                 
+                // Формируем контент тултипа
                 tooltip.innerHTML = `<div style="font-weight:600;color:var(--fg);margin-bottom:2px;">${text}</div><div style="font-size:10px;color:var(--fg-dim);">${dateStrFormat}</div>`;
                 tooltip.style.display = 'block';
                 
-                // Позиционируем тултип над столбиком
-                const colRect = col.getBoundingClientRect();
-                const containerRect = scrollContainer.getBoundingClientRect();
+                // Позиционируем тултип
+                // Ширина столбика теперь = 100/7 контейнера
+                const colWidth = scrollContainer.clientWidth / 7;
+                const colIndex = Array.from(cols).indexOf(targetCol);
                 
-                // Вычисляем позицию относительно scrollContainer
-                const leftPos = colRect.left - containerRect.left + (colRect.width / 2);
-                const barHeightPx = (parseFloat(col.querySelector('.tl-bar').style.height) / 100) * (containerRect.height - 32); 
-                const topPos = containerRect.height - 32 - barHeightPx - 45; // 32 - высота подписей дат, 45 - высота тултипа
+                // Центр столбика по X (относительно контейнера скролла)
+                const leftPos = (colIndex * colWidth) + (colWidth / 2);
+                
+                // Высота столбика по Y
+                const barHeightPx = (parseFloat(bar.style.height) / 100) * (scrollContainer.clientHeight - 32); 
+                const topPos = scrollContainer.clientHeight - 32 - barHeightPx - 45; // 32 - подписи, 45 - высота тултипа
 
                 tooltip.style.left = leftPos + 'px';
-                tooltip.style.top = topPos + 'px';
-                
-            } else {
-                col.querySelector('.tl-bar').classList.remove('selected');
+                tooltip.style.top = Math.max(0, topPos) + 'px'; // Чтобы не улетал за верхний край
             }
-        });
+        } else {
+            // Если ничего не выбрано, скрываем тултип
+            tooltip.style.display = 'none';
+        }
     };
 
     scrollContainer.addEventListener('scroll', () => {
