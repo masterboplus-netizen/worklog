@@ -1103,6 +1103,8 @@ function renderActivityPageV2() {
         const text = CHART_STATE_V2.metric === 'duration' ? fmtH(v) : String(v);
         const legend = document.createElement('div');
         legend.className = 'tl-legend';
+        legend.style.top = '-35px'; // Поднимаем выше
+        legend.style.zIndex = '100';
         legend.textContent = text;
         bar.appendChild(legend);
     });
