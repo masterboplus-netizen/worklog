@@ -19,9 +19,10 @@ async function init() {
 
   setupTabs();
 
-  // Показываем сейф
-  document.getElementById('scroll-pin-screen').classList.add('active');
-  initSafeDial();
+  // Показываем PIN-экран
+  const loadingEl = document.getElementById('loading');
+  if (loadingEl) loadingEl.classList.add('hidden');
+  showScreen('pin-screen');
 }
 
 if (document.readyState === 'loading') {
@@ -74,149 +75,8 @@ function switchTab(name) {
   }
 }
 
-// === ЛОГИКА СЕЙФА ===
-let SAFE_PIN = '';
-const SAFE_SECTORS = 12;
-const SAFE_RADIUS = 90;
-
-const TARGET_ZONES = [
-  { start: 150, end: 180 },
-  { start: 330, end: 360 },
-  { start: 60, end: 90 }
-];
-
-function initSafeDial() {
-  const container = document.getElementById('safe-dial-container');
-  const hitbox = document.getElementById('safe-dial-hitbox');
-  const ring = document.getElementById('safe-dial-ring');
-  const touchEffect = document.getElementById('safe-dial-touch-effect');
-  
-  if (!container || !hitbox || !ring || !touchEffect) return;
-  
-  let isDragging = false;
-  let currentSector = -1;
-  let holdTimer = null;
-  let hasMoved = false; // Флаг: двигал ли пользователь палец
-  let SAFE_INPUTS = [];
-
-  const getAngle = (x, y) => {
-    const rect = container.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    let angle = Math.atan2(y - cy, x - cx) * 180 / Math.PI;
-    if (angle < 0) angle += 360;
-    return angle;
-  };
-
-  const processMove = (x, y, rect) => {
-    const touchX = x - rect.left;
-    const touchY = y - rect.top;
-    touchEffect.style.left = touchX + 'px';
-    touchEffect.style.top = touchY + 'px';
-
-    const angle = getAngle(x, y);
-    const sector = Math.floor(angle / (360 / SAFE_SECTORS));
-    
-    if (sector !== currentSector) {
-      currentSector = sector;
-      hasMoved = true; // Если сектор сменился, значит, пользователь двигал пальцем
-      
-      const circumference = 2 * Math.PI * SAFE_RADIUS;
-      ring.style.strokeDasharray = (circumference / SAFE_SECTORS) + ' 1000';
-      ring.style.strokeDashoffset = -(sector * (circumference / SAFE_SECTORS));
-      
-      const zoneIndex = SAFE_INPUTS.length;
-      let isCorrect = false;
-      
-      if (zoneIndex < TARGET_ZONES.length) {
-        const zone = TARGET_ZONES[zoneIndex];
-        if (zone.end === 360) {
-          if (angle >= zone.start || angle <= 0) isCorrect = true;
-        } else {
-          if (angle >= zone.start && angle <= zone.end) isCorrect = true;
-        }
-        
-        if (isCorrect) {
-            ring.style.filter = 'drop-shadow(0 0 15px rgba(0, 255, 0, 1)) brightness(1.8)';
-            ring.style.stroke = '#00FF00';
-        } else {
-            ring.style.filter = 'drop-shadow(0 0 15px rgba(255, 0, 0, 1)) brightness(1.8)';
-            ring.style.stroke = '#FF0000';
-        }
-      }
-      
-      if (holdTimer) clearTimeout(holdTimer);
-      
-      holdTimer = setTimeout(() => {
-        if (SAFE_INPUTS.length < 3 && hasMoved) {
-          SAFE_INPUTS.push(isCorrect);
-          
-          if (SAFE_INPUTS.length === 3) {
-            setTimeout(() => {
-              const allCorrect = SAFE_INPUTS.every(val => val === true);
-              
-              if (allCorrect) {
-                const pin = '201186';
-                tryUnlock(pin).then(ok => {
-                  if (ok) {
-                    document.getElementById('scroll-pin-screen').classList.remove('active');
-                    const l = document.getElementById('loading');
-                    if (l) l.remove();
-                    showScreen('dashboard');
-                    renderDashboard();
-                  } else {
-                    alert('Ошибка расшифровки');
-                    SAFE_INPUTS = [];
-                  }
-                });
-              } else {
-                alert('Неверный код! Попробуй еще раз.');
-                SAFE_INPUTS = [];
-                ring.style.strokeDasharray = '0 1000';
-                ring.style.filter = 'drop-shadow(0 0 6px rgba(255, 165, 0, 0.6))';
-                ring.style.stroke = '#FFA500';
-              }
-            }, 300);
-          }
-        }
-      }, 600);
-    }
-  };
-
-  hitbox.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    isDragging = true;
-    hasMoved = false; // Сбрасываем флаг при новом касании
-    SAFE_INPUTS = []; // И сбрасываем массив ввода
-    touchEffect.classList.add('active');
-    const rect = container.getBoundingClientRect();
-    processMove(e.touches[0].clientX, e.touches[0].clientY, rect);
-  }, { passive: false });
-
-  hitbox.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    if (!isDragging) return;
-    const rect = container.getBoundingClientRect();
-    processMove(e.touches[0].clientX, e.touches[0].clientY, rect);
-  }, { passive: false });
-
-  const endDrag = () => {
-    isDragging = false;
-    touchEffect.classList.remove('active');
-    if (holdTimer) clearTimeout(holdTimer);
-    setTimeout(() => {
-        ring.style.strokeDasharray = '0 1000';
-        ring.style.filter = 'drop-shadow(0 0 6px rgba(255, 165, 0, 0.6))';
-        ring.style.stroke = '#FFA500';
-    }, 300);
-  };
-
-  hitbox.addEventListener('touchend', endDrag);
-  hitbox.addEventListener('touchcancel', endDrag);
-}
-
 function showScreen(name) {
-  ['scroll-pin-screen', 'dashboard', 'loading'].forEach(id => {
+  ['pin-screen', 'dashboard', 'loading'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     if (id === name) el.classList.remove('hidden');
