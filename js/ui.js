@@ -327,6 +327,8 @@ function renderRingSVG(percent, size, strokeWidth, color) {
     '</svg>';
 }
 
+
+
 function getProgressColor(percent) {
   if (percent < 25) return 'var(--red)';
   if (percent < 50) return 'var(--yellow)';
@@ -342,7 +344,7 @@ function renderHeroRings() {
   const scrVal = _sumRange(_sessions, MINI_SCR_PERIOD, 'screens');
   function _fmtH2(min) { return Math.floor(min / 60) + 'ч<br>' + (min % 60) + 'м'; }
   let timeVal = MINI_TIME_PERIOD === 'avg' ? fmtH(t.avgPerDay) : (MINI_TIME_PERIOD === 'all' ? _fmtH2(t.total) : _fmtH2(_sumRange(_sessions, MINI_TIME_PERIOD, 'duration_min')));
-  
+
   // Цель всегда равна среднему времени/день (если оно есть)
   let currentGoal = t.avgPerDay > 0 ? t.avgPerDay : DAILY_GOAL_MIN;
 
@@ -355,17 +357,39 @@ function renderHeroRings() {
     heroSub = lastSess ? (lastSess.date.slice(8, 10) + '.' + lastSess.date.slice(5, 7)) : '';
   }
   const pctDur = Math.round(heroValue / currentGoal * 100);
-
   const ringColor = getProgressColor(pctDur);
+
+  // --- Считаем проценты для малых колец (через среднее) ---
+  const uniqueDays = new Set(sessions.map(s => s.date)).size || 1;
+
+  // 1. Сообщения
+  const totalMsgs = sessions.reduce((acc, s) => acc + (s.events || 0), 0);
+  const avgMsgsPerDay = totalMsgs / uniqueDays;
+  const msgGoal = avgMsgsPerDay > 0 ? avgMsgsPerDay : 100;
+  let msgRaw = MINI_MSG_PERIOD === 'day' ? _sumRange(sessions, 'day', 'events') : msgVal;
+  let pctMsg = Math.min(100, Math.round(msgRaw / msgGoal * 100));
+
+  // 2. Скрины
+  const totalScrs = sessions.reduce((acc, s) => acc + (s.screens || 0), 0);
+  const avgScrsPerDay = totalScrs / uniqueDays;
+  const scrGoal = avgScrsPerDay > 0 ? avgScrsPerDay : 10;
+  let scrRaw = MINI_SCR_PERIOD === 'day' ? _sumRange(sessions, 'day', 'screens') : scrVal;
+  let pctScr = Math.min(100, Math.round(scrRaw / scrGoal * 100));
+
+  // 3. Время
+  let timeGoal = currentGoal;
+  let timeRaw = MINI_TIME_PERIOD === 'avg' ? t.avgPerDay : (MINI_TIME_PERIOD === 'all' ? t.total : _sumRange(_sessions, MINI_TIME_PERIOD, 'duration_min'));
+  let pctTime = Math.min(100, Math.round(timeRaw / (timeGoal || 1) * 100));
+
   const div = document.createElement('div');
   div.className = 'hero-rings';
   div.innerHTML = '<div class="hero-main"><div class="ring-wrap" style="cursor:pointer" id="hero-ring">' + renderRingSVG(pctDur, 290, 14, ringColor) +
         '<div class="ring-center"><div class="ring-icon">' + (HERO_MODE === 'today' ? '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' : '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>') + '</div>' +
           '<div class="ring-label">' + heroLabel + '</div><div class="ring-value">' + fmtH(heroValue) + '</div><div class="ring-sub">' + heroSub + '</div></div></div></div>' +
-    '<div class="hero-mini"><div class="mini-block" data-mini="msg"><div class="mini-label"><div class="mini-lbl-title">Сообщения</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_MSG_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 92, 7, 'var(--green)') + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + msgVal + '</div></div></div></div>' +
-      '<div class="mini-block" data-mini="scr"><div class="mini-label"><div class="mini-lbl-title">Скрины</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_SCR_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 92, 7, 'var(--yellow)') + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + scrVal + '</div></div></div></div>' +
-      '<div class="mini-block" data-mini="time"><div class="mini-label">' + (MINI_TIME_PERIOD === 'avg' ? '<div class="mini-lbl-title">Среднее/день</div>' : '<div class="mini-lbl-title">Время</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_TIME_PERIOD] + '</div>') + '</div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(100, 92, 7, 'var(--accent)') + '<div class="mini-center"><div class="mini-val" style="font-size:' + (timeVal.includes('<br>') ? '16' : '22') + 'px">' + timeVal + '</div></div></div></div></div>';
-  
+    '<div class="hero-mini"><div class="mini-block" data-mini="msg"><div class="mini-label"><div class="mini-lbl-title">Сообщения</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_MSG_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctMsg, 92, 7, getProgressColor(pctMsg)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + msgVal + '</div></div></div></div>' +
+      '<div class="mini-block" data-mini="scr"><div class="mini-label"><div class="mini-lbl-title">Скрины</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_SCR_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctScr, 92, 7, getProgressColor(pctScr)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + scrVal + '</div></div></div></div>' +
+      '<div class="mini-block" data-mini="time"><div class="mini-label">' + (MINI_TIME_PERIOD === 'avg' ? '<div class="mini-lbl-title">Среднее/день</div>' : '<div class="mini-lbl-title">Время</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_TIME_PERIOD] + '</div>') + '</div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctTime, 92, 7, getProgressColor(pctTime)) + '<div class="mini-center"><div class="mini-val" style="font-size:' + (timeVal.includes('<br>') ? '16' : '22') + 'px">' + timeVal + '</div></div></div></div></div>';
+
   div.querySelector('#hero-ring').addEventListener('click', () => { HERO_MODE = HERO_MODE === 'today' ? 'last' : 'today'; renderDashboard(); });
   div.querySelectorAll('.mini-block').forEach((block, index) => {
     block.querySelector('.mini-ring').addEventListener('click', () => {
