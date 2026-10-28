@@ -912,6 +912,12 @@ function renderActivityPageV2() {
     navRow.appendChild(yearSpan);
     c.appendChild(navRow);
 
+    // Строка для легенды (фиксированная)
+    const legendBar = document.createElement('div');
+    legendBar.id = 'tl-legend-bar';
+    legendBar.style.cssText = 'height: 24px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 8px;';
+    c.appendChild(legendBar);
+
     // 2. ГРАФИК (Ось Y + Лента)
     const chartWrapper = document.createElement('div');
     chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 260px; position: relative; padding-bottom: 30px;';
