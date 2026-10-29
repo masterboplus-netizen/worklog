@@ -970,7 +970,7 @@ function renderActivityPageV2() {
     // 1. НАВИГАЦИЯ
     const navRow = document.createElement('div');
     navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:16px; margin-bottom: 16px; font-size:20px; font-weight:600; color:var(--fg);';
-    
+
     const monthSpan = document.createElement('span');
     monthSpan.id = 'chart-month-label';
     monthSpan.style.cssText = 'cursor:pointer;';
@@ -999,12 +999,10 @@ function renderActivityPageV2() {
     const chartWrapper = document.createElement('div');
     chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 260px; position: relative; box-sizing: border-box;';
 
-    // Ось Y
     const yAxis = document.createElement('div');
     yAxis.id = 'tl-y-axis';
     yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 30px; padding-top: 0;';
-    
-    // Лента
+
     const scrollContainer = document.createElement('div');
     scrollContainer.className = 'tl-container';
     scrollContainer.id = 'tl-scroll';
@@ -1017,21 +1015,27 @@ function renderActivityPageV2() {
     chartWrapper.appendChild(scrollContainer);
     c.appendChild(chartWrapper);
 
-    // 3. ЛЕГЕНДА (Фиксированная строка)
+    // 3. ЛЕГЕНДА
     const legendBar = document.createElement('div');
     legendBar.id = 'tl-legend-bar';
     legendBar.style.cssText = 'height: 24px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent); margin-top: 8px; margin-bottom: 8px;';
     c.appendChild(legendBar);
 
-    // 4. НИЖНИЕ КНОПКИ
+    // 4. НИЖНИЕ КНОПКИ (КАПСУЛА)
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
-    const metricHTML = metrics.map(([key, label]) =>
-        '<button class="' + (CHART_STATE_V2.metric === key ? 'active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 4px 2px; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
-    ).join('');
+    
+    // Жесткие inline-стили для кнопок
+    const metricHTML = metrics.map(([key, label]) => {
+        const isActive = CHART_STATE_V2.metric === key;
+        const bg = isActive ? 'var(--accent)' : 'transparent';
+        const color = isActive ? '#fff' : 'var(--fg-dim)';
+        const shadow = isActive ? 'box-shadow:0 2px 6px rgba(74,158,255,0.3) !important;' : '';
+        return '<button data-metric="' + key + '" style="flex:1; background:' + bg + ' !important; color:' + color + ' !important; border:none !important; padding:8px 4px !important; border-radius:16px !important; font-size:13px !important; font-family:inherit; outline:none !important; -webkit-appearance:none !important; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; ' + shadow + '">' + label + '</button>';
+    }).join('');
 
     const metricBar = document.createElement('div');
-    metricBar.className = 'chart-segmented-control';
-    metricBar.style.cssText = 'border: 2px solid red !important; padding: 10px !important;'; // ТЕСТОВАЯ РАМКА
+    // Жесткие inline-стили для контейнера капсулы
+    metricBar.style.cssText = 'display:flex; background:var(--bg3); border-radius:20px; padding:4px; margin:16px 16px 20px 16px; gap:4px; width:calc(100% - 32px); box-sizing:border-box;';
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
 
@@ -1055,7 +1059,7 @@ function renderActivityPageV2() {
         col.className = 'tl-col';
         col.dataset.date = dateStr;
         col.style.position = 'relative';
-        col.style.outline = 'none'; // Убираем рамку фокуса при тапе
+        col.style.outline = 'none';
 
         const topSpace = document.createElement('div');
         topSpace.style.cssText = 'flex: 1; width: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative;';
@@ -1110,7 +1114,6 @@ function renderActivityPageV2() {
         }
         if (maxVal === 0) maxVal = CHART_STATE_V2.metric === 'duration' ? 720 : 10;
 
-        // Отрисовка Оси Y
         let yHTML = '';
         const step = maxVal / 4;
         for (let i = 4; i >= 0; i--) {
@@ -1120,7 +1123,6 @@ function renderActivityPageV2() {
         }
         yAxis.innerHTML = yHTML;
 
-        // Отрисовка столбиков и легенды
         const cols = scrollContainer.querySelectorAll('.tl-col');
         cols.forEach(col => {
             const dateStr = col.dataset.date;
@@ -1135,17 +1137,14 @@ function renderActivityPageV2() {
             }
             const h = v ? Math.max(2, Math.round(v / maxVal * 100)) : 0;
             col.querySelector('.tl-bar').style.height = h + '%';
-            
+
             if (dateStr === CHART_STATE_V2.selectedDay) {
                 col.querySelector('.tl-bar').classList.add('selected');
-                
-                // Записываем текст в фиксированную строку
                 const text = CHART_STATE_V2.metric === 'duration' ? fmtH(v) : String(v);
                 const d = new Date(dateStr + 'T00:00:00');
                 const monthsShort = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
                 const dowNamesShort = ['вс','пн','вт','ср','чт','пт','сб'];
                 const dateStrFormat = d.getDate() + ' ' + monthsShort[d.getMonth()] + ', ' + dowNamesShort[d.getDay()];
-                
                 legendBar.textContent = dateStrFormat + ' — ' + text;
             } else {
                 col.querySelector('.tl-bar').classList.remove('selected');
@@ -1153,7 +1152,6 @@ function renderActivityPageV2() {
         });
     };
 
-    // Слушаем скролл
     scrollContainer.addEventListener('scroll', () => {
         clearTimeout(scrollContainer._scrollTimeout);
         scrollContainer._scrollTimeout = setTimeout(() => {
@@ -1165,51 +1163,45 @@ function renderActivityPageV2() {
         }, 100);
     });
 
-    // Клик
     scrollContainer.addEventListener('click', (e) => {
         const col = e.target.closest('.tl-col');
         if (!col) return;
-        
         const dateStr = col.dataset.date;
-
         if (CHART_STATE_V2.selectedDay === dateStr) {
             CHART_STATE_V2.selectedDay = null;
             legendBar.textContent = '';
             updateChart();
             return;
         }
-
         CHART_STATE_V2.selectedDay = dateStr;
         updateChart();
     });
 
-    // Смена метрики
-    c.querySelectorAll('.chart-segmented-control button[data-metric]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            CHART_STATE_V2.metric = btn.dataset.metric;
-            CHART_STATE_V2.selectedDay = null;
-            legendBar.textContent = '';
-            
-            const currentScroll = scrollContainer.scrollLeft;
-            renderActivityPageV2();
-            setTimeout(() => {
-                const newScroll = document.getElementById('tl-scroll');
-                if (newScroll) {
-                    newScroll.scrollLeft = currentScroll;
-                    updateChart();
-                }
-            }, 50);
-        });
+    // Смена метрики (делегирование на контейнер)
+    metricBar.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-metric]');
+        if (!btn) return;
+        e.stopPropagation();
+        CHART_STATE_V2.metric = btn.dataset.metric;
+        CHART_STATE_V2.selectedDay = null;
+        legendBar.textContent = '';
+
+        const currentScroll = scrollContainer.scrollLeft;
+        renderActivityPageV2();
+        setTimeout(() => {
+            const newScroll = document.getElementById('tl-scroll');
+            if (newScroll) {
+                newScroll.scrollLeft = currentScroll;
+                updateChart();
+            }
+        }, 50);
     });
 
-    // Анимация входа
     setTimeout(() => {
         scrollContainer.scrollTo({ left: scrollContainer.scrollWidth, behavior: 'smooth' });
         setTimeout(() => { updateChart(); }, 600);
     }, 100);
 }
-// === ОБНОВЛЕННЫЙ DASHBOARD С АНИМАЦИЕЙ ===
 function renderDashboard() {
   if (!window.DATA) return;
   const c = document.getElementById('content');
