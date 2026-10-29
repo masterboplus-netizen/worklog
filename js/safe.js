@@ -25,6 +25,9 @@ function _safeVibrate(ms) {
 }
 
 function showSafe() {
+  // Пытаемся разбудить API вибрации (пустой вызов)
+  try { if (navigator.vibrate) navigator.vibrate(0); } catch(e) {}
+
   SAFE_ROTATION = 0;
   SAFE_STEP = 0;
   SAFE_ACTIVE = false;
@@ -131,6 +134,9 @@ function _safeBind() {
     
     LAST_VIB_STEP = Math.floor(START_TOUCH_ANGLE / 15);
     
+    // Принудительный вызов вибрации при первом касании
+    _safeVibrate(15);
+
     if (lens) {
       lens.classList.add('active');
       const r = box.getBoundingClientRect();
