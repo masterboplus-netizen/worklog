@@ -1941,7 +1941,7 @@ div[style*="justify-content: space-between"] {
 .chart-legend-v4 { height: 24px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
 
 
-.chart-metric-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
 /* === Починка нижнего меню === */
 
 
@@ -1951,11 +1951,7 @@ div[style*="justify-content: space-between"] {
 /* === ИДЕАЛЬНЫЕ КНОПКИ ГРАФИКА (GRID) === */
 
 
-.chart-metric-btn.active {
-  background: var(--accent) !important;
-  color: #fff !important;
-  border-color: var(--accent) !important;
-}
+
 
 /* === ИДЕАЛЬНОЕ НИЖНЕЕ МЕНЮ === */
 .tabs {
@@ -1997,11 +1993,7 @@ div[style*="justify-content: space-between"] {
 /* === Финальный стиль кнопок метрик (Таблетки) === */
 
 
-.chart-metric-btn.active {
-  background: var(--accent) !important;
-  color: #fff !important;
-  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important; /* Легкая тень для объема */
-}
+
 
 /* === Динамическая ширина столбиков (ровно 7 на экран) === */
 .tl-col {
@@ -2407,24 +2399,8 @@ html, body {
   width: calc(100% - 16px) !important;
   box-sizing: border-box !important;
 }
-.chart-metric-btn {
-  width: 100% !important;
-  text-align: center !important;
-  padding: 10px 0 !important;
-  font-size: 12px !important;
-  background: var(--bg2) !important;
-  border: 1px solid transparent !important;
-  border-radius: 20px !important;
-  color: var(--fg) !important;
-  transition: all 0.2s !important;
-  white-space: nowrap !important;
-  font-weight: 500 !important;
-}
-.chart-metric-btn.active {
-  background: var(--accent) !important;
-  color: #fff !important;
-  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
-}
+
+
 
 /* Скрываем старый PIN-пад, пока используем крутилки */
 
@@ -2496,28 +2472,9 @@ html, body {
   box-sizing: border-box !important;
 }
 
-.chart-metric-btn {
-  width: 100% !important;
-  text-align: center !important;
-  padding: 10px 0 !important; /* Убираем боковые отступы, чтобы текст влез */
-  font-size: 11px !important; /* Чуть меньше шрифт */
-  background: var(--bg2) !important;
-  border: 1px solid transparent !important;
-  border-radius: 20px !important;
-  color: var(--fg) !important;
-  white-space: nowrap !important; /* Запрещаем перенос строк */
-  font-weight: 500 !important;
-  overflow: hidden !important; /* Скрываем всё, что не влезло */
-  text-overflow: ellipsis !important; /* Но добавляем троеточие */
-  display: block !important;
-  box-sizing: border-box !important;
-}
 
-.chart-metric-btn.active {
-  background: var(--accent) !important;
-  color: #fff !important;
-  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
-}
+
+
 
 
 
@@ -2698,6 +2655,44 @@ html, body {
 }
 
 .segmented-control button.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3) !important;
+}
+
+/* === КАПСУЛА ДЛЯ ГРАФИКА === */
+.chart-segmented-control {
+  display: flex;
+  background: var(--bg3);
+  border-radius: 20px;
+  padding: 4px;
+  margin: 16px 16px 20px 16px;
+  gap: 4px;
+  width: calc(100% - 32px);
+  box-sizing: border-box;
+}
+
+.chart-segmented-control button {
+  flex: 1;
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 8px 4px !important;
+  border-radius: 16px !important;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  outline: none !important;
+  -webkit-appearance: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chart-segmented-control button.active {
   background: var(--accent) !important;
   color: #fff !important;
   box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3) !important;

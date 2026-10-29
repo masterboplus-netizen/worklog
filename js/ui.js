@@ -532,7 +532,7 @@ function renderActivityPage() {
                 renderActivityPage();
                 return;
             }
-            const metricBtn = e.target.closest('.cal-btn[data-metric]');
+            const metricBtn = e.target.closest('.chart-segmented-control button[data-metric]');
             if (metricBtn) {
                 CHART_METRIC = metricBtn.dataset.metric;
                 CHART_SELECTED = null;
@@ -655,12 +655,12 @@ function renderChart(hideFilters = false) {
     ['screens', 'Скрины'],
     ['tasks', 'Задачи']
   ];
-    const metricHTML = metrics.map(([key, label]) =>
-    '<button class="cal-btn' + (CHART_METRIC === key ? ' active' : '') + '" data-metric="' + key + '" style="flex: 1 1 0; min-width: 0; padding: 6px 2px !important; font-size: 12px !important; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
+  const metricHTML = metrics.map(([key, label]) =>
+    '<button class="' + (CHART_METRIC === key ? 'active' : '') + '" data-metric="' + key + '">' + label + '</button>'
   ).join('');
 
   const metricBar = document.createElement('div');
-  metricBar.style.cssText = 'display:flex; gap:8px; margin: 16px 0 0 0; overflow-x: auto; padding-bottom: 4px;';
+  metricBar.className = 'chart-segmented-control';
   metricBar.innerHTML = metricHTML;
   container.appendChild(metricBar);
 
@@ -1078,7 +1078,7 @@ function renderActivityPageV2() {
     });
 
     // Смена метрики
-    c.querySelectorAll('.cal-btn[data-metric]').forEach(btn => {
+    c.querySelectorAll('.chart-segmented-control button[data-metric]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             CHART_STATE_V2.metric = btn.dataset.metric;
