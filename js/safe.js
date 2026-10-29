@@ -18,6 +18,54 @@ let LAST_VIB_STEP = -1;
 let COUNTDOWN_TIMER = null;
 let TIME_LEFT = START_TIME_S;
 
+
+// === АУДИО ДВИЖОК ===
+let audioCtx = null;
+
+function _initAudio() {
+  if (!audioCtx) {
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e) { console.warn('Audio not supported'); }
+  }
+  // Разблокировка аудио (требование браузеров)
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+function _playSound(type) {
+  if (!audioCtx) return;
+  
+  try {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    if (type === 'tick') {
+      // Короткий тик для трещотки
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.02);
+      gain.gain.setValueAtTime(0.05, audioCtx.currentTime); // Тихо
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.02);
+    } else if (type === 'click') {
+      // Более низкий щелчок для успеха
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.1);
+    }
+  } catch(e) {}
+}
+
 function _safeAngle(cx, cy, x, y) {
   let a = Math.atan2(y - cy, x - cx) * 180 / Math.PI + 90;
   if (a < 0) a += 360;
@@ -118,6 +166,7 @@ function _safeBind() {
         _safeVibrate(20); // Легкий толчок при входе в зону
         HOLD_TIMER = setTimeout(() => {
           _safeVibrate(60);
+          _playSound('click'); // Звук щелчка (успех)
           SAFE_STEP++;
           HOLD_TIMER = null;
 
@@ -135,6 +184,7 @@ function _safeBind() {
   const startGame = () => {
     if (SAFE_STARTED || SAFE_LOCKED) return;
 
+    _initAudio(); // Разблокируем звук по тапу
     _safeVibrate(50); 
 
     SAFE_STARTED = true;
@@ -219,6 +269,7 @@ function _safeBind() {
     const vibStep = Math.floor(currentAngle / 15);
     if (vibStep !== LAST_VIB_STEP) {
       _safeVibrate(10);
+      _playSound('tick'); // Звук трещотки
       LAST_VIB_STEP = vibStep;
     }
 
