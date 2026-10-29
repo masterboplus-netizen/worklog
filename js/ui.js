@@ -69,6 +69,7 @@ let CALENDAR_OFFSET = 0;
 let CALENDAR_SELECTED_DAY = null;
 
 function renderDiary() {
+  console.log('renderDiary вызвана, режим:', DIARY_MODE);
   const c = document.getElementById('content-diary');
   if (!c) return;
   c.innerHTML = '';
@@ -293,7 +294,11 @@ function renderDiary() {
   const btn24h = document.createElement('button');
   btn24h.className = (DIARY_MODE === '24h' ? 'active' : '');
   btn24h.textContent = '24ч';
-  btn24h.addEventListener('click', () => { DIARY_MODE = '24h'; renderDiary(); });
+  btn24h.addEventListener('click', () => { 
+    console.log('Нажата кнопка 24ч'); 
+    DIARY_MODE = '24h'; 
+    renderDiary(); 
+  });
   
   toggleBar.appendChild(btnSessions);
   toggleBar.appendChild(btn24h);
@@ -301,8 +306,10 @@ function renderDiary() {
 
   // === 3. СПИСОК СЕССИЙ ===
   let sessions = window.DATA.sessions || [];
+  console.log('Режим 24ч?', DIARY_MODE === '24h');
   if (DIARY_MODE === '24h') {
     sessions = mergeMidnightSessions(sessions);
+    console.log('Склеено сессий:', sessions.length, 'из', window.DATA.sessions.length);
   }
   sessions = [...sessions].sort((a, b) => (b.date + ' ' + b.start).localeCompare(a.date + ' ' + a.start));
 
