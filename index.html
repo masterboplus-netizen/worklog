@@ -72,6 +72,9 @@
 <!-- === СЛЕПОЙ СЕЙФ (v15) === -->
 <div id="scroll-pin-screen">
   <div id="safe-dial-container">
+    <!-- Таймер в центре -->
+    <div id="safe-timer" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 5; font-size: 16px; font-weight: 600; color: var(--fg-dim); cursor: pointer; user-select: none;">Коснись, чтобы начать</div>
+
     <!-- Лупа под пальцем -->
     <div id="safe-dial-lens"></div>
     
@@ -93,7 +96,7 @@
 <script src="js/chart.js?v=999"></script>
 <script src="js/auth.js?v=7"></script>
 <script src="app.js?v=505"></script>
-<script src="js/safe.js?v=31"></script>
+<script src="js/safe.js?v=32"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=999', { updateViaCache: 'none' }).catch(function(){});
