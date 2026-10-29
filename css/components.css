@@ -2785,3 +2785,19 @@ html, body {
   z-index: 10 !important;
   pointer-events: auto !important;
 }
+
+/* === ФИКС СЕЙФА === */
+#scroll-pin-screen {
+  position: fixed !important;
+  top: 0 !important; left: 0 !important;
+  width: 100vw !important; height: 100vh !important;
+  z-index: 9999 !important;
+  background: var(--bg) !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+#safe-dial-container {
+  position: relative !important;
+  width: 220px !important; height: 220px !important;
+  pointer-events: auto !important;
+}
