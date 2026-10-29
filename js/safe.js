@@ -1,4 +1,4 @@
-// === СЛЕПОЙ СЕЙФ (ВИНИЛ) — v10 ФИНАЛ ===
+// === СЛЕПОЙ СЕЙФ (ВИНИЛ) — v12 ПЛАВНОЕ ВРАЩЕНИЕ ===
 const SAFE_TARGET_ANGLES = [150, 330, 420];
 const SAFE_PIN = '201186';
 let SAFE_ROTATION = 0;
@@ -53,7 +53,10 @@ function _safeHide() {
 function _safeResetVisual() {
   const ring = document.getElementById('safe-dial-ring');
   if (ring) {
-    ring.style.transform = `rotate(0deg)`;
+    // Убираем CSS-трансформации, оставляем только SVG-атрибут
+    ring.style.transform = 'none';
+    ring.style.transition = 'none'; 
+    ring.setAttribute('transform', `rotate(0 110 110)`);
     ring.style.filter = 'drop-shadow(0 0 15px rgba(255,165,0,0.8))';
   }
 }
@@ -66,7 +69,6 @@ function _safeBind() {
   
   if (!box || !ring) { console.warn('safe: нет элементов'); return; }
 
-  // Привязываем ко всем слоям, чтобы точно поймать палец
   const targets = [box, hitbox, document.getElementById('safe-dial-svg')].filter(Boolean);
   let lastVibStep = 0;
 
@@ -85,8 +87,9 @@ function _safeBind() {
     
     if (lens) {
       lens.classList.add('active');
+      // Прижимаем лупу к кольцу
       const r = box.getBoundingClientRect();
-      const radius = 90; // Радиус кольца
+      const radius = 90;
       const angleRad = (SAFE_LAST_ANGLE - 90) * Math.PI / 180;
       const lx = (cx - r.left) + Math.cos(angleRad) * radius;
       const ly = (cy - r.top) + Math.sin(angleRad) * radius;
@@ -114,6 +117,8 @@ function _safeBind() {
     }
 
     let delta = currentAngle - SAFE_LAST_ANGLE;
+    
+    // Обработка перехода через 0/360
     if (delta > 180) delta -= 360;
     if (delta < -180) delta += 360;
     
@@ -131,9 +136,9 @@ function _safeBind() {
     SAFE_ROTATION += delta;
     SAFE_LAST_ANGLE = currentAngle;
     
-    // Крутим группу (кольцо + точка)
+    // Крутим ТОЛЬКО через SVG-атрибут (плавно, без CSS)
     if (ring) {
-      ring.style.transform = `rotate(${SAFE_ROTATION}deg)`;
+      ring.setAttribute('transform', `rotate(${SAFE_ROTATION} 110 110)`);
     }
     
     // Проверяем точки
