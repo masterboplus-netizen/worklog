@@ -61,6 +61,10 @@ function setupTabs() {
 }
 
 function switchTab(name) {
+  // СКРЫВАЕМ ТУЛТИП ГРАФИКА ПРИ СМЕНЕ ВКЛАДКИ
+  const tooltip = document.getElementById('global-chart-tooltip');
+  if (tooltip) tooltip.style.display = 'none';
+
   // СБРОС СКРОЛЛА ВВЕРХ
   const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity'];
   scrollContainers.forEach(id => {
