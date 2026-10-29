@@ -89,19 +89,7 @@ function showSafe() {
 
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) return;
-
   screen.style.display = 'block';
-  screen.style.position = 'fixed';
-  screen.style.top = '0'; screen.style.left = '0';
-  screen.style.width = '100vw'; screen.style.height = '100vh';
-  screen.style.zIndex = '9999';
-  
-  // Прижимаем кольцо в правый нижний угол
-  screen.style.alignItems = 'flex-end';      // По вертикали — вниз
-  screen.style.justifyContent = 'flex-end';  // По горизонтали — вправо
-  screen.style.paddingRight = '20px';        // Отступ от правого края
-  screen.style.paddingBottom = '20px';       // Отступ от нижнего края
-  
   screen.style.backgroundColor = 'var(--bg)';
 
   const dash = document.getElementById('dashboard');
