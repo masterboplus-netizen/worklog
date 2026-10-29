@@ -1,11 +1,15 @@
-// === СЛЕПОЙ СЕЙФ (ВИНИЛ) — v12 ПЛАВНОЕ ВРАЩЕНИЕ ===
+// === СЛЕПОЙ СЕЙФ (ВИНИЛ) — v13 ЧИСТАЯ МАТЕМАТИКА ===
 const SAFE_TARGET_ANGLES = [150, 330, 420];
 const SAFE_PIN = '201186';
 let SAFE_ROTATION = 0;
 let SAFE_STEP = 0;
 let SAFE_ACTIVE = false;
 let SAFE_LOCKED = false;
-let SAFE_LAST_ANGLE = 0;
+
+// Для привязки к пальцу
+let START_TOUCH_ANGLE = 0;
+let START_RING_ROTATION = 0;
+let LAST_TOUCH_ANGLE = 0;
 
 function _safeAngle(cx, cy, x, y) {
   let a = Math.atan2(y - cy, x - cx) * 180 / Math.PI + 90;
@@ -22,7 +26,6 @@ function showSafe() {
   SAFE_STEP = 0;
   SAFE_ACTIVE = false;
   SAFE_LOCKED = false;
-  SAFE_LAST_ANGLE = 0;
   
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) return;
@@ -53,9 +56,6 @@ function _safeHide() {
 function _safeResetVisual() {
   const ring = document.getElementById('safe-dial-ring');
   if (ring) {
-    // Убираем CSS-трансформации, оставляем только SVG-атрибут
-    ring.style.transform = 'none';
-    ring.style.transition = 'none'; 
     ring.setAttribute('transform', `rotate(0 110 110)`);
     ring.style.filter = 'drop-shadow(0 0 15px rgba(255,165,0,0.8))';
   }
@@ -83,18 +83,19 @@ function _safeBind() {
     SAFE_ACTIVE = true;
     const t = e.touches[0];
     const { cx, cy } = getCenter();
-    SAFE_LAST_ANGLE = _safeAngle(cx, cy, t.clientX, t.clientY);
+    
+    // Запоминаем, где палец и где кольцо в момент касания
+    START_TOUCH_ANGLE = _safeAngle(cx, cy, t.clientX, t.clientY);
+    START_RING_ROTATION = SAFE_ROTATION;
+    LAST_TOUCH_ANGLE = START_TOUCH_ANGLE;
     
     if (lens) {
       lens.classList.add('active');
-      // Прижимаем лупу к кольцу
       const r = box.getBoundingClientRect();
       const radius = 90;
-      const angleRad = (SAFE_LAST_ANGLE - 90) * Math.PI / 180;
-      const lx = (cx - r.left) + Math.cos(angleRad) * radius;
-      const ly = (cy - r.top) + Math.sin(angleRad) * radius;
-      lens.style.left = lx + 'px';
-      lens.style.top  = ly + 'px';
+      const angleRad = (START_TOUCH_ANGLE - 90) * Math.PI / 180;
+      lens.style.left = (cx - r.left) + Math.cos(angleRad) * radius + 'px';
+      lens.style.top  = (cy - r.top) + Math.sin(angleRad) * radius + 'px';
     }
   };
 
@@ -110,36 +111,38 @@ function _safeBind() {
     if (lens) {
       const radius = 90;
       const angleRad = (currentAngle - 90) * Math.PI / 180;
-      const lx = (cx - r.left) + Math.cos(angleRad) * radius;
-      const ly = (cy - r.top) + Math.sin(angleRad) * radius;
-      lens.style.left = lx + 'px';
-      lens.style.top  = ly + 'px';
+      lens.style.left = (cx - r.left) + Math.cos(angleRad) * radius + 'px';
+      lens.style.top  = (cy - r.top) + Math.sin(angleRad) * radius + 'px';
     }
 
-    let delta = currentAngle - SAFE_LAST_ANGLE;
+    // Считаем разницу между текущим углом пальца и стартовым
+    let deltaAngle = currentAngle - START_TOUCH_ANGLE;
     
-    // Обработка перехода через 0/360
-    if (delta > 180) delta -= 360;
-    if (delta < -180) delta += 360;
+    // Обработка перехода через 360/0 (если палец пересекает верх)
+    if (deltaAngle > 180) deltaAngle -= 360;
+    if (deltaAngle < -180) deltaAngle += 360;
     
-    // Сброс, если крутим назад
-    if (delta < -0.5) {
-      if (SAFE_STEP > 0 || SAFE_ROTATION > 0) {
+    // Сбрасываем, если крутим назад
+    if (deltaAngle < -1) {
+      if (SAFE_STEP > 0 || START_RING_ROTATION > 0) {
         SAFE_ROTATION = 0;
         SAFE_STEP = 0;
+        START_RING_ROTATION = 0;
+        START_TOUCH_ANGLE = currentAngle;
         lastVibStep = 0;
         _safeResetVisual();
         _safeVibrate([30, 30, 30]);
       }
+    } else {
+      // Жестко привязываем поворот кольца к движению пальца
+      SAFE_ROTATION = START_RING_ROTATION + deltaAngle;
+      
+      if (ring) {
+        ring.setAttribute('transform', `rotate(${SAFE_ROTATION} 110 110)`);
+      }
     }
     
-    SAFE_ROTATION += delta;
-    SAFE_LAST_ANGLE = currentAngle;
-    
-    // Крутим ТОЛЬКО через SVG-атрибут (плавно, без CSS)
-    if (ring) {
-      ring.setAttribute('transform', `rotate(${SAFE_ROTATION} 110 110)`);
-    }
+    LAST_TOUCH_ANGLE = currentAngle;
     
     // Проверяем точки
     if (SAFE_STEP < SAFE_TARGET_ANGLES.length) {
@@ -160,7 +163,6 @@ function _safeBind() {
           _safeUnlock();
         }
       } else {
-        // Трещотка
         const currentStep = Math.floor(SAFE_ROTATION / 45);
         if (currentStep > lastVibStep && SAFE_ROTATION > 0) {
           _safeVibrate(10);
@@ -174,6 +176,9 @@ function _safeBind() {
     if (e) e.preventDefault();
     SAFE_ACTIVE = false;
     if (lens) lens.classList.remove('active');
+    
+    // При отпускании фиксируем новое положение кольца
+    START_RING_ROTATION = SAFE_ROTATION;
   };
 
   targets.forEach(t => {
