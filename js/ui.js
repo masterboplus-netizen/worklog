@@ -384,7 +384,7 @@ function renderHeroRings() {
 
   let heroValue = t.todayMin, heroLabel = 'Сегодня', heroSub = 'Среднее ' + fmtH(currentGoal) + ' · ' + Math.round(t.todayMin / currentGoal * 100) + '%';
   if (HERO_MODE === 'last') {
-    const mergedForHero = mergeMidnightSessions(window.DATA.sessions || []);
+    const mergedForHero = getCleanSessions(window.DATA.sessions || []);
     const sorted = mergedForHero.slice().sort((a, b) => (b.date + (b.end || '')).localeCompare(a.date + (a.end || '')));
     const lastSess = sorted[0];
     heroValue = lastSess ? (lastSess.duration_min || 0) : 0;
@@ -533,7 +533,7 @@ function calcTotals() {
   let total = 0, week = 0, month = 0, todayMin = 0, screens = 0, msgs = 0;
   
   // ИСПОЛЬЗУЕМ СКЛЕЕННЫЕ СЕССИИ
-  const merged = mergeMidnightSessions(window.DATA.sessions || []);
+  const merged = getCleanSessions(window.DATA.sessions || []);
   
   for (const s of merged) {
     total += s.duration_min || 0;

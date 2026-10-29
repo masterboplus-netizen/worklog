@@ -142,7 +142,7 @@ function renderActivityPageV2() {
         for (let i = startIndex; i <= endIndex && i < allDates.length; i++) {
             const dateStr = allDates[i];
             let v = 0;
-            for (const sess of window.DATA.sessions || []) {
+            for (const sess of (typeof getCleanSessions === 'function' ? getCleanSessions(window.DATA.sessions || []) : (window.DATA.sessions || []))) {
                 if (sess.date === dateStr) {
                     if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
@@ -169,7 +169,7 @@ function renderActivityPageV2() {
         cols.forEach(col => {
             const dateStr = col.dataset.date;
             let v = 0;
-            for (const sess of window.DATA.sessions || []) {
+            for (const sess of (typeof getCleanSessions === 'function' ? getCleanSessions(window.DATA.sessions || []) : (window.DATA.sessions || []))) {
                 if (sess.date === dateStr) {
                     if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
@@ -213,7 +213,7 @@ function renderActivityPageV2() {
         const targetCol = scrollContainer.querySelector(`.tl-col[data-date="${dateStr}"]`);
         if (targetCol) {
             let v = 0;
-            for (const sess of window.DATA.sessions || []) {
+            for (const sess of (typeof getCleanSessions === 'function' ? getCleanSessions(window.DATA.sessions || []) : (window.DATA.sessions || []))) {
                 if (sess.date === dateStr) {
                     if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
