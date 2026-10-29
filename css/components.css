@@ -2666,3 +2666,39 @@ html, body {
   color: #fff;
   box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
 }
+
+/* === СЕГМЕНТИРОВАННЫЙ КОНТРОЛ (КАПСУЛА) === */
+.segmented-control {
+  display: flex;
+  background: var(--bg3);
+  border-radius: 20px;
+  padding: 4px;
+  margin: 0 16px 16px 16px;
+  gap: 4px;
+  width: calc(100% - 32px);
+  box-sizing: border-box;
+}
+
+.segmented-control button {
+  flex: 1;
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 8px 4px !important;
+  border-radius: 16px !important;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  outline: none !important;
+  -webkit-appearance: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.segmented-control button.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3) !important;
+}

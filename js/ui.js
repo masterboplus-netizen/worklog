@@ -136,17 +136,17 @@ function renderDiary() {
   // === 2. КНОПКИ ПЕРЕКЛЮЧЕНИЯ СЕССИЙ ===
   const toggleBar = document.createElement('div');
   toggleBar.className = 'segmented-control';
-  toggleBar.style.marginTop = '20px'; // Добавляем отступ сверху
+  toggleBar.style.marginTop = '20px';
   
   const btnSessions = document.createElement('button');
   btnSessions.className = (DIARY_MODE === 'sessions' ? 'active' : '');
   btnSessions.textContent = 'Сессии';
-  btnSessions.onclick = () => { DIARY_MODE = 'sessions'; renderDiary(); };
+  btnSessions.addEventListener('click', () => { DIARY_MODE = 'sessions'; renderDiary(); });
   
   const btn24h = document.createElement('button');
   btn24h.className = (DIARY_MODE === '24h' ? 'active' : '');
   btn24h.textContent = '24ч';
-  btn24h.onclick = () => { DIARY_MODE = '24h'; renderDiary(); };
+  btn24h.addEventListener('click', () => { DIARY_MODE = '24h'; renderDiary(); });
   
   toggleBar.appendChild(btnSessions);
   toggleBar.appendChild(btn24h);
