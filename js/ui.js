@@ -55,11 +55,11 @@ function renderDiary() {
   const calTop = document.createElement('div');
   calTop.className = 'calendar-top';
   calTop.innerHTML = `
-    <div class="calendar-filters" style="margin-bottom: 12px; display: flex; gap: 8px; padding: 0 16px;">
-      <button class="cal-btn ${CALENDAR_VIEW === 'month' ? 'active' : ''}" data-view="month">Месяц</button>
-      <button class="cal-btn ${CALENDAR_VIEW === 'year' ? 'active' : ''}" data-view="year">Год</button>
-      <button class="cal-btn ${CALENDAR_VIEW === 'week' ? 'active' : ''}" data-view="week">Неделя</button>
-      <button class="cal-btn ${CALENDAR_VIEW === '30days' ? 'active' : ''}" data-view="30days">30 дней</button>
+    <div class="segmented-control">
+      <button class="${CALENDAR_VIEW === 'month' ? 'active' : ''}" data-view="month">Месяц</button>
+      <button class="${CALENDAR_VIEW === 'year' ? 'active' : ''}" data-view="year">Год</button>
+      <button class="${CALENDAR_VIEW === 'week' ? 'active' : ''}" data-view="week">Неделя</button>
+      <button class="${CALENDAR_VIEW === '30days' ? 'active' : ''}" data-view="30days">30 дней</button>
     </div>
     <div class="calendar-title" style="text-align: center; font-size: 20px; font-weight: 600; margin-bottom: 12px;"></div>
     <div class="calendar-grid" id="cal-grid"></div>

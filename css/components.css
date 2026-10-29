@@ -1822,11 +1822,8 @@ div[style*="justify-content: space-between"] {
 
 /* === СЕТКА КАЛЕНДАРЯ === */
 .calendar-top { margin-bottom: 20px; }
-.calendar-filters { display: flex; gap: 8px; margin-bottom: 12px; }
-.cal-btn {
-  background: transparent; border: 1px solid var(--border); color: var(--fg-dim);
-  padding: 6px 16px; border-radius: 20px; font-size: 14px; cursor: pointer;
-}
+
+
 .cal-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 .calendar-title { font-size: 24px; font-weight: 600; margin-bottom: 12px; color: var(--fg); }
 .calendar-nav { display: flex; gap: 8px; }
@@ -1847,17 +1844,7 @@ div[style*="justify-content: space-between"] {
 
 
 /* === НОВЫЕ КНОПКИ ГРАФИКА === */
-.cal-btn {
-  background: transparent !important;
-  border: 1px solid var(--border) !important;
-  color: var(--fg-dim) !important;
-  padding: 6px 16px !important;
-  border-radius: 20px !important;
-  font-size: 14px !important;
-  cursor: pointer !important;
-  font-family: inherit !important;
-  transition: 0.15s;
-}
+
 .cal-btn.active {
   background: var(--accent) !important;
   color: #fff !important;
@@ -1906,7 +1893,7 @@ div[style*="justify-content: space-between"] {
 }
 
 /* Кнопки внизу */
-.cal-btn { padding: 4px 2px !important; font-size: 11px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
 
 .tl-col:focus, .tl-col:active, .tl-bar:focus, .tl-bar:active {
   outline: none !important;
@@ -1934,18 +1921,7 @@ div[style*="justify-content: space-between"] {
 
 
 /* === ФИКС КНОПОК ТАБЛЕТОК === */
-.cal-btn {
-  background: transparent !important;
-  border: 1px solid var(--border) !important;
-  color: var(--fg-dim) !important;
-  padding: 6px 16px !important;
-  border-radius: 20px !important;
-  font-size: 14px !important;
-  cursor: pointer !important;
-  font-family: inherit !important;
-  transition: 0.15s !important;
-  white-space: nowrap !important;
-}
+
 .cal-btn.active {
   background: var(--accent) !important;
   color: #fff !important;
@@ -2658,4 +2634,35 @@ html, body {
   width: 220px !important;
   height: 220px !important;
   touch-action: none !important;
+}
+
+/* === СЕГМЕНТИРОВАННЫЙ КОНТРОЛ (КАПСУЛА) === */
+.segmented-control {
+  display: flex;
+  background: var(--bg3); /* Темно-серый фон капсулы */
+  border-radius: 20px;
+  padding: 4px;
+  margin: 0 16px 16px 16px;
+  gap: 4px;
+}
+
+.segmented-control button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--fg-dim);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 4px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.segmented-control button.active {
+  background: var(--accent); /* Синий цвет */
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
 }
