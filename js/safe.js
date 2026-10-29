@@ -53,7 +53,8 @@ function showSafe() {
   const rot = document.getElementById('safe-dial-rotator');
   if (rot) rot.style.transform = 'rotate(0deg)';
   
-  _safeBind();
+  // Даем браузеру 50 мс на отрисовку перед привязкой событий
+  setTimeout(_safeBind, 50);
 }
 
 function _safeHide() {
@@ -86,7 +87,7 @@ function _safeBind() {
     e.preventDefault();
     SAFE_ACTIVE = true;
     TOTAL_TOUCH_DELTA = 0;
-    CURRENT_SECTOR = -1; // Сброс при новом касании
+    CURRENT_SECTOR = -1; // Сброс при новом касании (важно для срабатывания первого тапа)
     
     const t = e.touches[0];
     const { cx, cy } = getCenter();
