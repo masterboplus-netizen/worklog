@@ -1,15 +1,13 @@
-// === СЛЕПОЙ СЕЙФ (ВИНИЛ / ВРАЩЕНИЕ) — v6 ===
-// Логика: крутим кольцо. Точки: 150°, 330°, 60° (следующий оборот).
-// Порядок важен. Назад крутить нельзя (сбрасывает).
+// === СЛЕПОЙ СЕЙФ (ВИНИЛ / ВРАЩЕНИЕ) — v8 ===
+// Логика: крутим кольцо. Точки: 150°, 330°, 420° (следующий оборот).
 
-const SAFE_TARGET_ANGLES = [150, 330, 420]; // 420 = 60 + 360 (следующий оборот)
+const SAFE_TARGET_ANGLES = [150, 330, 420];
 const SAFE_PIN = '201186';
-let SAFE_ROTATION = 0;       // Текущий угол поворота кольца
-let SAFE_STEP = 0;           // Какую точку ищем (0, 1, 2)
+let SAFE_ROTATION = 0;
+let SAFE_STEP = 0;
 let SAFE_ACTIVE = false;
 let SAFE_LOCKED = false;
-let SAFE_LAST_ANGLE = 0;     // Угол пальца на прошлом кадре
-let SAFE_LAST_ROTATION = 0;  // Поворот кольца на прошлом кадре
+let SAFE_LAST_ANGLE = 0;
 
 function _safeAngle(cx, cy, x, y) {
   let a = Math.atan2(y - cy, x - cx) * 180 / Math.PI + 90;
@@ -27,7 +25,6 @@ function showSafe() {
   SAFE_ACTIVE = false;
   SAFE_LOCKED = false;
   SAFE_LAST_ANGLE = 0;
-  SAFE_LAST_ROTATION = 0;
   
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) return;
@@ -68,10 +65,11 @@ function _safeBind() {
   const box = document.getElementById('safe-dial-container');
   const hitbox = document.querySelector('.safe-dial-hitbox');
   const ring = document.getElementById('safe-dial-ring');
+  const lens = document.getElementById('safe-dial-touch-effect');
   if (!box || !ring) return;
 
   const targets = [box, hitbox, document.getElementById('safe-dial-svg')].filter(Boolean);
-  let timer = null;
+  let lastVibStep = 0; // Для трещотки
 
   const getCenter = () => {
     const r = box.getBoundingClientRect();
@@ -85,7 +83,12 @@ function _safeBind() {
     const t = e.touches[0];
     const { cx, cy } = getCenter();
     SAFE_LAST_ANGLE = _safeAngle(cx, cy, t.clientX, t.clientY);
-    SAFE_LAST_ROTATION = SAFE_ROTATION;
+    
+    if (lens) {
+      lens.classList.add('active');
+      lens.style.left = (t.clientX - box.getBoundingClientRect().left) + 'px';
+      lens.style.top  = (t.clientY - box.getBoundingClientRect().top)  + 'px';
+    }
   };
 
   const handleMove = (e) => {
@@ -93,21 +96,27 @@ function _safeBind() {
     e.preventDefault();
     const t = e.touches[0];
     const { cx, cy } = getCenter();
+    const r = box.getBoundingClientRect();
     
+    if (lens) {
+      lens.style.left = (t.clientX - r.left) + 'px';
+      lens.style.top  = (t.clientY - r.top)  + 'px';
+    }
+
     const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
     let delta = currentAngle - SAFE_LAST_ANGLE;
     
-    // Обработка перехода через 360/0
     if (delta > 180) delta -= 360;
     if (delta < -180) delta += 360;
     
-    // Если крутим назад — сбрасываем прогресс
+    // Сброс при вращении назад
     if (delta < -0.5) {
       if (SAFE_STEP > 0 || SAFE_ROTATION > 0) {
         SAFE_ROTATION = 0;
         SAFE_STEP = 0;
+        lastVibStep = 0;
         _safeResetVisual();
-        _safeVibrate([30, 30, 30]); // Ошибка
+        _safeVibrate([30, 30, 30]);
       }
     }
     
@@ -117,43 +126,42 @@ function _safeBind() {
     // Визуально крутим кольцо
     ring.style.transform = `rotate(${SAFE_ROTATION}deg)`;
     
-    // Проверяем, не прошли ли мы нужную точку
+    // Проверяем прохождение точек
     if (SAFE_STEP < SAFE_TARGET_ANGLES.length) {
       const target = SAFE_TARGET_ANGLES[SAFE_STEP];
       
       if (SAFE_ROTATION >= target) {
-        // Прошли точку!
-        _safeVibrate(30);
+        _safeVibrate(50); // Четкая вибрация
         SAFE_STEP++;
+        lastVibStep = Math.floor(SAFE_ROTATION / 45); // Обновляем шаг трещотки
         
-        // Визуальный «щелчок» (сжатие)
-        ring.style.transform = `rotate(${SAFE_ROTATION}deg) scale(0.97)`;
-        setTimeout(() => { ring.style.transform = `rotate(${SAFE_ROTATION}deg) scale(1)`; }, 90);
+        // Анимация щелчка
+        ring.style.filter = 'drop-shadow(0 0 20px rgba(255,165,0,1))';
+        setTimeout(() => { ring.style.filter = 'drop-shadow(0 0 10px rgba(255,165,0,0.8))'; }, 150);
         
         if (SAFE_STEP === SAFE_TARGET_ANGLES.length) {
           SAFE_LOCKED = true;
           _safeUnlock();
         }
+      } else {
+        // Вибрация-трещотка каждые 45 градусов, пока не дошли до цели
+        const currentStep = Math.floor(SAFE_ROTATION / 45);
+        if (currentStep > lastVibStep && SAFE_ROTATION > 0) {
+          _safeVibrate(10);
+          lastVibStep = currentStep;
+        }
       }
     }
-    
-    // Легкая вибрация при вращении (опционально)
-    // _safeVibrate(5); 
   };
 
   const handleEnd = (e) => {
     if (e) e.preventDefault();
     SAFE_ACTIVE = false;
-    if (timer) { clearTimeout(timer); timer = null; }
+    if (lens) lens.classList.remove('active');
   };
 
   targets.forEach(t => {
-    // Принудительно перезаписываем, чтобы избежать дублирования
-    t.ontouchstart = null;
-    t.ontouchmove = null;
-    t.ontouchend = null;
-    t.ontouchcancel = null;
-
+    t.ontouchstart = null; t.ontouchmove = null; t.ontouchend = null; t.ontouchcancel = null;
     t.addEventListener('touchstart', handleStart, { passive: false });
     t.addEventListener('touchmove', handleMove, { passive: false });
     t.addEventListener('touchend', handleEnd, { passive: false });
