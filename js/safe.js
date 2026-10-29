@@ -57,7 +57,10 @@ function showSafe() {
   if (tabs) tabs.style.display = 'none';
 
   const rot = document.getElementById('safe-dial-rotator');
-  if (rot) rot.style.transform = 'rotate(0deg)';
+  if (rot) {
+    rot.style.transform = 'rotate(0deg)';
+    rot.className = 'waiting'; // Приглушенный режим
+  }
 
   const timerDisplay = document.getElementById('safe-timer');
   if (timerDisplay) {
@@ -135,6 +138,10 @@ function _safeBind() {
     _safeVibrate(50); 
 
     SAFE_STARTED = true;
+    
+    const rot = document.getElementById('safe-dial-rotator');
+    if (rot) rot.className = 'active'; // Включаем полную яркость
+
     TIME_LEFT = START_TIME_S;
     if (timerDisplay) {
       timerDisplay.textContent = TIME_LEFT + 'с';
