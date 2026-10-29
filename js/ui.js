@@ -22,23 +22,7 @@ function renderDiary() {
   if (!c) return;
   c.innerHTML = '';
 
-  // === КНОПКИ ПЕРЕКЛЮЧЕНИЯ ===
-  const topBar = document.createElement('div');
-  topBar.style.cssText = 'display: flex; gap: 8px; margin: 16px; justify-content: center;';
-
-  const btnSessions = document.createElement('button');
-  btnSessions.className = 'cal-btn' + (DIARY_MODE === 'sessions' ? ' active' : '');
-  btnSessions.textContent = 'Сессии';
-  btnSessions.onclick = () => { DIARY_MODE = 'sessions'; renderDiary(); };
-
-  const btn24h = document.createElement('button');
-  btn24h.className = 'cal-btn' + (DIARY_MODE === '24h' ? ' active' : '');
-  btn24h.textContent = '24ч';
-  btn24h.onclick = () => { DIARY_MODE = '24h'; renderDiary(); };
-
-  topBar.appendChild(btnSessions);
-  topBar.appendChild(btn24h);
-  c.appendChild(topBar);
+  
 
   // === ВЫБОР ДАННЫХ ===
   let sessions = window.DATA.sessions || [];
