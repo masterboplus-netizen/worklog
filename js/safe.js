@@ -40,7 +40,10 @@ function showSafe() {
 
 function _safeHide() {
   const screen = document.getElementById('scroll-pin-screen');
-  if (screen) screen.classList.remove('active');
+  if (screen) {
+    screen.style.display = 'none';
+    screen.classList.remove('active');
+  }
 }
 
 function _safeBind() {
@@ -95,12 +98,15 @@ function _safeBind() {
       if (ok) {
         _safeHide();
         
-        // Возвращаем дашборд
+        // Возвращаем дашборд через inline-стили
         const dash = document.getElementById('dashboard');
-        if (dash) dash.classList.remove('hidden');
+        if (dash) {
+          dash.classList.remove('hidden');
+          dash.style.display = 'flex'; // или block, смотря как в CSS
+        }
         const tabs = document.querySelector('.tabs');
         if (tabs) tabs.style.display = 'flex';
-        
+
         const l = document.getElementById('loading');
         if (l) l.remove();
         renderDashboard();

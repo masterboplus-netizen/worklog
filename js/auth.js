@@ -68,8 +68,18 @@ function lock() {
   DATA = null;
   PIN_BUF = '';
   if (typeof updatePinDisplay === 'function') updatePinDisplay();
+  
+  // Жёстко вызываем showSafe
   if (typeof showSafe === 'function') {
     showSafe();
+  } else {
+    // Резервный вариант, если safe.js не загрузился
+    const screen = document.getElementById('scroll-pin-screen');
+    if (screen) screen.style.display = 'flex';
+    const dash = document.getElementById('dashboard');
+    if (dash) dash.style.display = 'none';
+    const tabs = document.querySelector('.tabs');
+    if (tabs) tabs.style.display = 'none';
   }
 }
 
