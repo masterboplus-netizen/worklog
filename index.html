@@ -74,7 +74,7 @@
       <circle cx="110" cy="110" r="90" fill="none" stroke="rgba(255,165,0,0.15)" stroke-width="30"/>
       
       <!-- Вращающаяся группа (кольцо + метка) -->
-      <g id="safe-dial-ring" style="transition: filter 0.15s;" transform-origin="110 110">
+      <g id="safe-dial-ring" style="transition: filter 0.15s;">
         <!-- Само кольцо -->
         <circle cx="110" cy="110" r="90" fill="none" stroke="#FFA500" stroke-width="30"/>
         <!-- Метка (точка на 12 часах) -->
@@ -90,7 +90,7 @@
 <script src="js/chart.js?v=999"></script>
 <script src="js/auth.js?v=7"></script>
 <script src="app.js?v=505"></script>
-<script src="js/safe.js?v=19"></script>
+<script src="js/safe.js?v=20"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=999', { updateViaCache: 'none' }).catch(function(){});
