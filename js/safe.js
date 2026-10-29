@@ -1,4 +1,4 @@
-// === СЛЕПОЙ СЕЙФ (PIN-кольцо) — v5 ФИНАЛ ===
+// === СЛЕПОЙ СЕЙФ (PIN-кольцо) — v3 ===
 const SAFE_TARGETS = [5, 11, 2];
 const SAFE_HOLD_MS = 600;
 const SAFE_PIN = '201186';
@@ -24,10 +24,13 @@ function showSafe() {
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) return;
 
+  // Жестко прописываем inline-стили
   screen.style.display = 'flex';
   screen.style.position = 'fixed';
-  screen.style.top = '0'; screen.style.left = '0';
-  screen.style.width = '100vw'; screen.style.height = '100vh';
+  screen.style.top = '0';
+  screen.style.left = '0';
+  screen.style.width = '100vw';
+  screen.style.height = '100vh';
   screen.style.zIndex = '9999';
   screen.style.alignItems = 'center';
   screen.style.justifyContent = 'center';
@@ -51,7 +54,7 @@ function _safeBind() {
   const hitbox = document.querySelector('.safe-dial-hitbox');
   const lens = document.getElementById('safe-dial-touch-effect');
   const ring = document.getElementById('safe-dial-ring');
-  if (!box || !lens || !ring) return;
+  if (!box || !lens || !ring) { console.warn('safe: нет элементов'); return; }
 
   const targets = [box, hitbox, document.getElementById('safe-dial-svg')].filter(Boolean);
   let timer = null;
@@ -97,17 +100,24 @@ function _safeBind() {
       if (ok) {
         _safeHide();
         const dash = document.getElementById('dashboard');
-        if (dash) { dash.classList.remove('hidden'); dash.style.display = 'flex'; }
+        if (dash) {
+          dash.classList.remove('hidden');
+          dash.style.display = 'flex';
+        }
         const tabs = document.querySelector('.tabs');
         if (tabs) tabs.style.display = 'flex';
         const l = document.getElementById('loading');
         if (l) l.remove();
         renderDashboard();
       } else {
-        SAFE_INPUTS = []; SAFE_LOCKED = false; flashError();
+        SAFE_INPUTS = [];
+        SAFE_LOCKED = false;
+        flashError();
       }
     } catch(e) {
-      SAFE_INPUTS = []; SAFE_LOCKED = false; flashError();
+      SAFE_INPUTS = [];
+      SAFE_LOCKED = false;
+      flashError();
     }
   };
 
@@ -141,7 +151,9 @@ function _safeBind() {
     if (sector !== lastSector) {
       lastSector = sector;
       if (timer) { clearTimeout(timer); timer = null; }
-      if (SAFE_TARGETS[SAFE_INPUTS.length] === sector) _safeVibrate(30);
+      if (SAFE_TARGETS[SAFE_INPUTS.length] === sector) {
+        _safeVibrate(30);
+      }
       timer = setTimeout(() => {
         if (lastSector === sector) commitSector(sector);
       }, SAFE_HOLD_MS);
