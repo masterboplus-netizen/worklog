@@ -2698,3 +2698,52 @@ html, body {
   transition: stroke 0.1s, filter 0.1s;
   filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.8)); /* Постоянное свечение */
 }
+
+
+/* === СЛЕПОЙ СЕЙФ (v2) === */
+#scroll-pin-screen {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 2000;
+  padding: 20px; box-sizing: border-box;
+}
+#scroll-pin-screen.active { display: flex; }
+
+#safe-dial-container {
+  position: relative;
+  width: 220px; height: 220px;
+  margin: auto;
+  touch-action: none;
+  -webkit-user-select: none; user-select: none;
+}
+.safe-dial-hitbox {
+  position: absolute;
+  top: -50px; left: -50px; right: -50px; bottom: -50px;
+  border-radius: 50%;
+  z-index: 10;
+}
+#safe-dial-ring {
+  transition: stroke 0.15s, filter 0.15s, transform 0.1s;
+  transform-origin: 110px 110px;
+  filter: drop-shadow(0 0 10px rgba(255,165,0,0.8));
+}
+#safe-dial-touch-effect {
+  position: absolute;
+  width: 50px; height: 50px;
+  background: radial-gradient(circle, rgba(255,165,0,0.9) 0%, rgba(255,165,0,0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+  opacity: 0;
+  z-index: 100;
+  box-shadow: 0 0 15px rgba(255,165,0,0.8);
+}
+#safe-dial-touch-effect.active {
+  transform: translate(-50%, -50%) scale(1.5);
+  opacity: 1;
+}
+/* === /СЛЕПОЙ СЕЙФ (v2) === */

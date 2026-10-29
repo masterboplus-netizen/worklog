@@ -11,7 +11,7 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="css/base.css?v=189">
-<link rel="stylesheet" href="css/components.css?v=501">
+<link rel="stylesheet" href="css/components.css?v=502">
 </head>
 <body>
 <div id="app"></div>
@@ -58,14 +58,30 @@
   <button id="tab-profile" class="tab"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Профиль</button>
 </nav>
 
+
+<!-- === СЛЕПОЙ СЕЙФ === -->
+<div id="scroll-pin-screen">
+  <div id="safe-dial-container">
+    <div class="safe-dial-hitbox"></div>
+    <svg id="safe-dial-svg" width="220" height="220" viewBox="0 0 220 220">
+      <circle cx="110" cy="110" r="90" fill="none" stroke="rgba(255,165,0,0.15)" stroke-width="30"/>
+      <circle id="safe-dial-ring" cx="110" cy="110" r="90" fill="none" stroke="#FFA500" stroke-width="30"
+              stroke-linecap="round" stroke-dasharray="565.48" stroke-dashoffset="0"
+              style="transition: stroke 0.15s, filter 0.15s, transform 0.1s; transform-origin: 110px 110px;"/>
+    </svg>
+    <div id="safe-dial-touch-effect"></div>
+  </div>
+</div>
+
 <script src="crypto.js?v=204"></script>
 <script src="js/ui.js?v=500"></script>
 <script src="js/chart.js?v=500"></script>
 <script src="js/auth.js?v=500"></script>
-<script src="app.js?v=501"></script>
+<script src="app.js?v=502"></script>
+<script src="js/safe.js?v=1"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js?v=205', { updateViaCache: 'none' }).catch(function(){});
+  navigator.serviceWorker.register('sw.js?v=206', { updateViaCache: 'none' }).catch(function(){});
 }
 </script>
 </body>

@@ -24,14 +24,14 @@ async function init() {
   if (loadingEl) loadingEl.classList.add('hidden');
   
   // Загружаем данные (расшифровываем с нашим паролем)
-  tryUnlock('201186').then(ok => {
-    if (ok) {
-      showScreen('dashboard');
-      renderDashboard();
-    } else {
-      alert('Ошибка загрузки данных');
-    }
-  });
+  if (typeof showSafe === 'function') {
+    showSafe();
+  } else {
+    tryUnlock('201186').then(ok => {
+      if (ok) { showScreen('dashboard'); renderDashboard(); }
+      else { alert('Ошибка загрузки данных'); }
+    });
+  }
 }
 
 if (document.readyState === 'loading') {
