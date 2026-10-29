@@ -2755,3 +2755,33 @@ html, body {
   opacity: 1;
 }
 /* === /СЛЕПОЙ СЕЙФ (v2) === */
+
+/* === ЖЕСТКИЙ ФИКС СЕЙФА (v3) === */
+#scroll-pin-screen {
+  position: fixed !important;
+  top: 0 !important; left: 0 !important;
+  width: 100vw !important; height: 100vh !important;
+  z-index: 9999 !important;
+  background: var(--bg) !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+#scroll-pin-screen.active { display: flex !important; }
+
+#safe-dial-container {
+  position: relative !important;
+  width: 220px !important;
+  height: 220px !important;
+  touch-action: none !important;
+  pointer-events: auto !important;
+  z-index: 50 !important;
+}
+
+.safe-dial-hitbox {
+  position: absolute !important;
+  top: -50px !important; left: -50px !important;
+  right: -50px !important; bottom: -50px !important;
+  border-radius: 50% !important;
+  z-index: 10 !important;
+  pointer-events: auto !important;
+}

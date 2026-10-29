@@ -1,6 +1,4 @@
-// === СЛЕПОЙ СЕЙФ (PIN-кольцо) — v2 (inline-стили) ===
-// Зоны: сектор 5 -> 11 -> 2. Порядок важен.
-
+// === СЛЕПОЙ СЕЙФ (PIN-кольцо) — v3 ===
 const SAFE_TARGETS = [5, 11, 2];
 const SAFE_HOLD_MS = 600;
 const SAFE_PIN = '201186';
@@ -23,20 +21,21 @@ function showSafe() {
   SAFE_INPUTS = [];
   SAFE_LOCKED = false;
   SAFE_ACTIVE = false;
-
   const screen = document.getElementById('scroll-pin-screen');
-  if (!screen) { console.warn('safe: нет #scroll-pin-screen'); return; }
+  if (!screen) return;
 
-  // Жёстко показываем сейф
+  // Жестко прописываем inline-стили
   screen.style.display = 'flex';
   screen.style.position = 'fixed';
   screen.style.top = '0';
   screen.style.left = '0';
-  screen.style.width = '100%';
+  screen.style.width = '100vw';
   screen.style.height = '100vh';
   screen.style.zIndex = '9999';
-
-  // Жёстко скрываем дашборд и меню
+  screen.style.alignItems = 'center';
+  screen.style.justifyContent = 'center';
+  screen.style.backgroundColor = 'var(--bg)';
+  
   const dash = document.getElementById('dashboard');
   if (dash) dash.style.display = 'none';
   const tabs = document.querySelector('.tabs');
@@ -47,9 +46,7 @@ function showSafe() {
 
 function _safeHide() {
   const screen = document.getElementById('scroll-pin-screen');
-  if (screen) {
-    screen.style.display = 'none';
-  }
+  if (screen) screen.style.display = 'none';
 }
 
 function _safeBind() {
@@ -59,9 +56,7 @@ function _safeBind() {
   const ring = document.getElementById('safe-dial-ring');
   if (!box || !lens || !ring) { console.warn('safe: нет элементов'); return; }
 
-  // Слушаем и контейнер, и хитбокс, и сам SVG
   const targets = [box, hitbox, document.getElementById('safe-dial-svg')].filter(Boolean);
-
   let timer = null;
   let lastSector = -1;
 
@@ -126,7 +121,7 @@ function _safeBind() {
     }
   };
 
-  targets.forEach(t => t.ontouchstart = (e) => {
+  const handleStart = (e) => {
     if (SAFE_LOCKED) return;
     e.preventDefault();
     SAFE_INPUTS = [];
@@ -138,9 +133,9 @@ function _safeBind() {
     lens.classList.add('active');
     lens.style.left = (t.clientX - box.getBoundingClientRect().left) + 'px';
     lens.style.top  = (t.clientY - box.getBoundingClientRect().top)  + 'px';
-  });
+  };
 
-  targets.forEach(t => t.ontouchmove = (e) => {
+  const handleMove = (e) => {
     if (!SAFE_ACTIVE || SAFE_LOCKED) return;
     e.preventDefault();
     const t = e.touches[0];
@@ -156,23 +151,26 @@ function _safeBind() {
     if (sector !== lastSector) {
       lastSector = sector;
       if (timer) { clearTimeout(timer); timer = null; }
-
       if (SAFE_TARGETS[SAFE_INPUTS.length] === sector) {
         _safeVibrate(30);
       }
-
       timer = setTimeout(() => {
         if (lastSector === sector) commitSector(sector);
       }, SAFE_HOLD_MS);
     }
-  });
+  };
 
-  const endTouch = (e) => {
+  const handleEnd = (e) => {
     if (e) e.preventDefault();
     SAFE_ACTIVE = false;
     if (timer) { clearTimeout(timer); timer = null; }
     lens.classList.remove('active');
   };
-  targets.forEach(t => t.ontouchend = endTouch);
-  targets.forEach(t => t.ontouchcancel = endTouch);
+
+  targets.forEach(t => {
+    t.ontouchstart = handleStart;
+    t.ontouchmove = handleMove;
+    t.ontouchend = handleEnd;
+    t.ontouchcancel = handleEnd;
+  });
 }
