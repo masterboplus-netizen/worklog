@@ -1,4 +1,4 @@
-// === СЛЕПОЙ СЕЙФ (v31 - Старт по тапу + таймер) ===
+// === СЛЕПОЙ СЕЙФ (v37 - Свободное вращение) ===
 const SAFE_TARGET_ANGLES = [150, 330, 420];
 const SAFE_PIN = '201186';
 const HOLD_TIME_MS = 1000;
@@ -12,7 +12,6 @@ let SAFE_STARTED = false;
 
 let START_TOUCH_ANGLE = 0;
 let START_RING_ROTATION = 0;
-let TOTAL_TOUCH_DELTA = 0;
 let HOLD_TIMER = null;
 let LAST_VIB_STEP = -1;
 
@@ -98,7 +97,8 @@ function _safeBind() {
     if (SAFE_STEP >= SAFE_TARGET_ANGLES.length || SAFE_LOCKED) return;
     const target = SAFE_TARGET_ANGLES[SAFE_STEP];
 
-    if (SAFE_ROTATION >= target - 20 && SAFE_ROTATION <= target + 20) {
+    // Зона срабатывания ±25 градусов
+    if (SAFE_ROTATION >= target - 25 && SAFE_ROTATION <= target + 25) {
       if (!HOLD_TIMER) {
         _safeVibrate(20); // Легкий толчок при входе в зону
         HOLD_TIMER = setTimeout(() => {
@@ -148,7 +148,7 @@ function _safeBind() {
   box.addEventListener('touchstart', (e) => {
     if (SAFE_LOCKED) return;
     e.preventDefault();
-    e.stopPropagation(); // Останавливаем всплытие, чтобы тап не улетал в другие слои
+    e.stopPropagation();
 
     if (!SAFE_STARTED) {
       startGame();
@@ -156,7 +156,6 @@ function _safeBind() {
     }
 
     SAFE_ACTIVE = true;
-    TOTAL_TOUCH_DELTA = 0;
 
     const t = e.touches[0];
     const { cx, cy } = getCenter();
@@ -189,14 +188,16 @@ function _safeBind() {
     }
 
     const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
-    let deltaAngle = currentAngle - START_TOUCH_ANGLE;
-    if (deltaAngle > 180) deltaAngle -= 360;
-    if (deltaAngle < -180) deltaAngle += 360;
+    
+    // Считаем разницу между текущим углом пальца и тем, с которого начали касание
+    let diff = currentAngle - START_TOUCH_ANGLE;
+    
+    // Обработка перехода через 0/360
+    if (diff > 180) diff -= 360;
+    if (diff < -180) diff += 360;
 
-    TOTAL_TOUCH_DELTA += deltaAngle;
-    START_TOUCH_ANGLE = currentAngle;
-
-    SAFE_ROTATION = START_RING_ROTATION + TOTAL_TOUCH_DELTA;
+    // ЖЕСТКАЯ ПРИВЯЗКА: кольцо там, где палец (относительно начала касания)
+    SAFE_ROTATION = START_RING_ROTATION + diff;
     rot.style.transform = `rotate(${SAFE_ROTATION}deg)`;
 
     const vibStep = Math.floor(currentAngle / 15);
