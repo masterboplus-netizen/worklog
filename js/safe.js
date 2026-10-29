@@ -61,7 +61,7 @@ function _safeBind() {
   const flashError = () => {
     ring.setAttribute('stroke', '#ff3b30');
     ring.style.filter = 'drop-shadow(0 0 16px rgba(255,59,48,0.9))';
-    _safeVibrate(80);
+    _safeVibrate([50, 50, 50]); // Двойная пульсация для ошибки
     setTimeout(resetRing, 350);
   };
 
@@ -69,7 +69,7 @@ function _safeBind() {
     const idx = SAFE_INPUTS.length;
     if (SAFE_TARGETS[idx] === sector) {
       SAFE_INPUTS.push(sector);
-      _safeVibrate(20);
+      _safeVibrate(30); // Вибрация-щелчок при фиксации
       // «щелчок»
       ring.style.transform = 'scale(0.97)';
       setTimeout(() => { ring.style.transform = 'scale(1)'; }, 90);
@@ -134,10 +134,12 @@ function _safeBind() {
     if (sector !== lastSector) {
       lastSector = sector;
       if (timer) { clearTimeout(timer); timer = null; }
-      // Вибрация СРАЗУ, если сектор целевой (не в setTimeout!)
+      
+      // Даем вибрацию ТОЛЬКО при входе в ПРАВИЛЬНЫЙ сектор
       if (SAFE_TARGETS[SAFE_INPUTS.length] === sector) {
-        _safeVibrate(20);
+        _safeVibrate(30); // Чуть сильнее, чтобы почувствовать
       }
+      
       timer = setTimeout(() => {
         if (lastSector === sector) commitSector(sector);
       }, SAFE_HOLD_MS);
