@@ -471,6 +471,57 @@ function _sumRange(sessions, period, field) {
   return sum;
 }
 
+
+// === ВЫЧИСЛЕНИЕ ЧИСТОГО ВРЕМЕНИ (БЕЗ ПАРАЛЛЕЛЬНЫХ ПЕРЕСЕЧЕНИЙ) ===
+function getCleanSessions(sessions) {
+  if (!sessions || !sessions.length) return [];
+  
+  // Сортируем по времени начала (от старых к новым)
+  const sorted = [...sessions].sort((a, b) => {
+    const da = a.date + ' ' + a.start;
+    const db = b.date + ' ' + b.start;
+    return da.localeCompare(db);
+  });
+
+  const clean = [];
+  
+  for (let i = 0; i < sorted.length; i++) {
+    const curr = { ...sorted[i] };
+    
+    // Конвертируем время в минуты от начала дня (с учетом даты)
+    const currStart = new Date(curr.date + 'T' + curr.start + ':00').getTime();
+    const currEnd = new Date(curr.date + 'T' + curr.end + ':00').getTime();
+    
+    let overlapMinutes = 0;
+    
+    // Проверяем пересечения со всеми предыдущими сессиями
+    for (let j = 0; j < i; j++) {
+      const prev = sorted[j];
+      const prevStart = new Date(prev.date + 'T' + prev.start + ':00').getTime();
+      let prevEnd = new Date(prev.date + 'T' + prev.end + ':00').getTime();
+      
+      // Если сессия перешла через полночь, prevEnd будет меньше prevStart
+      if (prevEnd < prevStart) {
+        prevEnd += 24 * 60 * 60 * 1000; // Добавляем сутки
+      }
+      
+      // Проверяем пересечение
+      const overlapStart = Math.max(currStart, prevStart);
+      const overlapEnd = Math.min(currEnd, prevEnd);
+      
+      if (overlapStart < overlapEnd) {
+        overlapMinutes += (overlapEnd - overlapStart) / (1000 * 60);
+      }
+    }
+    
+    // Вычитаем пересечения из длительности
+    curr.duration_min = Math.max(0, (curr.duration_min || 0) - overlapMinutes);
+    clean.push(curr);
+  }
+  
+  return clean;
+}
+
 function calcTotals() {
   const now = new Date();
   const today = _localDate(now);
