@@ -21,6 +21,8 @@ function _safeVibrate(ms) {
 }
 
 function showSafe() {
+  SAFE_INPUTS = [];
+  SAFE_LOCKED = false;
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) { console.warn('safe: нет #scroll-pin-screen'); return; }
   screen.classList.add('active');
@@ -36,10 +38,9 @@ function _safeHide() {
   if (screen) screen.classList.remove('active');
 }
 
-let _safeBound = false;
 function _safeBind() {
-  if (_safeBound) return;
-  _safeBound = true;
+  // Убираем проверку, чтобы при каждом вызове showSafe() 
+  // обработчики навешивались заново поверх старых (они перезапишутся)
   const box = document.getElementById('safe-dial-container');
   const lens = document.getElementById('safe-dial-touch-effect');
   const ring = document.getElementById('safe-dial-ring');
@@ -104,7 +105,7 @@ function _safeBind() {
     }
   };
 
-  box.addEventListener('touchstart', (e) => {
+  box.ontouchstart = (e) => {
     if (SAFE_LOCKED) return;
     e.preventDefault();
     SAFE_INPUTS = [];
@@ -118,7 +119,7 @@ function _safeBind() {
     lens.style.top  = (t.clientY - box.getBoundingClientRect().top)  + 'px';
   }, { passive: false });
 
-  box.addEventListener('touchmove', (e) => {
+  box.ontouchmove = (e) => {
     if (!SAFE_ACTIVE || SAFE_LOCKED) return;
     e.preventDefault();
     const t = e.touches[0];
@@ -152,6 +153,6 @@ function _safeBind() {
     if (timer) { clearTimeout(timer); timer = null; }
     lens.classList.remove('active');
   };
-  box.addEventListener('touchend', endTouch, { passive: false });
-  box.addEventListener('touchcancel', endTouch, { passive: false });
+  box.ontouchend = endTouch;
+  box.ontouchcancel = endTouch;
 }
