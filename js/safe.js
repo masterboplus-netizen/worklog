@@ -1,8 +1,8 @@
 // === СЛЕПОЙ СЕЙФ (v38 - Свободное вращение по метке) ===
-const SAFE_TARGET_ANGLES = [150, 330, 420];
+const SAFE_TARGET_ANGLES = [150, 330];
 const SAFE_PIN = '201186';
 const HOLD_TIME_MS = 1000;
-const START_TIME_S = 10;
+const START_TIME_S = 7;
 
 let SAFE_ROTATION = 0;
 let SAFE_STEP = 0;
