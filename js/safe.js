@@ -95,8 +95,13 @@ function showSafe() {
   screen.style.top = '0'; screen.style.left = '0';
   screen.style.width = '100vw'; screen.style.height = '100vh';
   screen.style.zIndex = '9999';
-  screen.style.alignItems = 'center';
-  screen.style.justifyContent = 'center';
+  
+  // Прижимаем кольцо в правый нижний угол
+  screen.style.alignItems = 'flex-end';      // По вертикали — вниз
+  screen.style.justifyContent = 'flex-end';  // По горизонтали — вправо
+  screen.style.paddingRight = '20px';        // Отступ от правого края
+  screen.style.paddingBottom = '20px';       // Отступ от нижнего края
+  
   screen.style.backgroundColor = 'var(--bg)';
 
   const dash = document.getElementById('dashboard');
