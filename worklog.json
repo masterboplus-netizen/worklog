@@ -1142,6 +1142,32 @@
       "events": 37,
       "screens": 39,
       "tasks_done": 10
+    },
+    {
+      "id": "s_20261030_1",
+      "date": "2026-10-30",
+      "start": "13:44",
+      "end": "23:59",
+      "duration_min": 615,
+      "project": "worklog",
+      "note": "Параллельная работа (Чат 2): Сейф, график, календарь.",
+      "events": 37,
+      "screens": 39,
+      "tasks_done": 10,
+      "parallel": true
+    },
+    {
+      "id": "s_20261031_1",
+      "date": "2026-10-31",
+      "start": "00:00",
+      "end": "02:38",
+      "duration_min": 158,
+      "project": "worklog",
+      "note": "Параллельная работа (Чат 2): Сейф, график, календарь. (Продолжение после полуночи)",
+      "events": 0,
+      "screens": 0,
+      "tasks_done": 0,
+      "parallel": true
     }
   ],
   "baseline": {
