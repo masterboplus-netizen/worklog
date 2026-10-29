@@ -67,8 +67,12 @@ async function submitPin(pin) {
 function lock() {
   DATA = null;
   PIN_BUF = '';
-  updatePinDisplay();
-  showScreen('pin-screen');
+  if (typeof updatePinDisplay === 'function') updatePinDisplay();
+  if (typeof showSafe === 'function') {
+    showSafe();
+  } else {
+    showScreen('pin-screen'); // фолбэк
+  }
 }
 
 function showScreen(name) {

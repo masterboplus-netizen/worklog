@@ -6,6 +6,14 @@ async function init() {
   const btnHeart = $('#btn-heart');
   if (btnHeart) btnHeart.addEventListener('click', showCreators);
 
+  const btnLock = $('#btn-lock');
+  if (btnLock) {
+    btnLock.addEventListener('click', () => {
+      if (typeof lock === 'function') lock();
+      else { showSafe(); } // фолбэк
+    });
+  }
+
   const logoBtn = $('#logo-btn');
   if (logoBtn) {
     logoBtn.addEventListener('click', () => {
