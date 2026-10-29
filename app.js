@@ -61,6 +61,14 @@ function setupTabs() {
 }
 
 function switchTab(name) {
+  // СБРОС СКРОЛЛА ВВЕРХ
+  const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity'];
+  scrollContainers.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.scrollTop = 0;
+  });
+  window.scrollTo(0, 0); // На всякий случай
+
   ['content', 'content-diary', 'content-projects', 'content-activity'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.classList.add('hidden'); if (id === 'content-activity') el.innerHTML = ''; }
