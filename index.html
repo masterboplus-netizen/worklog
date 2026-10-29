@@ -65,22 +65,21 @@
 </nav>
 
 
-<!-- === СЛЕПОЙ СЕЙФ (v28) === -->
+<!-- === СЛЕПОЙ СЕЙФ (v45) === -->
 <div id="scroll-pin-screen">
-  <div id="safe-dial-container">
-    <!-- Вращающийся диск -->
-    <div id="safe-dial-rotator">
+  <!-- Жестко задаем абсолютное позиционирование контейнера в правом нижнем углу -->
+  <div id="safe-dial-container" style="position: absolute; right: 20px; bottom: 20px; width: 220px; height: 220px; touch-action: none; z-index: 10;">
+    
+    <div id="safe-dial-rotator" class="waiting" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;">
       <svg width="220" height="220" viewBox="0 0 220 220">
         <circle cx="110" cy="110" r="90" fill="none" stroke="#FFA500" stroke-width="30"/>
         <circle cx="110" cy="20" r="8" fill="#fff"/>
       </svg>
     </div>
 
-    <!-- Лупа под пальцем -->
-    <div id="safe-dial-lens"></div>
+    <div id="safe-dial-lens" style="position: absolute; width: 50px; height: 50px; background: radial-gradient(circle, rgba(255,165,0,0.9) 0%, rgba(255,165,0,0) 70%); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%) scale(0); opacity: 0; z-index: 100; box-shadow: 0 0 15px rgba(255,165,0,0.8); transition: transform 0.1s, opacity 0.1s;"></div>
 
-    <!-- Таймер в центре (ПОВЕРХ КОЛЬЦА) -->
-    <div id="safe-timer">Коснись, чтобы начать</div>
+    <div id="safe-timer" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; font-size: 16px; font-weight: 600; color: var(--fg-dim); text-align: center; width: 100px; pointer-events: none; user-select: none;">Коснись, чтобы начать</div>
   </div>
 </div>
 <!-- === КОНЕЦ СЕЙФА === -->
@@ -90,7 +89,7 @@
 <script src="js/chart.js?v=999"></script>
 <script src="js/auth.js?v=7"></script>
 <script src="app.js?v=505"></script>
-<script src="js/safe.js?v=50"></script>
+<script src="js/safe.js?v=51"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=999', { updateViaCache: 'none' }).catch(function(){});
