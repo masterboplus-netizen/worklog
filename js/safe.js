@@ -1,4 +1,4 @@
-// === СЛЕПОЙ СЕЙФ (v37 - Свободное вращение) ===
+// === СЛЕПОЙ СЕЙФ (v38 - Свободное вращение по метке) ===
 const SAFE_TARGET_ANGLES = [150, 330, 420];
 const SAFE_PIN = '201186';
 const HOLD_TIME_MS = 1000;
@@ -93,12 +93,24 @@ function _safeBind() {
     if (HOLD_TIMER) { clearTimeout(HOLD_TIMER); HOLD_TIMER = null; }
   };
 
+  // Считаем текущий угол МЕТКИ (от 12 часов)
+  const getMarkAngle = () => {
+    let angle = SAFE_ROTATION % 360;
+    if (angle < 0) angle += 360;
+    return angle;
+  };
+
   const checkTargetAngle = () => {
     if (SAFE_STEP >= SAFE_TARGET_ANGLES.length || SAFE_LOCKED) return;
+    
+    const currentMarkAngle = getMarkAngle();
     const target = SAFE_TARGET_ANGLES[SAFE_STEP];
 
-    // Зона срабатывания ±25 градусов
-    if (SAFE_ROTATION >= target - 25 && SAFE_ROTATION <= target + 25) {
+    // Зона ±20 градусов от цели
+    let diff = Math.abs(currentMarkAngle - target);
+    if (diff > 180) diff = 360 - diff; // Обработка перехода через 0
+
+    if (diff <= 20) {
       if (!HOLD_TIMER) {
         _safeVibrate(20); // Легкий толчок при входе в зону
         HOLD_TIMER = setTimeout(() => {
@@ -189,14 +201,11 @@ function _safeBind() {
 
     const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
     
-    // Считаем разницу между текущим углом пальца и тем, с которого начали касание
     let diff = currentAngle - START_TOUCH_ANGLE;
-    
-    // Обработка перехода через 0/360
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
 
-    // ЖЕСТКАЯ ПРИВЯЗКА: кольцо там, где палец (относительно начала касания)
+    // Крутим кольцо за пальцем
     SAFE_ROTATION = START_RING_ROTATION + diff;
     rot.style.transform = `rotate(${SAFE_ROTATION}deg)`;
 
