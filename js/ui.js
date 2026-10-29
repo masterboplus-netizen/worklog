@@ -104,6 +104,107 @@ function renderDiary() {
       dayEl.addEventListener('click', () => { CALENDAR_SELECTED_DAY = dateStr; renderDiary(); });
       grid.appendChild(dayEl);
     }
+  } else if (CALENDAR_VIEW === 'year') {
+    title.textContent = year + ' год';
+    const monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+    
+    // Сетка годов: 3 колонки по 4 месяца
+    grid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 0 16px;';
+    grid.innerHTML = '';
+    
+    for (let m = 0; m < 12; m++) {
+      const monthWrap = document.createElement('div');
+      monthWrap.style.cssText = 'display: flex; flex-direction: column; align-items: center; cursor: pointer;';
+      
+      // Заголовок месяца
+      const mTitle = document.createElement('div');
+      mTitle.textContent = monthNames[m].slice(0, 3);
+      mTitle.style.cssText = 'font-size: 13px; font-weight: 600; color: var(--fg); margin-bottom: 4px;';
+      monthWrap.appendChild(mTitle);
+      
+      // Мини-сетка дней
+      const miniGrid = document.createElement('div');
+      miniGrid.style.cssText = 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;';
+      
+      const firstDay = new Date(year, m, 1);
+      const lastDay = new Date(year, m + 1, 0);
+      const daysInMonth = lastDay.getDate();
+      let startDow = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+      
+      // Пустые клетки
+      for (let i = 0; i < startDow; i++) miniGrid.appendChild(document.createElement('div'));
+      
+      // Дни
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dayBox = document.createElement('div');
+        dayBox.className = 'cal-day';
+        const dateStr = `${year}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        
+        if (dateStr === _localDate(new Date())) dayBox.classList.add('today');
+        if (dateStr === CALENDAR_SELECTED_DAY) dayBox.classList.add('selected');
+        
+        const hasSessions = (window.DATA.sessions || []).some(s => s.date === dateStr);
+        // Делаем точку меньше для мини-сетки
+        dayBox.innerHTML = `<span class="cal-num" style="width:16px; height:16px; font-size:10px;">${d}</span>`;
+        
+        if (hasSessions) {
+          const dot = document.createElement('span');
+          dot.className = 'cal-dot';
+          dot.style.cssText = 'width: 4px; height: 4px; bottom: 0;';
+          dayBox.appendChild(dot);
+        }
+        
+        dayBox.addEventListener('click', (e) => {
+          e.stopPropagation();
+          CALENDAR_SELECTED_DAY = dateStr;
+          CALENDAR_VIEW = 'month';
+          const now = new Date();
+          CALENDAR_OFFSET = (year - now.getFullYear()) * 12 + (m - now.getMonth());
+          renderDiary();
+        });
+        
+        miniGrid.appendChild(dayBox);
+      }
+      
+      monthWrap.appendChild(miniGrid);
+      grid.appendChild(monthWrap);
+    }
+  } else if (CALENDAR_VIEW === 'week') {
+    title.textContent = 'Неделя';
+    const today = new Date();
+    const currentDow = today.getDay() === 0 ? 6 : today.getDay() - 1;
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - currentDow);
+
+    for (let i = 0; i < 7; i++) {
+      const dayEl = document.createElement('div');
+      dayEl.className = 'cal-day';
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const dateStr = _localDate(d);
+      if (dateStr === _localDate(today)) dayEl.classList.add('today');
+      if (dateStr === CALENDAR_SELECTED_DAY) dayEl.classList.add('selected');
+      const hasSessions = (window.DATA.sessions || []).some(s => s.date === dateStr);
+      dayEl.innerHTML = `<span class="cal-num">${d.getDate()}</span>${hasSessions ? '<span class="cal-dot"></span>' : ''}`;
+      dayEl.addEventListener('click', () => { CALENDAR_SELECTED_DAY = dateStr; renderDiary(); });
+      grid.appendChild(dayEl);
+    }
+  } else if (CALENDAR_VIEW === '30days') {
+    title.textContent = 'Последние 30 дней';
+    const today = new Date();
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const dateStr = _localDate(d);
+      const dayEl = document.createElement('div');
+      dayEl.className = 'cal-day';
+      if (dateStr === _localDate(today)) dayEl.classList.add('today');
+      if (dateStr === CALENDAR_SELECTED_DAY) dayEl.classList.add('selected');
+      const hasSessions = (window.DATA.sessions || []).some(s => s.date === dateStr);
+      dayEl.innerHTML = `<span class="cal-num">${d.getDate()}</span>${hasSessions ? '<span class="cal-dot"></span>' : ''}`;
+      dayEl.addEventListener('click', () => { CALENDAR_SELECTED_DAY = dateStr; renderDiary(); });
+      grid.appendChild(dayEl);
+    }
   } else if (CALENDAR_VIEW === 'week') {
     title.textContent = 'Неделя';
     // Показываем текущую неделю (пн-вс)
