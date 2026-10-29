@@ -148,10 +148,16 @@ function _safeBind() {
   };
 
   targets.forEach(t => {
-    t.ontouchstart = handleStart;
-    t.ontouchmove = handleMove;
-    t.ontouchend = handleEnd;
-    t.ontouchcancel = handleEnd;
+    // Принудительно перезаписываем, чтобы избежать дублирования
+    t.ontouchstart = null;
+    t.ontouchmove = null;
+    t.ontouchend = null;
+    t.ontouchcancel = null;
+
+    t.addEventListener('touchstart', handleStart, { passive: false });
+    t.addEventListener('touchmove', handleMove, { passive: false });
+    t.addEventListener('touchend', handleEnd, { passive: false });
+    t.addEventListener('touchcancel', handleEnd, { passive: false });
   });
 }
 
