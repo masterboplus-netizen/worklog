@@ -2741,3 +2741,22 @@ html, body {
   overflow-y: auto !important;
   height: auto !important;
 }
+
+/* === МИНИ-КАЛЕНДАРЬ В ГОДОВОМ ВИДЕ === */
+.year-view .cal-day {
+  aspect-ratio: 1;
+  min-width: 0;
+}
+.year-view .cal-day .cal-num {
+  width: 14px !important;
+  height: 14px !important;
+  font-size: 9px !important;
+  border: none !important;
+}
+.year-view .cal-day.today .cal-num {
+  background: var(--accent) !important;
+  color: #fff !important;
+}
+.year-view .cal-day.selected .cal-num {
+  border: 1px solid var(--accent) !important;
+}

@@ -68,6 +68,7 @@ function renderDiary() {
 
   // Рисуем сетку
   const grid = calTop.querySelector('#cal-grid');
+  grid.className = CALENDAR_VIEW === 'year' ? 'year-view' : '';
   const title = calTop.querySelector('.calendar-title');
 
   const now = new Date();
@@ -109,7 +110,7 @@ function renderDiary() {
     const monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
     
     // Сетка годов: 3 колонки по 4 месяца
-    grid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 0 16px;';
+    grid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 12px;';
     grid.innerHTML = '';
     
     for (let m = 0; m < 12; m++) {
@@ -124,7 +125,7 @@ function renderDiary() {
       
       // Мини-сетка дней
       const miniGrid = document.createElement('div');
-      miniGrid.style.cssText = 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;';
+      miniGrid.style.cssText = 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px;';
       
       const firstDay = new Date(year, m, 1);
       const lastDay = new Date(year, m + 1, 0);
@@ -145,12 +146,12 @@ function renderDiary() {
         
         const hasSessions = (window.DATA.sessions || []).some(s => s.date === dateStr);
         // Делаем точку меньше для мини-сетки
-        dayBox.innerHTML = `<span class="cal-num" style="width:16px; height:16px; font-size:10px;">${d}</span>`;
+        dayBox.innerHTML = `<span class="cal-num" style="width:14px; height:14px; font-size:9px; min-width:0;">${d}</span>`;
         
         if (hasSessions) {
           const dot = document.createElement('span');
           dot.className = 'cal-dot';
-          dot.style.cssText = 'width: 4px; height: 4px; bottom: 0;';
+          dot.style.cssText = 'width: 3px; height: 3px; bottom: -1px; margin-top: 0;';
           dayBox.appendChild(dot);
         }
         
