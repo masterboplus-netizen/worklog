@@ -294,20 +294,44 @@
       "status": "active",
       "plan": [
         {
-          "phase": "Фаза 1: MVP (Просмотр)",
+          "phase": "Фаза 1: MVP (Фронтенд и UI)",
           "status": "active",
           "items": [
+            {
+              "text": "Домен и SSL (masterbo.work.gd)",
+              "done": true
+            },
+            {
+              "text": "Постоянная шапка (лого, название, SVG-кнопки)",
+              "done": true
+            },
+            {
+              "text": "Нижнее меню (2 ряда, 8 разделов)",
+              "done": true
+            },
+            {
+              "text": "Центральная кнопка '+'",
+              "done": true
+            },
+            {
+              "text": "Свайп-меню (открытие/закрытие)",
+              "done": true
+            },
+            {
+              "text": "PWA и кэш (sw.js, версии)",
+              "done": true
+            },
+            {
+              "text": "Рефакторинг app2.js (XSS, клики)",
+              "done": true
+            },
             {
               "text": "API: список объектов",
               "done": true
             },
             {
-              "text": "API: список комнат",
+              "text": "Фронт: подключить API объектов (fetch)",
               "done": false
-            },
-            {
-              "text": "Фронт: подключить API объектов",
-              "done": true
             },
             {
               "text": "Фронт: экран Комнаты",
