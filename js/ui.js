@@ -1031,6 +1031,7 @@ function renderActivityPageV2() {
 
     const metricBar = document.createElement('div');
     metricBar.className = 'chart-segmented-control';
+    metricBar.style.cssText = 'border: 2px solid red !important; padding: 10px !important;'; // ТЕСТОВАЯ РАМКА
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
 
