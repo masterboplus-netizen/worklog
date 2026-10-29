@@ -52,7 +52,8 @@ function showSafe() {
   const rot = document.getElementById('safe-dial-rotator');
   if (rot) rot.style.transform = 'rotate(0deg)';
   
-  setTimeout(_safeBind, 50);
+  // Вызываем привязку сразу, без задержки
+  _safeBind();
 }
 
 function _safeHide() {
@@ -66,7 +67,11 @@ function _safeBind() {
   const rot = document.getElementById('safe-dial-rotator');
   const lens = document.getElementById('safe-dial-lens');
   
-  if (!box || !rot) return;
+  if (!box || !rot) {
+    // Если элементов нет, пробуем еще раз через 100 мс
+    setTimeout(_safeBind, 100);
+    return;
+  }
 
   const getCenter = () => {
     const r = box.getBoundingClientRect();
