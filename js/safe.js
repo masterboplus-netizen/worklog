@@ -115,9 +115,8 @@ function _safeBind() {
     }
   };
 
-  // СТАРТ ТАЙМЕРА ПО ТАПУ В ЦЕНТР
-  timerDisplay.onclick = (e) => {
-    e.stopPropagation();
+  // СТАРТ ТАЙМЕРА (по тапу на сам экран сейфа)
+  const startGame = () => {
     if (SAFE_STARTED || SAFE_LOCKED) return;
     
     // Разблокируем вибрацию (первый тап)
@@ -125,9 +124,11 @@ function _safeBind() {
     
     SAFE_STARTED = true;
     TIME_LEFT = START_TIME_S;
-    timerDisplay.textContent = TIME_LEFT + 'с';
-    timerDisplay.style.color = '#FFA500';
-    timerDisplay.style.fontSize = '24px';
+    if (timerDisplay) {
+      timerDisplay.textContent = TIME_LEFT + 'с';
+      timerDisplay.style.color = '#FFA500';
+      timerDisplay.style.fontSize = '24px';
+    }
     
     COUNTDOWN_TIMER = setInterval(() => {
       TIME_LEFT--;
@@ -145,7 +146,14 @@ function _safeBind() {
   box.ontouchend = null;
 
   box.addEventListener('touchstart', (e) => {
-    if (SAFE_LOCKED || !SAFE_STARTED) return; // Игнорируем, если таймер не запущен
+    if (SAFE_LOCKED) return;
+    
+    // Если игра не начата, запускаем её по первому тапу
+    if (!SAFE_STARTED) {
+      startGame();
+      return;
+    }
+
     e.preventDefault();
     SAFE_ACTIVE = true;
     TOTAL_TOUCH_DELTA = 0;
