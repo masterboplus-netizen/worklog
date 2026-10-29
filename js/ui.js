@@ -75,54 +75,77 @@ function renderDiary() {
   const year = now.getFullYear();
   const month = now.getMonth();
   
+  grid.style.cssText = 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; padding: 0 16px;';
+  const dows = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+  dows.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'cal-dow';
+    el.textContent = d;
+    grid.appendChild(el);
+  });
+
   if (CALENDAR_VIEW === 'month') {
     const monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
     title.textContent = monthNames[month] + ' ' + year;
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
-    let startDow = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; // Пн=0, Вс=6
+    let startDow = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
 
-    grid.style.cssText = 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; padding: 0 16px;';
-    
-    // Заголовки дней
-    const dows = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-    dows.forEach(d => {
-      const el = document.createElement('div');
-      el.className = 'cal-dow';
-      el.textContent = d;
-      grid.appendChild(el);
-    });
-
-    // Пустые клетки
-    for (let i = 0; i < startDow; i++) {
-      grid.appendChild(document.createElement('div'));
-    }
-
-    // Дни
+    for (let i = 0; i < startDow; i++) grid.appendChild(document.createElement('div'));
     for (let i = 1; i <= daysInMonth; i++) {
       const dayEl = document.createElement('div');
       dayEl.className = 'cal-day';
       const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-      
       if (dateStr === _localDate(new Date())) dayEl.classList.add('today');
       if (dateStr === CALENDAR_SELECTED_DAY) dayEl.classList.add('selected');
-      
-      // Проверяем, есть ли сессии в этот день
       const hasSessions = (window.DATA.sessions || []).some(s => s.date === dateStr);
-      
       dayEl.innerHTML = `<span class="cal-num">${i}</span>${hasSessions ? '<span class="cal-dot"></span>' : ''}`;
-      
-      dayEl.addEventListener('click', () => {
-        CALENDAR_SELECTED_DAY = dateStr;
-        renderDiary();
-      });
-      
+      dayEl.addEventListener('click', () => { CALENDAR_SELECTED_DAY = dateStr; renderDiary(); });
+      grid.appendChild(dayEl);
+    }
+  } else if (CALENDAR_VIEW === 'week') {
+    title.textContent = 'Неделя';
+    // Показываем текущую неделю (пн-вс)
+    const today = new Date();
+    const currentDow = today.getDay() === 0 ? 6 : today.getDay() - 1;
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - currentDow);
+
+    for (let i = 0; i < 7; i++) {
+      const dayEl = document.createElement('div');
+      dayEl.className = 'cal-day';
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const dateStr = _localDate(d);
+      if (dateStr === _localDate(today)) dayEl.classList.add('today');
+      if (dateStr === CALENDAR_SELECTED_DAY) dayEl.classList.add('selected');
+      const hasSessions = (window.DATA.sessions || []).some(s => s.date === dateStr);
+      dayEl.innerHTML = `<span class="cal-num">${d.getDate()}</span>${hasSessions ? '<span class="cal-dot"></span>' : ''}`;
+      dayEl.addEventListener('click', () => { CALENDAR_SELECTED_DAY = dateStr; renderDiary(); });
+      grid.appendChild(dayEl);
+    }
+  } else if (CALENDAR_VIEW === '30days') {
+    title.textContent = 'Последние 30 дней';
+    // Показываем последние 30 дней (сдвиг)
+    const today = new Date();
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const dateStr = _localDate(d);
+      const dayEl = document.createElement('div');
+      dayEl.className = 'cal-day';
+      if (dateStr === _localDate(today)) dayEl.classList.add('today');
+      if (dateStr === CALENDAR_SELECTED_DAY) dayEl.classList.add('selected');
+      const hasSessions = (window.DATA.sessions || []).some(s => s.date === dateStr);
+      dayEl.innerHTML = `<span class="cal-num">${d.getDate()}</span>${hasSessions ? '<span class="cal-dot"></span>' : ''}`;
+      dayEl.addEventListener('click', () => { CALENDAR_SELECTED_DAY = dateStr; renderDiary(); });
       grid.appendChild(dayEl);
     }
   } else {
-    title.textContent = 'Режим: ' + CALENDAR_VIEW; // Упрощенно
-    grid.innerHTML = '<div style="padding:20px;text-align:center;color:var(--fg-dim)">Детальный вид в разработке</div>';
+    // Год
+    title.textContent = 'Режим: ' + CALENDAR_VIEW; 
+    grid.innerHTML = '<div style="padding:20px;text-align:center;color:var(--fg-dim)">Годовой вид в разработке</div>';
   }
 
   // Обработчики переключения вида (для капсулы)
