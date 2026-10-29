@@ -10,7 +10,7 @@ function mergeMidnightSessions(sessions) {
     return (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start);
   });
 
-  const merged = [];
+  const merged = getCleanSessions(window.DATA.sessions || []);
   let i = 0;
 
   while (i < sorted.length) {
