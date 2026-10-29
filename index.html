@@ -11,7 +11,7 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="css/base.css?v=999">
-<link rel="stylesheet" href="css/components.css?v=508">
+<link rel="stylesheet" href="css/components.css?v=509">
 </head>
 <body>
 <div id="app"></div>
@@ -69,11 +69,17 @@
 <div id="scroll-pin-screen">
   <div id="safe-dial-container">
     <div class="safe-dial-hitbox"></div>
-    <svg id="safe-dial-svg" width="220" height="220" viewBox="0 0 220 220">
+        <svg id="safe-dial-svg" width="220" height="220" viewBox="0 0 220 220">
+      <!-- Фоновое кольцо -->
       <circle cx="110" cy="110" r="90" fill="none" stroke="rgba(255,165,0,0.15)" stroke-width="30"/>
-      <circle id="safe-dial-ring" cx="110" cy="110" r="90" fill="none" stroke="#FFA500" stroke-width="30"
-              stroke-linecap="round" stroke-dasharray="565.48" stroke-dashoffset="0"
-              style="transition: stroke 0.15s, filter 0.15s, transform 0.1s; transform-origin: 110px 110px;"/>
+      
+      <!-- Вращающаяся группа (кольцо + метка) -->
+      <g id="safe-dial-ring" style="transform-origin: 110px 110px; transition: transform 0.1s, filter 0.1s;">
+        <!-- Само кольцо -->
+        <circle cx="110" cy="110" r="90" fill="none" stroke="#FFA500" stroke-width="30"/>
+        <!-- Метка (точка на 12 часах) -->
+        <circle cx="110" cy="20" r="8" fill="#fff" stroke="#FFA500" stroke-width="2"/>
+      </g>
     </svg>
     <div id="safe-dial-touch-effect"></div>
   </div>
@@ -84,7 +90,7 @@
 <script src="js/chart.js?v=999"></script>
 <script src="js/auth.js?v=7"></script>
 <script src="app.js?v=505"></script>
-<script src="js/safe.js?v=14"></script>
+<script src="js/safe.js?v=15"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=999', { updateViaCache: 'none' }).catch(function(){});

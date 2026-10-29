@@ -57,7 +57,7 @@ function _safeResetVisual() {
   if (ring) {
     ring.style.transform = `rotate(0deg)`;
     ring.setAttribute('stroke', '#FFA500');
-    ring.style.filter = 'drop-shadow(0 0 10px rgba(255,165,0,0.8))';
+    ring.style.filter = 'drop-shadow(0 0 15px rgba(255,165,0,0.8))';
   }
 }
 
@@ -86,8 +86,14 @@ function _safeBind() {
     
     if (lens) {
       lens.classList.add('active');
-      lens.style.left = (t.clientX - box.getBoundingClientRect().left) + 'px';
-      lens.style.top  = (t.clientY - box.getBoundingClientRect().top)  + 'px';
+      // Прижимаем к кольцу
+      const radius = 90;
+      const angleRad = (SAFE_LAST_ANGLE - 90) * Math.PI / 180;
+      const r = box.getBoundingClientRect();
+      const lx = (cx - r.left) + Math.cos(angleRad) * radius;
+      const ly = (cy - r.top) + Math.sin(angleRad) * radius;
+      lens.style.left = lx + 'px';
+      lens.style.top  = ly + 'px';
     }
   };
 
@@ -99,8 +105,14 @@ function _safeBind() {
     const r = box.getBoundingClientRect();
     
     if (lens) {
-      lens.style.left = (t.clientX - r.left) + 'px';
-      lens.style.top  = (t.clientY - r.top)  + 'px';
+      // Вычисляем угол и радиус, чтобы лупа скользила по кольцу
+      const radius = 90; // Радиус кольца
+      const angleRad = (currentAngle - 90) * Math.PI / 180;
+      const lx = cx - r.left + Math.cos(angleRad) * radius;
+      const ly = cy - r.top + Math.sin(angleRad) * radius;
+      
+      lens.style.left = lx + 'px';
+      lens.style.top  = ly + 'px';
     }
 
     const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
@@ -137,7 +149,7 @@ function _safeBind() {
         
         // Анимация щелчка
         ring.style.filter = 'drop-shadow(0 0 20px rgba(255,165,0,1))';
-        setTimeout(() => { ring.style.filter = 'drop-shadow(0 0 10px rgba(255,165,0,0.8))'; }, 150);
+        setTimeout(() => { ring.style.filter = 'drop-shadow(0 0 15px rgba(255,165,0,0.8))'; }, 150);
         
         if (SAFE_STEP === SAFE_TARGET_ANGLES.length) {
           SAFE_LOCKED = true;
