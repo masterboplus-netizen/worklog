@@ -757,12 +757,15 @@ function renderChart(hideFilters = false) {
     ['screens', 'Скрины'],
     ['tasks', 'Задачи']
   ];
-  const metricHTML = metrics.map(([key, label]) =>
-    '<button class="' + (CHART_METRIC === key ? 'active' : '') + '" data-metric="' + key + '">' + label + '</button>'
-  ).join('');
+  const metricHTML = metrics.map(([key, label]) => {
+    const isActive = CHART_METRIC === key;
+    const bg = isActive ? 'var(--accent)' : 'transparent';
+    const color = isActive ? '#fff' : 'var(--fg-dim)';
+    return '<button data-metric="' + key + '" style="flex:1; background:' + bg + ' !important; color:' + color + ' !important; border:none !important; padding:8px 4px !important; border-radius:16px !important; font-size:13px !important; font-family:inherit; outline:none !important; -webkit-appearance:none !important;">' + label + '</button>';
+  }).join('');
 
   const metricBar = document.createElement('div');
-  metricBar.className = 'chart-segmented-control';
+  metricBar.style.cssText = 'display:flex; background:var(--bg3); border-radius:20px; padding:4px; margin:16px 16px 20px 16px; gap:4px; width:calc(100% - 32px); box-sizing:border-box;';
   metricBar.innerHTML = metricHTML;
   container.appendChild(metricBar);
 
