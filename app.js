@@ -6,13 +6,12 @@ async function init() {
   const btnHeart = $('#btn-heart');
   if (btnHeart) btnHeart.addEventListener('click', showCreators);
 
-  const btnLock = $('#btn-lock');
-  if (btnLock) {
-    btnLock.addEventListener('click', () => {
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#btn-lock')) {
       if (typeof lock === 'function') lock();
-      else { showSafe(); } // фолбэк
-    });
-  }
+      else if (typeof showSafe === 'function') showSafe();
+    }
+  });
 
   const logoBtn = $('#logo-btn');
   if (logoBtn) {

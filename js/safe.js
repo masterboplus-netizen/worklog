@@ -26,17 +26,12 @@ function showSafe() {
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) { console.warn('safe: нет #scroll-pin-screen'); return; }
   
-  // Принудительно показываем сейф
+  // Показываем сейф
   screen.classList.add('active');
-  screen.style.display = 'flex';
-  screen.style.zIndex = '9999'; // Поверх всего
   
   // Скрываем дашборд и меню
   const dash = document.getElementById('dashboard');
-  if (dash) {
-    dash.classList.add('hidden');
-    dash.style.display = 'none';
-  }
+  if (dash) dash.classList.add('hidden');
   const tabs = document.querySelector('.tabs');
   if (tabs) tabs.style.display = 'none';
   
@@ -102,10 +97,7 @@ function _safeBind() {
         
         // Возвращаем дашборд
         const dash = document.getElementById('dashboard');
-        if (dash) {
-          dash.classList.remove('hidden');
-          dash.style.display = 'flex'; // или block
-        }
+        if (dash) dash.classList.remove('hidden');
         const tabs = document.querySelector('.tabs');
         if (tabs) tabs.style.display = 'flex';
         
