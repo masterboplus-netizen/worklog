@@ -2543,218 +2543,7 @@ html, body {
   box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
 }
 
-/* === СЛЕПОЙ СЕЙФ === */
 
-
-
-/* === ЭКРАН СЕЙФА (ТОЛЬКО КОЛЬЦО) === */
-
-#scroll-pin-screen.active { display: flex; }
-
-/* Контейнер кольца */
-
-
-/* === КОЛЬЦО: ВЫРАВНИВАНИЕ И ЭФФЕКТЫ === */
-
-
-/* Эффект "взятия" кольца (появление сферы под пальцем) */
-
-#safe-dial-touch-effect.active {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-}
-
-/* Само кольцо (всегда оранжевое) */
-
-
-/* === КОЛЬЦО: УМЕНЬШЕНО И С ОТСТУПАМИ === */
-
-
-/* Эффект "лупы" под пальцем */
-
-#safe-dial-touch-effect.active {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-}
-
-/* Само кольцо (всегда оранжевое) */
-
-
-/* Делаем внешнюю область активной (невидимая рамка) */
-
-
-/* === СЕЙФ: ИДЕАЛЬНЫЕ СТИЛИ === */
-#scroll-pin-screen {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: var(--bg);
-  position: fixed;
-  top: 0; left: 0; width: 100%;
-  z-index: 2000;
-  padding: 20px; /* Отступы по краям */
-  box-sizing: border-box;
-}
-#scroll-pin-screen.active { display: flex; }
-
-#safe-dial-container {
-  position: relative;
-  width: 220px;
-  height: 220px;
-  touch-action: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Центрируем */
-  margin: auto;
-  pointer-events: auto !important;
-  z-index: 50;
-}
-
-/* Невидимая зона для пальца */
-.safe-dial-hitbox {
-  position: absolute;
-  top: -50px; left: -50px; right: -50px; bottom: -50px;
-  border-radius: 50%;
-  z-index: 10;
-  pointer-events: auto !important; /* Жёстко включаем события */
-  background: transparent; /* Прозрачный */
-}
-
-/* Лупа под пальцем */
-#safe-dial-touch-effect {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  background: radial-gradient(circle, rgba(255, 165, 0, 0.9) 0%, rgba(255, 165, 0, 0) 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-  opacity: 0;
-  z-index: 100;
-  box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
-}
-#safe-dial-touch-effect.active {
-  transform: translate(-50%, -50%) scale(1.5);
-  opacity: 1;
-}
-
-/* Само кольцо */
-
-
-/* === СЕЙФ: ИДЕАЛЬНЫЕ СТИЛИ === */
-#scroll-pin-screen {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: var(--bg);
-  position: fixed;
-  top: 0; left: 0; width: 100%;
-  z-index: 2000;
-  padding: 20px;
-  box-sizing: border-box;
-}
-#scroll-pin-screen.active { display: flex; }
-
-#safe-dial-container {
-  position: relative;
-  width: 220px;
-  height: 220px;
-  touch-action: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: auto;
-}
-
-.safe-dial-hitbox {
-  position: absolute;
-  top: -50px; left: -50px; right: -50px; bottom: -50px;
-  border-radius: 50%;
-  z-index: 10;
-  pointer-events: auto !important; /* Жёстко включаем события */
-  background: transparent; /* Прозрачный */
-}
-
-#safe-dial-touch-effect {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  background: radial-gradient(circle, rgba(255, 165, 0, 0.9) 0%, rgba(255, 165, 0, 0) 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-  opacity: 0;
-  z-index: 100;
-  box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
-}
-#safe-dial-touch-effect.active {
-  transform: translate(-50%, -50%) scale(1.5);
-  opacity: 1;
-}
-
-
-
-/* === ЯРКОЕ И ТОЛСТОЕ КОЛЬЦО === */
-#safe-dial-ring {
-  transition: stroke 0.1s, filter 0.1s;
-  filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.8)); /* Постоянное свечение */
-}
-
-
-/* === СЛЕПОЙ СЕЙФ (v2) === */
-#scroll-pin-screen {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  position: fixed; inset: 0;
-  background: var(--bg);
-  z-index: 2000;
-  padding: 20px; box-sizing: border-box;
-}
-#scroll-pin-screen.active { display: flex; }
-
-#safe-dial-container {
-  position: relative;
-  width: 220px; height: 220px;
-  margin: auto;
-  touch-action: none;
-  -webkit-user-select: none; user-select: none;
-}
-.safe-dial-hitbox {
-  position: absolute;
-  top: -50px; left: -50px; right: -50px; bottom: -50px;
-  border-radius: 50%;
-  z-index: 10;
-  pointer-events: auto !important; /* Жёстко включаем события */
-  background: transparent; /* Прозрачный */
-}
-#safe-dial-ring {
-  transition: stroke 0.15s, filter 0.15s, transform 0.1s;
-  transform-origin: 110px 110px;
-  filter: drop-shadow(0 0 10px rgba(255,165,0,0.8));
-}
-#safe-dial-touch-effect {
-  position: absolute;
-  width: 40px; height: 40px;
-  background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,165,0,0.5) 50%, rgba(255,165,0,0) 100%);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-  opacity: 0;
-  z-index: 100;
-  box-shadow: 0 0 20px rgba(255,165,0,0.9);
-}
-#safe-dial-touch-effect.active {
-  transform: translate(-50%, -50%) scale(1.2);
-  opacity: 1;
-}
-/* === /СЛЕПОЙ СЕЙФ (v2) === */
 
 /* === ЖЕСТКИЙ ФИКС СЕЙФА (v3) === */
 #scroll-pin-screen {
@@ -2794,3 +2583,48 @@ html, body {
   pointer-events: auto !important;
   touch-action: none !important;
 }
+
+/* === СЛЕПОЙ СЕЙФ (v15) === */
+#scroll-pin-screen {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  touch-action: none;
+}
+#scroll-pin-screen.active { display: flex; }
+
+#safe-dial-container {
+  position: relative;
+  width: 220px; height: 220px;
+  margin: auto;
+  touch-action: none;
+}
+
+#safe-dial-rotator {
+  position: absolute;
+  inset: 0;
+  /* Важно: никаких transition, чтобы не было задержек */
+  transition: none; 
+  filter: drop-shadow(0 0 15px rgba(255,165,0,0.8));
+}
+
+#safe-dial-lens {
+  position: absolute;
+  width: 40px; height: 40px;
+  background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,165,0,0.5) 50%, rgba(255,165,0,0) 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+  opacity: 0;
+  z-index: 100;
+  box-shadow: 0 0 20px rgba(255,165,0,0.9);
+}
+#safe-dial-lens.active {
+  transform: translate(-50%, -50%) scale(1.2);
+  opacity: 1;
+}
+/* === /СЛЕПОЙ СЕЙФ === */

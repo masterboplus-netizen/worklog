@@ -1,15 +1,12 @@
-// === СЛЕПОЙ СЕЙФ (ВИНИЛ) — v13 ЧИСТАЯ МАТЕМАТИКА ===
+// === СЛЕПОЙ СЕЙФ (v15 - Чистый винил) ===
 const SAFE_TARGET_ANGLES = [150, 330, 420];
 const SAFE_PIN = '201186';
 let SAFE_ROTATION = 0;
 let SAFE_STEP = 0;
 let SAFE_ACTIVE = false;
 let SAFE_LOCKED = false;
-
-// Для привязки к пальцу
 let START_TOUCH_ANGLE = 0;
 let START_RING_ROTATION = 0;
-let LAST_TOUCH_ANGLE = 0;
 
 function _safeAngle(cx, cy, x, y) {
   let a = Math.atan2(y - cy, x - cx) * 180 / Math.PI + 90;
@@ -44,7 +41,9 @@ function showSafe() {
   const tabs = document.querySelector('.tabs');
   if (tabs) tabs.style.display = 'none';
 
-  _safeResetVisual();
+  const rot = document.getElementById('safe-dial-rotator');
+  if (rot) rot.style.transform = 'rotate(0deg)';
+  
   _safeBind();
 }
 
@@ -53,141 +52,102 @@ function _safeHide() {
   if (screen) screen.style.display = 'none';
 }
 
-function _safeResetVisual() {
-  const ring = document.getElementById('safe-dial-ring');
-  if (ring) {
-    ring.setAttribute('transform', `rotate(0 110 110)`);
-    ring.style.filter = 'drop-shadow(0 0 15px rgba(255,165,0,0.8))';
-  }
-}
-
 function _safeBind() {
   const box = document.getElementById('safe-dial-container');
-  const hitbox = document.querySelector('.safe-dial-hitbox');
-  const ring = document.getElementById('safe-dial-ring');
-  const lens = document.getElementById('safe-dial-touch-effect');
+  const rot = document.getElementById('safe-dial-rotator');
+  const lens = document.getElementById('safe-dial-lens');
   
-  if (!box || !ring) { console.warn('safe: нет элементов'); return; }
+  if (!box || !rot) return;
 
-  const targets = [box, hitbox, document.getElementById('safe-dial-svg')].filter(Boolean);
-  let lastVibStep = 0;
+  // Чтобы поймать палец везде, вешаем на весь экран
+  const target = document.getElementById('scroll-pin-screen');
 
   const getCenter = () => {
     const r = box.getBoundingClientRect();
     return { cx: r.left + r.width/2, cy: r.top + r.height/2 };
   };
 
-  const handleStart = (e) => {
+  target.ontouchstart = null;
+  target.ontouchmove = null;
+  target.ontouchend = null;
+
+  target.addEventListener('touchstart', (e) => {
     if (SAFE_LOCKED) return;
     e.preventDefault();
     SAFE_ACTIVE = true;
     const t = e.touches[0];
     const { cx, cy } = getCenter();
     
-    // Запоминаем, где палец и где кольцо в момент касания
     START_TOUCH_ANGLE = _safeAngle(cx, cy, t.clientX, t.clientY);
     START_RING_ROTATION = SAFE_ROTATION;
-    LAST_TOUCH_ANGLE = START_TOUCH_ANGLE;
     
     if (lens) {
       lens.classList.add('active');
       const r = box.getBoundingClientRect();
-      const radius = 90;
-      const angleRad = (START_TOUCH_ANGLE - 90) * Math.PI / 180;
-      lens.style.left = (cx - r.left) + Math.cos(angleRad) * radius + 'px';
-      lens.style.top  = (cy - r.top) + Math.sin(angleRad) * radius + 'px';
+      // Ставим лупy прямо под палец
+      lens.style.left = (t.clientX - r.left) + 'px';
+      lens.style.top  = (t.clientY - r.top)  + 'px';
     }
-  };
+  }, { passive: false });
 
-  const handleMove = (e) => {
+  target.addEventListener('touchmove', (e) => {
     if (!SAFE_ACTIVE || SAFE_LOCKED) return;
     e.preventDefault();
     const t = e.touches[0];
     const { cx, cy } = getCenter();
     const r = box.getBoundingClientRect();
     
-    const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
-    
+    // Двигаем лупу за пальцем
     if (lens) {
-      const radius = 90;
-      const angleRad = (currentAngle - 90) * Math.PI / 180;
-      lens.style.left = (cx - r.left) + Math.cos(angleRad) * radius + 'px';
-      lens.style.top  = (cy - r.top) + Math.sin(angleRad) * radius + 'px';
+      lens.style.left = (t.clientX - r.left) + 'px';
+      lens.style.top  = (t.clientY - r.top)  + 'px';
     }
 
-    // Считаем разницу между текущим углом пальца и стартовым
+    const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
     let deltaAngle = currentAngle - START_TOUCH_ANGLE;
     
-    // Обработка перехода через 360/0 (если палец пересекает верх)
     if (deltaAngle > 180) deltaAngle -= 360;
     if (deltaAngle < -180) deltaAngle += 360;
     
-    // Сбрасываем, если крутим назад
     if (deltaAngle < -1) {
       if (SAFE_STEP > 0 || START_RING_ROTATION > 0) {
         SAFE_ROTATION = 0;
         SAFE_STEP = 0;
         START_RING_ROTATION = 0;
         START_TOUCH_ANGLE = currentAngle;
-        lastVibStep = 0;
-        _safeResetVisual();
+        rot.style.transform = `rotate(0deg)`;
         _safeVibrate([30, 30, 30]);
       }
     } else {
-      // Жестко привязываем поворот кольца к движению пальца
       SAFE_ROTATION = START_RING_ROTATION + deltaAngle;
       
-      if (ring) {
-        ring.setAttribute('transform', `rotate(${SAFE_ROTATION} 110 110)`);
-      }
-    }
-    
-    LAST_TOUCH_ANGLE = currentAngle;
-    
-    // Проверяем точки
-    if (SAFE_STEP < SAFE_TARGET_ANGLES.length) {
-      const target = SAFE_TARGET_ANGLES[SAFE_STEP];
+      // Крутим обычный DIV, это работает идеально
+      rot.style.transform = `rotate(${SAFE_ROTATION}deg)`;
       
-      if (SAFE_ROTATION >= target) {
-        _safeVibrate(50);
-        SAFE_STEP++;
-        lastVibStep = Math.floor(SAFE_ROTATION / 45);
-        
-        if (ring) {
-          ring.style.filter = 'drop-shadow(0 0 25px rgba(255,255,255,0.9))';
-          setTimeout(() => { ring.style.filter = 'drop-shadow(0 0 15px rgba(255,165,0,0.8))'; }, 150);
-        }
-        
-        if (SAFE_STEP === SAFE_TARGET_ANGLES.length) {
-          SAFE_LOCKED = true;
-          _safeUnlock();
-        }
-      } else {
-        const currentStep = Math.floor(SAFE_ROTATION / 45);
-        if (currentStep > lastVibStep && SAFE_ROTATION > 0) {
-          _safeVibrate(10);
-          lastVibStep = currentStep;
+      // Проверка точек
+      if (SAFE_STEP < SAFE_TARGET_ANGLES.length) {
+        const targetAngle = SAFE_TARGET_ANGLES[SAFE_STEP];
+        if (SAFE_ROTATION >= targetAngle) {
+          _safeVibrate(50);
+          SAFE_STEP++;
+          if (SAFE_STEP === SAFE_TARGET_ANGLES.length) {
+            SAFE_LOCKED = true;
+            _safeUnlock();
+          }
         }
       }
     }
-  };
+  }, { passive: false });
 
-  const handleEnd = (e) => {
+  const endTouch = (e) => {
     if (e) e.preventDefault();
     SAFE_ACTIVE = false;
     if (lens) lens.classList.remove('active');
-    
-    // При отпускании фиксируем новое положение кольца
     START_RING_ROTATION = SAFE_ROTATION;
   };
 
-  targets.forEach(t => {
-    t.ontouchstart = null; t.ontouchmove = null; t.ontouchend = null; t.ontouchcancel = null;
-    t.addEventListener('touchstart', handleStart, { passive: false });
-    t.addEventListener('touchmove', handleMove, { passive: false });
-    t.addEventListener('touchend', handleEnd, { passive: false });
-    t.addEventListener('touchcancel', handleEnd, { passive: false });
-  });
+  target.addEventListener('touchend', endTouch, { passive: false });
+  target.addEventListener('touchcancel', endTouch, { passive: false });
 }
 
 const _safeUnlock = async () => {
@@ -204,12 +164,12 @@ const _safeUnlock = async () => {
       renderDashboard();
     } else {
       SAFE_STEP = 0; SAFE_ROTATION = 0; SAFE_LOCKED = false;
-      _safeResetVisual();
+      document.getElementById('safe-dial-rotator').style.transform = 'rotate(0deg)';
       _safeVibrate([50, 50, 50]);
     }
   } catch(e) {
     SAFE_STEP = 0; SAFE_ROTATION = 0; SAFE_LOCKED = false;
-    _safeResetVisual();
+    document.getElementById('safe-dial-rotator').style.transform = 'rotate(0deg)';
     _safeVibrate([50, 50, 50]);
   }
 };
