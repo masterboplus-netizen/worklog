@@ -1,6 +1,8 @@
-// === СЛЕПОЙ СЕЙФ (v16 - ФИНАЛ) ===
-const SAFE_TARGET_ANGLES = [150, 330, 420];
+// === СЛЕПОЙ СЕЙФ (v18 - Трещотка + Задержка 1.5с) ===
+const SAFE_TARGET_SECTORS = [5, 11, 2];
 const SAFE_PIN = '201186';
+const HOLD_TIME_MS = 1500; // 1.5 секунды на удержание
+
 let SAFE_ROTATION = 0;
 let SAFE_STEP = 0;
 let SAFE_ACTIVE = false;
@@ -8,7 +10,10 @@ let SAFE_LOCKED = false;
 
 let START_TOUCH_ANGLE = 0;
 let START_RING_ROTATION = 0;
-let TOTAL_TOUCH_DELTA = 0; // Для обхода скачка 180 градусов
+let TOTAL_TOUCH_DELTA = 0;
+let HOLD_TIMER = null;
+let CURRENT_SECTOR = -1;
+let LAST_VIB_STEP = 0;
 
 function _safeAngle(cx, cy, x, y) {
   let a = Math.atan2(y - cy, x - cx) * 180 / Math.PI + 90;
@@ -25,6 +30,8 @@ function showSafe() {
   SAFE_STEP = 0;
   SAFE_ACTIVE = false;
   SAFE_LOCKED = false;
+  CURRENT_SECTOR = -1;
+  LAST_VIB_STEP = 0;
   
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) return;
@@ -66,6 +73,10 @@ function _safeBind() {
     return { cx: r.left + r.width/2, cy: r.top + r.height/2 };
   };
 
+  const resetHold = () => {
+    if (HOLD_TIMER) { clearTimeout(HOLD_TIMER); HOLD_TIMER = null; }
+  };
+
   box.ontouchstart = null;
   box.ontouchmove = null;
   box.ontouchend = null;
@@ -74,7 +85,7 @@ function _safeBind() {
     if (SAFE_LOCKED) return;
     e.preventDefault();
     SAFE_ACTIVE = true;
-    TOTAL_TOUCH_DELTA = 0; // Сбрасываем счетчик дельты
+    TOTAL_TOUCH_DELTA = 0;
     
     const t = e.touches[0];
     const { cx, cy } = getCenter();
@@ -82,12 +93,19 @@ function _safeBind() {
     START_TOUCH_ANGLE = _safeAngle(cx, cy, t.clientX, t.clientY);
     START_RING_ROTATION = SAFE_ROTATION;
     
+    // Определяем текущий шаг трещотки при старте
+    let currentAngleMod = SAFE_ROTATION % 360;
+    if (currentAngleMod < 0) currentAngleMod += 360;
+    LAST_VIB_STEP = Math.floor(currentAngleMod / 15);
+    
     if (lens) {
       lens.classList.add('active');
       const r = box.getBoundingClientRect();
       lens.style.left = (t.clientX - r.left) + 'px';
       lens.style.top  = (t.clientY - r.top)  + 'px';
     }
+    
+    resetHold();
   }, { passive: false });
 
   box.addEventListener('touchmove', (e) => {
@@ -103,40 +121,45 @@ function _safeBind() {
     }
 
     const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
-    
-    // Вычисляем дельту между текущим и предыдущим углом
     let deltaAngle = currentAngle - START_TOUCH_ANGLE;
     
-    // Обход скачка 180 градусов
     if (deltaAngle > 180) deltaAngle -= 360;
     if (deltaAngle < -180) deltaAngle += 360;
     
-    // Накапливаем общую дельту от начала касания
     TOTAL_TOUCH_DELTA += deltaAngle;
-    // Обновляем START_TOUCH_ANGLE для следующего кадра
     START_TOUCH_ANGLE = currentAngle;
 
-    // Считаем новое положение кольца
-    let newRotation = START_RING_ROTATION + TOTAL_TOUCH_DELTA;
-
-    // Жесткий стоп: не даем крутить назад
-    if (newRotation < SAFE_ROTATION) {
-      newRotation = SAFE_ROTATION; 
-    }
-
-    SAFE_ROTATION = newRotation;
+    SAFE_ROTATION = START_RING_ROTATION + TOTAL_TOUCH_DELTA;
     rot.style.transform = `rotate(${SAFE_ROTATION}deg)`;
     
-    // Проверка точек
-    if (SAFE_STEP < SAFE_TARGET_ANGLES.length) {
-      const targetAngle = SAFE_TARGET_ANGLES[SAFE_STEP];
-      if (SAFE_ROTATION >= targetAngle) {
-        _safeVibrate(60);
-        SAFE_STEP++;
-        if (SAFE_STEP === SAFE_TARGET_ANGLES.length) {
-          SAFE_LOCKED = true;
-          _safeUnlock();
-        }
+    // --- ЛОГИКА ТРЕЩОТКИ (каждые 15 градусов) ---
+    let currentAngleMod = SAFE_ROTATION % 360;
+    if (currentAngleMod < 0) currentAngleMod += 360;
+    const vibStep = Math.floor(currentAngleMod / 15);
+    
+    if (vibStep !== LAST_VIB_STEP) {
+      _safeVibrate(10); // Легкая вибрация
+      LAST_VIB_STEP = vibStep;
+    }
+    
+    // --- ЛОГИКА СЕКТОРОВ (12 секторов по 30 град) ---
+    const sector = Math.floor(currentAngleMod / 30);
+    
+    if (sector !== CURRENT_SECTOR) {
+      CURRENT_SECTOR = sector;
+      resetHold();
+      
+      if (SAFE_TARGET_SECTORS[SAFE_STEP] === sector) {
+        // Вход в правильный сектор. Ждем 1.5 секунды.
+        HOLD_TIMER = setTimeout(() => {
+          _safeVibrate(60); // Сильная вибрация при успехе
+          SAFE_STEP++;
+          
+          if (SAFE_STEP === SAFE_TARGET_SECTORS.length) {
+            SAFE_LOCKED = true;
+            _safeUnlock();
+          }
+        }, HOLD_TIME_MS);
       }
     }
   }, { passive: false });
@@ -145,7 +168,9 @@ function _safeBind() {
     if (e) e.preventDefault();
     SAFE_ACTIVE = false;
     if (lens) lens.classList.remove('active');
-    START_RING_ROTATION = SAFE_ROTATION; // Фиксируем позицию для следующего касания
+    resetHold();
+    START_RING_ROTATION = SAFE_ROTATION;
+    CURRENT_SECTOR = -1;
   };
 
   box.addEventListener('touchend', endTouch, { passive: false });
