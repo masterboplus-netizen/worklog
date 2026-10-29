@@ -125,8 +125,8 @@ function renderDiary() {
     grid.innerHTML = '<div style="padding:20px;text-align:center;color:var(--fg-dim)">Детальный вид в разработке</div>';
   }
 
-  // Обработчики переключения вида
-  calTop.querySelectorAll('.cal-btn[data-view]').forEach(btn => {
+  // Обработчики переключения вида (для капсулы)
+  calTop.querySelectorAll('.segmented-control button[data-view]').forEach(btn => {
     btn.addEventListener('click', () => {
       CALENDAR_VIEW = btn.dataset.view;
       renderDiary();
@@ -135,15 +135,16 @@ function renderDiary() {
 
   // === 2. КНОПКИ ПЕРЕКЛЮЧЕНИЯ СЕССИЙ ===
   const toggleBar = document.createElement('div');
-  toggleBar.style.cssText = 'display: flex; gap: 8px; margin: 20px 16px 10px 16px; justify-content: center;';
+  toggleBar.className = 'segmented-control';
+  toggleBar.style.marginTop = '20px'; // Добавляем отступ сверху
   
   const btnSessions = document.createElement('button');
-  btnSessions.className = 'cal-btn' + (DIARY_MODE === 'sessions' ? ' active' : '');
+  btnSessions.className = (DIARY_MODE === 'sessions' ? 'active' : '');
   btnSessions.textContent = 'Сессии';
   btnSessions.onclick = () => { DIARY_MODE = 'sessions'; renderDiary(); };
   
   const btn24h = document.createElement('button');
-  btn24h.className = 'cal-btn' + (DIARY_MODE === '24h' ? ' active' : '');
+  btn24h.className = (DIARY_MODE === '24h' ? 'active' : '');
   btn24h.textContent = '24ч';
   btn24h.onclick = () => { DIARY_MODE = '24h'; renderDiary(); };
   
