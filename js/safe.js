@@ -1,8 +1,8 @@
-// === СЛЕПОЙ СЕЙФ (v26 - Таймер и старт по тапу) ===
+// === СЛЕПОЙ СЕЙФ (v31 - Старт по тапу + таймер) ===
 const SAFE_TARGET_ANGLES = [150, 330, 420];
 const SAFE_PIN = '201186';
-const HOLD_TIME_MS = 1000; // Уменьшил до 1 сек, чтобы успеть за 10 сек
-const START_TIME_S = 10; // Время на ввод
+const HOLD_TIME_MS = 1000;
+const START_TIME_S = 10;
 
 let SAFE_ROTATION = 0;
 let SAFE_STEP = 0;
@@ -36,7 +36,7 @@ function showSafe() {
   SAFE_LOCKED = false;
   SAFE_STARTED = false;
   LAST_VIB_STEP = -1;
-  
+
   if (HOLD_TIMER) clearTimeout(HOLD_TIMER);
   if (COUNTDOWN_TIMER) clearInterval(COUNTDOWN_TIMER);
 
@@ -51,7 +51,7 @@ function showSafe() {
   screen.style.alignItems = 'center';
   screen.style.justifyContent = 'center';
   screen.style.backgroundColor = 'var(--bg)';
-  
+
   const dash = document.getElementById('dashboard');
   if (dash) dash.style.display = 'none';
   const tabs = document.querySelector('.tabs');
@@ -64,8 +64,9 @@ function showSafe() {
   if (timerDisplay) {
     timerDisplay.textContent = 'Коснись, чтобы начать';
     timerDisplay.style.color = 'var(--fg-dim)';
+    timerDisplay.style.fontSize = '18px';
   }
-  
+
   _safeBind();
 }
 
@@ -81,7 +82,7 @@ function _safeBind() {
   const rot = document.getElementById('safe-dial-rotator');
   const lens = document.getElementById('safe-dial-lens');
   const timerDisplay = document.getElementById('safe-timer');
-  
+
   if (!box || !rot) return;
 
   const getCenter = () => {
@@ -96,14 +97,14 @@ function _safeBind() {
   const checkTargetAngle = () => {
     if (SAFE_STEP >= SAFE_TARGET_ANGLES.length || SAFE_LOCKED) return;
     const target = SAFE_TARGET_ANGLES[SAFE_STEP];
-    
+
     if (SAFE_ROTATION >= target - 15 && SAFE_ROTATION <= target + 15) {
       if (!HOLD_TIMER) {
         HOLD_TIMER = setTimeout(() => {
           _safeVibrate(60);
           SAFE_STEP++;
           HOLD_TIMER = null;
-          
+
           if (SAFE_STEP === SAFE_TARGET_ANGLES.length) {
             SAFE_LOCKED = true;
             _safeUnlock();
@@ -115,13 +116,11 @@ function _safeBind() {
     }
   };
 
-  // СТАРТ ТАЙМЕРА (по тапу на сам экран сейфа)
   const startGame = () => {
     if (SAFE_STARTED || SAFE_LOCKED) return;
-    
-    // Разблокируем вибрацию (первый тап)
+
     _safeVibrate(50); 
-    
+
     SAFE_STARTED = true;
     TIME_LEFT = START_TIME_S;
     if (timerDisplay) {
@@ -129,11 +128,11 @@ function _safeBind() {
       timerDisplay.style.color = '#FFA500';
       timerDisplay.style.fontSize = '24px';
     }
-    
+
     COUNTDOWN_TIMER = setInterval(() => {
       TIME_LEFT--;
       if (timerDisplay) timerDisplay.textContent = TIME_LEFT + 'с';
-      
+
       if (TIME_LEFT <= 0) {
         clearInterval(COUNTDOWN_TIMER);
         _safeError();
@@ -147,31 +146,30 @@ function _safeBind() {
 
   box.addEventListener('touchstart', (e) => {
     if (SAFE_LOCKED) return;
-    
-    // Если игра не начата, запускаем её по первому тапу
+    e.preventDefault();
+
     if (!SAFE_STARTED) {
       startGame();
       return;
     }
 
-    e.preventDefault();
     SAFE_ACTIVE = true;
     TOTAL_TOUCH_DELTA = 0;
-    
+
     const t = e.touches[0];
     const { cx, cy } = getCenter();
-    
+
     START_TOUCH_ANGLE = _safeAngle(cx, cy, t.clientX, t.clientY);
     START_RING_ROTATION = SAFE_ROTATION;
     LAST_VIB_STEP = Math.floor(START_TOUCH_ANGLE / 15);
-    
+
     if (lens) {
       lens.classList.add('active');
       const r = box.getBoundingClientRect();
       lens.style.left = (t.clientX - r.left) + 'px';
       lens.style.top  = (t.clientY - r.top)  + 'px';
     }
-    
+
     resetHold();
     checkTargetAngle();
   }, { passive: false });
@@ -182,7 +180,7 @@ function _safeBind() {
     const t = e.touches[0];
     const { cx, cy } = getCenter();
     const r = box.getBoundingClientRect();
-    
+
     if (lens) {
       lens.style.left = (t.clientX - r.left) + 'px';
       lens.style.top  = (t.clientY - r.top)  + 'px';
@@ -192,19 +190,19 @@ function _safeBind() {
     let deltaAngle = currentAngle - START_TOUCH_ANGLE;
     if (deltaAngle > 180) deltaAngle -= 360;
     if (deltaAngle < -180) deltaAngle += 360;
-    
+
     TOTAL_TOUCH_DELTA += deltaAngle;
     START_TOUCH_ANGLE = currentAngle;
 
     SAFE_ROTATION = START_RING_ROTATION + TOTAL_TOUCH_DELTA;
     rot.style.transform = `rotate(${SAFE_ROTATION}deg)`;
-    
+
     const vibStep = Math.floor(currentAngle / 15);
     if (vibStep !== LAST_VIB_STEP) {
       _safeVibrate(10);
       LAST_VIB_STEP = vibStep;
     }
-    
+
     checkTargetAngle();
   }, { passive: false });
 
@@ -221,15 +219,15 @@ function _safeBind() {
 }
 
 const _safeError = () => {
-  _safeVibrate([100, 50, 100, 50, 100]); // Вибрация ошибки
+  _safeVibrate([100, 50, 100, 50, 100]);
   const rot = document.getElementById('safe-dial-rotator');
   const timer = document.getElementById('safe-timer');
-  
+
   if (rot) rot.style.filter = 'drop-shadow(0 0 25px red)';
   if (timer) { timer.textContent = 'ОШИБКА'; timer.style.color = 'red'; }
-  
+
   setTimeout(() => {
-    showSafe(); // Перезапуск сейфа
+    showSafe();
   }, 1500);
 };
 
