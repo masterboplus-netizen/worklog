@@ -98,8 +98,9 @@ function _safeBind() {
     if (SAFE_STEP >= SAFE_TARGET_ANGLES.length || SAFE_LOCKED) return;
     const target = SAFE_TARGET_ANGLES[SAFE_STEP];
 
-    if (SAFE_ROTATION >= target - 15 && SAFE_ROTATION <= target + 15) {
+    if (SAFE_ROTATION >= target - 20 && SAFE_ROTATION <= target + 20) {
       if (!HOLD_TIMER) {
+        _safeVibrate(20); // Легкий толчок при входе в зону
         HOLD_TIMER = setTimeout(() => {
           _safeVibrate(60);
           SAFE_STEP++;
