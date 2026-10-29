@@ -65,28 +65,22 @@
 </nav>
 
 
-<!-- === СЛЕПОЙ СЕЙФ === -->
-
-
-
-<!-- === СЛЕПОЙ СЕЙФ (v15) === -->
+<!-- === СЛЕПОЙ СЕЙФ (v28) === -->
 <div id="scroll-pin-screen">
   <div id="safe-dial-container">
-    <!-- Таймер в центре -->
-    <div id="safe-timer" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 999; font-size: 18px; font-weight: 600; color: var(--fg); cursor: pointer; user-select: none; text-align: center; pointer-events: auto;">Коснись, чтобы начать</div>
-
-    <!-- Лупа под пальцем -->
-    <div id="safe-dial-lens"></div>
-    
     <!-- Вращающийся диск -->
     <div id="safe-dial-rotator">
       <svg width="220" height="220" viewBox="0 0 220 220">
-        <!-- Кольцо -->
         <circle cx="110" cy="110" r="90" fill="none" stroke="#FFA500" stroke-width="30"/>
-        <!-- Метка (точка на 12 часах) -->
         <circle cx="110" cy="20" r="8" fill="#fff"/>
       </svg>
     </div>
+
+    <!-- Лупа под пальцем -->
+    <div id="safe-dial-lens"></div>
+
+    <!-- Таймер в центре (ПОВЕРХ КОЛЬЦА) -->
+    <div id="safe-timer">Коснись, чтобы начать</div>
   </div>
 </div>
 <!-- === КОНЕЦ СЕЙФА === -->
@@ -96,7 +90,7 @@
 <script src="js/chart.js?v=999"></script>
 <script src="js/auth.js?v=7"></script>
 <script src="app.js?v=505"></script>
-<script src="js/safe.js?v=33"></script>
+<script src="js/safe.js?v=34"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=999', { updateViaCache: 'none' }).catch(function(){});
