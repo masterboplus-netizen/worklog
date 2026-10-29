@@ -70,8 +70,6 @@ function lock() {
   if (typeof updatePinDisplay === 'function') updatePinDisplay();
   if (typeof showSafe === 'function') {
     showSafe();
-  } else {
-    showScreen('pin-screen'); // фолбэк
   }
 }
 

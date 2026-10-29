@@ -25,11 +25,21 @@ function showSafe() {
   SAFE_LOCKED = false;
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) { console.warn('safe: нет #scroll-pin-screen'); return; }
+  
+  // Принудительно показываем сейф
   screen.classList.add('active');
+  screen.style.display = 'flex';
+  screen.style.zIndex = '9999'; // Поверх всего
+  
+  // Скрываем дашборд и меню
   const dash = document.getElementById('dashboard');
-  if (dash) dash.classList.add('hidden');
+  if (dash) {
+    dash.classList.add('hidden');
+    dash.style.display = 'none';
+  }
   const tabs = document.querySelector('.tabs');
   if (tabs) tabs.style.display = 'none';
+  
   _safeBind();
 }
 
@@ -89,9 +99,18 @@ function _safeBind() {
       const ok = await tryUnlock(SAFE_PIN);
       if (ok) {
         _safeHide();
+        
+        // Возвращаем дашборд
+        const dash = document.getElementById('dashboard');
+        if (dash) {
+          dash.classList.remove('hidden');
+          dash.style.display = 'flex'; // или block
+        }
+        const tabs = document.querySelector('.tabs');
+        if (tabs) tabs.style.display = 'flex';
+        
         const l = document.getElementById('loading');
         if (l) l.remove();
-        showScreen('dashboard');
         renderDashboard();
       } else {
         SAFE_INPUTS = [];
