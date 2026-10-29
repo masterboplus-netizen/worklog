@@ -306,10 +306,9 @@ function renderDiary() {
 
   // === 3. СПИСОК СЕССИЙ ===
   let sessions = window.DATA.sessions || [];
-  console.log('Режим 24ч?', DIARY_MODE === '24h');
-  if (DIARY_MODE === '24h') {
+  // Если нажата «Сессии» — показываем склеенные (как было задумано)
+  if (DIARY_MODE === 'sessions') {
     sessions = mergeMidnightSessions(sessions);
-    console.log('Склеено сессий:', sessions.length, 'из', window.DATA.sessions.length);
   }
   sessions = [...sessions].sort((a, b) => (b.date + ' ' + b.start).localeCompare(a.date + ' ' + a.start));
 
