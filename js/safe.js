@@ -1,5 +1,5 @@
-// === СЛЕПОЙ СЕЙФ (v19 - Сектора по пальцу) ===
-const SAFE_TARGET_SECTORS = [5, 11, 2]; // 5=низ-право, 11=верх-лево, 2=верх-право
+// === СЛЕПОЙ СЕЙФ (v23 - Проверка по кольцу) ===
+const SAFE_TARGET_ANGLES = [150, 330, 420]; // Углы для кольца
 const SAFE_PIN = '201186';
 const HOLD_TIME_MS = 1500;
 
@@ -12,7 +12,6 @@ let START_TOUCH_ANGLE = 0;
 let START_RING_ROTATION = 0;
 let TOTAL_TOUCH_DELTA = 0;
 let HOLD_TIMER = null;
-let CURRENT_SECTOR = -1;
 let LAST_VIB_STEP = -1;
 
 function _safeAngle(cx, cy, x, y) {
@@ -30,8 +29,8 @@ function showSafe() {
   SAFE_STEP = 0;
   SAFE_ACTIVE = false;
   SAFE_LOCKED = false;
-  CURRENT_SECTOR = -1;
   LAST_VIB_STEP = -1;
+  if (HOLD_TIMER) { clearTimeout(HOLD_TIMER); HOLD_TIMER = null; }
   
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) return;
@@ -53,13 +52,13 @@ function showSafe() {
   const rot = document.getElementById('safe-dial-rotator');
   if (rot) rot.style.transform = 'rotate(0deg)';
   
-  // Даем браузеру 50 мс на отрисовку перед привязкой событий
   setTimeout(_safeBind, 50);
 }
 
 function _safeHide() {
   const screen = document.getElementById('scroll-pin-screen');
   if (screen) screen.style.display = 'none';
+  if (HOLD_TIMER) { clearTimeout(HOLD_TIMER); HOLD_TIMER = null; }
 }
 
 function _safeBind() {
@@ -78,6 +77,37 @@ function _safeBind() {
     if (HOLD_TIMER) { clearTimeout(HOLD_TIMER); HOLD_TIMER = null; }
   };
 
+  // Функция проверки: находится ли кольцо на нужном угле?
+  const checkTargetAngle = () => {
+    if (SAFE_STEP >= SAFE_TARGET_ANGLES.length || SAFE_LOCKED) return;
+    
+    const target = SAFE_TARGET_ANGLES[SAFE_STEP];
+    
+    // Если кольцо довернулось до нужного угла (с погрешностью в 15 градусов)
+    // Например, цель 150, значит зона от 135 до 165.
+    if (SAFE_ROTATION >= target - 15 && SAFE_ROTATION <= target + 15) {
+      // Мы в зоне! Если таймер еще не запущен — запускаем
+      if (!HOLD_TIMER) {
+        HOLD_TIMER = setTimeout(() => {
+          _safeVibrate(60); // Вибрация успеха
+          SAFE_STEP++;
+          HOLD_TIMER = null;
+          
+          if (SAFE_STEP === SAFE_TARGET_ANGLES.length) {
+            SAFE_LOCKED = true;
+            _safeUnlock();
+          }
+        }, HOLD_TIME_MS);
+      }
+    } else {
+      // Если выехали из зоны — сбрасываем таймер
+      if (HOLD_TIMER) {
+        clearTimeout(HOLD_TIMER);
+        HOLD_TIMER = null;
+      }
+    }
+  };
+
   box.ontouchstart = null;
   box.ontouchmove = null;
   box.ontouchend = null;
@@ -87,7 +117,6 @@ function _safeBind() {
     e.preventDefault();
     SAFE_ACTIVE = true;
     TOTAL_TOUCH_DELTA = 0;
-    CURRENT_SECTOR = -1; // Сброс при новом касании (важно для срабатывания первого тапа)
     
     const t = e.touches[0];
     const { cx, cy } = getCenter();
@@ -95,7 +124,6 @@ function _safeBind() {
     START_TOUCH_ANGLE = _safeAngle(cx, cy, t.clientX, t.clientY);
     START_RING_ROTATION = SAFE_ROTATION;
     
-    // Инициализируем шаг трещотки
     LAST_VIB_STEP = Math.floor(START_TOUCH_ANGLE / 15);
     
     if (lens) {
@@ -106,6 +134,7 @@ function _safeBind() {
     }
     
     resetHold();
+    checkTargetAngle(); // Проверяем сразу при касании (если кольцо уже на месте)
   }, { passive: false });
 
   box.addEventListener('touchmove', (e) => {
@@ -122,7 +151,7 @@ function _safeBind() {
 
     const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
     
-    // 1. Крутим кольцо
+    // Вращение кольца
     let deltaAngle = currentAngle - START_TOUCH_ANGLE;
     if (deltaAngle > 180) deltaAngle -= 360;
     if (deltaAngle < -180) deltaAngle += 360;
@@ -133,34 +162,15 @@ function _safeBind() {
     SAFE_ROTATION = START_RING_ROTATION + TOTAL_TOUCH_DELTA;
     rot.style.transform = `rotate(${SAFE_ROTATION}deg)`;
     
-    // 2. Трещотка (по углу пальца!)
+    // Трещотка (по углу пальца)
     const vibStep = Math.floor(currentAngle / 15);
     if (vibStep !== LAST_VIB_STEP) {
       _safeVibrate(10);
       LAST_VIB_STEP = vibStep;
     }
     
-    // 3. Определяем сектор ПАЛЬЦА (0-11)
-    const fingerSector = Math.floor(currentAngle / 30);
-    
-    if (fingerSector !== CURRENT_SECTOR) {
-      CURRENT_SECTOR = fingerSector;
-      resetHold();
-      
-      // Если палец зашел в правильный сектор — запускаем таймер
-      if (SAFE_TARGET_SECTORS[SAFE_STEP] === fingerSector) {
-        HOLD_TIMER = setTimeout(() => {
-          // Успех! Палец продержался 1.5 сек
-          _safeVibrate(60);
-          SAFE_STEP++;
-          
-          if (SAFE_STEP === SAFE_TARGET_SECTORS.length) {
-            SAFE_LOCKED = true;
-            _safeUnlock();
-          }
-        }, HOLD_TIME_MS);
-      }
-    }
+    // Постоянная проверка: не пора ли засчитать угол?
+    checkTargetAngle();
   }, { passive: false });
 
   const endTouch = (e) => {
@@ -169,7 +179,6 @@ function _safeBind() {
     if (lens) lens.classList.remove('active');
     resetHold();
     START_RING_ROTATION = SAFE_ROTATION;
-    CURRENT_SECTOR = -1;
   };
 
   box.addEventListener('touchend', endTouch, { passive: false });
