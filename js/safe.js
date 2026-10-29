@@ -1,6 +1,4 @@
-// === СЛЕПОЙ СЕЙФ (ВИНИЛ / ВРАЩЕНИЕ) — v8 ===
-// Логика: крутим кольцо. Точки: 150°, 330°, 420° (следующий оборот).
-
+// === СЛЕПОЙ СЕЙФ (ВИНИЛ) — v10 ФИНАЛ ===
 const SAFE_TARGET_ANGLES = [150, 330, 420];
 const SAFE_PIN = '201186';
 let SAFE_ROTATION = 0;
@@ -56,7 +54,6 @@ function _safeResetVisual() {
   const ring = document.getElementById('safe-dial-ring');
   if (ring) {
     ring.style.transform = `rotate(0deg)`;
-    ring.setAttribute('stroke', '#FFA500');
     ring.style.filter = 'drop-shadow(0 0 15px rgba(255,165,0,0.8))';
   }
 }
@@ -66,10 +63,12 @@ function _safeBind() {
   const hitbox = document.querySelector('.safe-dial-hitbox');
   const ring = document.getElementById('safe-dial-ring');
   const lens = document.getElementById('safe-dial-touch-effect');
-  if (!box || !ring) return;
+  
+  if (!box || !ring) { console.warn('safe: нет элементов'); return; }
 
+  // Привязываем ко всем слоям, чтобы точно поймать палец
   const targets = [box, hitbox, document.getElementById('safe-dial-svg')].filter(Boolean);
-  let lastVibStep = 0; // Для трещотки
+  let lastVibStep = 0;
 
   const getCenter = () => {
     const r = box.getBoundingClientRect();
@@ -86,10 +85,9 @@ function _safeBind() {
     
     if (lens) {
       lens.classList.add('active');
-      // Прижимаем к кольцу
-      const radius = 90;
-      const angleRad = (SAFE_LAST_ANGLE - 90) * Math.PI / 180;
       const r = box.getBoundingClientRect();
+      const radius = 90; // Радиус кольца
+      const angleRad = (SAFE_LAST_ANGLE - 90) * Math.PI / 180;
       const lx = (cx - r.left) + Math.cos(angleRad) * radius;
       const ly = (cy - r.top) + Math.sin(angleRad) * radius;
       lens.style.left = lx + 'px';
@@ -104,24 +102,22 @@ function _safeBind() {
     const { cx, cy } = getCenter();
     const r = box.getBoundingClientRect();
     
+    const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
+    
     if (lens) {
-      // Вычисляем угол и радиус, чтобы лупа скользила по кольцу
-      const radius = 90; // Радиус кольца
+      const radius = 90;
       const angleRad = (currentAngle - 90) * Math.PI / 180;
-      const lx = cx - r.left + Math.cos(angleRad) * radius;
-      const ly = cy - r.top + Math.sin(angleRad) * radius;
-      
+      const lx = (cx - r.left) + Math.cos(angleRad) * radius;
+      const ly = (cy - r.top) + Math.sin(angleRad) * radius;
       lens.style.left = lx + 'px';
       lens.style.top  = ly + 'px';
     }
 
-    const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
     let delta = currentAngle - SAFE_LAST_ANGLE;
-    
     if (delta > 180) delta -= 360;
     if (delta < -180) delta += 360;
     
-    // Сброс при вращении назад
+    // Сброс, если крутим назад
     if (delta < -0.5) {
       if (SAFE_STEP > 0 || SAFE_ROTATION > 0) {
         SAFE_ROTATION = 0;
@@ -135,28 +131,31 @@ function _safeBind() {
     SAFE_ROTATION += delta;
     SAFE_LAST_ANGLE = currentAngle;
     
-    // Визуально крутим кольцо
-    ring.style.transform = `rotate(${SAFE_ROTATION}deg)`;
+    // Крутим группу (кольцо + точка)
+    if (ring) {
+      ring.style.transform = `rotate(${SAFE_ROTATION}deg)`;
+    }
     
-    // Проверяем прохождение точек
+    // Проверяем точки
     if (SAFE_STEP < SAFE_TARGET_ANGLES.length) {
       const target = SAFE_TARGET_ANGLES[SAFE_STEP];
       
       if (SAFE_ROTATION >= target) {
-        _safeVibrate(50); // Четкая вибрация
+        _safeVibrate(50);
         SAFE_STEP++;
-        lastVibStep = Math.floor(SAFE_ROTATION / 45); // Обновляем шаг трещотки
+        lastVibStep = Math.floor(SAFE_ROTATION / 45);
         
-        // Анимация щелчка
-        ring.style.filter = 'drop-shadow(0 0 20px rgba(255,165,0,1))';
-        setTimeout(() => { ring.style.filter = 'drop-shadow(0 0 15px rgba(255,165,0,0.8))'; }, 150);
+        if (ring) {
+          ring.style.filter = 'drop-shadow(0 0 25px rgba(255,255,255,0.9))';
+          setTimeout(() => { ring.style.filter = 'drop-shadow(0 0 15px rgba(255,165,0,0.8))'; }, 150);
+        }
         
         if (SAFE_STEP === SAFE_TARGET_ANGLES.length) {
           SAFE_LOCKED = true;
           _safeUnlock();
         }
       } else {
-        // Вибрация-трещотка каждые 45 градусов, пока не дошли до цели
+        // Трещотка
         const currentStep = Math.floor(SAFE_ROTATION / 45);
         if (currentStep > lastVibStep && SAFE_ROTATION > 0) {
           _safeVibrate(10);
