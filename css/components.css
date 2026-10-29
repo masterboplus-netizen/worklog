@@ -2552,8 +2552,11 @@ html, body {
   width: 100vw !important; height: 100vh !important;
   z-index: 9999 !important;
   background: var(--bg) !important;
-  align-items: center !important;
-  justify-content: center !important;
+  /* Прижимаем в правый нижний угол */
+  align-items: flex-end !important;
+  justify-content: flex-end !important;
+  padding-right: 20px !important;
+  padding-bottom: 20px !important;
 }
 #scroll-pin-screen.active { display: flex !important; }
 
