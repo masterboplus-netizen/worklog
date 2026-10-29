@@ -6,6 +6,11 @@ function renderActivityPageV2() {
     if (!c || !window.DATA) return;
     c.innerHTML = '';
 
+    // ПОДМЕНА ДАННЫХ: используем чистые сессии (без параллельных пересечений)
+    if (typeof getCleanSessions === 'function') {
+        window.DATA.sessions = getCleanSessions(window.DATA.sessions);
+    }
+
     // 1. НАВИГАЦИЯ
     const navRow = document.createElement('div');
     navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:16px; margin-bottom: 16px; font-size:20px; font-weight:600; color:var(--fg);';
