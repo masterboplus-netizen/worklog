@@ -22,9 +22,20 @@ function renderDiary() {
   if (!c) return;
   c.innerHTML = '';
 
-  // === КНОПКИ ПЕРЕКЛЮЧЕНИЯ ===
-  const topBar = document.createElement('div');
-  topBar.style.cssText = 'display: flex; gap: 8px; margin: 16px; justify-content: center;';
+  // === 1. РИСУЕМ КАЛЕНДАРЬ (ВЕРХНЮЮ ЧАСТЬ) ===
+  const calContainer = document.createElement('div');
+  calContainer.className = 'calendar-top';
+  calContainer.innerHTML = '<div id="calendar-grid" class="calendar-grid"></div>';
+  c.appendChild(calContainer);
+  
+  // Вызываем функцию отрисовки сетки (если она есть)
+  if (typeof renderCalendarGrid === 'function') {
+    renderCalendarGrid();
+  }
+
+  // === 2. КНОПКИ ПЕРЕКЛЮЧЕНИЯ (ПОД КАЛЕНДАРЕМ) ===
+  const toggleBar = document.createElement('div');
+  toggleBar.style.cssText = 'display: flex; gap: 8px; margin: 20px 16px 10px 16px; justify-content: center;';
 
   const btnSessions = document.createElement('button');
   btnSessions.className = 'cal-btn' + (DIARY_MODE === 'sessions' ? ' active' : '');
@@ -36,11 +47,11 @@ function renderDiary() {
   btn24h.textContent = '24ч';
   btn24h.onclick = () => { DIARY_MODE = '24h'; renderDiary(); };
 
-  topBar.appendChild(btnSessions);
-  topBar.appendChild(btn24h);
-  c.appendChild(topBar);
+  toggleBar.appendChild(btnSessions);
+  toggleBar.appendChild(btn24h);
+  c.appendChild(toggleBar);
 
-  // === ВЫБОР ДАННЫХ ===
+  // === 3. СПИСОК СЕССИЙ ===
   let sessions = window.DATA.sessions || [];
   if (DIARY_MODE === '24h') {
     sessions = mergeMidnightSessions(sessions);
@@ -49,7 +60,6 @@ function renderDiary() {
   // Сортируем от новых к старым
   sessions = [...sessions].sort((a, b) => (b.date + ' ' + b.start).localeCompare(a.date + ' ' + a.start));
 
-  // === РЕНДЕР КАРТОЧЕК ===
   let lastDate = '';
   sessions.forEach(s => {
     if (s.date !== lastDate) {
