@@ -135,15 +135,7 @@ function _safeBind() {
       
       if (TIME_LEFT <= 0) {
         clearInterval(COUNTDOWN_TIMER);
-        _safeVibrate([100, 50, 100, 50, 100]);
-        timerDisplay.textContent = 'Время вышло!';
-        timerDisplay.style.color = 'red';
-        SAFE_LOCKED = true; // Блокируем ввод
-        
-        // Сброс через 2 секунды
-        setTimeout(() => {
-          showSafe(); // Перезапуск экрана
-        }, 2000);
+        _safeError();
       }
     }, 1000);
   };
@@ -219,6 +211,19 @@ function _safeBind() {
   box.addEventListener('touchend', endTouch, { passive: false });
   box.addEventListener('touchcancel', endTouch, { passive: false });
 }
+
+const _safeError = () => {
+  _safeVibrate([100, 50, 100, 50, 100]); // Вибрация ошибки
+  const rot = document.getElementById('safe-dial-rotator');
+  const timer = document.getElementById('safe-timer');
+  
+  if (rot) rot.style.filter = 'drop-shadow(0 0 25px red)';
+  if (timer) { timer.textContent = 'ОШИБКА'; timer.style.color = 'red'; }
+  
+  setTimeout(() => {
+    showSafe(); // Перезапуск сейфа
+  }, 1500);
+};
 
 const _safeUnlock = async () => {
   try {
