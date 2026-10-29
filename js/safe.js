@@ -1,6 +1,5 @@
-// === СЛЕПОЙ СЕЙФ (PIN-кольцо) — v1 ===
+// === СЛЕПОЙ СЕЙФ (PIN-кольцо) — v2 (inline-стили) ===
 // Зоны: сектор 5 -> 11 -> 2. Порядок важен.
-// Угол: 0 = 12 часов, по часовой. Math.atan2 + 90°, без rotate на SVG.
 
 const SAFE_TARGETS = [5, 11, 2];
 const SAFE_HOLD_MS = 600;
@@ -23,18 +22,26 @@ function _safeVibrate(ms) {
 function showSafe() {
   SAFE_INPUTS = [];
   SAFE_LOCKED = false;
+  SAFE_ACTIVE = false;
+
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) { console.warn('safe: нет #scroll-pin-screen'); return; }
-  
-  // Показываем сейф
-  screen.classList.add('active');
-  
-  // Скрываем дашборд и меню
+
+  // Жёстко показываем сейф
+  screen.style.display = 'flex';
+  screen.style.position = 'fixed';
+  screen.style.top = '0';
+  screen.style.left = '0';
+  screen.style.width = '100%';
+  screen.style.height = '100vh';
+  screen.style.zIndex = '9999';
+
+  // Жёстко скрываем дашборд и меню
   const dash = document.getElementById('dashboard');
-  if (dash) dash.classList.add('hidden');
+  if (dash) dash.style.display = 'none';
   const tabs = document.querySelector('.tabs');
   if (tabs) tabs.style.display = 'none';
-  
+
   _safeBind();
 }
 
@@ -42,13 +49,10 @@ function _safeHide() {
   const screen = document.getElementById('scroll-pin-screen');
   if (screen) {
     screen.style.display = 'none';
-    screen.classList.remove('active');
   }
 }
 
 function _safeBind() {
-  // Убираем проверку, чтобы при каждом вызове showSafe() 
-  // обработчики навешивались заново поверх старых (они перезапишутся)
   const box = document.getElementById('safe-dial-container');
   const lens = document.getElementById('safe-dial-touch-effect');
   const ring = document.getElementById('safe-dial-ring');
@@ -70,7 +74,7 @@ function _safeBind() {
   const flashError = () => {
     ring.setAttribute('stroke', '#ff3b30');
     ring.style.filter = 'drop-shadow(0 0 16px rgba(255,59,48,0.9))';
-    _safeVibrate([50, 50, 50]); // Двойная пульсация для ошибки
+    _safeVibrate([50, 50, 50]);
     setTimeout(resetRing, 350);
   };
 
@@ -78,8 +82,7 @@ function _safeBind() {
     const idx = SAFE_INPUTS.length;
     if (SAFE_TARGETS[idx] === sector) {
       SAFE_INPUTS.push(sector);
-      _safeVibrate(30); // Вибрация-щелчок при фиксации
-      // «щелчок»
+      _safeVibrate(30);
       ring.style.transform = 'scale(0.97)';
       setTimeout(() => { ring.style.transform = 'scale(1)'; }, 90);
       if (SAFE_INPUTS.length === SAFE_TARGETS.length) {
@@ -97,16 +100,13 @@ function _safeBind() {
       const ok = await tryUnlock(SAFE_PIN);
       if (ok) {
         _safeHide();
-        
-        // Возвращаем дашборд через inline-стили
         const dash = document.getElementById('dashboard');
         if (dash) {
           dash.classList.remove('hidden');
-          dash.style.display = 'flex'; // или block, смотря как в CSS
+          dash.style.display = 'flex';
         }
         const tabs = document.querySelector('.tabs');
         if (tabs) tabs.style.display = 'flex';
-
         const l = document.getElementById('loading');
         if (l) l.remove();
         renderDashboard();
@@ -134,7 +134,7 @@ function _safeBind() {
     lens.classList.add('active');
     lens.style.left = (t.clientX - box.getBoundingClientRect().left) + 'px';
     lens.style.top  = (t.clientY - box.getBoundingClientRect().top)  + 'px';
-  }, { passive: false });
+  };
 
   box.ontouchmove = (e) => {
     if (!SAFE_ACTIVE || SAFE_LOCKED) return;
@@ -152,17 +152,16 @@ function _safeBind() {
     if (sector !== lastSector) {
       lastSector = sector;
       if (timer) { clearTimeout(timer); timer = null; }
-      
-      // Даем вибрацию ТОЛЬКО при входе в ПРАВИЛЬНЫЙ сектор
+
       if (SAFE_TARGETS[SAFE_INPUTS.length] === sector) {
-        _safeVibrate(30); // Чуть сильнее, чтобы почувствовать
+        _safeVibrate(30);
       }
-      
+
       timer = setTimeout(() => {
         if (lastSector === sector) commitSector(sector);
       }, SAFE_HOLD_MS);
     }
-  }, { passive: false });
+  };
 
   const endTouch = (e) => {
     if (e) e.preventDefault();
