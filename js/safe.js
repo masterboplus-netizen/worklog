@@ -54,9 +54,13 @@ function _safeHide() {
 
 function _safeBind() {
   const box = document.getElementById('safe-dial-container');
+  const hitbox = document.querySelector('.safe-dial-hitbox');
   const lens = document.getElementById('safe-dial-touch-effect');
   const ring = document.getElementById('safe-dial-ring');
   if (!box || !lens || !ring) { console.warn('safe: нет элементов'); return; }
+
+  // Слушаем и контейнер, и хитбокс, и сам SVG
+  const targets = [box, hitbox, document.getElementById('safe-dial-svg')].filter(Boolean);
 
   let timer = null;
   let lastSector = -1;
@@ -122,7 +126,7 @@ function _safeBind() {
     }
   };
 
-  box.ontouchstart = (e) => {
+  targets.forEach(t => t.ontouchstart = (e) => {
     if (SAFE_LOCKED) return;
     e.preventDefault();
     SAFE_INPUTS = [];
@@ -134,9 +138,9 @@ function _safeBind() {
     lens.classList.add('active');
     lens.style.left = (t.clientX - box.getBoundingClientRect().left) + 'px';
     lens.style.top  = (t.clientY - box.getBoundingClientRect().top)  + 'px';
-  };
+  });
 
-  box.ontouchmove = (e) => {
+  targets.forEach(t => t.ontouchmove = (e) => {
     if (!SAFE_ACTIVE || SAFE_LOCKED) return;
     e.preventDefault();
     const t = e.touches[0];
@@ -161,7 +165,7 @@ function _safeBind() {
         if (lastSector === sector) commitSector(sector);
       }, SAFE_HOLD_MS);
     }
-  };
+  });
 
   const endTouch = (e) => {
     if (e) e.preventDefault();
@@ -169,6 +173,6 @@ function _safeBind() {
     if (timer) { clearTimeout(timer); timer = null; }
     lens.classList.remove('active');
   };
-  box.ontouchend = endTouch;
-  box.ontouchcancel = endTouch;
+  targets.forEach(t => t.ontouchend = endTouch);
+  targets.forEach(t => t.ontouchcancel = endTouch);
 }

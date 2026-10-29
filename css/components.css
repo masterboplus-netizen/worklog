@@ -2608,6 +2608,8 @@ html, body {
   justify-content: center;
   /* Центрируем */
   margin: auto;
+  pointer-events: auto !important;
+  z-index: 50;
 }
 
 /* Невидимая зона для пальца */
@@ -2616,6 +2618,8 @@ html, body {
   top: -50px; left: -50px; right: -50px; bottom: -50px;
   border-radius: 50%;
   z-index: 10;
+  pointer-events: auto !important; /* Жёстко включаем события */
+  background: transparent; /* Прозрачный */
 }
 
 /* Лупа под пальцем */
@@ -2671,6 +2675,8 @@ html, body {
   top: -50px; left: -50px; right: -50px; bottom: -50px;
   border-radius: 50%;
   z-index: 10;
+  pointer-events: auto !important; /* Жёстко включаем события */
+  background: transparent; /* Прозрачный */
 }
 
 #safe-dial-touch-effect {
@@ -2724,6 +2730,8 @@ html, body {
   top: -50px; left: -50px; right: -50px; bottom: -50px;
   border-radius: 50%;
   z-index: 10;
+  pointer-events: auto !important; /* Жёстко включаем события */
+  background: transparent; /* Прозрачный */
 }
 #safe-dial-ring {
   transition: stroke 0.15s, filter 0.15s, transform 0.1s;
