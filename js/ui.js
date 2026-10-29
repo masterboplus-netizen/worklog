@@ -4,28 +4,50 @@ let DIARY_MODE = 'sessions';
 
 function mergeMidnightSessions(sessions) {
   if (!sessions || !sessions.length) return [];
-  const sorted = [...sessions].sort((a, b) => (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start));
+  
+  // 1. Сортируем от старых к новым (по дате и времени начала)
+  const sorted = [...sessions].sort((a, b) => {
+    return (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start);
+  });
+
   const merged = [];
-  let skipNext = false;
-  for (let i = 0; i < sorted.length; i++) {
-    if (skipNext) { skipNext = false; continue; }
+  let i = 0;
+
+  while (i < sorted.length) {
     const curr = { ...sorted[i] };
+    
+    // Проверяем, заканчивается ли сессия в 23:59 (или 23:58, 23:57)
     const isEndOfDay = curr.end === '23:59' || curr.end === '23:58' || curr.end === '23:57';
+    
     if (isEndOfDay && i + 1 < sorted.length) {
       const next = sorted[i + 1];
-      const currDate = new Date(curr.date + 'T00:00:00');
-      const nextDate = new Date(next.date + 'T00:00:00');
-      const diffDays = (nextDate - currDate) / (1000 * 60 * 60 * 24);
-      const isNextDayStart = (next.start === '00:00' || next.start === '00:01') && diffDays === 1;
-      if (isNextDayStart && curr.project === next.project) {
+      
+      // Проверяем, начинается ли следующая в 00:00 (или 00:01)
+      const isStartOfDay = next.start === '00:00' || next.start === '00:01';
+      
+      // Проверяем, что это следующий день
+      const currD = new Date(curr.date + 'T00:00:00');
+      const nextD = new Date(next.date + 'T00:00:00');
+      const diffDays = (nextD - currD) / (1000 * 60 * 60 * 24);
+      const isNextDay = diffDays === 1;
+      
+      // Если день следующий и проект тот же — склеиваем
+      if (isStartOfDay && isNextDay && curr.project === next.project) {
         curr.end = next.end;
         curr.duration_min = (curr.duration_min || 0) + (next.duration_min || 0);
         curr.note = (curr.note || '') + ' ' + (next.note || '');
-        skipNext = true;
+        i += 2; // Пропускаем обе сессии
+        merged.push(curr);
+        continue;
       }
     }
+    
+    // Если не склеили — просто добавляем
     merged.push(curr);
+    i += 1;
   }
+
+  // Возвращаем от новых к старым (как обычно в ленте)
   return merged.reverse();
 }
 
