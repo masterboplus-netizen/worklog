@@ -1,7 +1,7 @@
-// === СЛЕПОЙ СЕЙФ (v18 - Трещотка + Задержка 1.5с) ===
-const SAFE_TARGET_SECTORS = [5, 11, 2];
+// === СЛЕПОЙ СЕЙФ (v19 - Сектора по пальцу) ===
+const SAFE_TARGET_SECTORS = [5, 11, 2]; // 5=низ-право, 11=верх-лево, 2=верх-право
 const SAFE_PIN = '201186';
-const HOLD_TIME_MS = 1500; // 1.5 секунды на удержание
+const HOLD_TIME_MS = 1500;
 
 let SAFE_ROTATION = 0;
 let SAFE_STEP = 0;
@@ -13,7 +13,7 @@ let START_RING_ROTATION = 0;
 let TOTAL_TOUCH_DELTA = 0;
 let HOLD_TIMER = null;
 let CURRENT_SECTOR = -1;
-let LAST_VIB_STEP = 0;
+let LAST_VIB_STEP = -1;
 
 function _safeAngle(cx, cy, x, y) {
   let a = Math.atan2(y - cy, x - cx) * 180 / Math.PI + 90;
@@ -31,7 +31,7 @@ function showSafe() {
   SAFE_ACTIVE = false;
   SAFE_LOCKED = false;
   CURRENT_SECTOR = -1;
-  LAST_VIB_STEP = 0;
+  LAST_VIB_STEP = -1;
   
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) return;
@@ -86,6 +86,7 @@ function _safeBind() {
     e.preventDefault();
     SAFE_ACTIVE = true;
     TOTAL_TOUCH_DELTA = 0;
+    CURRENT_SECTOR = -1; // Сброс при новом касании
     
     const t = e.touches[0];
     const { cx, cy } = getCenter();
@@ -93,10 +94,8 @@ function _safeBind() {
     START_TOUCH_ANGLE = _safeAngle(cx, cy, t.clientX, t.clientY);
     START_RING_ROTATION = SAFE_ROTATION;
     
-    // Определяем текущий шаг трещотки при старте
-    let currentAngleMod = SAFE_ROTATION % 360;
-    if (currentAngleMod < 0) currentAngleMod += 360;
-    LAST_VIB_STEP = Math.floor(currentAngleMod / 15);
+    // Инициализируем шаг трещотки
+    LAST_VIB_STEP = Math.floor(START_TOUCH_ANGLE / 15);
     
     if (lens) {
       lens.classList.add('active');
@@ -121,8 +120,9 @@ function _safeBind() {
     }
 
     const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
-    let deltaAngle = currentAngle - START_TOUCH_ANGLE;
     
+    // 1. Крутим кольцо
+    let deltaAngle = currentAngle - START_TOUCH_ANGLE;
     if (deltaAngle > 180) deltaAngle -= 360;
     if (deltaAngle < -180) deltaAngle += 360;
     
@@ -132,27 +132,25 @@ function _safeBind() {
     SAFE_ROTATION = START_RING_ROTATION + TOTAL_TOUCH_DELTA;
     rot.style.transform = `rotate(${SAFE_ROTATION}deg)`;
     
-    // --- ЛОГИКА ТРЕЩОТКИ (каждые 15 градусов) ---
-    let currentAngleMod = SAFE_ROTATION % 360;
-    if (currentAngleMod < 0) currentAngleMod += 360;
-    const vibStep = Math.floor(currentAngleMod / 15);
-    
+    // 2. Трещотка (по углу пальца!)
+    const vibStep = Math.floor(currentAngle / 15);
     if (vibStep !== LAST_VIB_STEP) {
-      _safeVibrate(10); // Легкая вибрация
+      _safeVibrate(10);
       LAST_VIB_STEP = vibStep;
     }
     
-    // --- ЛОГИКА СЕКТОРОВ (12 секторов по 30 град) ---
-    const sector = Math.floor(currentAngleMod / 30);
+    // 3. Определяем сектор ПАЛЬЦА (0-11)
+    const fingerSector = Math.floor(currentAngle / 30);
     
-    if (sector !== CURRENT_SECTOR) {
-      CURRENT_SECTOR = sector;
+    if (fingerSector !== CURRENT_SECTOR) {
+      CURRENT_SECTOR = fingerSector;
       resetHold();
       
-      if (SAFE_TARGET_SECTORS[SAFE_STEP] === sector) {
-        // Вход в правильный сектор. Ждем 1.5 секунды.
+      // Если палец зашел в правильный сектор — запускаем таймер
+      if (SAFE_TARGET_SECTORS[SAFE_STEP] === fingerSector) {
         HOLD_TIMER = setTimeout(() => {
-          _safeVibrate(60); // Сильная вибрация при успехе
+          // Успех! Палец продержался 1.5 сек
+          _safeVibrate(60);
           SAFE_STEP++;
           
           if (SAFE_STEP === SAFE_TARGET_SECTORS.length) {
