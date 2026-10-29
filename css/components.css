@@ -2557,14 +2557,7 @@ html, body {
 }
 #scroll-pin-screen.active { display: flex !important; }
 
-#safe-dial-container {
-  position: relative !important;
-  width: 220px !important;
-  height: 220px !important;
-  touch-action: none !important;
-  pointer-events: auto !important;
-  z-index: 50 !important;
-}
+#safe-dial-container { position: relative; width: 220px; height: 220px; margin: auto; touch-action: none; pointer-events: auto !important; z-index: 10; }
 
 .safe-dial-hitbox {
   position: absolute !important;
@@ -2596,12 +2589,7 @@ html, body {
 }
 #scroll-pin-screen.active { display: flex; }
 
-#safe-dial-container {
-  position: relative;
-  width: 220px; height: 220px;
-  margin: auto;
-  touch-action: none;
-}
+#safe-dial-container { position: relative; width: 220px; height: 220px; margin: auto; touch-action: none; pointer-events: auto !important; z-index: 10; }
 
 #safe-dial-rotator {
   position: absolute;
@@ -2631,19 +2619,4 @@ html, body {
 /* === /СЛЕПОЙ СЕЙФ === */
 
 /* === СТИЛИ ТАЙМЕРА СЕЙФА (v28) === */
-#safe-timer {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999 !important;
-  font-size: 18px;
-  font-weight: 600;
-  color: #FFA500;
-  text-align: center;
-  cursor: pointer;
-  user-select: none;
-  pointer-events: auto;
-  text-shadow: 0 0 10px rgba(0,0,0,0.8);
-  width: 100px; /* Ограничиваем ширину, чтобы текст переносился */
-  line-height: 1.2;
-}
+#safe-timer { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; font-size: 18px; font-weight: 600; color: var(--fg); text-align: center; pointer-events: none; user-select: none; text-shadow: 0 0 10px rgba(0,0,0,0.8); width: 100px; line-height: 1.2; }

@@ -147,6 +147,7 @@ function _safeBind() {
   box.addEventListener('touchstart', (e) => {
     if (SAFE_LOCKED) return;
     e.preventDefault();
+    e.stopPropagation(); // Останавливаем всплытие, чтобы тап не улетал в другие слои
 
     if (!SAFE_STARTED) {
       startGame();
