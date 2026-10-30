@@ -73,8 +73,8 @@ function renderActivityPageV2() {
 
     const metricBar = document.createElement('div');
     metricBar.className = "segmented-control";
-    metricBar.style.cssText = "margin: 16px 0; display: flex; gap: 4px; padding: 4px; background: var(--bg3); border-radius: 20px; width: calc(100% - 32px); box-sizing: border-box;";
-    metricBar.querySelectorAll(".seg-btn").forEach(btn => btn.style.cssText = "flex: 1; background: transparent; border: none; color: var(--fg-dim); font-size: 13px; font-weight: 500; padding: 8px 4px; border-radius: 16px; cursor: pointer; text-align: center; transition: all 0.2s; white-space: nowrap;");
+    metricBar.style.cssText = "margin: 16px 16px; display: flex; gap: 4px; padding: 4px; background: var(--bg3); border-radius: 20px; width: calc(100% - 32px); box-sizing: border-box;";
+    metricBar.innerHTML = metricHTML;
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
 
@@ -208,33 +208,31 @@ function renderActivityPageV2() {
         CHART_STATE.selectedDay = dateStr;
         updateChart();
 
-        // Показываем тултип
-        const targetCol = scrollContainer.querySelector(`.tl-col[data-date="${dateStr}"]`);
+        const targetCol = scrollContainer.querySelector(".tl-col[data-date=\"" + dateStr + "\"]");
         if (targetCol) {
             let v = 0;
             for (const sess of window.DATA.sessions || []) {
                 if (sess.date === dateStr) {
-                    if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
-                    else if (CHART_STATE.metric === 'events') v += sess.events || 0;
-                    else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
-                    else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
+                    if (CHART_STATE.metric === "duration") v += sess.duration_min || 0;
+                    else if (CHART_STATE.metric === "events") v += sess.events || 0;
+                    else if (CHART_STATE.metric === "screens") v += sess.screens || 0;
+                    else if (CHART_STATE.metric === "tasks") v += sess.tasks_done || 0;
                 }
             }
-            let text = String(v);
-            if (CHART_STATE.metric === "duration") {
-                const h = Math.floor(v / 60);
-                const m = v % 60;
-                text = (h > 0 ? h + "ч " : "") + m + "м";
-            }
-            tooltip.innerHTML = "<div style=\"font-weight:600;color:var(--fg);\">" + text + "</div>";
-            tooltip.style.display = 'block';
-
-            // Позиционируем относительно документа
-            const rect = targetCol.getBoundingClientRect();
-            const bar = targetCol.querySelector('.tl-bar');
+            const text = CHART_STATE.metric === "duration" ? (Math.floor(v / 60) > 0 ? Math.floor(v / 60) + "ч " : "") + (v % 60) + "м" : String(v);
+            tooltip.innerHTML = "<div style=\"font-weight:600;color:#fff;font-size:16px;padding:8px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;\">" + text + "</div>";
+            tooltip.style.display = "block";
+            tooltip.style.position = "fixed";
+            tooltip.style.zIndex = "99999";
             
-            // Центр столбика по X (глобальные координаты)
-            let leftPos = rect.left + (rect.width / 2) + window.scrollX;
+            const rect = targetCol.getBoundingClientRect();
+            const bar = targetCol.querySelector(".tl-bar");
+            const barHeight = bar ? bar.getBoundingClientRect().height : 0;
+            
+            tooltip.style.left = (rect.left + (rect.width / 2)) + "px";
+            tooltip.style.top = (rect.top + (rect.height - barHeight) - 50) + "px";
+            tooltip.style.transform = "translateX(-50%)";
+        }
             
             // Высота столбика (глобальные координаты)
             const barHeightPx = bar.getBoundingClientRect().height;
