@@ -396,13 +396,13 @@ function renderHeroRings() {
   const sessions = mergeMidnightSessions(window.DATA.sessions || []);
   const _sessions = window.DATA.sessions || [];
 
-  // 2. Считаем время ТОЛЬКО за сегодня (по склеенным сессиям)
+  // 2. Считаем время за сегодня ТАК ЖЕ, КАК В КАЛЕНДАРЕ
   let todayMin = 0;
   const todayStr = _localDate(new Date());
-  const todaySessions = sessions.filter(s => s.date === todayStr);
-  
-  if (todaySessions.length > 0) {
-    todayMin = todaySessions.reduce((acc, s) => acc + (s.duration_min || 0), 0);
+  for (const s of window.DATA.sessions || []) {
+    if (s.date === todayStr) {
+      todayMin += (s.duration_min || 0);
+    }
   }
 
   // 3. Переменные для большого кольца
