@@ -214,7 +214,7 @@ function renderActivityPageV2() {
                 text = (h > 0 ? h + 'ч ' : '') + m + 'м';
             }
 
-            tooltip.innerHTML = `<div style="font-weight:600;color:#fff;font-size:13px;padding:4px 8px;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
+            tooltip.innerHTML = `<div style="font-weight:600;color:#fff;font-size:14px;padding:6px 10px;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
             tooltip.style.display = 'block';
             tooltip.style.position = 'fixed';
             tooltip.style.zIndex = '99999';
