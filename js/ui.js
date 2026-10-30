@@ -117,7 +117,7 @@ function renderDiary() {
   const todayStr = _localDate(new Date());
 
   if (CALENDAR_VIEW === 'year') {
-    grid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 8px; margin-bottom: 100px; padding: 0 4px;';
+    grid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 8px; margin-bottom: 24px; padding: 0 4px;';
     for (let m = 0; m < 12; m++) {
       const mDiv = document.createElement('div');
       mDiv.innerHTML = '<div style="font-size:12px;color:var(--fg-dim);margin-bottom:4px;text-align:center;">' + months[m].slice(0,3) + '</div>';
@@ -132,7 +132,18 @@ function renderDiary() {
       for (let d = new Date(mStart); d <= mEnd; d.setDate(d.getDate() + 1)) {
         const ds = _localDate(d);
         const hasData = !!dayStats[ds];
-        miniGrid.innerHTML += `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:9px; border-radius:50%; background:${hasData ? 'var(--accent)' : 'transparent'}; color:${hasData ? '#fff' : 'var(--fg-dim)'}">${d.getDate()}</div>`;
+        const isToday = ds === todayStr;
+        
+        let bg = 'transparent';
+        let col = 'var(--fg-dim)';
+        if (isToday) { bg = 'rgba(255, 255, 255, 0.2)'; col = '#fff'; }
+        
+        let cellHtml = `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:9px; border-radius:50%; background:${bg}; color:${col}; position:relative;">${d.getDate()}`;
+        if (hasData) {
+             cellHtml += `<div style="position:absolute; bottom:1px; width:3px; height:3px; border-radius:50%; background:var(--accent);"></div>`;
+        }
+        cellHtml += `</div>`;
+        miniGrid.innerHTML += cellHtml;
       }
       mDiv.style.cursor = 'pointer';
       miniGrid.style.pointerEvents = 'none';
