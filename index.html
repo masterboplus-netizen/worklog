@@ -10,8 +10,8 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="css/base.css?v=999">
-<link rel="stylesheet" href="css/components.css?v=6000"
+<link rel="stylesheet" href="css/base.css?v=9999">
+<link rel="stylesheet" href="css/components.css?v=9999">
 </head>
 <body>
 <div id="app"></div>
@@ -65,34 +65,35 @@
 </nav>
 
 
-<!-- === СЛЕПОЙ СЕЙФ (v45) === -->
+<!-- === СЛЕПОЙ СЕЙФ (v28) === -->
 <div id="scroll-pin-screen">
-  <!-- Жестко задаем абсолютное позиционирование контейнера в правом нижнем углу -->
-  <div id="safe-dial-container" style="position: fixed; right: 20px; bottom: 20px; width: 220px; height: 220px; touch-action: none; z-index: 9999; margin: 0; padding: 0; transform: translateY(-150px);">
-    
-    <div id="safe-dial-rotator" class="waiting" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;">
+  <div id="safe-dial-container">
+    <!-- Вращающийся диск -->
+    <div id="safe-dial-rotator">
       <svg width="220" height="220" viewBox="0 0 220 220">
         <circle cx="110" cy="110" r="90" fill="none" stroke="#FFA500" stroke-width="30"/>
         <circle cx="110" cy="20" r="8" fill="#fff"/>
       </svg>
     </div>
 
-    <div id="safe-dial-lens" style="position: absolute; width: 50px; height: 50px; background: radial-gradient(circle, rgba(255,165,0,0.9) 0%, rgba(255,165,0,0) 70%); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%) scale(0); opacity: 0; z-index: 100; box-shadow: 0 0 15px rgba(255,165,0,0.8); transition: transform 0.1s, opacity 0.1s;"></div>
+    <!-- Лупа под пальцем -->
+    <div id="safe-dial-lens"></div>
 
-    <div id="safe-timer" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; font-size: 16px; font-weight: 600; color: var(--fg-dim); text-align: center; width: 100px; pointer-events: none; user-select: none;">Коснись, чтобы начать</div>
+    <!-- Таймер в центре (ПОВЕРХ КОЛЬЦА) -->
+    <div id="safe-timer">Коснись, чтобы начать</div>
   </div>
 </div>
 <!-- === КОНЕЦ СЕЙФА === -->
 
-<script src="crypto.js?v=999"></script>
-<script src="js/ui.js?v=6000"
-<script src="js/chart.js?v=6000"
-<script src="js/auth.js?v=7"></script>
-<script src="app.js?v=6000"
-<script src="js/safe.js?v=6001"
+<script src="crypto.js?v=9999"></script>
+<script src="js/ui.js?v=9999"></script>
+<script src="js/chart.js?v=9999"></script>
+<script src="js/auth.js?v=9999"></script>
+<script src="app.js?v=9999"></script>
+<script src="js/safe.js?v=9999"></script>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js?v=999', { updateViaCache: 'none' }).catch(function(){});
+  navigator.serviceWorker.register('sw.js?v=9999', { updateViaCache: 'none' }).catch(function(){});
 }
 </script>
 </body>
