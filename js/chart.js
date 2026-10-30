@@ -72,8 +72,8 @@ function renderActivityPageV2() {
     ).join('');
 
     const metricBar = document.createElement('div');
-    metricBar.className = "chart-tabs";
-    metricBar.style.cssText = 'margin: 16px 0; padding: 4px; display: flex; gap: 4px; border-radius: 20px; background: var(--bg3); width: 100%; box-sizing: border-box;'; gap:4px; margin: 16px 0; justify-content: space-between; box-sizing: border-box; width: 100%;';
+    metricBar.className = "segmented-control";
+    metricBar.style.cssText = "margin: 16px 0; display: flex; gap: 4px; padding: 4px; background: var(--bg3); border-radius: 20px; width: calc(100% - 32px); box-sizing: border-box;";
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
 
@@ -219,8 +219,13 @@ function renderActivityPageV2() {
                     else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
                 }
             }
-            const text = CHART_STATE.metric === 'duration' ? fmtH(v) : String(v);
-            tooltip.innerHTML = `<div style="font-weight:600;color:var(--fg);">${text}</div>`;
+            let text = String(v);
+            if (CHART_STATE.metric === "duration") {
+                const h = Math.floor(v / 60);
+                const m = v % 60;
+                text = (h > 0 ? h + "ч " : "") + m + "м";
+            }
+            tooltip.innerHTML = "<div style=\"font-weight:600;color:var(--fg);\">" + text + "</div>";
             tooltip.style.display = 'block';
 
             // Позиционируем относительно документа
