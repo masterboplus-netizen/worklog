@@ -72,7 +72,7 @@ function renderActivityPageV2() {
     ).join('');
 
     const metricBar = document.createElement('div');
-    metricBar.className = 'chart-tabs';
+    metricBar.className = "chart-tabs";
     metricBar.style.cssText = 'display:flex; gap:4px; margin: 16px 0; justify-content: space-between; box-sizing: border-box; width: 100%;';
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
