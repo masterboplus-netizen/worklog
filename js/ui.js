@@ -1156,6 +1156,17 @@ function renderActivityPageV2() {
         scrollContainer.scrollTo({ left: scrollContainer.scrollWidth, behavior: 'smooth' });
         setTimeout(() => { updateChart(); }, 600);
     }, 100);
+
+    // Скрываем тултип при клике в любое пустое место
+    const hideTooltip = (e) => {
+        if (!e.target.closest('.tl-col')) {
+            CHART_STATE_V2.selectedDay = null;
+            legendBar.textContent = '';
+            updateChart();
+        }
+    };
+    c.removeEventListener('click', hideTooltip);
+    c.addEventListener('click', hideTooltip);
 }
 // === ОБНОВЛЕННЫЙ DASHBOARD С АНИМАЦИЕЙ ===
 function renderDashboard() {

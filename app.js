@@ -61,6 +61,12 @@ function setupTabs() {
 }
 
 function switchTab(name) {
+  // ПРИНУДИТЕЛЬНО СКРЫВАЕМ ВСЕ ТУЛТИПЫ И ЛЕГЕНДЫ ГРАФИКА ПРИ СМЕНЕ ВКЛАДКИ
+  document.querySelectorAll('.floating-tooltip, #global-chart-tooltip, #tl-legend-bar').forEach(el => {
+      el.style.display = 'none';
+      el.classList.add('hidden');
+  });
+
   ['content', 'content-diary', 'content-projects', 'content-activity'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.classList.add('hidden'); if (id === 'content-activity') el.innerHTML = ''; }
