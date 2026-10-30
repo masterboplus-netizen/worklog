@@ -28,11 +28,12 @@ function mergeMidnightSessions(sessions) {
   const merged = [];
   let current = null;
 
-  // Функция для перевода времени в минуты от начала суток (для сравнения)
-  const toMins = (timeStr) => {
-    const [h, m] = (timeStr || '00:00').split(':').map(Number);
-    return h * 60 + m;
+  // Функция перевода даты и времени в миллисекунды
+  const getMs = (dateStr, timeStr) => {
+    return new Date(dateStr + 'T' + (timeStr || '00:00') + ':00').getTime();
   };
+
+  const GAP_MS = 15 * 60 * 1000; // 15 минут в миллисекундах
 
   for (const s of sorted) {
     if (!current) {
@@ -40,30 +41,22 @@ function mergeMidnightSessions(sessions) {
       continue;
     }
 
-    // Смотрим на даты
-    const currDate = new Date(current.date + 'T00:00:00').getTime();
-    const sDate = new Date(s.date + 'T00:00:00').getTime();
-    const dayDiff = (sDate - currDate) / (1000 * 60 * 60 * 24); // Разница в днях
+    let currEndMs = getMs(current.date, current.end);
+    // Если текущая сессия ушла за полночь (конец меньше начала), добавляем сутки к концу
+    if (currEndMs < getMs(current.date, current.start)) {
+        currEndMs += 24 * 60 * 60 * 1000;
+    }
 
-    let currEndM = toMins(current.end);
-    let sStartM = toMins(s.start);
-    let sEndM = toMins(s.end);
+    const sStartMs = getMs(s.date, s.start);
 
-    // Если сессия была ночной (конец меньше начала), добавляем сутки
-    if (currEndM < toMins(current.start)) currEndM += 24 * 60;
-    if (sEndM < sStartM) sEndM += 24 * 60;
+    // Если следующая начинается РАНЬШЕ или РОВНО через 15 минут после конца текущей — склеиваем
+    if (sStartMs <= currEndMs + GAP_MS) {
+      let sEndMs = getMs(s.date, s.end);
+      if (sEndMs < sStartMs) sEndMs += 24 * 60 * 60 * 1000;
 
-    // Вычисляем виртуальное время начала следующей сессии относительно текущей
-    let sStartVirtual = sStartM + (dayDiff * 24 * 60);
-
-    // Проверяем правило 15 минут (и пересечение, и стык через полночь)
-    // Если следующая начинается не позже, чем через 15 минут после конца текущей
-    if (sStartVirtual <= currEndM) {
-      // Склеиваем
-      if (sEndM + (dayDiff * 24 * 60) > currEndM) {
+      if (sEndMs > currEndMs) {
         current.end = s.end;
-        // Если перешли на следующий день, сохраняем дату окончания для инфо
-        if (dayDiff > 0) current.endDate = s.date; 
+        if (s.date > current.date) current.endDate = s.date; 
       }
       
       current.duration_min = (current.duration_min || 0) + (s.duration_min || 0);
@@ -75,7 +68,7 @@ function mergeMidnightSessions(sessions) {
           current.note = (current.note ? current.note + ' ' : '') + s.note;
       }
     } else {
-      // Разрыв больше 15 минут — сохраняем текущую и начинаем новую
+      // Есть разрыв больше 15 минут — сохраняем текущую и начинаем новую
       merged.push(current);
       current = { ...s };
     }
