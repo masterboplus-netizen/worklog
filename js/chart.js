@@ -5,6 +5,7 @@ function renderActivityPageV2() {
     const c = document.getElementById('content-activity');
     if (!c || !window.DATA) return;
     c.innerHTML = '';
+    CHART_STATE.selectedDay = null; // Сбрасываем выбранный день
 
     // 1. НАВИГАЦИЯ
     const navRow = document.createElement('div');
@@ -152,9 +153,9 @@ function renderActivityPageV2() {
         const formatLbl = (val) => CHART_STATE.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
         
         // Позиционируем абсолютно: 0 - внизу, mid - посередине, top - сверху
-        yHTML += `<div style="position: absolute; top: 0; right: 8px; transform: translateY(-50%);">${formatLbl(topVal)}</div>`;
+        yHTML += `<div style="position: absolute; top: 0; right: 8px; transform: translateY(0);">${formatLbl(topVal)}</div>`;
         yHTML += `<div style="position: absolute; top: 50%; right: 8px; transform: translateY(-50%);">${formatLbl(midVal)}</div>`;
-        yHTML += `<div style="position: absolute; bottom: 30px; right: 8px; transform: translateY(50%);">0</div>`;
+        yHTML += `<div style="position: absolute; bottom: 30px; right: 8px; transform: translateY(0);">0</div>`;
         yAxis.innerHTML = yHTML;
 
         scrollContainer.querySelectorAll('.tl-col').forEach(col => {
