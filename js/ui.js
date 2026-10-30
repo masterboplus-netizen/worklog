@@ -22,67 +22,67 @@ let CALENDAR_SELECTED_DAY = null;
 function mergeMidnightSessions(sessions) {
   if (!sessions || !sessions.length) return [];
   
-  // Группируем по датам
-  const byDate = {};
-  for (const s of sessions) {
-    if (!byDate[s.date]) byDate[s.date] = [];
-    byDate[s.date].push(s);
-  }
+  // 1. Сортируем ВСЕ сессии по дате и времени начала
+  const sorted = [...sessions].sort((a, b) => (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start));
   
   const merged = [];
-  const dates = Object.keys(byDate).sort();
-  
-  for (const date of dates) {
-    const daySessions = byDate[date];
-    
-    // Находим самое раннее начало и самый поздний конец
-    let minStart = '23:59';
-    let maxEnd = '00:00';
-    let totalEvents = 0;
-    let totalScreens = 0;
-    let totalTasks = 0;
-    let notes = [];
-    let project = daySessions[0].project;
-    
-    let minStartM = 9999;
-    let maxEndM = -1;
-    
-    for (const s of daySessions) {
-      const [sh, sm] = (s.start || '00:00').split(':').map(Number);
-      const [eh, em] = (s.end || '00:00').split(':').map(Number);
-      let sM = sh * 60 + sm;
-      let eM = eh * 60 + em;
-      
-      // Если конец меньше начала, значит перешел через полночь
-      if (eM < sM) eM += 24 * 60;
-      
-      if (sM < minStartM) { minStartM = sM; minStart = s.start; }
-      if (eM > maxEndM) { maxEndM = eM; maxEnd = s.end; }
-      
-      totalEvents += s.events || 0;
-      totalScreens += s.screens || 0;
-      totalTasks += s.tasks_done || 0;
-      if (s.note) notes.push(s.note);
+  let current = null;
+
+  // Функция для перевода времени в минуты от начала суток (для сравнения)
+  const toMins = (timeStr) => {
+    const [h, m] = (timeStr || '00:00').split(':').map(Number);
+    return h * 60 + m;
+  };
+
+  for (const s of sorted) {
+    if (!current) {
+      current = { ...s };
+      continue;
     }
-    
-    // Считаем реальное время от начала до конца (учитывая ночь)
-    let realDuration = maxEndM - minStartM;
-    
-    merged.push({
-      id: 'merged_' + date,
-      date: date,
-      start: minStart,
-      end: maxEnd,
-      duration_min: realDuration, // Это и есть 12ч 53м
-      project: project,
-      note: notes.join(' '),
-      events: totalEvents,
-      screens: totalScreens,
-      tasks_done: totalTasks
-    });
+
+    // Смотрим на даты
+    const currDate = new Date(current.date + 'T00:00:00').getTime();
+    const sDate = new Date(s.date + 'T00:00:00').getTime();
+    const dayDiff = (sDate - currDate) / (1000 * 60 * 60 * 24); // Разница в днях
+
+    let currEndM = toMins(current.end);
+    let sStartM = toMins(s.start);
+    let sEndM = toMins(s.end);
+
+    // Если сессия была ночной (конец меньше начала), добавляем сутки
+    if (currEndM < toMins(current.start)) currEndM += 24 * 60;
+    if (sEndM < sStartM) sEndM += 24 * 60;
+
+    // Вычисляем виртуальное время начала следующей сессии относительно текущей
+    let sStartVirtual = sStartM + (dayDiff * 24 * 60);
+
+    // Проверяем правило 15 минут (и пересечение, и стык через полночь)
+    // Если следующая начинается не позже, чем через 15 минут после конца текущей
+    if (sStartVirtual <= currEndM + 15) {
+      // Склеиваем
+      if (sEndM + (dayDiff * 24 * 60) > currEndM) {
+        current.end = s.end;
+        // Если перешли на следующий день, сохраняем дату окончания для инфо
+        if (dayDiff > 0) current.endDate = s.date; 
+      }
+      
+      current.duration_min = (current.duration_min || 0) + (s.duration_min || 0);
+      current.events = (current.events || 0) + (s.events || 0);
+      current.screens = (current.screens || 0) + (s.screens || 0);
+      current.tasks_done = (current.tasks_done || 0) + (s.tasks_done || 0);
+      
+      if (s.note && !current.note.includes(s.note)) {
+          current.note = (current.note ? current.note + ' ' : '') + s.note;
+      }
+    } else {
+      // Разрыв больше 15 минут — сохраняем текущую и начинаем новую
+      merged.push(current);
+      current = { ...s };
+    }
   }
   
-  // Сортируем итоговый список от новых к старым
+  if (current) merged.push(current);
+  
   return merged.sort((a, b) => b.date.localeCompare(a.date));
 }
 
