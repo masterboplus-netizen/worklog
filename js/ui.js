@@ -28,12 +28,8 @@ function mergeMidnightSessions(sessions) {
   const merged = [];
   let current = null;
 
-  // Функция перевода даты и времени в миллисекунды
-  const getMs = (dateStr, timeStr) => {
-    return new Date(dateStr + 'T' + (timeStr || '00:00') + ':00').getTime();
-  };
-
-  const GAP_MS = 15 * 60 * 1000; // 15 минут в миллисекундах
+  const getMs = (dateStr, timeStr) => new Date(dateStr + 'T' + (timeStr || '00:00') + ':00').getTime();
+  const GAP_MS = 15 * 60 * 1000;
 
   for (const s of sorted) {
     if (!current) {
@@ -42,24 +38,30 @@ function mergeMidnightSessions(sessions) {
     }
 
     let currEndMs = getMs(current.date, current.end);
-    // Если текущая сессия ушла за полночь (конец меньше начала), добавляем сутки к концу
-    if (currEndMs < getMs(current.date, current.start)) {
-        currEndMs += 24 * 60 * 60 * 1000;
-    }
+    if (currEndMs < getMs(current.date, current.start)) currEndMs += 24 * 60 * 60 * 1000;
 
     const sStartMs = getMs(s.date, s.start);
+    let sEndMs = getMs(s.date, s.end);
+    if (sEndMs < sStartMs) sEndMs += 24 * 60 * 60 * 1000;
 
-    // Если следующая начинается РАНЬШЕ или РОВНО через 15 минут после конца текущей — склеиваем
     if (sStartMs <= currEndMs + GAP_MS) {
-      let sEndMs = getMs(s.date, s.end);
-      if (sEndMs < sStartMs) sEndMs += 24 * 60 * 60 * 1000;
-
+      // Склеиваем
       if (sEndMs > currEndMs) {
         current.end = s.end;
-        if (s.date > current.date) current.endDate = s.date; 
+        if (s.date > current.date) current.endDate = s.date;
       }
       
-      current.duration_min = (current.duration_min || 0) + (s.duration_min || 0);
+      // ВАЖНО: Считаем реальное время склейки (разницу между началом и текущим концом)
+      // Но прибавляем только ту часть s.duration_min, которая не пересекается!
+      // Самый простой способ: время от начала склейки до нового конца, МИНУС пересечения.
+      
+      // Вместо сложной математики, мы просто берем разницу между крайними точками
+      // и это и будет реальное время работы (если там не было перерывов)
+      let newCurrStartMs = getMs(current.date, current.start);
+      let newCurrEndMs = sEndMs;
+      
+      current.duration_min = Math.round((newCurrEndMs - newCurrStartMs) / 60000);
+      
       current.events = (current.events || 0) + (s.events || 0);
       current.screens = (current.screens || 0) + (s.screens || 0);
       current.tasks_done = (current.tasks_done || 0) + (s.tasks_done || 0);
@@ -68,7 +70,6 @@ function mergeMidnightSessions(sessions) {
           current.note = (current.note ? current.note + ' ' : '') + s.note;
       }
     } else {
-      // Есть разрыв больше 15 минут — сохраняем текущую и начинаем новую
       merged.push(current);
       current = { ...s };
     }
