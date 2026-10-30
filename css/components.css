@@ -2620,3 +2620,38 @@ html, body {
 
 /* === СТИЛИ ТАЙМЕРА СЕЙФА (v28) === */
 #safe-timer { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; font-size: 18px; font-weight: 600; color: var(--fg); text-align: center; pointer-events: none; user-select: none; text-shadow: 0 0 10px rgba(0,0,0,0.8); width: 100px; line-height: 1.2; }
+
+
+/* === КАПСУЛЫ (SEGMENTED CONTROL) === */
+.segmented-control {
+  display: flex;
+  background: var(--bg3);
+  border-radius: 20px;
+  padding: 4px;
+  margin: 0 16px 16px 16px;
+  gap: 4px;
+  width: calc(100% - 32px);
+  box-sizing: border-box;
+}
+.segmented-control button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--fg-dim);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 4px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  outline: none;
+  -webkit-appearance: none;
+  text-align: center;
+}
+.segmented-control button.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
+}

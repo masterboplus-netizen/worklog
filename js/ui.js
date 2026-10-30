@@ -64,20 +64,7 @@ function renderDiary() {
   `;
   topBar.appendChild(filters);
 
-  const modeFilters = document.createElement('div');
-  modeFilters.className = 'segmented-control';
-  modeFilters.innerHTML = `
-    <button class="${DIARY_MODE === 'sessions' ? 'active' : ''}" data-mode="sessions">Сессии</button>
-    <button class="${DIARY_MODE === '24h' ? 'active' : ''}" data-mode="24h">24ч</button>
-  `;
-  topBar.appendChild(modeFilters);
 
-  modeFilters.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      DIARY_MODE = btn.dataset.mode;
-      renderDiary();
-    });
-  });
 
   // Навигация: [<-] Название [->]
   const navRow = document.createElement('div');
@@ -260,7 +247,24 @@ function renderDiary() {
     c.appendChild(grid);
   }
 
-  // 3. СПИСОК СЕССИЙ
+  // 3. ПЕРЕКЛЮЧАТЕЛЬ СЕССИИ / 24Ч (ПОД КАЛЕНДАРЕМ)
+  const modeFilters = document.createElement('div');
+  modeFilters.className = 'segmented-control';
+  modeFilters.style.marginTop = '24px';
+  modeFilters.innerHTML = `
+    <button class="${DIARY_MODE === 'sessions' ? 'active' : ''}" data-mode="sessions">Сессии</button>
+    <button class="${DIARY_MODE === '24h' ? 'active' : ''}" data-mode="24h">24ч</button>
+  `;
+  c.appendChild(modeFilters);
+
+  modeFilters.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      DIARY_MODE = btn.dataset.mode;
+      renderDiary();
+    });
+  });
+
+  // 4. СПИСОК СЕССИЙ
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '24px';
 
