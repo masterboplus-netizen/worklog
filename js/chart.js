@@ -68,7 +68,7 @@ function renderActivityPageV2() {
     // 3. НИЖНИЕ КНОПКИ
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     const metricHTML = metrics.map(([key, label]) =>
-        '<button class="' + (CHART_STATE.metric === key ? 'active' : '') + '" data-metric="' + key + '">' + label + '</button>'
+        '<button class="chart-tabs ' + (CHART_STATE.metric === key ? 'active' : '') + '" data-metric="' + key + '">' + label + '</button>'
     ).join('');
 
     const metricBar = document.createElement('div');
@@ -165,7 +165,7 @@ function renderActivityPageV2() {
         // Отрисовка столбиков
         const cols = scrollContainer.querySelectorAll('.tl-col');
         cols.forEach(col => {
-            const dateStr = col.dataset.date; alert("Клик сработал! Дата: " + dateStr);
+            const dateStr = col.dataset.date;
             let v = 0;
             for (const sess of window.DATA.sessions || []) {
                 if (sess.date === dateStr) {
@@ -195,7 +195,7 @@ function renderActivityPageV2() {
     scrollContainer.addEventListener('click', (e) => {
         const col = e.target.closest('.tl-col');
         if (!col) return;
-        const dateStr = col.dataset.date; alert("Клик сработал! Дата: " + dateStr);
+        const dateStr = col.dataset.date;
 
         if (CHART_STATE.selectedDay === dateStr) {
             CHART_STATE.selectedDay = null;
