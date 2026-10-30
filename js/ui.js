@@ -22,62 +22,95 @@ let CALENDAR_SELECTED_DAY = null;
 function mergeMidnightSessions(sessions) {
   if (!sessions || !sessions.length) return [];
   
-  // 1. Сортируем ВСЕ сессии по дате и времени начала
   const sorted = [...sessions].sort((a, b) => (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start));
   
-  const merged = [];
-  let current = null;
-
-  const getMs = (dateStr, timeStr) => new Date(dateStr + 'T' + (timeStr || '00:00') + ':00').getTime();
-  const GAP_MS = 15 * 60 * 1000;
-
+  let events = [];
   for (const s of sorted) {
-    if (!current) {
-      current = { ...s };
-      continue;
-    }
+    let startMs = new Date(s.date + 'T' + s.start + ':00').getTime();
+    let endMs = new Date(s.date + 'T' + s.end + ':00').getTime();
+    if (endMs < startMs) endMs += 24 * 60 * 60 * 1000;
+    
+    events.push({
+      startMs, endMs,
+      project: s.project,
+      note: s.note || '',
+      events: s.events || 0,
+      screens: s.screens || 0,
+      tasks_done: s.tasks_done || 0
+    });
+  }
 
-    let currEndMs = getMs(current.date, current.end);
-    if (currEndMs < getMs(current.date, current.start)) currEndMs += 24 * 60 * 60 * 1000;
+  let points = new Set();
+  for (const e of events) {
+    points.add(e.startMs);
+    points.add(e.endMs);
+  }
+  let sortedPoints = Array.from(points).sort((a, b) => a - b);
 
-    const sStartMs = getMs(s.date, s.start);
-    let sEndMs = getMs(s.date, s.end);
-    if (sEndMs < sStartMs) sEndMs += 24 * 60 * 60 * 1000;
-
-    if (sStartMs <= currEndMs + GAP_MS) {
-      // Склеиваем
-      if (sEndMs > currEndMs) {
-        current.end = s.end;
-        if (s.date > current.date) current.endDate = s.date;
-      }
+  let segments = [];
+  for (let i = 0; i < sortedPoints.length - 1; i++) {
+    let start = sortedPoints[i];
+    let end = sortedPoints[i+1];
+    
+    let covering = events.filter(e => e.startMs <= start && e.endMs >= end);
+    
+    if (covering.length > 0) {
+      let isParallel = covering.length > 1;
+      let main = covering[0];
       
-      // ВАЖНО: Считаем реальное время склейки (разницу между началом и текущим концом)
-      // Но прибавляем только ту часть s.duration_min, которая не пересекается!
-      // Самый простой способ: время от начала склейки до нового конца, МИНУС пересечения.
-      
-      // Вместо сложной математики, мы просто берем разницу между крайними точками
-      // и это и будет реальное время работы (если там не было перерывов)
-      let newCurrStartMs = getMs(current.date, current.start);
-      let newCurrEndMs = sEndMs;
-      
-      current.duration_min = Math.round((newCurrEndMs - newCurrStartMs) / 60000);
-      
-      current.events = (current.events || 0) + (s.events || 0);
-      current.screens = (current.screens || 0) + (s.screens || 0);
-      current.tasks_done = (current.tasks_done || 0) + (s.tasks_done || 0);
-      
-      if (s.note && !current.note.includes(s.note)) {
-          current.note = (current.note ? current.note + ' ' : '') + s.note;
-      }
-    } else {
-      merged.push(current);
-      current = { ...s };
+      segments.push({
+        startMs: start,
+        endMs: end,
+        duration: (end - start) / 60000,
+        isParallel: isParallel,
+        project: main.project,
+        note: isParallel ? 'Параллельная работа' : main.note,
+        events: isParallel ? 0 : main.events,
+        screens: isParallel ? 0 : main.screens,
+        tasks_done: isParallel ? 0 : main.tasks_done
+      });
     }
   }
-  
+
+  let merged = [];
+  let current = null;
+  for (const seg of segments) {
+    if (!current) {
+      current = { ...seg };
+      continue;
+    }
+    
+    let gap = seg.startMs - current.endMs;
+    if (!seg.isParallel && !current.isParallel && gap <= 15 * 60 * 1000) {
+      current.endMs = seg.endMs;
+      current.duration = (current.endMs - current.startMs) / 60000;
+      current.note = (current.note ? current.note + ' ' : '') + seg.note;
+      current.events += seg.events;
+      current.screens += seg.screens;
+      current.tasks_done += seg.tasks_done;
+    } else {
+      merged.push(current);
+      current = { ...seg };
+    }
+  }
   if (current) merged.push(current);
-  
-  return merged.sort((a, b) => b.date.localeCompare(a.date));
+
+  return merged.map(m => {
+    let startDate = new Date(m.startMs);
+    let endDate = new Date(m.endMs);
+    return {
+      id: 'merged_' + m.startMs,
+      date: startDate.toISOString().slice(0, 10),
+      start: startDate.toTimeString().slice(0, 5),
+      end: endDate.toTimeString().slice(0, 5),
+      duration_min: Math.round(m.duration),
+      project: m.project,
+      note: m.note,
+      events: m.events,
+      screens: m.screens,
+      tasks_done: m.tasks_done
+    };
+  }).sort((a, b) => (b.date + b.start).localeCompare(a.date + a.start));
 }
 
 function renderDiary() {
