@@ -252,3 +252,4 @@ const _safeUnlock = async () => {
     showSafe();
   }
 };
+window.addEventListener("error", (e) => { document.title = "ОШИБКА: " + e.message + " в " + e.filename.split("/").pop() + ":" + e.lineno; }); window.addEventListener("unhandledrejection", (e) => { document.title = "PROMISE ERR: " + e.reason; });
