@@ -1,5 +1,5 @@
 // === СЛЕПОЙ СЕЙФ (v31 - Старт по тапу + таймер) ===
-const SAFE_TARGET_ANGLES = [150, 330, 420];
+const SAFE_TARGET_ANGLES = [150, 330];
 const SAFE_PIN = '201186';
 const HOLD_TIME_MS = 1000;
 const START_TIME_S = 10;
