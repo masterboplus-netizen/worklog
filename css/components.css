@@ -1822,8 +1822,11 @@ div[style*="justify-content: space-between"] {
 
 /* === СЕТКА КАЛЕНДАРЯ === */
 .calendar-top { margin-bottom: 20px; }
-
-
+.calendar-filters { display: flex; gap: 8px; margin-bottom: 12px; }
+.cal-btn {
+  background: transparent; border: 1px solid var(--border); color: var(--fg-dim);
+  padding: 6px 16px; border-radius: 20px; font-size: 14px; cursor: pointer;
+}
 .cal-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 .calendar-title { font-size: 24px; font-weight: 600; margin-bottom: 12px; color: var(--fg); }
 .calendar-nav { display: flex; gap: 8px; }
@@ -1844,7 +1847,17 @@ div[style*="justify-content: space-between"] {
 
 
 /* === НОВЫЕ КНОПКИ ГРАФИКА === */
-
+.cal-btn {
+  background: transparent !important;
+  border: 1px solid var(--border) !important;
+  color: var(--fg-dim) !important;
+  padding: 6px 16px !important;
+  border-radius: 20px !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  transition: 0.15s;
+}
 .cal-btn.active {
   background: var(--accent) !important;
   color: #fff !important;
@@ -1893,7 +1906,7 @@ div[style*="justify-content: space-between"] {
 }
 
 /* Кнопки внизу */
-
+.cal-btn { padding: 4px 2px !important; font-size: 11px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .tl-col:focus, .tl-col:active, .tl-bar:focus, .tl-bar:active {
   outline: none !important;
@@ -1921,7 +1934,18 @@ div[style*="justify-content: space-between"] {
 
 
 /* === ФИКС КНОПОК ТАБЛЕТОК === */
-
+.cal-btn {
+  background: transparent !important;
+  border: 1px solid var(--border) !important;
+  color: var(--fg-dim) !important;
+  padding: 6px 16px !important;
+  border-radius: 20px !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  transition: 0.15s !important;
+  white-space: nowrap !important;
+}
 .cal-btn.active {
   background: var(--accent) !important;
   color: #fff !important;
@@ -1941,7 +1965,7 @@ div[style*="justify-content: space-between"] {
 .chart-legend-v4 { height: 24px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
 
 
-
+.chart-metric-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 /* === Починка нижнего меню === */
 
 
@@ -1951,7 +1975,11 @@ div[style*="justify-content: space-between"] {
 /* === ИДЕАЛЬНЫЕ КНОПКИ ГРАФИКА (GRID) === */
 
 
-
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border-color: var(--accent) !important;
+}
 
 /* === ИДЕАЛЬНОЕ НИЖНЕЕ МЕНЮ === */
 .tabs {
@@ -1993,7 +2021,11 @@ div[style*="justify-content: space-between"] {
 /* === Финальный стиль кнопок метрик (Таблетки) === */
 
 
-
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important; /* Легкая тень для объема */
+}
 
 /* === Динамическая ширина столбиков (ровно 7 на экран) === */
 .tl-col {
@@ -2399,8 +2431,24 @@ html, body {
   width: calc(100% - 16px) !important;
   box-sizing: border-box !important;
 }
-
-
+.chart-metric-btn {
+  width: 100% !important;
+  text-align: center !important;
+  padding: 10px 0 !important;
+  font-size: 12px !important;
+  background: var(--bg2) !important;
+  border: 1px solid transparent !important;
+  border-radius: 20px !important;
+  color: var(--fg) !important;
+  transition: all 0.2s !important;
+  white-space: nowrap !important;
+  font-weight: 500 !important;
+}
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
+}
 
 /* Скрываем старый PIN-пад, пока используем крутилки */
 
@@ -2472,9 +2520,28 @@ html, body {
   box-sizing: border-box !important;
 }
 
+.chart-metric-btn {
+  width: 100% !important;
+  text-align: center !important;
+  padding: 10px 0 !important; /* Убираем боковые отступы, чтобы текст влез */
+  font-size: 11px !important; /* Чуть меньше шрифт */
+  background: var(--bg2) !important;
+  border: 1px solid transparent !important;
+  border-radius: 20px !important;
+  color: var(--fg) !important;
+  white-space: nowrap !important; /* Запрещаем перенос строк */
+  font-weight: 500 !important;
+  overflow: hidden !important; /* Скрываем всё, что не влезло */
+  text-overflow: ellipsis !important; /* Но добавляем троеточие */
+  display: block !important;
+  box-sizing: border-box !important;
+}
 
-
-
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
+}
 
 
 
@@ -2485,11 +2552,8 @@ html, body {
   width: 100vw !important; height: 100vh !important;
   z-index: 9999 !important;
   background: var(--bg) !important;
-  /* Прижимаем в правый нижний угол */
-  align-items: flex-end !important;
-  justify-content: flex-end !important;
-  padding-right: 20px !important;
-  padding-bottom: 20px !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 #scroll-pin-screen.active { display: flex !important; }
 
@@ -2556,207 +2620,3 @@ html, body {
 
 /* === СТИЛИ ТАЙМЕРА СЕЙФА (v28) === */
 #safe-timer { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; font-size: 18px; font-weight: 600; color: var(--fg); text-align: center; pointer-events: none; user-select: none; text-shadow: 0 0 10px rgba(0,0,0,0.8); width: 100px; line-height: 1.2; }
-
-/* === СЕЙФ: Режим ожидания старта (v39) === */
-#safe-dial-rotator.waiting {
-  opacity: 0.3;
-  filter: none !important; /* Убираем свечение */
-  transition: opacity 0.3s ease, filter 0.3s ease;
-}
-#safe-dial-rotator.waiting svg circle[fill="#fff"] {
-  opacity: 0.5; /* Метка тоже бледная */
-}
-#safe-dial-rotator.active {
-  opacity: 1;
-  filter: drop-shadow(0 0 15px rgba(255,165,0,0.8));
-  transition: opacity 0.3s ease, filter 0.3s ease;
-}
-
-/* === ЖЕСТКОЕ ПОЗИЦИОНИРОВАНИЕ СЕЙФА (ФИНАЛ) === */
-#scroll-pin-screen {
-  display: none;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 9999 !important;
-  background: var(--bg) !important;
-}
-
-#safe-dial-container {
-  position: absolute !important;
-  right: 20px !important;
-  bottom: 20px !important;
-  width: 220px !important;
-  height: 220px !important;
-  touch-action: none !important;
-}
-
-/* === СЕГМЕНТИРОВАННЫЙ КОНТРОЛ (КАПСУЛА) === */
-.segmented-control {
-  display: flex;
-  background: var(--bg3); /* Темно-серый фон капсулы */
-  border-radius: 20px;
-  padding: 4px;
-  margin: 0 16px 16px 16px;
-  gap: 4px;
-}
-
-.segmented-control button {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--fg-dim);
-  font-size: 13px;
-  font-weight: 500;
-  padding: 8px 4px;
-  border-radius: 16px;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.segmented-control button.active {
-  background: var(--accent); /* Синий цвет */
-  color: #fff;
-  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
-}
-
-/* === СЕГМЕНТИРОВАННЫЙ КОНТРОЛ (КАПСУЛА) === */
-.segmented-control {
-  display: flex;
-  background: var(--bg3);
-  border-radius: 20px;
-  padding: 4px;
-  margin: 0 16px 16px 16px;
-  gap: 4px;
-  width: calc(100% - 32px);
-  box-sizing: border-box;
-}
-
-.segmented-control button {
-  flex: 1;
-  background: transparent !important;
-  border: none !important;
-  color: var(--fg-dim) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  padding: 8px 4px !important;
-  border-radius: 16px !important;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  outline: none !important;
-  -webkit-appearance: none !important;
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-.segmented-control button.active {
-  background: var(--accent) !important;
-  color: #fff !important;
-  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3) !important;
-}
-
-/* === КАПСУЛА ДЛЯ ГРАФИКА === */
-.chart-segmented-control {
-  display: flex;
-  background: var(--bg3);
-  border-radius: 20px;
-  padding: 4px;
-  margin: 16px 16px 20px 16px;
-  gap: 4px;
-  width: calc(100% - 32px);
-  box-sizing: border-box;
-}
-
-.chart-segmented-control button {
-  flex: 1;
-  background: transparent !important;
-  border: none !important;
-  color: var(--fg-dim) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  padding: 8px 4px !important;
-  border-radius: 16px !important;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  outline: none !important;
-  -webkit-appearance: none !important;
-  -webkit-tap-highlight-color: transparent !important;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.chart-segmented-control button.active {
-  background: var(--accent) !important;
-  color: #fff !important;
-  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3) !important;
-}
-
-/* === КАПСУЛЫ (ФИНАЛЬНЫЙ ФИКС) === */
-.segmented-control, .chart-segmented-control {
-  display: flex;
-  background: var(--bg3);
-  border-radius: 20px;
-  padding: 4px;
-  margin: 16px 16px 20px 16px;
-  gap: 4px;
-  width: calc(100% - 32px);
-  box-sizing: border-box;
-}
-
-.segmented-control button, .chart-segmented-control button {
-  flex: 1;
-  background: transparent !important;
-  border: none !important;
-  color: var(--fg-dim) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  padding: 8px 4px !important;
-  border-radius: 16px !important;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  outline: none !important;
-  -webkit-appearance: none !important;
-  -webkit-tap-highlight-color: transparent !important;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.segmented-control button.active, .chart-segmented-control button.active {
-  background: var(--accent) !important;
-  color: #fff !important;
-  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3) !important;
-}
-
-/* Возвращаем нормальный скролл для страницы */
-html, body {
-  overflow-y: auto !important;
-  height: auto !important;
-}
-
-/* === МИНИ-КАЛЕНДАРЬ В ГОДОВОМ ВИДЕ === */
-.year-view .cal-day {
-  aspect-ratio: 1;
-  min-width: 0;
-}
-.year-view .cal-day .cal-num {
-  width: 14px !important;
-  height: 14px !important;
-  font-size: 9px !important;
-  border: none !important;
-}
-.year-view .cal-day.today .cal-num {
-  background: var(--accent) !important;
-  color: #fff !important;
-}
-.year-view .cal-day.selected .cal-num {
-  border: 1px solid var(--accent) !important;
-}

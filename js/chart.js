@@ -6,11 +6,6 @@ function renderActivityPageV2() {
     if (!c || !window.DATA) return;
     c.innerHTML = '';
 
-    // ПОДМЕНА ДАННЫХ: используем чистые сессии (без параллельных пересечений)
-    if (typeof getCleanSessions === 'function') {
-        window.DATA.sessions = getCleanSessions(window.DATA.sessions);
-    }
-
     // 1. НАВИГАЦИЯ
     const navRow = document.createElement('div');
     navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:16px; margin-bottom: 16px; font-size:20px; font-weight:600; color:var(--fg);';
@@ -71,16 +66,12 @@ function renderActivityPageV2() {
 
     // 3. НИЖНИЕ КНОПКИ
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
-    const metricHTML = metrics.map(([key, label]) => {
-        const isActive = CHART_STATE_V2.metric === key;
-        const bg = isActive ? 'var(--accent)' : 'transparent';
-        const color = isActive ? '#fff' : 'var(--fg-dim)';
-        const shadow = isActive ? 'box-shadow:0 2px 6px rgba(74,158,255,0.3) !important;' : '';
-        return '<button data-metric="' + key + '" style="flex:1; background:' + bg + ' !important; color:' + color + ' !important; border:none !important; padding:8px 4px !important; border-radius:16px !important; font-size:13px !important; font-family:inherit; outline:none !important; -webkit-appearance:none !important; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; ' + shadow + '">' + label + '</button>';
-    }).join('');
+    const metricHTML = metrics.map(([key, label]) =>
+        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 4px 2px; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
+    ).join('');
 
     const metricBar = document.createElement('div');
-    metricBar.style.cssText = 'display:flex; background:var(--bg3); border-radius:20px; padding:4px; margin:16px 16px 20px 16px; gap:4px; width:calc(100% - 32px); box-sizing:border-box;';
+    metricBar.style.cssText = 'display:flex; gap:4px; margin: 16px 8px 16px 8px; justify-content: space-between; box-sizing: border-box;';
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
 
@@ -147,7 +138,7 @@ function renderActivityPageV2() {
         for (let i = startIndex; i <= endIndex && i < allDates.length; i++) {
             const dateStr = allDates[i];
             let v = 0;
-            for (const sess of (typeof getCleanSessions === 'function' ? getCleanSessions(window.DATA.sessions || []) : (window.DATA.sessions || []))) {
+            for (const sess of window.DATA.sessions || []) {
                 if (sess.date === dateStr) {
                     if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
@@ -174,7 +165,7 @@ function renderActivityPageV2() {
         cols.forEach(col => {
             const dateStr = col.dataset.date;
             let v = 0;
-            for (const sess of (typeof getCleanSessions === 'function' ? getCleanSessions(window.DATA.sessions || []) : (window.DATA.sessions || []))) {
+            for (const sess of window.DATA.sessions || []) {
                 if (sess.date === dateStr) {
                     if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
@@ -218,7 +209,7 @@ function renderActivityPageV2() {
         const targetCol = scrollContainer.querySelector(`.tl-col[data-date="${dateStr}"]`);
         if (targetCol) {
             let v = 0;
-            for (const sess of (typeof getCleanSessions === 'function' ? getCleanSessions(window.DATA.sessions || []) : (window.DATA.sessions || []))) {
+            for (const sess of window.DATA.sessions || []) {
                 if (sess.date === dateStr) {
                     if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
@@ -249,7 +240,7 @@ function renderActivityPageV2() {
     });
 
     // Смена метрики
-    c.querySelectorAll('button[data-metric]').forEach(btn => {
+    c.querySelectorAll('.cal-btn[data-metric]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             CHART_STATE_V2.metric = btn.dataset.metric;
