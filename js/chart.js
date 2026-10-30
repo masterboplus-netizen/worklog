@@ -144,6 +144,7 @@ function renderActivityPageV2() {
             if (v > maxVal) maxVal = v;
         }
         if (maxVal === 0) maxVal = CHART_STATE.metric === 'duration' ? 720 : 10;
+        if (maxVal === 0) maxVal = CHART_STATE.metric === 'duration' ? 720 : 10;
 
         let yHTML = '';
         const midVal = Math.round(maxVal / 2);
@@ -216,10 +217,15 @@ function renderActivityPageV2() {
                 text = (h > 0 ? h + 'ч ' : '') + m + 'м';
             }
 
-            tooltip.innerHTML = `<div style="font-weight:600;color:#fff;font-size:13px;padding:4px 8px;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
-            tooltip.style.display = 'block';
-            tooltip.style.position = 'fixed';
-            tooltip.style.zIndex = '99999';
+            // Пересоздаем тултип прямо здесь, чтобы не было конфликтов
+            const oldT = document.getElementById('global-chart-tooltip');
+            if (oldT) oldT.remove();
+            const t = document.createElement('div');
+            t.id = 'global-chart-tooltip';
+            t.style.cssText = 'position: fixed; z-index: 99999; display: block; pointer-events: none;';
+            t.innerHTML = `<div style="font-weight:600;color:#fff;font-size:13px;padding:4px 8px;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
+            document.body.appendChild(t);
+            tooltip = t; // обновляем ссылку
 
             const rect = targetCol.getBoundingClientRect();
             const bar = targetCol.querySelector('.tl-bar');
