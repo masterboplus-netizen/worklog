@@ -260,7 +260,7 @@ function renderDiary() {
   // 5. СПИСОК
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '16px';
-  let baseSessions = window.DATA.sessions || []; // ВРЕМЕННО ОТКЛЮЧЕНО
+  let baseSessions = DIARY_MODE === 'sessions' ? mergeMidnightSessions(window.DATA.sessions || []) : (window.DATA.sessions || []);
   let filtered = baseSessions.filter(s => {
       const sd = new Date(s.date + 'T00:00:00');
       if (CALENDAR_VIEW === 'year') return sd.getFullYear() === curDate.getFullYear();
