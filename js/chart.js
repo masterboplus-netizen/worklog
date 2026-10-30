@@ -40,7 +40,7 @@ function renderActivityPageV2() {
 
     const yAxis = document.createElement('div');
     yAxis.id = 'tl-y-axis';
-    yAxis.style.cssText = "width: 32px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: calc(100% - 44px); margin-top: 4px;";
+    yAxis.style.cssText = "width: 32px; position: relative; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%;";
 
     const scrollContainer = document.createElement('div');
     scrollContainer.className = 'tl-container';
@@ -149,9 +149,10 @@ function renderActivityPageV2() {
         const topVal = Math.round(maxVal);
         const formatLbl = (val) => CHART_STATE.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
         
-        yHTML += `<div>${formatLbl(topVal)}</div>`;
-        yHTML += `<div>${formatLbl(midVal)}</div>`;
-        yHTML += `<div>0</div>`;
+        // Позиционируем абсолютно: 0 - внизу, mid - посередине, top - сверху
+        yHTML += `<div style="position: absolute; top: 0; right: 8px; transform: translateY(-50%);">${formatLbl(topVal)}</div>`;
+        yHTML += `<div style="position: absolute; top: 50%; right: 8px; transform: translateY(-50%);">${formatLbl(midVal)}</div>`;
+        yHTML += `<div style="position: absolute; bottom: 30px; right: 8px; transform: translateY(50%);">0</div>`;
         yAxis.innerHTML = yHTML;
 
         scrollContainer.querySelectorAll('.tl-col').forEach(col => {
