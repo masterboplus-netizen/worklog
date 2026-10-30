@@ -388,7 +388,7 @@ function getProgressColor(percent) {
 
 function renderHeroRings() {
   const t = calcTotals();
-  const sessions = window.DATA.sessions || [];
+  const sessions = mergeMidnightSessions(window.DATA.sessions || []);
   const _sessions = window.DATA.sessions || [];
   const msgVal = _sumRange(_sessions, MINI_MSG_PERIOD, 'events');
   const scrVal = _sumRange(_sessions, MINI_SCR_PERIOD, 'screens');
@@ -400,7 +400,7 @@ function renderHeroRings() {
 
   let heroValue = t.todayMin, heroLabel = 'Сегодня', heroSub = 'Среднее ' + fmtH(currentGoal) + ' · ' + Math.round(t.todayMin / currentGoal * 100) + '%';
   if (HERO_MODE === 'last') {
-    const sorted = (window.DATA.sessions || []).slice().sort((a, b) => (b.date + (b.end || '')).localeCompare(a.date + (a.end || '')));
+    const sorted = mergeMidnightSessions(window.DATA.sessions || []).slice().sort((a, b) => (b.date + (b.end || '')).localeCompare(a.date + (a.end || '')));
     const lastSess = sorted[0];
     heroValue = lastSess ? (lastSess.duration_min || 0) : 0;
     heroLabel = 'Последняя сессия';
