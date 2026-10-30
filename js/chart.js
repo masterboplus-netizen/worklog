@@ -48,13 +48,14 @@ function renderActivityPageV2() {
     scrollContainer.style.flex = '1';
     scrollContainer.style.position = 'relative';
 
-    let tooltip = document.getElementById('global-chart-tooltip');
-    if (!tooltip) {
-        tooltip = document.createElement('div');
-        tooltip.id = 'global-chart-tooltip';
-        tooltip.style.display = 'none';
-        document.body.appendChild(tooltip);
-    }
+    // Удаляем старый тултип, если он остался от прошлого рендера
+    const oldTooltip = document.getElementById('global-chart-tooltip');
+    if (oldTooltip) oldTooltip.remove();
+
+    const tooltip = document.createElement('div');
+    tooltip.id = 'global-chart-tooltip';
+    tooltip.style.display = 'none';
+    document.body.appendChild(tooltip);
 
     chartWrapper.appendChild(yAxis);
     chartWrapper.appendChild(scrollContainer);
