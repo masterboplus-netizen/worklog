@@ -22,95 +22,81 @@ let CALENDAR_SELECTED_DAY = null;
 function mergeMidnightSessions(sessions) {
   if (!sessions || !sessions.length) return [];
   
+  // 1. Сортируем по времени
   const sorted = [...sessions].sort((a, b) => (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start));
   
-  let events = [];
+  // 2. Группируем по дням (по дате НАЧАЛА)
+  const byDate = {};
   for (const s of sorted) {
-    let startMs = new Date(s.date + 'T' + s.start + ':00').getTime();
-    let endMs = new Date(s.date + 'T' + s.end + ':00').getTime();
-    if (endMs < startMs) endMs += 24 * 60 * 60 * 1000;
+    if (!byDate[s.date]) byDate[s.date] = [];
+    byDate[s.date].push(s);
+  }
+
+  const merged = [];
+  
+  for (const date of Object.keys(byDate).sort()) {
+    const daySessions = byDate[date];
     
-    events.push({
-      startMs, endMs,
-      project: s.project,
-      note: s.note || '',
-      events: s.events || 0,
-      screens: s.screens || 0,
-      tasks_done: s.tasks_done || 0
+    // Берем самое раннее начало и самый поздний конец за этот день
+    let minStart = daySessions[0].start;
+    let maxEnd = daySessions[0].end;
+    let minStartMs = new Date(date + 'T' + minStart + ':00').getTime();
+    let maxEndMs = new Date(date + 'T' + maxEnd + ':00').getTime();
+    
+    let totalEvents = 0, totalScreens = 0, totalTasks = 0;
+    let notes = [];
+    let project = daySessions[0].project;
+    
+    for (const s of daySessions) {
+      let sStartMs = new Date(s.date + 'T' + s.start + ':00').getTime();
+      let sEndMs = new Date(s.date + 'T' + s.end + ':00').getTime();
+      if (sEndMs < sStartMs) sEndMs += 24 * 60 * 60 * 1000; // Переход через полночь
+      
+      if (sStartMs < minStartMs) { minStartMs = sStartMs; minStart = s.start; }
+      if (sEndMs > maxEndMs) { maxEndMs = sEndMs; maxEnd = s.end; }
+      
+      totalEvents += s.events || 0;
+      totalScreens += s.screens || 0;
+      totalTasks += s.tasks_done || 0;
+      if (s.note) notes.push(s.note);
+    }
+    
+    // Считаем реальное время: от самого раннего до самого позднего, МИНУС пересечения
+    let realDuration = maxEndMs - minStartMs;
+    // Вычитаем пересечения (если они есть)
+    for (let i = 0; i < daySessions.length; i++) {
+        for (let j = i + 1; j < daySessions.length; j++) {
+            let s1Start = new Date(daySessions[i].date + 'T' + daySessions[i].start + ':00').getTime();
+            let s1End = new Date(daySessions[i].date + 'T' + daySessions[i].end + ':00').getTime();
+            if (s1End < s1Start) s1End += 24 * 60 * 60 * 1000;
+            
+            let s2Start = new Date(daySessions[j].date + 'T' + daySessions[j].start + ':00').getTime();
+            let s2End = new Date(daySessions[j].date + 'T' + daySessions[j].end + ':00').getTime();
+            if (s2End < s2Start) s2End += 24 * 60 * 60 * 1000;
+            
+            let overlapStart = Math.max(s1Start, s2Start);
+            let overlapEnd = Math.min(s1End, s2End);
+            if (overlapStart < overlapEnd) {
+                realDuration -= (overlapEnd - overlapStart);
+            }
+        }
+    }
+    
+    merged.push({
+      id: 'merged_' + date,
+      date: date,
+      start: minStart,
+      end: maxEnd,
+      duration_min: Math.round(realDuration / 60000),
+      project: project,
+      note: notes.join(' '),
+      events: totalEvents,
+      screens: totalScreens,
+      tasks_done: totalTasks
     });
   }
-
-  let points = new Set();
-  for (const e of events) {
-    points.add(e.startMs);
-    points.add(e.endMs);
-  }
-  let sortedPoints = Array.from(points).sort((a, b) => a - b);
-
-  let segments = [];
-  for (let i = 0; i < sortedPoints.length - 1; i++) {
-    let start = sortedPoints[i];
-    let end = sortedPoints[i+1];
-    
-    let covering = events.filter(e => e.startMs <= start && e.endMs >= end);
-    
-    if (covering.length > 0) {
-      let isParallel = covering.length > 1;
-      let main = covering[0];
-      
-      segments.push({
-        startMs: start,
-        endMs: end,
-        duration: (end - start) / 60000,
-        isParallel: isParallel,
-        project: main.project,
-        note: isParallel ? 'Параллельная работа' : main.note,
-        events: isParallel ? 0 : main.events,
-        screens: isParallel ? 0 : main.screens,
-        tasks_done: isParallel ? 0 : main.tasks_done
-      });
-    }
-  }
-
-  let merged = [];
-  let current = null;
-  for (const seg of segments) {
-    if (!current) {
-      current = { ...seg };
-      continue;
-    }
-    
-    let gap = seg.startMs - current.endMs;
-    if (!seg.isParallel && !current.isParallel && gap <= 15 * 60 * 1000) {
-      current.endMs = seg.endMs;
-      current.duration = (current.endMs - current.startMs) / 60000;
-      current.note = (current.note ? current.note + ' ' : '') + seg.note;
-      current.events += seg.events;
-      current.screens += seg.screens;
-      current.tasks_done += seg.tasks_done;
-    } else {
-      merged.push(current);
-      current = { ...seg };
-    }
-  }
-  if (current) merged.push(current);
-
-  return merged.map(m => {
-    let startDate = new Date(m.startMs);
-    let endDate = new Date(m.endMs);
-    return {
-      id: 'merged_' + m.startMs,
-      date: startDate.toISOString().slice(0, 10),
-      start: startDate.toTimeString().slice(0, 5),
-      end: endDate.toTimeString().slice(0, 5),
-      duration_min: Math.round(m.duration),
-      project: m.project,
-      note: m.note,
-      events: m.events,
-      screens: m.screens,
-      tasks_done: m.tasks_done
-    };
-  }).sort((a, b) => (b.date + b.start).localeCompare(a.date + a.start));
+  
+  return merged.sort((a, b) => b.date.localeCompare(a.date));
 }
 
 function renderDiary() {
