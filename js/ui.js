@@ -21,26 +21,64 @@ let CALENDAR_SELECTED_DAY = null;
 
 function mergeMidnightSessions(sessions) {
   if (!sessions || !sessions.length) return [];
-  const sorted = [...sessions].sort((a, b) => (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start));
-  const merged = [];
-  let skipNext = false;
-  for (let i = 0; i < sorted.length; i++) {
-    if (skipNext) { skipNext = false; continue; }
-    const curr = { ...sorted[i] };
-    const isEndOfDay = curr.end === '23:59' || curr.end === '23:58' || curr.end === '23:57';
-    if (isEndOfDay && i + 1 < sorted.length) {
-      const next = sorted[i + 1];
-      const isNextDayStart = (next.start === '00:00' || next.start === '00:01') && 
-        (new Date(next.date) - new Date(curr.date)) / (1000*60*60*24) === 1;
-      if (isNextDayStart && curr.project === next.project) {
-        curr.end = next.end;
-        curr.duration_min = (curr.duration_min || 0) + (next.duration_min || 0);
-        curr.note = (curr.note || '') + ' ' + (next.note || '');
-        skipNext = true;
-      }
-    }
-    merged.push(curr);
+  
+  // Группируем все сессии по дате
+  const byDate = {};
+  for (const s of sessions) {
+    if (!byDate[s.date]) byDate[s.date] = [];
+    byDate[s.date].push(s);
   }
+  
+  const merged = [];
+  const dates = Object.keys(byDate).sort();
+  
+  for (const date of dates) {
+    const daySessions = byDate[date];
+    
+    // Сортируем по времени начала
+    daySessions.sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+    
+    // Если сессия одна — просто добавляем
+    if (daySessions.length === 1) {
+      merged.push(daySessions[0]);
+      continue;
+    }
+    
+    // Если сессий несколько — объединяем их в одну
+    let minStart = daySessions[0].start;
+    let maxEnd = daySessions[0].end;
+    let totalDur = 0;
+    let totalEvents = 0;
+    let totalScreens = 0;
+    let totalTasks = 0;
+    let notes = [];
+    let project = daySessions[0].project;
+    
+    for (const s of daySessions) {
+      if (s.start < minStart) minStart = s.start;
+      if (s.end > maxEnd) maxEnd = s.end;
+      totalDur += s.duration_min || 0;
+      totalEvents += s.events || 0;
+      totalScreens += s.screens || 0;
+      totalTasks += s.tasks_done || 0;
+      if (s.note) notes.push(s.note);
+    }
+    
+    merged.push({
+      id: 'merged_' + date,
+      date: date,
+      start: minStart,
+      end: maxEnd,
+      duration_min: totalDur,
+      project: project,
+      note: notes.join(' '),
+      events: totalEvents,
+      screens: totalScreens,
+      tasks_done: totalTasks
+    });
+  }
+  
+  // Возвращаем от новых к старым
   return merged.reverse();
 }
 
@@ -191,23 +229,12 @@ function renderDiary() {
   // 5. СПИСОК
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '16px';
-  let filtered;
-  if (DIARY_MODE === 'sessions') {
-      // Берем склеенные сессии
-      const merged = mergeMidnightSessions(window.DATA.sessions || []);
-      filtered = merged.filter(s => {
-          const sd = new Date(s.date + 'T00:00:00');
-          if (CALENDAR_VIEW === 'year') return sd.getFullYear() === curDate.getFullYear();
-          return sd >= start && sd <= end;
-      });
-  } else {
-      // Берем сырые сессии
-      filtered = (window.DATA.sessions || []).filter(s => {
-          const sd = new Date(s.date + 'T00:00:00');
-          if (CALENDAR_VIEW === 'year') return sd.getFullYear() === curDate.getFullYear();
-          return sd >= start && sd <= end;
-      });
-  }
+  let baseSessions = DIARY_MODE === 'sessions' ? mergeMidnightSessions(window.DATA.sessions || []) : (window.DATA.sessions || []);
+  let filtered = baseSessions.filter(s => {
+      const sd = new Date(s.date + 'T00:00:00');
+      if (CALENDAR_VIEW === 'year') return sd.getFullYear() === curDate.getFullYear();
+      return sd >= start && sd <= end;
+  });
   
   if (CALENDAR_SELECTED_DAY) filtered = filtered.filter(s => s.date === CALENDAR_SELECTED_DAY);
   filtered.sort((a, b) => (b.date + (b.start||'')).localeCompare(a.date + (a.start||'')));
