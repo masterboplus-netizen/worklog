@@ -10,7 +10,7 @@ function mergeMidnightSessions(sessions) {
     return (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start);
   });
 
-  const merged = getCleanSessions(window.DATA.sessions || []);
+  const merged = [];
   let i = 0;
 
   while (i < sorted.length) {
@@ -533,7 +533,7 @@ function calcTotals() {
   let total = 0, week = 0, month = 0, todayMin = 0, screens = 0, msgs = 0;
   
   // ИСПОЛЬЗУЕМ СКЛЕЕННЫЕ СЕССИИ
-  const merged = getCleanSessions(window.DATA.sessions || []);
+  const merged = [];
   
   for (const s of merged) {
     total += s.duration_min || 0;
