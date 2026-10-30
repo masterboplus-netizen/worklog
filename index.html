@@ -12,6 +12,42 @@
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="css/base.css?v=9999">
 <link rel="stylesheet" href="css/components.css?v=9600">
+
+<style>
+.segmented-control {
+  display: flex !important;
+  background: var(--bg3) !important;
+  border-radius: 20px !important;
+  padding: 4px !important;
+  margin: 0 16px 16px 16px !important;
+  gap: 4px !important;
+  width: calc(100% - 32px) !important;
+  box-sizing: border-box !important;
+}
+.segmented-control button {
+  flex: 1 !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 8px 4px !important;
+  border-radius: 16px !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  outline: none !important;
+  -webkit-appearance: none !important;
+  text-align: center !important;
+}
+.segmented-control button.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3) !important;
+}
+</style>
+
 </head>
 <body>
 <div id="app"></div>
@@ -86,7 +122,7 @@
 <!-- === КОНЕЦ СЕЙФА === -->
 
 <script src="crypto.js?v=9999"></script>
-<script src="js/ui.js?v=9600"></script>
+<script src="js/ui.js?v=9700"></script>
 <script src="js/chart.js?v=9999"></script>
 <script src="js/auth.js?v=9999"></script>
 <script src="app.js?v=9999"></script>
