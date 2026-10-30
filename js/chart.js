@@ -36,11 +36,11 @@ function renderActivityPageV2() {
 
     // 2. ГРАФИК
     const chartWrapper = document.createElement('div');
-    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 220px; position: relative; box-sizing: border-box;';
+    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 200px; margin-bottom: 10px; position: relative; box-sizing: border-box;';
 
     const yAxis = document.createElement('div');
     yAxis.id = 'tl-y-axis';
-    yAxis.style.cssText = 'width: 32px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 30px;';
+    yAxis.style.cssText = 'width: 32px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 40px;';
 
     const scrollContainer = document.createElement('div');
     scrollContainer.className = 'tl-container';
@@ -214,7 +214,7 @@ function renderActivityPageV2() {
                 text = (h > 0 ? h + 'ч ' : '') + m + 'м';
             }
 
-            tooltip.innerHTML = `<div style="font-weight:600;color:#fff;font-size:14px;padding:6px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
+            tooltip.innerHTML = `<div style="font-weight:600;color:#fff;font-size:13px;padding:4px 8px;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
             tooltip.style.display = 'block';
             tooltip.style.position = 'fixed';
             tooltip.style.zIndex = '99999';
