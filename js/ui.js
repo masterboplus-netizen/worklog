@@ -138,9 +138,10 @@ function renderDiary() {
         let col = 'var(--fg-dim)';
         if (isToday) { bg = 'rgba(255, 255, 255, 0.2)'; col = '#fff'; }
         
-        let cellHtml = `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:9px; border-radius:50%; background:${bg}; color:${col}; position:relative;">${d.getDate()}`;
+        // Уменьшаем размер ячейки и шрифт
+        let cellHtml = `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:7px; border-radius:50%; background:${bg}; color:${col}; position:relative;">${d.getDate()}`;
         if (hasData) {
-             cellHtml += `<div style="position:absolute; bottom:1px; width:3px; height:3px; border-radius:50%; background:var(--accent);"></div>`;
+             cellHtml += `<div style="position:absolute; bottom:0px; width:2px; height:2px; border-radius:50%; background:var(--accent);"></div>`;
         }
         cellHtml += `</div>`;
         miniGrid.innerHTML += cellHtml;
@@ -190,12 +191,24 @@ function renderDiary() {
   // 5. СПИСОК
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '16px';
-  let baseSessions = DIARY_MODE === 'sessions' ? mergeMidnightSessions(window.DATA.sessions || []) : (window.DATA.sessions || []);
-  let filtered = baseSessions.filter(s => {
-      const sd = new Date(s.date + 'T00:00:00');
-      if (CALENDAR_VIEW === 'year') return sd.getFullYear() === curDate.getFullYear();
-      return sd >= start && sd <= end;
-  });
+  let filtered;
+  if (DIARY_MODE === 'sessions') {
+      // Берем склеенные сессии
+      const merged = mergeMidnightSessions(window.DATA.sessions || []);
+      filtered = merged.filter(s => {
+          const sd = new Date(s.date + 'T00:00:00');
+          if (CALENDAR_VIEW === 'year') return sd.getFullYear() === curDate.getFullYear();
+          return sd >= start && sd <= end;
+      });
+  } else {
+      // Берем сырые сессии
+      filtered = (window.DATA.sessions || []).filter(s => {
+          const sd = new Date(s.date + 'T00:00:00');
+          if (CALENDAR_VIEW === 'year') return sd.getFullYear() === curDate.getFullYear();
+          return sd >= start && sd <= end;
+      });
+  }
+  
   if (CALENDAR_SELECTED_DAY) filtered = filtered.filter(s => s.date === CALENDAR_SELECTED_DAY);
   filtered.sort((a, b) => (b.date + (b.start||'')).localeCompare(a.date + (a.start||'')));
 
