@@ -13,9 +13,36 @@ const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц',
 
 
 
+let DIARY_MODE = 'sessions';
 let CALENDAR_VIEW = 'month';
 let CALENDAR_OFFSET = 0;
 let CALENDAR_SELECTED_DAY = null;
+
+
+function mergeMidnightSessions(sessions) {
+  if (!sessions || !sessions.length) return [];
+  const sorted = [...sessions].sort((a, b) => (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start));
+  const merged = [];
+  let skipNext = false;
+  for (let i = 0; i < sorted.length; i++) {
+    if (skipNext) { skipNext = false; continue; }
+    const curr = { ...sorted[i] };
+    const isEndOfDay = curr.end === '23:59' || curr.end === '23:58' || curr.end === '23:57';
+    if (isEndOfDay && i + 1 < sorted.length) {
+      const next = sorted[i + 1];
+      const isNextDayStart = (next.start === '00:00' || next.start === '00:01') && 
+        (new Date(next.date) - new Date(curr.date)) / (1000*60*60*24) === 1;
+      if (isNextDayStart && curr.project === next.project) {
+        curr.end = next.end;
+        curr.duration_min = (curr.duration_min || 0) + (next.duration_min || 0);
+        curr.note = (curr.note || '') + ' ' + (next.note || '');
+        skipNext = true;
+      }
+    }
+    merged.push(curr);
+  }
+  return merged.reverse();
+}
 
 function renderDiary() {
   const c = document.getElementById('content-diary');
@@ -28,14 +55,29 @@ function renderDiary() {
 
   // Фильтры
   const filters = document.createElement('div');
-  filters.style.cssText = 'display:flex; gap:8px; margin-bottom:16px; overflow-x: auto; padding-bottom: 4px;';
+  filters.className = 'segmented-control';
   filters.innerHTML = `
-    <button class="cal-btn ${CALENDAR_VIEW === 'week' ? 'active' : ''}" data-view="week" style="white-space:nowrap;">Неделя</button>
-    <button class="cal-btn ${CALENDAR_VIEW === 'month' ? 'active' : ''}" data-view="month" style="white-space:nowrap;">Месяц</button>
-    <button class="cal-btn ${CALENDAR_VIEW === 'year' ? 'active' : ''}" data-view="year" style="white-space:nowrap;">Год</button>
-    <button class="cal-btn ${CALENDAR_VIEW === '30days' ? 'active' : ''}" data-view="30days" style="white-space:nowrap;">30 дней</button>
+    <button class="${CALENDAR_VIEW === 'month' ? 'active' : ''}" data-view="month">Месяц</button>
+    <button class="${CALENDAR_VIEW === 'year' ? 'active' : ''}" data-view="year">Год</button>
+    <button class="${CALENDAR_VIEW === 'week' ? 'active' : ''}" data-view="week">Неделя</button>
+    <button class="${CALENDAR_VIEW === '30days' ? 'active' : ''}" data-view="30days">30 дней</button>
   `;
   topBar.appendChild(filters);
+
+  const modeFilters = document.createElement('div');
+  modeFilters.className = 'segmented-control';
+  modeFilters.innerHTML = `
+    <button class="${DIARY_MODE === 'sessions' ? 'active' : ''}" data-mode="sessions">Сессии</button>
+    <button class="${DIARY_MODE === '24h' ? 'active' : ''}" data-mode="24h">24ч</button>
+  `;
+  topBar.appendChild(modeFilters);
+
+  modeFilters.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      DIARY_MODE = btn.dataset.mode;
+      renderDiary();
+    });
+  });
 
   // Навигация: [<-] Название [->]
   const navRow = document.createElement('div');
@@ -222,7 +264,8 @@ function renderDiary() {
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '24px';
 
-  let filteredSessions = (window.DATA.sessions || []).filter(s => {
+  let baseSessions = DIARY_MODE === 'sessions' ? mergeMidnightSessions(window.DATA.sessions || []) : (window.DATA.sessions || []);
+  let filteredSessions = baseSessions.filter(s => {
     const sd = new Date(s.date + 'T00:00:00');
     if (CALENDAR_VIEW === 'year') return sd.getFullYear() === startDate.getFullYear();
     return sd >= startDate && sd <= endDate;
@@ -259,7 +302,7 @@ function renderDiary() {
   c.appendChild(listDiv);
 
   // 4. ОБРАБОТЧИКИ КНОПОК
-  c.querySelectorAll('.cal-btn').forEach(btn => {
+  c.querySelectorAll('.segmented-control button[data-view]').forEach(btn => {
     btn.addEventListener('click', () => {
       CALENDAR_VIEW = btn.dataset.view;
       CALENDAR_OFFSET = 0;
