@@ -36,7 +36,7 @@ function renderActivityPageV2() {
 
     // 2. ГРАФИК
     const chartWrapper = document.createElement('div');
-    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 200px; margin-bottom: 40px; position: relative; box-sizing: border-box;';
+    chartWrapper.style.cssText = 'display: flex; flex-direction: row; width: 100%; height: 200px; margin-bottom: 10px; position: relative; box-sizing: border-box;';
 
     const yAxis = document.createElement('div');
     yAxis.id = 'tl-y-axis';
@@ -64,7 +64,7 @@ function renderActivityPageV2() {
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     
     const metricBar = document.createElement('div');
-    metricBar.className = 'segmented-control';
+    metricBar.className = "segmented-control"; metricBar.style.marginTop = "32px"; metricBar.style.marginBottom = "16px";
     
     metricBar.innerHTML = metrics.map(([key, label]) => {
         const isActive = CHART_STATE.metric === key;
@@ -214,7 +214,7 @@ function renderActivityPageV2() {
                 text = (h > 0 ? h + 'ч ' : '') + m + 'м';
             }
 
-            tooltip.innerHTML = `<div style="font-weight:600;color:#fff;font-size:14px;padding:6px 10px;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
+            tooltip.innerHTML = `<div style="font-weight:600;color:#fff;font-size:13px;padding:4px 8px;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
             tooltip.style.display = 'block';
             tooltip.style.position = 'fixed';
             tooltip.style.zIndex = '99999';
