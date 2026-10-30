@@ -386,22 +386,8 @@ function getProgressColor(percent) {
   return 'var(--green)'; // Зеленый
 }
 
-function renderHeroRings(todayMin, avgPerDay, todayEvents, todayScreens, todayTasks) {
+function renderHeroRings() {
   const t = calcTotals();
-  // Восстанавливаем переменные, которые удалил предыдущий ИИ
-  let heroValue = todayMin;
-  let heroLabel = 'Сегодня';
-  let heroSub = 'Среднее ' + fmtH(avgPerDay);
-  
-  const pctDur = Math.min(100, Math.round(heroValue / (avgPerDay > 0 ? avgPerDay : 480) * 100));
-  const ringColor = getProgressColor(pctDur);
-  const pctMsg = Math.min(100, Math.round(todayEvents / 100 * 100));
-  const pctScr = Math.min(100, Math.round(todayScreens / 100 * 100));
-  const pctTasks = Math.min(100, Math.round(todayTasks / 10 * 100));
-  const msgVal = todayEvents;
-  const scrVal = todayScreens;
-  const tasksVal = todayTasks;
-
   const sessions = mergeMidnightSessions(window.DATA.sessions || []);
   const _sessions = window.DATA.sessions || [];
   const msgVal = _sumRange(_sessions, MINI_MSG_PERIOD, 'events');
