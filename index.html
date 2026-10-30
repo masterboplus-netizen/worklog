@@ -103,7 +103,7 @@
 
 <!-- === СЛЕПОЙ СЕЙФ (v28) === -->
 <div id="scroll-pin-screen">
-  <div id="safe-dial-container">
+  <div id="safe-dial-container" style="position: fixed; right: 20px; bottom: 70px; width: 220px; height: 220px; touch-action: none; z-index: 9999; margin: 0; padding: 0;">
     <!-- Вращающийся диск -->
     <div id="safe-dial-rotator">
       <svg width="220" height="220" viewBox="0 0 220 220">
@@ -126,7 +126,7 @@
 <script src="js/chart.js?v=9999"></script>
 <script src="js/auth.js?v=9999"></script>
 <script src="app.js?v=9500"></script>
-<script src="js/safe.js?v=9999"></script>
+<script src="js/safe.js?v=9700"></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js?v=9999', { updateViaCache: 'none' }).catch(function(){});

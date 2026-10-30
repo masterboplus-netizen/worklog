@@ -43,13 +43,13 @@ function showSafe() {
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) return;
 
-  screen.style.display = 'flex';
+  screen.style.display = 'block';
   screen.style.position = 'fixed';
   screen.style.top = '0'; screen.style.left = '0';
   screen.style.width = '100vw'; screen.style.height = '100vh';
   screen.style.zIndex = '9999';
-  screen.style.alignItems = 'center';
-  screen.style.justifyContent = 'center';
+  screen.style.alignItems = 'initial';
+  screen.style.justifyContent = 'initial';
   screen.style.backgroundColor = 'var(--bg)';
 
   const dash = document.getElementById('dashboard');
