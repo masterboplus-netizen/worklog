@@ -61,6 +61,20 @@ function setupTabs() {
 }
 
 function switchTab(name) {
+  // 1. СБРОС СКРОЛЛА ВВЕРХ ПРИ СМЕНЕ ВКЛАДКИ
+  const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity'];
+  scrollContainers.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.scrollTop = 0;
+  });
+  window.scrollTo(0, 0);
+
+  // 2. СКРЫВАЕМ ВСЕ ТУЛТИПЫ ПРИ СМЕНЕ ВКЛАДКИ
+  document.querySelectorAll('.floating-tooltip, #global-chart-tooltip, #tl-legend-bar').forEach(el => {
+      el.style.display = 'none';
+      el.classList.add('hidden');
+  });
+
   // ПРИНУДИТЕЛЬНО СКРЫВАЕМ ВСЕ ТУЛТИПЫ И ЛЕГЕНДЫ ГРАФИКА ПРИ СМЕНЕ ВКЛАДКИ
   document.querySelectorAll('.floating-tooltip, #global-chart-tooltip, #tl-legend-bar').forEach(el => {
       el.style.display = 'none';
