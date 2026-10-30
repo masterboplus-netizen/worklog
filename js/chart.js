@@ -67,11 +67,12 @@ function renderActivityPageV2() {
     // 3. НИЖНИЕ КНОПКИ
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     const metricHTML = metrics.map(([key, label]) =>
-        '<button class="cal-btn' + (CHART_STATE_V2.metric === key ? ' active' : '') + '" data-metric="' + key + '" style="flex:1; text-align:center; padding: 4px 2px; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + label + '</button>'
+        '<button class="' + (CHART_STATE_V2.metric === key ? 'active' : '') + '" data-metric="' + key + '">' + label + '</button>'
     ).join('');
 
     const metricBar = document.createElement('div');
-    metricBar.style.cssText = 'display:flex; gap:4px; margin: 16px 8px 16px 8px; justify-content: space-between; box-sizing: border-box;';
+    metricBar.className = 'segmented-control';
+    metricBar.style.margin = '16px 0';
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
 

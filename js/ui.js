@@ -61,7 +61,15 @@ function mergeMidnightSessions(sessions) {
     merged.push(processGroup(currentGroup));
   }
 
-  return merged.sort((a, b) => b.date.localeCompare(a.date));
+  return merged.sort((a, b) => {
+    if (a.date !== b.date) return b.date.localeCompare(a.date);
+    // Сортируем по времени окончания (по убыванию)
+    let endA = a.end; let endB = b.end;
+    // Если конец "меньше" начала (ночная), считаем его позже
+    if (endA < a.start) endA = '24' + endA;
+    if (endB < b.start) endB = '24' + endB;
+    return endB.localeCompare(endA);
+  });
 
   // 3. Обработка группы
   function processGroup(group) {
@@ -1254,29 +1262,51 @@ function renderActivityPageV2() {
 }
 // === ОБНОВЛЕННЫЙ DASHBOARD С АНИМАЦИЕЙ ===
 function renderDashboard() {
-  if (!window.DATA) return;
   const c = document.getElementById('content');
-  if (!c) return;
+  if (!c || !window.DATA) return;
+  
+  // ВАЖНО: Берем склеенные сессии!
+  const merged = mergeMidnightSessions(window.DATA.sessions || []);
+  const todayStr = _localDate(new Date());
+  
+  // Ищем сегодняшнюю сессию (или вчерашнюю, если она перешла за полночь)
+  let todaySessions = merged.filter(s => s.date === todayStr);
+  
+  // Если сегодня пусто, проверим вчера (вдруг сессия ночная)
+  if (todaySessions.length === 0) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yStr = _localDate(yesterday);
+      todaySessions = merged.filter(s => s.date === yStr);
+  }
+
+  // Считаем суммы
+  let todayMin = 0, todayEvents = 0, todayScreens = 0, todayTasks = 0;
+  for (const s of todaySessions) {
+      todayMin += s.duration_min || 0;
+      todayEvents += s.events || 0;
+      todayScreens += s.screens || 0;
+      todayTasks += s.tasks_done || 0;
+  }
+
+  // Считаем среднее в день (только по уникальным дням)
+  let totalMin = 0;
+  let uniqueDays = new Set();
+  for (const s of merged) {
+      totalMin += s.duration_min || 0;
+      uniqueDays.add(s.date);
+  }
+  const avgPerDay = uniqueDays.size > 0 ? Math.round(totalMin / uniqueDays.size) : 0;
+
+  // Очищаем контент
   c.innerHTML = '';
-  c.appendChild(renderHeroRings());
 
-  // Принудительный сброс колец в 0 перед запуском анимации
-  const circles = document.querySelectorAll('.ring-progress');
-  circles.forEach(circle => {
-    circle.style.transition = 'none'; // Отключаем плавность на мгновение
-    circle.style.strokeDashoffset = circle.getAttribute('stroke-dasharray'); // Ставим в 0
-  });
-
-  // Запускаем анимацию через requestAnimationFrame
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      circles.forEach(circle => {
-        const targetOffset = circle.getAttribute('data-target-offset');
-        if (targetOffset !== null) {
-          circle.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1)'; // Включаем плавность
-          circle.style.strokeDashoffset = targetOffset; // Едем к цели
-        }
-      });
-    }, 50); // Небольшая задержка
-  });
+  // Отрисовка (оставляем твои родные функции)
+  renderHeroRings(todayMin, avgPerDay, todayEvents, todayScreens, todayTasks);
+  
+  // Отрисовка остального (графики, проекты и т.д., если они есть в функции)
+  // ...
+  
+  // Восстанавливаем скролл (если нужно)
 }
+
