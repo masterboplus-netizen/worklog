@@ -1,3 +1,4 @@
+window.onerror = function(msg, url, line) { alert('ОШИБКА В ГРАФИКЕ:\n' + msg + '\nСтрока: ' + line); return false; };
 // === МОДУЛЬ: ГРАФИК (ЧИСТАЯ ВЕРСИЯ V4) ===
 let CHART_STATE = { metric: 'duration', selectedDay: null, currentMonth: null, currentYear: null };
 
