@@ -254,11 +254,18 @@ function renderDiary() {
   if (filtered.length === 0) {
       listDiv.innerHTML = '<div class="empty" style="padding:20px 0;">Нет записей за этот период</div>';
   } else {
+      let lastDate = '';
       filtered.forEach(s => {
+          if (s.date !== lastDate) {
+              const dateHeader = document.createElement('div');
+              dateHeader.className = 'diary-date';
+              dateHeader.textContent = formatDiaryDate(s.date);
+              listDiv.appendChild(dateHeader);
+              lastDate = s.date;
+          }
           const item = document.createElement('div');
           item.className = 'diary-item';
           item.innerHTML = `
-            <div class="diary-date">${formatDiaryDate(s.date)}</div>
             <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
             <div class="diary-proj">${projName[s.project] || s.project || '–'}</div>
             <div class="diary-note">${s.note || ''}</div>
