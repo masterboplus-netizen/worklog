@@ -89,19 +89,24 @@ function renderDiary() {
   // Сетка календаря
   const grid = document.createElement('div');
   grid.className = 'calendar-grid';
-  // ... (упрощенная логика отрисовки сетки)
+  
+  let start, end;
+  if (CALENDAR_VIEW === 'month') {
+    start = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
+    end = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);
+  } else if (CALENDAR_VIEW === 'week') {
+    start = new Date(curDate); start.setDate(curDate.getDate() - (curDate.getDay() === 0 ? 6 : curDate.getDay() - 1));
+    end = new Date(start); end.setDate(start.getDate() + 6);
+  } else if (CALENDAR_VIEW === '30days') {
+    start = new Date(curDate); end = new Date(curDate); end.setDate(start.getDate() + 29);
+  } else {
+    start = new Date(curDate.getFullYear(), 0, 1); end = new Date(curDate.getFullYear(), 11, 31);
+  }
+
   if (CALENDAR_VIEW !== 'year') {
     ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(d => {
       const el = document.createElement('div'); el.className = 'cal-dow'; el.textContent = d; grid.appendChild(el);
     });
-    let start = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
-    let end = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);
-    if (CALENDAR_VIEW === 'week') {
-        start.setDate(curDate.getDate() - (curDate.getDay() === 0 ? 6 : curDate.getDay() - 1));
-        end = new Date(start); end.setDate(start.getDate() + 6);
-    } else if (CALENDAR_VIEW === '30days') {
-        start = new Date(curDate); end = new Date(curDate); end.setDate(start.getDate() + 29);
-    }
     
     const firstDow = start.getDay() === 0 ? 6 : start.getDay() - 1;
     for (let i = 0; i < firstDow; i++) grid.appendChild(document.createElement('div'));
@@ -121,6 +126,8 @@ function renderDiary() {
       cell.addEventListener('click', () => { CALENDAR_SELECTED_DAY = CALENDAR_SELECTED_DAY === ds ? null : ds; renderDiary(); });
       grid.appendChild(cell);
     }
+  } else {
+    grid.innerHTML = '<div style="padding:20px;text-align:center;">Годовой вид в разработке</div>';
   }
   c.appendChild(grid);
 
@@ -149,32 +156,47 @@ function renderDiary() {
   const projName = {};
   for (const p of window.DATA.projects || []) projName[p.id] = p.name;
 
-  filtered.forEach(s => {
-      const item = document.createElement('div');
-      item.className = 'diary-item';
-      item.innerHTML = `
-        <div class="diary-date">${formatDiaryDate(s.date)}</div>
-        <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
-        <div class="diary-proj">${projName[s.project] || s.project || '–'}</div>
-        <div class="diary-note">${s.note || ''}</div>
-      `;
-      listDiv.appendChild(item);
-  });
+  if (filtered.length === 0) {
+      listDiv.innerHTML = '<div class="empty" style="padding:20px 0;">Нет записей за этот период</div>';
+  } else {
+      filtered.forEach(s => {
+          const item = document.createElement('div');
+          item.className = 'diary-item';
+          item.innerHTML = `
+            <div class="diary-date">${formatDiaryDate(s.date)}</div>
+            <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
+            <div class="diary-proj">${projName[s.project] || s.project || '–'}</div>
+            <div class="diary-note">${s.note || ''}</div>
+          `;
+          listDiv.appendChild(item);
+      });
+  }
   c.appendChild(listDiv);
 
-  // ОБРАБОТЧИКИ
-  c.querySelectorAll('.segmented-control button[data-view]').forEach(b => {
-      b.addEventListener('click', () => { CALENDAR_VIEW = b.dataset.view; CALENDAR_OFFSET = 0; CALENDAR_SELECTED_DAY = null; renderDiary(); });
+  // 4. ОБРАБОТЧИКИ (ПРИВЯЗЫВАЕМ ЗАНОВО)
+  viewCapsule.querySelectorAll('button[data-view]').forEach(b => {
+      b.addEventListener('click', () => { 
+          CALENDAR_VIEW = b.dataset.view; 
+          CALENDAR_OFFSET = 0; 
+          CALENDAR_SELECTED_DAY = null; 
+          renderDiary(); 
+      });
   });
-  c.querySelectorAll('.segmented-control button[data-mode]').forEach(b => {
-      b.addEventListener('click', () => { DIARY_MODE = b.dataset.mode; renderDiary(); });
+  
+  modeCapsule.querySelectorAll('button[data-mode]').forEach(b => {
+      b.addEventListener('click', () => { 
+          DIARY_MODE = b.dataset.mode; 
+          renderDiary(); 
+      });
   });
+
   prevBtn.addEventListener('click', () => { 
     if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET--; 
     else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30;
     else CALENDAR_OFFSET--; 
     CALENDAR_SELECTED_DAY = null; renderDiary(); 
   });
+  
   nextBtn.addEventListener('click', () => { 
     if (CALENDAR_VIEW === 'year') CALENDAR_OFFSET++; 
     else if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30;
