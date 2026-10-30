@@ -74,6 +74,7 @@ function renderActivityPageV2() {
     const metricBar = document.createElement('div');
     metricBar.className = "segmented-control";
     metricBar.style.cssText = "margin: 16px 0; display: flex; gap: 4px; padding: 4px; background: var(--bg3); border-radius: 20px; width: calc(100% - 32px); box-sizing: border-box;";
+    metricBar.querySelectorAll(".seg-btn").forEach(btn => btn.style.cssText = "flex: 1; background: transparent; border: none; color: var(--fg-dim); font-size: 13px; font-weight: 500; padding: 8px 4px; border-radius: 16px; cursor: pointer; text-align: center; transition: all 0.2s; white-space: nowrap;");
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
 
