@@ -235,26 +235,30 @@ function renderActivityPageV2() {
             let topPos = rect.top + (rect.height - barHeightPx) - 40 + window.scrollY;
 
             tooltip.style.position = 'absolute';
-            tooltip.style.left = leftPos + 'px';
-            tooltip.style.top = topPos + 'px';
-            tooltip.style.transform = 'translateX(-50%)';
-        }
-    });
-
-    // Смена метрики
-    c.querySelectorAll('.chart-tabs button[data-metric]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    // Смена метрики (ИСПРАВЛЕНО)
+    c.querySelectorAll(".chart-tabs button[data-metric]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
             e.stopPropagation();
-            CHART_STATE.metric = btn.dataset.metric;
+            const newMetric = btn.getAttribute("data-metric");
+            if (CHART_STATE.metric === newMetric) return;
+            
+            CHART_STATE.metric = newMetric;
             CHART_STATE.selectedDay = null;
-            tooltip.style.display = 'none';
+            const t = document.getElementById("global-chart-tooltip");
+            if (t) t.style.display = "none";
+            
             const currentScroll = scrollContainer.scrollLeft;
             renderActivityPageV2();
+            
             setTimeout(() => {
-                const newScroll = document.getElementById('tl-scroll');
+                const newScroll = document.getElementById("tl-scroll");
                 if (newScroll) {
                     newScroll.scrollLeft = currentScroll;
-                    updateChart();
+                    newScroll.dispatchEvent(new Event("scroll"));
+                }
+            }, 50);
+        });
+    });
                 }
             }, 50);
         });
