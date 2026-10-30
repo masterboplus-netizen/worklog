@@ -46,6 +46,33 @@
   color: #fff !important;
   box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3) !important;
 }
+
+.chart-tabs button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--fg-dim);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 4px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  outline: none;
+  text-align: center;
+}
+.chart-tabs button.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
+}
+.chart-tabs {
+  background: var(--bg3);
+  border-radius: 20px;
+  padding: 4px;
+}
 </style>
 
 </head>
@@ -122,8 +149,8 @@
 <!-- === КОНЕЦ СЕЙФА === -->
 
 <script src="crypto.js?v=163"></script>
-<script src="js/ui.js?v=168"></script>
-<script src="js/chart.js?v=168"></script>
+<script src="js/ui.js?v=169"></script>
+<script src="js/chart.js?v=169"></script>
 <script src="js/auth.js?v=163"></script>
 <script src="app.js?v=163"></script>
 <script src="js/safe.js?v=163"></script>
