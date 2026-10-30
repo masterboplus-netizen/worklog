@@ -1166,6 +1166,18 @@
       "events": 0,
       "screens": 0,
       "tasks_done": 0
+    },
+    {
+      "id": "s_20261030_2",
+      "date": "2026-10-30",
+      "start": "14:30",
+      "end": "17:00",
+      "duration_min": 150,
+      "project": "worklog",
+      "note": "Рефакторинг склейки сессий (15 мин), фикс графика, восстановление колец, борьба с дублями renderHeroRings",
+      "events": 0,
+      "screens": 0,
+      "tasks_done": 0
     }
   ],
   "baseline": {
