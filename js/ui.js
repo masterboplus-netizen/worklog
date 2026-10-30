@@ -91,7 +91,10 @@ function renderDiary() {
   grid.className = 'calendar-grid';
   
   let start, end;
-  if (CALENDAR_VIEW === 'month') {
+  if (CALENDAR_VIEW === 'year') {
+    start = new Date(curDate.getFullYear(), 0, 1);
+    end = new Date(curDate.getFullYear(), 11, 31);
+  } else if (CALENDAR_VIEW === 'month') {
     start = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
     end = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);
   } else if (CALENDAR_VIEW === 'week') {
@@ -99,8 +102,6 @@ function renderDiary() {
     end = new Date(start); end.setDate(start.getDate() + 6);
   } else if (CALENDAR_VIEW === '30days') {
     start = new Date(curDate); end = new Date(curDate); end.setDate(start.getDate() + 29);
-  } else {
-    start = new Date(curDate.getFullYear(), 0, 1); end = new Date(curDate.getFullYear(), 11, 31);
   }
 
   if (CALENDAR_VIEW !== 'year') {
