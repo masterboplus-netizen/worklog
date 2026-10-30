@@ -58,7 +58,7 @@ function mergeMidnightSessions(sessions) {
 
     // Проверяем правило 15 минут (и пересечение, и стык через полночь)
     // Если следующая начинается не позже, чем через 15 минут после конца текущей
-    if (sStartVirtual <= currEndM + 15) {
+    if (sStartVirtual <= currEndM) {
       // Склеиваем
       if (sEndM + (dayDiff * 24 * 60) > currEndM) {
         current.end = s.end;
