@@ -17,15 +17,15 @@ function renderActivityPageV2() {
     yearSpan.id = 'chart-year-label';
     yearSpan.style.cssText = 'cursor:pointer;';
 
-    if (!CHART_STATE_V2.currentMonth) {
+    if (!CHART_STATE.currentMonth) {
         const now = new Date();
-        CHART_STATE_V2.currentMonth = now.getMonth();
-        CHART_STATE_V2.currentYear = now.getFullYear();
+        CHART_STATE.currentMonth = now.getMonth();
+        CHART_STATE.currentYear = now.getFullYear();
     }
 
     const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-    monthSpan.textContent = months[CHART_STATE_V2.currentMonth];
-    yearSpan.textContent = CHART_STATE_V2.currentYear;
+    monthSpan.textContent = months[CHART_STATE.currentMonth];
+    yearSpan.textContent = CHART_STATE.currentYear;
 
     monthSpan.addEventListener('click', () => openMonthPicker());
     yearSpan.addEventListener('click', () => openYearPicker());
@@ -67,7 +67,7 @@ function renderActivityPageV2() {
     // 3. НИЖНИЕ КНОПКИ
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     const metricHTML = metrics.map(([key, label]) =>
-        '<button class="' + (CHART_STATE_V2.metric === key ? 'active' : '') + '" data-metric="' + key + '">' + label + '</button>'
+        '<button class="' + (CHART_STATE.metric === key ? 'active' : '') + '" data-metric="' + key + '">' + label + '</button>'
     ).join('');
 
     const metricBar = document.createElement('div');
@@ -131,8 +131,8 @@ function renderActivityPageV2() {
             const d = new Date(allDates[startIndex] + 'T00:00:00');
             monthSpan.textContent = months[d.getMonth()];
             yearSpan.textContent = d.getFullYear();
-            CHART_STATE_V2.currentMonth = d.getMonth();
-            CHART_STATE_V2.currentYear = d.getFullYear();
+            CHART_STATE.currentMonth = d.getMonth();
+            CHART_STATE.currentYear = d.getFullYear();
         }
 
         let maxVal = 0;
@@ -141,22 +141,22 @@ function renderActivityPageV2() {
             let v = 0;
             for (const sess of window.DATA.sessions || []) {
                 if (sess.date === dateStr) {
-                    if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
-                    else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
-                    else if (CHART_STATE_V2.metric === 'screens') v += sess.screens || 0;
-                    else if (CHART_STATE_V2.metric === 'tasks') v += sess.tasks_done || 0;
+                    if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
+                    else if (CHART_STATE.metric === 'events') v += sess.events || 0;
+                    else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
+                    else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
                 }
             }
             if (v > maxVal) maxVal = v;
         }
-        if (maxVal === 0) maxVal = CHART_STATE_V2.metric === 'duration' ? 720 : 10;
+        if (maxVal === 0) maxVal = CHART_STATE.metric === 'duration' ? 720 : 10;
 
         // Отрисовка Оси Y
         let yHTML = '';
         const step = maxVal / 4;
         for (let i = 4; i >= 0; i--) {
             const val = Math.round(step * i);
-            const lbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
+            const lbl = CHART_STATE.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
             yHTML += '<div>' + lbl + '</div>';
         }
         yAxis.innerHTML = yHTML;
@@ -168,17 +168,17 @@ function renderActivityPageV2() {
             let v = 0;
             for (const sess of window.DATA.sessions || []) {
                 if (sess.date === dateStr) {
-                    if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
-                    else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
-                    else if (CHART_STATE_V2.metric === 'screens') v += sess.screens || 0;
-                    else if (CHART_STATE_V2.metric === 'tasks') v += sess.tasks_done || 0;
+                    if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
+                    else if (CHART_STATE.metric === 'events') v += sess.events || 0;
+                    else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
+                    else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
                 }
             }
             const h = v ? Math.max(2, Math.round(v / maxVal * 100)) : 0;
             col.querySelector('.tl-bar').style.height = h + '%';
             col.querySelector('.tl-bar').classList.remove('selected');
 
-            if (dateStr === CHART_STATE_V2.selectedDay) {
+            if (dateStr === CHART_STATE.selectedDay) {
                 col.querySelector('.tl-bar').classList.add('selected');
             }
         });
@@ -196,14 +196,14 @@ function renderActivityPageV2() {
         if (!col) return;
         const dateStr = col.dataset.date;
 
-        if (CHART_STATE_V2.selectedDay === dateStr) {
-            CHART_STATE_V2.selectedDay = null;
+        if (CHART_STATE.selectedDay === dateStr) {
+            CHART_STATE.selectedDay = null;
             tooltip.style.display = 'none';
             updateChart();
             return;
         }
 
-        CHART_STATE_V2.selectedDay = dateStr;
+        CHART_STATE.selectedDay = dateStr;
         updateChart();
 
         // Показываем тултип
@@ -212,13 +212,13 @@ function renderActivityPageV2() {
             let v = 0;
             for (const sess of window.DATA.sessions || []) {
                 if (sess.date === dateStr) {
-                    if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
-                    else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
-                    else if (CHART_STATE_V2.metric === 'screens') v += sess.screens || 0;
-                    else if (CHART_STATE_V2.metric === 'tasks') v += sess.tasks_done || 0;
+                    if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
+                    else if (CHART_STATE.metric === 'events') v += sess.events || 0;
+                    else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
+                    else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
                 }
             }
-            const text = CHART_STATE_V2.metric === 'duration' ? fmtH(v) : String(v);
+            const text = CHART_STATE.metric === 'duration' ? fmtH(v) : String(v);
             tooltip.innerHTML = `<div style="font-weight:600;color:var(--fg);">${text}</div>`;
             tooltip.style.display = 'block';
 
@@ -241,11 +241,11 @@ function renderActivityPageV2() {
     });
 
     // Смена метрики
-    c.querySelectorAll('.cal-btn[data-metric]').forEach(btn => {
+    c.querySelectorAll('.chart-tabs button[data-metric]').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            CHART_STATE_V2.metric = btn.dataset.metric;
-            CHART_STATE_V2.selectedDay = null;
+            CHART_STATE.metric = btn.dataset.metric;
+            CHART_STATE.selectedDay = null;
             tooltip.style.display = 'none';
             const currentScroll = scrollContainer.scrollLeft;
             renderActivityPageV2();
