@@ -1,8 +1,8 @@
-// === СЛЕПОЙ СЕЙФ (v38 - Свободное вращение по метке) ===
-const SAFE_TARGET_ANGLES = [150, 330];
+// === СЛЕПОЙ СЕЙФ (v31 - Старт по тапу + таймер) ===
+const SAFE_TARGET_ANGLES = [150, 330, 420];
 const SAFE_PIN = '201186';
 const HOLD_TIME_MS = 1000;
-const START_TIME_S = 7;
+const START_TIME_S = 10;
 
 let SAFE_ROTATION = 0;
 let SAFE_STEP = 0;
@@ -12,59 +12,12 @@ let SAFE_STARTED = false;
 
 let START_TOUCH_ANGLE = 0;
 let START_RING_ROTATION = 0;
+let TOTAL_TOUCH_DELTA = 0;
 let HOLD_TIMER = null;
 let LAST_VIB_STEP = -1;
 
 let COUNTDOWN_TIMER = null;
 let TIME_LEFT = START_TIME_S;
-
-
-// === АУДИО ДВИЖОК ===
-let audioCtx = null;
-
-function _initAudio() {
-  if (!audioCtx) {
-    try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    } catch(e) { console.warn('Audio not supported'); }
-  }
-  // Разблокировка аудио (требование браузеров)
-  if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-}
-
-function _playSound(type) {
-  if (!audioCtx) return;
-  
-  try {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    
-    if (type === 'tick') {
-      // Короткий тик для трещотки
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.02);
-      gain.gain.setValueAtTime(0.05, audioCtx.currentTime); // Тихо
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.02);
-    } else if (type === 'click') {
-      // Более низкий щелчок для успеха
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.1);
-    }
-  } catch(e) {}
-}
 
 function _safeAngle(cx, cy, x, y) {
   let a = Math.atan2(y - cy, x - cx) * 180 / Math.PI + 90;
@@ -89,7 +42,14 @@ function showSafe() {
 
   const screen = document.getElementById('scroll-pin-screen');
   if (!screen) return;
-  screen.style.display = 'block';
+
+  screen.style.display = 'flex';
+  screen.style.position = 'fixed';
+  screen.style.top = '0'; screen.style.left = '0';
+  screen.style.width = '100vw'; screen.style.height = '100vh';
+  screen.style.zIndex = '9999';
+  screen.style.alignItems = 'center';
+  screen.style.justifyContent = 'center';
   screen.style.backgroundColor = 'var(--bg)';
 
   const dash = document.getElementById('dashboard');
@@ -98,10 +58,7 @@ function showSafe() {
   if (tabs) tabs.style.display = 'none';
 
   const rot = document.getElementById('safe-dial-rotator');
-  if (rot) {
-    rot.style.transform = 'rotate(0deg)';
-    rot.className = 'waiting'; // Приглушенный режим
-  }
+  if (rot) rot.style.transform = 'rotate(0deg)';
 
   const timerDisplay = document.getElementById('safe-timer');
   if (timerDisplay) {
@@ -137,29 +94,15 @@ function _safeBind() {
     if (HOLD_TIMER) { clearTimeout(HOLD_TIMER); HOLD_TIMER = null; }
   };
 
-  // Считаем текущий угол МЕТКИ (от 12 часов)
-  const getMarkAngle = () => {
-    let angle = SAFE_ROTATION % 360;
-    if (angle < 0) angle += 360;
-    return angle;
-  };
-
   const checkTargetAngle = () => {
     if (SAFE_STEP >= SAFE_TARGET_ANGLES.length || SAFE_LOCKED) return;
-    
-    const currentMarkAngle = getMarkAngle();
     const target = SAFE_TARGET_ANGLES[SAFE_STEP];
 
-    // Зона ±20 градусов от цели
-    let diff = Math.abs(currentMarkAngle - target);
-    if (diff > 180) diff = 360 - diff; // Обработка перехода через 0
-
-    if (diff <= 20) {
+    if (SAFE_ROTATION >= target - 20 && SAFE_ROTATION <= target + 20) {
       if (!HOLD_TIMER) {
         _safeVibrate(20); // Легкий толчок при входе в зону
         HOLD_TIMER = setTimeout(() => {
           _safeVibrate(60);
-          _playSound('click'); // Звук щелчка (успех)
           SAFE_STEP++;
           HOLD_TIMER = null;
 
@@ -177,14 +120,9 @@ function _safeBind() {
   const startGame = () => {
     if (SAFE_STARTED || SAFE_LOCKED) return;
 
-    _initAudio(); // Разблокируем звук по тапу
     _safeVibrate(50); 
 
     SAFE_STARTED = true;
-    
-    const rot = document.getElementById('safe-dial-rotator');
-    if (rot) rot.className = 'active'; // Включаем полную яркость
-
     TIME_LEFT = START_TIME_S;
     if (timerDisplay) {
       timerDisplay.textContent = TIME_LEFT + 'с';
@@ -210,7 +148,7 @@ function _safeBind() {
   box.addEventListener('touchstart', (e) => {
     if (SAFE_LOCKED) return;
     e.preventDefault();
-    e.stopPropagation();
+    e.stopPropagation(); // Останавливаем всплытие, чтобы тап не улетал в другие слои
 
     if (!SAFE_STARTED) {
       startGame();
@@ -218,6 +156,7 @@ function _safeBind() {
     }
 
     SAFE_ACTIVE = true;
+    TOTAL_TOUCH_DELTA = 0;
 
     const t = e.touches[0];
     const { cx, cy } = getCenter();
@@ -250,19 +189,19 @@ function _safeBind() {
     }
 
     const currentAngle = _safeAngle(cx, cy, t.clientX, t.clientY);
-    
-    let diff = currentAngle - START_TOUCH_ANGLE;
-    if (diff > 180) diff -= 360;
-    if (diff < -180) diff += 360;
+    let deltaAngle = currentAngle - START_TOUCH_ANGLE;
+    if (deltaAngle > 180) deltaAngle -= 360;
+    if (deltaAngle < -180) deltaAngle += 360;
 
-    // Крутим кольцо за пальцем
-    SAFE_ROTATION = START_RING_ROTATION + diff;
+    TOTAL_TOUCH_DELTA += deltaAngle;
+    START_TOUCH_ANGLE = currentAngle;
+
+    SAFE_ROTATION = START_RING_ROTATION + TOTAL_TOUCH_DELTA;
     rot.style.transform = `rotate(${SAFE_ROTATION}deg)`;
 
     const vibStep = Math.floor(currentAngle / 15);
     if (vibStep !== LAST_VIB_STEP) {
       _safeVibrate(10);
-      _playSound('tick'); // Звук трещотки
       LAST_VIB_STEP = vibStep;
     }
 
