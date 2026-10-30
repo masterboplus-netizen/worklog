@@ -68,12 +68,12 @@ function renderActivityPageV2() {
     // 3. НИЖНИЕ КНОПКИ
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     const metricHTML = metrics.map(([key, label]) =>
-        '<button class="chart-tabs ' + (CHART_STATE.metric === key ? 'active' : '') + '" data-metric="' + key + '">' + label + '</button>'
+        '<button class="seg-btn ' + (CHART_STATE.metric === key ? 'active' : '') + '" data-metric="' + key + '">' + label + '</button>'
     ).join('');
 
     const metricBar = document.createElement('div');
     metricBar.className = "chart-tabs";
-    metricBar.style.cssText = 'display:flex; gap:4px; margin: 16px 0; justify-content: space-between; box-sizing: border-box; width: 100%;';
+    metricBar.style.cssText = 'margin: 16px 0; padding: 4px; display: flex; gap: 4px; border-radius: 20px; background: var(--bg3); width: 100%; box-sizing: border-box;'; gap:4px; margin: 16px 0; justify-content: space-between; box-sizing: border-box; width: 100%;';
     metricBar.innerHTML = metricHTML;
     c.appendChild(metricBar);
 
@@ -236,7 +236,7 @@ function renderActivityPageV2() {
 
             tooltip.style.position = 'absolute';
     // Смена метрики (ИСПРАВЛЕНО)
-    c.querySelectorAll(".chart-tabs button[data-metric]").forEach(btn => {
+    c.querySelectorAll(".seg-btn[data-metric]").forEach(btn => {
         btn.addEventListener("click", (e) => {
             e.stopPropagation();
             const newMetric = btn.getAttribute("data-metric");
