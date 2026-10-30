@@ -21,82 +21,110 @@ let CALENDAR_SELECTED_DAY = null;
 
 function mergeMidnightSessions(sessions) {
   if (!sessions || !sessions.length) return [];
-  
-  // 1. Сортируем по времени
-  const sorted = [...sessions].sort((a, b) => (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start));
-  
-  // 2. Группируем по дням (по дате НАЧАЛА)
-  const byDate = {};
-  for (const s of sorted) {
-    if (!byDate[s.date]) byDate[s.date] = [];
-    byDate[s.date].push(s);
-  }
+
+  // 1. Подготовка (считаем миллисекунды, учитываем ночь)
+  const prepared = sessions.map(s => {
+    let startMs = new Date(s.date + 'T' + s.start + ':00').getTime();
+    let endMs = new Date(s.date + 'T' + s.end + ':00').getTime();
+    if (endMs < startMs) endMs += 24 * 60 * 60 * 1000; 
+    return { ...s, startMs, endMs };
+  }).sort((a, b) => a.startMs - b.startMs);
 
   const merged = [];
-  
-  for (const date of Object.keys(byDate).sort()) {
-    const daySessions = byDate[date];
+  let currentGroup = [];
+
+  // 2. Склейка по 15 минутам
+  for (let i = 0; i < prepared.length; i++) {
+    const s = prepared[i];
     
-    // Берем самое раннее начало и самый поздний конец за этот день
-    let minStart = daySessions[0].start;
-    let maxEnd = daySessions[0].end;
-    let minStartMs = new Date(date + 'T' + minStart + ':00').getTime();
-    let maxEndMs = new Date(date + 'T' + maxEnd + ':00').getTime();
+    if (currentGroup.length === 0) {
+      currentGroup.push(s);
+      continue;
+    }
+
+    let maxEndMs = -Infinity;
+    for (const gs of currentGroup) {
+        if (gs.endMs > maxEndMs) maxEndMs = gs.endMs;
+    }
+
+    const gapMs = s.startMs - maxEndMs;
+
+    if (gapMs < 15 * 60 * 1000) {
+      currentGroup.push(s);
+    } else {
+      merged.push(processGroup(currentGroup));
+      currentGroup = [s];
+    }
+  }
+
+  if (currentGroup.length > 0) {
+    merged.push(processGroup(currentGroup));
+  }
+
+  return merged.sort((a, b) => b.date.localeCompare(a.date));
+
+  // 3. Обработка группы
+  function processGroup(group) {
+    const firstSess = group[0]; 
+    const date = firstSess.date; // Привязка к дате первой сессии
+    
+    let minStartStr = firstSess.start;
+    let maxEndMs = -Infinity;
+    let displayEndStr = firstSess.end;
     
     let totalEvents = 0, totalScreens = 0, totalTasks = 0;
     let notes = [];
-    let project = daySessions[0].project;
-    
-    for (const s of daySessions) {
-      let sStartMs = new Date(s.date + 'T' + s.start + ':00').getTime();
-      let sEndMs = new Date(s.date + 'T' + s.end + ':00').getTime();
-      if (sEndMs < sStartMs) sEndMs += 24 * 60 * 60 * 1000; // Переход через полночь
+    const projects = new Set();
+
+    const intervals = group.map(s => ({ start: s.startMs, end: s.endMs }))
+                            .sort((a, b) => a.start - b.start);
+
+    let realDurationMs = 0;
+    if (intervals.length > 0) {
+        let curStart = intervals[0].start;
+        let curEnd = intervals[0].end;
+        for (let i = 1; i < intervals.length; i++) {
+            if (intervals[i].start <= curEnd) {
+                curEnd = Math.max(curEnd, intervals[i].end);
+            } else {
+                realDurationMs += (curEnd - curStart);
+                curStart = intervals[i].start;
+                curEnd = intervals[i].end;
+            }
+        }
+        realDurationMs += (curEnd - curStart);
+    }
+
+    for (const s of group) {
+      if (s.startMs < new Date(date + 'T' + minStartStr + ':00').getTime()) {
+        minStartStr = s.start;
+      }
       
-      if (sStartMs < minStartMs) { minStartMs = sStartMs; minStart = s.start; }
-      if (sEndMs > maxEndMs) { maxEndMs = sEndMs; maxEnd = s.end; }
-      
+      if (s.endMs > maxEndMs) {
+          maxEndMs = s.endMs;
+          displayEndStr = s.end;
+      }
+
       totalEvents += s.events || 0;
       totalScreens += s.screens || 0;
       totalTasks += s.tasks_done || 0;
       if (s.note) notes.push(s.note);
+      if (s.project) projects.add(s.project);
     }
-    
-    // Считаем реальное время: от самого раннего до самого позднего, МИНУС пересечения
-    let realDuration = maxEndMs - minStartMs;
-    // Вычитаем пересечения (если они есть)
-    for (let i = 0; i < daySessions.length; i++) {
-        for (let j = i + 1; j < daySessions.length; j++) {
-            let s1Start = new Date(daySessions[i].date + 'T' + daySessions[i].start + ':00').getTime();
-            let s1End = new Date(daySessions[i].date + 'T' + daySessions[i].end + ':00').getTime();
-            if (s1End < s1Start) s1End += 24 * 60 * 60 * 1000;
-            
-            let s2Start = new Date(daySessions[j].date + 'T' + daySessions[j].start + ':00').getTime();
-            let s2End = new Date(daySessions[j].date + 'T' + daySessions[j].end + ':00').getTime();
-            if (s2End < s2Start) s2End += 24 * 60 * 60 * 1000;
-            
-            let overlapStart = Math.max(s1Start, s2Start);
-            let overlapEnd = Math.min(s1End, s2End);
-            if (overlapStart < overlapEnd) {
-                realDuration -= (overlapEnd - overlapStart);
-            }
-        }
-    }
-    
-    merged.push({
-      id: 'merged_' + date,
+
+    return {
+      id: 'merged_' + firstSess.id,
       date: date,
-      start: minStart,
-      end: maxEnd,
-      duration_min: Math.round(realDuration / 60000),
-      project: project,
+      start: minStartStr,
+      end: displayEndStr,
+      duration_min: Math.round(realDurationMs / 60000),
+      project: Array.from(projects)[0] || '–',
       note: notes.join(' '),
       events: totalEvents,
       screens: totalScreens,
       tasks_done: totalTasks
-    });
+    };
   }
-  
-  return merged.sort((a, b) => b.date.localeCompare(a.date));
 }
 
 function renderDiary() {
