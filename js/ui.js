@@ -386,75 +386,61 @@ function getProgressColor(percent) {
   return 'var(--green)'; // Зеленый
 }
 
+
 function renderHeroRings() {
+  const c = document.getElementById('content');
+  if (!c || !window.DATA) return;
+
+  // 1. Данные из calcTotals и склеенные сессии
   const t = calcTotals();
   const sessions = mergeMidnightSessions(window.DATA.sessions || []);
   const _sessions = window.DATA.sessions || [];
-  const msgVal = _sumRange(_sessions, MINI_MSG_PERIOD, 'events');
-  const scrVal = _sumRange(_sessions, MINI_SCR_PERIOD, 'screens');
-  function _fmtH2(min) { return Math.floor(min / 60) + 'ч<br>' + (min % 60) + 'м'; }
-  let timeVal = MINI_TIME_PERIOD === 'avg' ? fmtH(t.avgPerDay) : (MINI_TIME_PERIOD === 'all' ? _fmtH2(t.total) : _fmtH2(_sumRange(_sessions, MINI_TIME_PERIOD, 'duration_min')));
 
-  // Цель всегда равна среднему времени/день (если оно есть)
-  let currentGoal = t.avgPerDay > 0 ? t.avgPerDay : DAILY_GOAL_MIN;
-
-  let heroValue = t.todayMin, heroLabel = 'Сегодня', heroSub = 'Среднее ' + fmtH(currentGoal) + ' · ' + Math.round(t.todayMin / currentGoal * 100) + '%';
-  if (HERO_MODE === 'last') {
-    const sorted = mergeMidnightSessions(window.DATA.sessions || []).slice().sort((a, b) => (b.date + (b.end || '')).localeCompare(a.date + (a.end || '')));
-    const lastSess = sorted[0];
-    heroValue = lastSess ? (lastSess.duration_min || 0) : 0;
-    heroLabel = 'Последняя сессия';
-    heroSub = lastSess ? (lastSess.date.slice(8, 10) + '.' + lastSess.date.slice(5, 7)) : '';
+  // 2. Считаем время ТОЛЬКО за сегодня (по склеенным сессиям)
+  let todayMin = 0;
+  const todayStr = _localDate(new Date());
+  const todaySessions = sessions.filter(s => s.date === todayStr);
+  
+  if (todaySessions.length > 0) {
+    todayMin = todaySessions.reduce((acc, s) => acc + (s.duration_min || 0), 0);
   }
-  const pctDur = Math.round(heroValue / currentGoal * 100);
+
+  // 3. Переменные для большого кольца
+  const heroValue = todayMin;
+  const heroLabel = 'Сегодня';
+  const heroSub = 'Среднее ' + fmtH(t.avgPerDay);
+  
+  const pctDur = Math.min(100, Math.round(heroValue / (t.avgPerDay > 0 ? t.avgPerDay : 480) * 100));
   const ringColor = getProgressColor(pctDur);
 
-  // --- Считаем проценты для малых колец (через среднее) ---
-  const uniqueDays = new Set(sessions.map(s => s.date)).size || 1;
-
-  // 1. Сообщения (относительно рекорда)
-  // Группируем сообщения по дням, чтобы найти максимальный день
-  const msgByDay = {};
-  for (const s of sessions) {
-    msgByDay[s.date] = (msgByDay[s.date] || 0) + (s.events || 0);
-  }
-  let maxMsg = 1;
-  for (const k in msgByDay) {
-    if (msgByDay[k] > maxMsg) maxMsg = msgByDay[k];
-  }
-  let msgRaw = MINI_MSG_PERIOD === 'day' ? _sumRange(sessions, 'day', 'events') : msgVal;
-  let pctMsg = Math.min(100, Math.round(msgRaw / maxMsg * 100));
-
-  // 2. Скрины (относительно рекорда)
-  const maxScr = Math.max(1, ...sessions.map(s => s.screens || 0));
-  let scrRaw = MINI_SCR_PERIOD === 'day' ? _sumRange(sessions, 'day', 'screens') : scrVal;
-  let pctScr = Math.min(100, Math.round(scrRaw / maxScr * 100));
-
-  // 3. Задачи (относительно рекорда)
-  const maxTasks = Math.max(1, ...sessions.map(s => s.tasks_done || 0));
+  // 4. Малые кольца
+  const msgVal = _sumRange(_sessions, MINI_MSG_PERIOD, 'events');
+  const scrVal = _sumRange(_sessions, MINI_SCR_PERIOD, 'screens');
   const tasksVal = _sumRange(_sessions, MINI_TASKS_PERIOD, 'tasks_done');
-  let pctTasks = Math.min(100, Math.round(tasksVal / maxTasks * 100));
+  
+  const maxMsg = Math.max(1, ...sessions.map(s => s.events || 0));
+  const pctMsg = Math.min(100, Math.round(msgVal / maxMsg * 100));
+  
+  const maxScr = Math.max(1, ...sessions.map(s => s.screens || 0));
+  const pctScr = Math.min(100, Math.round(scrVal / maxScr * 100));
+  
+  const maxTasks = Math.max(1, ...sessions.map(s => s.tasks_done || 0));
+  const pctTasks = Math.min(100, Math.round(tasksVal / maxTasks * 100));
 
+  // 5. Отрисовка (оригинальная верстка)
   const div = document.createElement('div');
   div.className = 'hero-rings';
   div.innerHTML = '<div class="hero-main"><div class="ring-wrap" style="cursor:pointer" id="hero-ring">' + renderRingSVG(pctDur, 290, 14, ringColor) +
-        '<div class="ring-center"><div class="ring-icon">' + (HERO_MODE === 'today' ? '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' : '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M9 2h6"/></svg>') + '</div>' +
-          '<div class="ring-label">' + heroLabel + '</div><div class="ring-value">' + fmtH(heroValue) + '</div><div class="ring-sub">' + heroSub + '</div></div></div></div>' +
+    '<div class="ring-center"><div class="ring-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--fg-dim)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>' +
+    '<div class="ring-label">' + heroLabel + '</div><div class="ring-value">' + fmtH(heroValue) + '</div><div class="ring-sub">' + heroSub + '</div></div></div></div>' +
     '<div class="hero-mini"><div class="mini-block" data-mini="msg"><div class="mini-label"><div class="mini-lbl-title">Сообщения</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_MSG_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctMsg, 92, 7, getProgressColor(pctMsg)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + msgVal + '</div></div></div></div>' +
-      '<div class="mini-block" data-mini="scr"><div class="mini-label"><div class="mini-lbl-title">Скрины</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_SCR_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctScr, 92, 7, getProgressColor(pctScr)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + scrVal + '</div></div></div></div>' +
-      '<div class="mini-block" data-mini="tasks"><div class="mini-label"><div class="mini-lbl-title">Задачи</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_TASKS_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctTasks, 92, 7, getProgressColor(pctTasks)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + tasksVal + '</div></div></div></div></div>';
+    '<div class="mini-block" data-mini="scr"><div class="mini-label"><div class="mini-lbl-title">Скрины</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_SCR_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctScr, 92, 7, getProgressColor(pctScr)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + scrVal + '</div></div></div></div>' +
+    '<div class="mini-block" data-mini="tasks"><div class="mini-label"><div class="mini-lbl-title">Задачи</div><div class="mini-lbl-period">' + MINI_LABELS[MINI_TASKS_PERIOD] + '</div></div><div class="mini-ring" style="cursor:pointer">' + renderRingSVG(pctTasks, 92, 7, getProgressColor(pctTasks)) + '<div class="mini-center"><div class="mini-val" style="font-size:22px">' + tasksVal + '</div></div></div></div></div>';
 
-  div.querySelector('#hero-ring').addEventListener('click', () => { HERO_MODE = HERO_MODE === 'today' ? 'last' : 'today'; renderDashboard(); });
-  div.querySelectorAll('.mini-block').forEach((block, index) => {
-    block.querySelector('.mini-ring').addEventListener('click', () => {
-      if (index === 0) MINI_MSG_PERIOD = MINI_PERIODS_MSG[(MINI_PERIODS_MSG.indexOf(MINI_MSG_PERIOD) + 1) % MINI_PERIODS_MSG.length];
-      else if (index === 1) MINI_SCR_PERIOD = MINI_PERIODS_MSG[(MINI_PERIODS_MSG.indexOf(MINI_SCR_PERIOD) + 1) % MINI_PERIODS_MSG.length];
-      else if (index === 2) MINI_TASKS_PERIOD = MINI_PERIODS_MSG[(MINI_PERIODS_MSG.indexOf(MINI_TASKS_PERIOD) + 1) % MINI_PERIODS_MSG.length];
-      renderDashboard();
-    });
-  });
-  return div;
+  c.innerHTML = '';
+  c.appendChild(div);
 }
+
 
 
 function _localDate(d) {
