@@ -476,12 +476,11 @@ function _sumRange(sessions, period, field) {
 function getCleanSessions(sessions) {
   if (!sessions || !sessions.length) return [];
   
-  // 1. Склеиваем полночь (чтобы сессии не пересекались по датам)
-  const merged = mergeMidnightSessions(sessions);
-  
-  // 2. Сортируем по времени начала
-  const sorted = [...merged].sort((a, b) => {
-    return (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start);
+  // Сортируем по времени начала (от старых к новым)
+  const sorted = [...sessions].sort((a, b) => {
+    const da = a.date + ' ' + a.start;
+    const db = b.date + ' ' + b.start;
+    return da.localeCompare(db);
   });
 
   const clean = [];
@@ -489,33 +488,34 @@ function getCleanSessions(sessions) {
   for (let i = 0; i < sorted.length; i++) {
     const curr = { ...sorted[i] };
     
-    // Конвертируем время в минуты
-    const currStart = new Date(curr.date + 'T' + curr.start + ':00').getTime() / 60000;
-    let currEnd = new Date(curr.date + 'T' + curr.end + ':00').getTime() / 60000;
-    if (currEnd < currStart) currEnd += 24 * 60; // Если через полночь
+    // Конвертируем время в минуты от начала дня (с учетом даты)
+    const currStart = new Date(curr.date + 'T' + curr.start + ':00').getTime();
+    const currEnd = new Date(curr.date + 'T' + curr.end + ':00').getTime();
     
     let overlapMinutes = 0;
     
     // Проверяем пересечения со всеми предыдущими сессиями
     for (let j = 0; j < i; j++) {
       const prev = sorted[j];
-      const prevStart = new Date(prev.date + 'T' + prev.start + ':00').getTime() / 60000;
-      let prevEnd = new Date(prev.date + 'T' + prev.end + ':00').getTime() / 60000;
-      if (prevEnd < prevStart) prevEnd += 24 * 60;
+      const prevStart = new Date(prev.date + 'T' + prev.start + ':00').getTime();
+      let prevEnd = new Date(prev.date + 'T' + prev.end + ':00').getTime();
       
+      // Если сессия перешла через полночь, prevEnd будет меньше prevStart
+      if (prevEnd < prevStart) {
+        prevEnd += 24 * 60 * 60 * 1000; // Добавляем сутки
+      }
+      
+      // Проверяем пересечение
       const overlapStart = Math.max(currStart, prevStart);
       const overlapEnd = Math.min(currEnd, prevEnd);
       
       if (overlapStart < overlapEnd) {
-        overlapMinutes += (overlapEnd - overlapStart);
+        overlapMinutes += (overlapEnd - overlapStart) / (1000 * 60);
       }
     }
     
-    // Вычитаем только пересечения
+    // Вычитаем пересечения из длительности
     curr.duration_min = Math.max(0, (curr.duration_min || 0) - overlapMinutes);
-    
-    // ВАЖНО: Если это параллельная сессия и после вычитания осталось время, оставляем её.
-    // Если это основная сессия, она тоже остается, но с вычтенным временем (если было).
     clean.push(curr);
   }
   
