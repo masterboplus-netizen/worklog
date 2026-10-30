@@ -40,7 +40,7 @@ function renderActivityPageV2() {
 
     const yAxis = document.createElement('div');
     yAxis.id = 'tl-y-axis';
-    yAxis.style.cssText = "width: 32px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: calc(100% - 40px);";
+    yAxis.style.cssText = "width: 32px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: calc(100% - 44px); margin-top: 4px;";
 
     const scrollContainer = document.createElement('div');
     scrollContainer.className = 'tl-container';
@@ -64,7 +64,7 @@ function renderActivityPageV2() {
     const metrics = [['duration', 'Время'], ['events', 'Сообщения'], ['screens', 'Скрины'], ['tasks', 'Задачи']];
     
     const metricBar = document.createElement('div');
-    metricBar.className = "segmented-control"; metricBar.style.marginTop = "32px"; metricBar.style.marginBottom = "16px";
+    metricBar.className = "segmented-control"; metricBar.style.marginTop = "32px"; metricBar.style.marginBottom = "16px"; metricBar.style.marginLeft = "48px"; metricBar.style.width = "calc(100% - 64px)";
     
     metricBar.innerHTML = metrics.map(([key, label]) => {
         const isActive = CHART_STATE.metric === key;
