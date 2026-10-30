@@ -165,7 +165,7 @@ function renderActivityPageV2() {
         // Отрисовка столбиков
         const cols = scrollContainer.querySelectorAll('.tl-col');
         cols.forEach(col => {
-            const dateStr = col.dataset.date;
+            const dateStr = col.dataset.date; alert("Клик сработал! Дата: " + dateStr);
             let v = 0;
             for (const sess of window.DATA.sessions || []) {
                 if (sess.date === dateStr) {
@@ -195,7 +195,7 @@ function renderActivityPageV2() {
     scrollContainer.addEventListener('click', (e) => {
         const col = e.target.closest('.tl-col');
         if (!col) return;
-        const dateStr = col.dataset.date;
+        const dateStr = col.dataset.date; alert("Клик сработал! Дата: " + dateStr);
 
         if (CHART_STATE.selectedDay === dateStr) {
             CHART_STATE.selectedDay = null;
