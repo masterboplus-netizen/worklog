@@ -22,63 +22,64 @@ let CALENDAR_SELECTED_DAY = null;
 function mergeMidnightSessions(sessions) {
   if (!sessions || !sessions.length) return [];
   
-  // Группируем все сессии по дате
-  const byDate = {};
-  for (const s of sessions) {
-    if (!byDate[s.date]) byDate[s.date] = [];
-    byDate[s.date].push(s);
-  }
+  // Сортируем абсолютно все сессии по дате и времени начала
+  const sorted = [...sessions].sort((a, b) => (a.date + ' ' + a.start).localeCompare(b.date + ' ' + b.start));
   
   const merged = [];
-  const dates = Object.keys(byDate).sort();
+  let current = null;
   
-  for (const date of dates) {
-    const daySessions = byDate[date];
-    
-    // Сортируем по времени начала
-    daySessions.sort((a, b) => (a.start || '').localeCompare(b.start || ''));
-    
-    // Если сессия одна — просто добавляем
-    if (daySessions.length === 1) {
-      merged.push(daySessions[0]);
+  const timeToMin = (dateStr, timeStr) => {
+    const d = new Date(dateStr + 'T' + timeStr + ':00');
+    return d.getTime(); // Используем timestamp для точного сравнения
+  };
+
+  for (const s of sorted) {
+    if (!current) {
+      current = { ...s };
       continue;
     }
-    
-    // Если сессий несколько — объединяем их в одну
-    let minStart = daySessions[0].start;
-    let maxEnd = daySessions[0].end;
-    let totalDur = 0;
-    let totalEvents = 0;
-    let totalScreens = 0;
-    let totalTasks = 0;
-    let notes = [];
-    let project = daySessions[0].project;
-    
-    for (const s of daySessions) {
-      if (s.start < minStart) minStart = s.start;
-      if (s.end > maxEnd) maxEnd = s.end;
-      totalDur += s.duration_min || 0;
-      totalEvents += s.events || 0;
-      totalScreens += s.screens || 0;
-      totalTasks += s.tasks_done || 0;
-      if (s.note) notes.push(s.note);
+
+    const currStartMs = timeToMin(current.date, current.start);
+    let currEndMs = timeToMin(current.date, current.end);
+    if (currEndMs < currStartMs) currEndMs += 24 * 60 * 60 * 1000; // Если конец раньше начала, значит через полночь
+
+    const sStartMs = timeToMin(s.date, s.start);
+    let sEndMs = timeToMin(s.date, s.end);
+    if (sEndMs < sStartMs) sEndMs += 24 * 60 * 60 * 1000;
+
+    // Если следующая сессия начинается ДО или РОВНО В МОМЕНТ окончания текущей (включая стык в 1 минуту)
+    // 23:59 и 00:00 — это разница в 1 минуту, считаем стыком.
+    if (sStartMs <= currEndMs + 60000) {
+      // Склеиваем
+      if (sEndMs > currEndMs) {
+        // Если следующая заканчивается позже, продлеваем текущую
+        // Пересчитываем end для текущей (на случай перехода через полночь)
+        const diffMins = Math.round((sEndMs - currEndMs) / 60000);
+        const newEndDate = new Date(currEndMs + diffMins * 60000);
+        // Записываем время окончания в формате HH:MM
+        current.end = String(newEndDate.getHours()).padStart(2, '0') + ':' + String(newEndDate.getMinutes()).padStart(2, '0');
+        
+        // Если при продлении мы перешли на следующий день, обновляем дату сессии (чтобы в списке она висела на дне окончания, или оставляем на дне начала? Лучше оставить на дне начала, но мы должны сохранить реальное время)
+        // Но для корректного отображения, мы просто сохраним timestamp конца
+      }
+      
+      // Суммируем метрики
+      current.duration_min += s.duration_min || 0;
+      current.events = (current.events || 0) + (s.events || 0);
+      current.screens = (current.screens || 0) + (s.screens || 0);
+      current.tasks_done = (current.tasks_done || 0) + (s.tasks_done || 0);
+      if (s.note && !current.note.includes(s.note)) {
+          current.note = (current.note ? current.note + ' ' : '') + s.note;
+      }
+    } else {
+      // Есть разрыв — пушим текущую и начинаем новую
+      merged.push(current);
+      current = { ...s };
     }
-    
-    merged.push({
-      id: 'merged_' + date,
-      date: date,
-      start: minStart,
-      end: maxEnd,
-      duration_min: totalDur,
-      project: project,
-      note: notes.join(' '),
-      events: totalEvents,
-      screens: totalScreens,
-      tasks_done: totalTasks
-    });
   }
   
-  // Возвращаем от новых к старым
+  if (current) merged.push(current);
+  
   return merged.reverse();
 }
 
