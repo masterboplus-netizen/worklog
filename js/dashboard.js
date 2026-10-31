@@ -129,49 +129,13 @@ function renderHeroRings() {
 function renderDashboard() {
   const c = document.getElementById('content');
   if (!c || !window.DATA) return;
-  
-  // ВАЖНО: Берем склеенные сессии!
-  const merged = mergeMidnightSessions(window.DATA.sessions || []);
-  const todayStr = _localDate(new Date());
-  
-  // Ищем сегодняшнюю сессию (или вчерашнюю, если она перешла за полночь)
-  let todaySessions = merged.filter(s => s.date === todayStr);
-  
-  // Если сегодня пусто, проверим вчера (вдруг сессия ночная)
-  if (todaySessions.length === 0) {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yStr = _localDate(yesterday);
-      todaySessions = merged.filter(s => s.date === yStr);
-  }
 
-  // Считаем суммы
-  let todayMin = 0, todayEvents = 0, todayScreens = 0, todayTasks = 0;
-  for (const s of todaySessions) {
-      todayMin += s.duration_min || 0;
-      todayEvents += s.events || 0;
-      todayScreens += s.screens || 0;
-      todayTasks += s.tasks_done || 0;
-  }
-
-  // Считаем среднее в день (только по уникальным дням)
-  let totalMin = 0;
-  let uniqueDays = new Set();
-  for (const s of merged) {
-      totalMin += s.duration_min || 0;
-      uniqueDays.add(s.date);
-  }
-  const avgPerDay = uniqueDays.size > 0 ? Math.round(totalMin / uniqueDays.size) : 0;
-
-  // Очищаем контент
+  // Очищаем контейнер
   c.innerHTML = '';
 
-  // Отрисовка (оставляем твои родные функции)
-  renderHeroRings(todayMin, avgPerDay, todayEvents, todayScreens, todayTasks);
-  
-  // Отрисовка остального (графики, проекты и т.д., если они есть в функции)
-  // ...
-  
-  // Восстанавливаем скролл (если нужно)
+  // Вызываем функцию отрисовки колец
+  if (typeof renderHeroRings === 'function') {
+    renderHeroRings();
+  }
 }
 
