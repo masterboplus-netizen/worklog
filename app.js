@@ -187,3 +187,6 @@ function showCreators() {
 
 // Делаем функцию глобальной для safe.js
 window.renderDashboard = renderDashboard;
+
+
+window.addEventListener('load', () => { if (typeof renderDashboard === 'function' && window.DATA) renderDashboard(); });
