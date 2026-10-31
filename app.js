@@ -186,6 +186,6 @@ function showCreators() {
 
 
 // Делаем функцию глобальной для safe.js
-window.renderDashboard = renderDashboard;
+window.renderDashboard = function() { try { renderDashboard(); } catch(e) { alert("ОШИБКА ДАШБОРДА: " + e.message); } };
 
 
