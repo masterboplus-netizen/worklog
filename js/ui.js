@@ -318,14 +318,23 @@ function renderDiary() {
             <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
             <div class="diary-proj">${projName[s.project] || s.project || '–'}</div>
             <div class="diary-note">${s.note || ''}</div>
-          `;
-          listDiv.appendChild(item);
-      });
-  }
-  c.appendChild(listDiv);
-
-  // 6. ОБРАБОТЧИКИ
-  viewCapsule.querySelectorAll('button[data-view]').forEach(b => {
+      const item = document.createElement("div");
+      item.className = "diary-item";
+      let countersHTML = "";
+      if (s.events || s.screens || s.tasks_done) {
+          countersHTML = "<div class=\"diary-counters\">";
+          if (s.events) countersHTML += `📨 ${s.events} `;
+          if (s.screens) countersHTML += `📸 ${s.screens} `;
+          if (s.tasks_done) countersHTML += `✅ ${s.tasks_done}`;
+          countersHTML += "</div>";
+      }
+      item.innerHTML = `
+        <div class="diary-time">${s.start || "?"} → ${s.end || "?"} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
+        ${countersHTML}
+        <div class="diary-proj">${projName[s.project] || s.project || "–"}</div>
+        <div class="diary-note">${s.note || ""}</div>
+      `;
+      listDiv.appendChild(item);
       b.addEventListener('click', () => { 
           CALENDAR_VIEW = b.dataset.view; 
           CALENDAR_OFFSET = 0; 
