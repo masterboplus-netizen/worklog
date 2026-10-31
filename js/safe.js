@@ -245,7 +245,7 @@ const _safeUnlock = async () => {
       if (tabs) tabs.style.display = 'flex';
       const l = document.getElementById('loading');
       if (l) l.remove();
-      // renderDashboard(); // Убрано
+      renderDashboard();
     } else {
       showSafe();
     }
