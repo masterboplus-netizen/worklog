@@ -77,6 +77,39 @@ function renderHeroRings() {
   c.innerHTML = '';
   c.appendChild(div);
   startRingAnimation();
+
+  // ОБРАБОТЧИКИ КЛИКОВ
+  const heroRing = document.getElementById('hero-ring');
+  if (heroRing) {
+    heroRing.addEventListener('click', () => {
+      const periods = ['today', 'week', 'month', 'all'];
+      const labels = { today: 'Сегодня', week: 'Неделя', month: 'Месяц', all: 'Всё время' };
+      let curIdx = periods.indexOf(HERO_MODE || 'today');
+      curIdx = (curIdx + 1) % periods.length;
+      HERO_MODE = periods[curIdx];
+      renderDashboard(); // Перерисовываем
+    });
+  }
+
+  // Обработчики для маленьких колец (сообщения, скрины, задачи)
+  const minis = div.querySelectorAll('.mini-ring');
+  if (minis.length >= 3) {
+    minis[0].addEventListener('click', () => {
+      const idx = (MINI_PERIODS_MSG.indexOf(MINI_MSG_PERIOD) + 1) % MINI_PERIODS_MSG.length;
+      MINI_MSG_PERIOD = MINI_PERIODS_MSG[idx];
+      renderDashboard();
+    });
+    minis[1].addEventListener('click', () => {
+      const idx = (MINI_PERIODS_MSG.indexOf(MINI_SCR_PERIOD) + 1) % MINI_PERIODS_MSG.length;
+      MINI_SCR_PERIOD = MINI_PERIODS_MSG[idx];
+      renderDashboard();
+    });
+    minis[2].addEventListener('click', () => {
+      const idx = (MINI_PERIODS_MSG.indexOf(MINI_TASKS_PERIOD) + 1) % MINI_PERIODS_MSG.length;
+      MINI_TASKS_PERIOD = MINI_PERIODS_MSG[idx];
+      renderDashboard();
+    });
+  }
 }
 
 function renderDashboard() {
