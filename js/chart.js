@@ -179,6 +179,10 @@ function renderActivityPageV2() {
     };
 
     scrollContainer.addEventListener('scroll', () => {
+        // Скрываем тултип при скролле
+        const oldT = document.getElementById('global-chart-tooltip');
+        if (oldT) oldT.remove();
+
         clearTimeout(scrollContainer._scrollTimeout);
         scrollContainer._scrollTimeout = setTimeout(updateChart, 100);
     });
