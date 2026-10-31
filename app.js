@@ -183,3 +183,7 @@ function showCreators() {
   document.body.appendChild(modal);
   setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
+
+
+// Делаем функцию глобальной для safe.js
+window.renderDashboard = renderDashboard;
