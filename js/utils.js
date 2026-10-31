@@ -57,7 +57,8 @@ function getProgressColor(percent) {
 
 
 // === АНИМАЦИЯ КОЛЕЦ ===
-function animateRings() {
+/* Функция перенесена в dashboard.js */
+function _old_animateRings() {
   setTimeout(() => {
     document.querySelectorAll('.ring-progress').forEach(ring => {
       const targetOffset = ring.getAttribute('data-target-offset');

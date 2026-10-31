@@ -2655,3 +2655,13 @@ html, body {
   color: #fff;
   box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
 }
+
+/* Анимация дыхания для колец */
+@keyframes ringPulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+.ring-breathing {
+  animation: ringPulse 2.5s ease-in-out infinite;
+}

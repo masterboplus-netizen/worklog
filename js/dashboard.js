@@ -1,4 +1,29 @@
 // МОДУЛЬ: ДАШБОРД
+
+function getProgressColor(percent) {
+  if (percent < 25) return 'var(--red)';
+  if (percent < 50) return 'var(--yellow)';
+  if (percent < 85) return 'var(--accent)';
+  return 'var(--green)';
+}
+
+function startRingAnimation() {
+  setTimeout(() => {
+    document.querySelectorAll('.ring-progress').forEach(ring => {
+      const targetOffset = ring.getAttribute('data-target-offset');
+      if (targetOffset !== null) {
+        ring.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+        ring.style.strokeDashoffset = targetOffset;
+        
+        // Добавляем дыхание для маленьких колец (и большого) после анимации
+        setTimeout(() => {
+          ring.classList.add('ring-breathing');
+        }, 1500);
+      }
+    });
+  }, 100);
+}
+
 function renderHeroRings() {
   const c = document.getElementById('content');
   if (!c || !window.DATA) return;
@@ -51,6 +76,7 @@ function renderHeroRings() {
 
   c.innerHTML = '';
   c.appendChild(div);
+  startRingAnimation();
 }
 
 function renderDashboard() {
