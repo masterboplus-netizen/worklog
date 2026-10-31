@@ -229,7 +229,6 @@ function renderDiary() {
         let col = 'var(--fg-dim)';
         if (isToday) { bg = 'rgba(255, 255, 255, 0.2)'; col = '#fff'; }
         
-        // Уменьшаем размер ячейки и шрифт
         let cellHtml = `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:7px; border-radius:50%; background:${bg}; color:${col}; position:relative;">${d.getDate()}`;
         if (hasData) {
              cellHtml += `<div style="position:absolute; bottom:0px; width:2px; height:2px; border-radius:50%; background:var(--accent);"></div>`;
@@ -291,7 +290,6 @@ function renderDiary() {
   
   if (CALENDAR_SELECTED_DAY) filtered = filtered.filter(s => s.date === CALENDAR_SELECTED_DAY);
   
-  // Сортируем строго по дате, а если даты совпадают — по времени начала
   filtered.sort((a, b) => {
     if (a.date !== b.date) return b.date.localeCompare(a.date);
     return (b.start || '').localeCompare(a.start || '');
@@ -300,6 +298,9 @@ function renderDiary() {
   const projName = {};
   for (const p of window.DATA.projects || []) projName[p.id] = p.name;
 
+  if (filtered.length === 0) {
+      listDiv.innerHTML = '<div class="empty" style="padding:20px 0;">Нет записей за этот период</div>';
+  } else {
       let lastDate = '';
       filtered.forEach(s => {
           if (s.date !== lastDate) {
@@ -315,15 +316,15 @@ function renderDiary() {
           let countersHTML = '';
           if (s.events || s.screens || s.tasks_done) {
               countersHTML = '<div class="diary-counters">';
-              if (s.events)     countersHTML += `p${116} ${s.events} `;
-              if (s.screens)    countersHTML += `p${128} ${s.screens} `;
-              if (s.tasks_done) countersHTML 4= `p$${118} ${s.tasks_done}`;
+              if (s.events)     countersHTML += `📨 ${s.events} `;
+              if (s.screens)    countersHTML += `📸 ${s.screens} `;
+              if (s.tasks_done) countersHTML += `✅ ${s.tasks_done}`;
               countersHTML += '</div>';
           }
 
           item.innerHTML = `
-            <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH s.duration_min || 0)}</span></div>
-            {$countersHTML}
+            <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
+            ${countersHTML}
             <div class="diary-proj">${projName[s.project] || s.project || '–'}</div>
             <div class="diary-note">${s.note || ''}</div>
           `;
@@ -348,7 +349,7 @@ function renderDiary() {
       });
   });
   prevBtn.addEventListener('click', () => {
-    if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30; else CALENDAR_OFFSETE--;
+    if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30; else CALENDAR_OFFSET--;
     CALENDAR_SELECTED_DAY = null; renderDiary();
   });
   nextBtn.addEventListener('click', () => {
@@ -356,7 +357,6 @@ function renderDiary() {
     CALENDAR_SELECTED_DAY = null; renderDiary();
   });
 }
-
 
 function formatDiaryDate(iso) {
   const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
