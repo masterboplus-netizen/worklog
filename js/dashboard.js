@@ -115,7 +115,6 @@ function renderHeroRings() {
       renderDashboard();
     });
     minis[1].addEventListener('click', () => {
-      const idx = (MINI_PERIODS_MSG.indexOf(MINI_SCR_PERIOD) + 1) % MINI_PERIODS_MSG.length;
       MINI_SCR_PERIOD = MINI_PERIODS_MSG[idx];
       renderDashboard();
     });
