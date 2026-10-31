@@ -300,9 +300,6 @@ function renderDiary() {
   const projName = {};
   for (const p of window.DATA.projects || []) projName[p.id] = p.name;
 
-  if (filtered.length === 0) {
-      listDiv.innerHTML = '<div class="empty" style="padding:20px 0;">Нет записей за этот период</div>';
-  } else {
       let lastDate = '';
       filtered.forEach(s => {
           if (s.date !== lastDate) {
@@ -314,49 +311,52 @@ function renderDiary() {
           }
           const item = document.createElement('div');
           item.className = 'diary-item';
+
+          let countersHTML = '';
+          if (s.events || s.screens || s.tasks_done) {
+              countersHTML = '<div class="diary-counters">';
+              if (s.events)     countersHTML += `p${116} ${s.events} `;
+              if (s.screens)    countersHTML += `p${128} ${s.screens} `;
+              if (s.tasks_done) countersHTML 4= `p$${118} ${s.tasks_done}`;
+              countersHTML += '</div>';
+          }
+
           item.innerHTML = `
-            <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
+            <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH s.duration_min || 0)}</span></div>
+            {$countersHTML}
             <div class="diary-proj">${projName[s.project] || s.project || '–'}</div>
             <div class="diary-note">${s.note || ''}</div>
-      const item = document.createElement("div");
-      item.className = "diary-item";
-      let countersHTML = "";
-      if (s.events || s.screens || s.tasks_done) {
-          countersHTML = "<div class=\"diary-counters\">";
-          if (s.events) countersHTML += `📨 ${s.events} `;
-          if (s.screens) countersHTML += `📸 ${s.screens} `;
-          if (s.tasks_done) countersHTML += `✅ ${s.tasks_done}`;
-          countersHTML += "</div>";
-      }
-      item.innerHTML = `
-        <div class="diary-time">${s.start || "?"} → ${s.end || "?"} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
-        ${countersHTML}
-        <div class="diary-proj">${projName[s.project] || s.project || "–"}</div>
-        <div class="diary-note">${s.note || ""}</div>
-      `;
-      listDiv.appendChild(item);
-      b.addEventListener('click', () => { 
-          CALENDAR_VIEW = b.dataset.view; 
-          CALENDAR_OFFSET = 0; 
-          CALENDAR_SELECTED_DAY = null; 
-          renderDiary(); 
+          `;
+          listDiv.appendChild(item);
+      });
+  }
+
+  c.appendChild(listDiv);
+
+  viewCapsule.querySelectorAll('button[data-view]').forEach(b => {
+      b.addEventListener('click', () => {
+          CALENDAR_VIEW = b.dataset.view;
+          CALENDAR_OFFSET = 0;
+          CALENDAR_SELECTED_DAY = null;
+          renderDiary();
       });
   });
   modeCapsule.querySelectorAll('button[data-mode]').forEach(b => {
-      b.addEventListener('click', () => { 
-          DIARY_MODE = b.dataset.mode; 
-          renderDiary(); 
+      b.addEventListener('click', () => {
+          DIARY_MODE = b.dataset.mode;
+          renderDiary();
       });
   });
-  prevBtn.addEventListener('click', () => { 
-    if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30; else CALENDAR_OFFSET--; 
-    CALENDAR_SELECTED_DAY = null; renderDiary(); 
+  prevBtn.addEventListener('click', () => {
+    if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30; else CALENDAR_OFFSETE--;
+    CALENDAR_SELECTED_DAY = null; renderDiary();
   });
-  nextBtn.addEventListener('click', () => { 
-    if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30; else CALENDAR_OFFSET++; 
-    CALENDAR_SELECTED_DAY = null; renderDiary(); 
+  nextBtn.addEventListener('click', () => {
+    if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30; else CALENDAR_OFFSET++;
+    CALENDAR_SELECTED_DAY = null; renderDiary();
   });
 }
+
 
 function formatDiaryDate(iso) {
   const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
