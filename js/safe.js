@@ -252,6 +252,6 @@ const _safeUnlock = async () => {
     }
   } catch(e) {
     alert("СЕЙФ: Ошибка расшифровки: " + e.message);
-    showSafe();
+    // showSafe() временно отключен для диагностики
   }
 };
