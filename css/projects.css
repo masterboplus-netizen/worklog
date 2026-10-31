@@ -1,0 +1,122 @@
+/* Стили проектов */
+/* === Карточка проекта === */
+.project-card { 
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.project-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.project-name {
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.project-hours {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.project-meta {
+  font-size: 12px;
+  color: var(--fg-dim);
+}
+
+/* === Пирог по проектам (полоса) === */
+.project-bars { margin-top: 10px; }
+
+/* === Project card + analytics button (v13) === */
+.project-card-wrap { margin-bottom: 16px;
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.project-card { 
+  margin-bottom: 0;
+}
+
+/* === Project actions (final, clean) === */
+.project-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.project-btn {
+  flex: 1;
+  height: 44px;
+  padding: 0 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-sizing: border-box;
+  line-height: 1;
+}
+
+.project-btn:active { background: var(--accent); color: #fff; }
+
+.project-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Меняем местами кнопки (Аналитика слева, Открыть справа) */
+.project-actions {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 8px;
+}
+
+.accordion-arrow {
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Уменьшаем расстояние между аккордеонами */
+.accordion-header {
+    margin-top: 15px !important;
+}
+
+/* Плавное раскрытие аккордеонов */
+.accordion-content { display: none; }
+
+.accordion-content.open { display: block; }
+
+.accordion-content.closed { display: none; }
+
+/* Переопределяем анимацию: используем display и opacity вместо max-height */
+.accordion-content { display: none; }
+
+.accordion-content.open { display: block; }
+
+.accordion-content.closed { display: none; }

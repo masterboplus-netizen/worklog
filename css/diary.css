@@ -808,3 +808,392 @@
   color: #fff !important;
   box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
 }
+
+/* Перенесено из layout.css */
+/* === Карточки метрик === */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.metric {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.metric-value.accent { color: var(--accent); }
+
+.metrics { grid-template-columns: repeat(4, 1fr); }
+
+.an-stats {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.an-stat {
+  flex: 1;
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+}
+
+.an-stat-label {
+  font-size: 11px;
+  color: var(--fg-dim);
+  margin-bottom: 4px;
+}
+
+.an-stat-val {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.an-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 14px 0 8px;
+  color: var(--fg-dim);
+}
+
+.an-block {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.an-month-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.an-month-label { width: 60px; color: var(--fg-dim); }
+
+.an-month-bar-wrap {
+  flex: 1;
+  height: 14px;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.an-month-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.an-month-val { width: 60px; text-align: right; font-weight: 600; }
+
+.an-top-row {
+  font-size: 13px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.an-top-row:last-child { border-bottom: none; }
+
+.an-top-rank { color: var(--fg-dim); margin-right: 4px; }
+
+.an-trend {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px;
+}
+
+/* === Month nav (активность) === */
+.month-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+  font-size: 12px;
+}
+
+.month-prev, .month-next {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 0;
+}
+
+.month-label {
+  color: var(--fg);
+  font-weight: 600;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* === Month picker === */
+
+.month-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.month-pick-item {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.month-pick-item.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* === Month/year: без рамки, большой шрифт === */
+.month-year-wrap {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.month-text, .year-text {
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.month-text:hover, .year-text:hover {
+  background: var(--bg3);
+}
+
+.bar-label {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(0,0,0,0.9);
+  z-index: 10;
+  pointer-events: none;
+  background: transparent; /* убираем фон */
+  border: none; /* убираем рамку */
+  padding: 0;
+}
+
+/* Плашка с цифрой (без рамки, просто текст) */
+
+.bar-label {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(0,0,0,0.9);
+  z-index: 10;
+  pointer-events: none;
+  background: transparent; /* убираем фон */
+  border: none; /* убираем рамку */
+  padding: 0;
+}
+
+/* === ИДЕАЛЬНАЯ СЕТКА 4x1 === */
+
+
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 4px 0 !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
+
+/* === ОДИНАКОВЫЙ ШРИФТ ДЛЯ ВСЕХ КНОПОК === */
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--fg-dim) !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
+
+/* === ИДЕАЛЬНАЯ СЕТКА С ВЫРАВНИВАНИЕМ ПО ЛЕВОМУ КРАЮ ГРАФИКА === */
+.top-filter-row, .metric-switch {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 0 !important;
+  width: 100% !important;
+  padding: 0 16px !important;
+  box-sizing: border-box !important;
+  margin: 0 0 16px 0 !important;
+  align-items: center !important;
+  justify-items: center !important;
+}
+
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 4px 0 !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
+
+/* Заставляем старые обертки исчезнуть */
+.period-filter-row, .month-year-filter {
+  display: contents !important;
+}
+
+/* === СТИРАЕМ ВСЁ СТАРОЕ === */
+.top-filter-row, .metric-switch,
+.period-filter-row, .month-year-filter,
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  all: unset !important; /* Сбрасываем абсолютно все стили */
+}
+
+/* === НОВАЯ ЧИСТАЯ СЕТКА === */
+.top-filter-row, .metric-switch {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  width: 100% !important;
+  padding: 0 16px !important;
+  box-sizing: border-box !important;
+  margin: 0 0 16px 0 !important;
+  align-items: center !important;
+}
+
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  display: block !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--fg-dim) !important;
+  text-align: left !important; /* Текст влево */
+  padding: 4px 0 !important;
+  cursor: pointer !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
+
+/* Оба меню в одну жесткую сетку */
+.top-filter-row, 
+.metric-switch {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    width: 100% !important;
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
+    margin: 0 0 16px 0 !important;
+    align-items: center !important;
+}
+
+/* Сами кнопки */
+.period-btn, .month-btn, .year-btn, .metric-btn {
+    display: flex !important;
+    background: transparent !important;
+    border: none !important;
+    color: var(--fg-dim) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    padding: 4px 0 !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+}
+
+/* 1-я кнопка (7 дней / Время) - сдвиг на 30px и прижатие влево */
+.top-filter-row button:nth-child(1),
+.metric-switch button:nth-child(1) {
+    padding-left: 30px !important;
+    justify-content: flex-start !important;
+}
+
+/* 2-я и 3-я кнопки - по центру */
+.top-filter-row button:nth-child(2),
+.top-filter-row button:nth-child(3),
+.metric-switch button:nth-child(2),
+.metric-switch button:nth-child(3) {
+    justify-content: center !important;
+}
+
+/* 4-я кнопка (2026 / Задачи) - прижатие вправо */
+.top-filter-row button:nth-child(4),
+.metric-switch button:nth-child(4) {
+    justify-content: flex-end !important;
+}
+
+/* Активный цвет */
+.period-btn.active, .metric-btn.active {
+    color: var(--fg) !important;
+    font-weight: 600 !important;
+}
