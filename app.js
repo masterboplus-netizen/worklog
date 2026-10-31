@@ -189,4 +189,3 @@ function showCreators() {
 window.renderDashboard = renderDashboard;
 
 
-window.addEventListener('load', () => { if (typeof renderDashboard === 'function' && window.DATA) renderDashboard(); });
