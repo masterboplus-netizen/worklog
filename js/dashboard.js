@@ -27,8 +27,7 @@ function startRingAnimation() {
 
 function renderHeroRings() {
   const c = document.getElementById('content');
-  if (!c) { alert("НЕТ КОНТЕЙНЕРА content!"); return; }
-  if (!window.DATA) { alert("НЕТ ДАННЫХ DATA!"); return; }
+  if (!c || !window.DATA) return;
 
   // 1. Данные из calcTotals и склеенные сессии
   const t = calcTotals();
@@ -129,8 +128,7 @@ function renderHeroRings() {
 
 function renderDashboard() {
   const c = document.getElementById('content');
-  if (!c) { alert("НЕТ КОНТЕЙНЕРА content!"); return; }
-  if (!window.DATA) { alert("НЕТ ДАННЫХ DATA!"); return; }
+  if (!c || !window.DATA) return;
   
   // ВАЖНО: Берем склеенные сессии!
   const merged = mergeMidnightSessions(window.DATA.sessions || []);
