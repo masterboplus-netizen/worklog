@@ -396,6 +396,20 @@ function getProgressColor(percent) {
 }
 
 
+
+// === АНИМАЦИЯ КОЛЕЦ ===
+function animateRings() {
+  setTimeout(() => {
+    document.querySelectorAll('.ring-progress').forEach(ring => {
+      const targetOffset = ring.getAttribute('data-target-offset');
+      if (targetOffset !== null) {
+        ring.style.transition = 'stroke-dashoffset 1s ease-out';
+        ring.style.strokeDashoffset = targetOffset;
+      }
+    });
+  }, 50); // Небольшая задержка, чтобы DOM успел отрисоваться
+}
+
 function renderHeroRings() {
   const c = document.getElementById('content');
   if (!c || !window.DATA) return;
@@ -449,6 +463,7 @@ function renderHeroRings() {
   c.innerHTML = '';
   c.appendChild(div);
 }
+  animateRings();
 
 
 
