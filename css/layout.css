@@ -451,84 +451,6 @@ div[style*="justify-content: space-between"] {
     font-weight: 600 !important;
 }
 
-/* === НОВАЯ ЛЕНТА ГРАФИКА (TIME LINE) - FLEXBOX === */
-.tl-container {
-  display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding: 0; gap: 0; scrollbar-width: none; -ms-overflow-style: none;
-  scroll-behavior: smooth; height: 100%; width: 100%; align-items: flex-end;
-}
-
-.tl-container::-webkit-scrollbar { display: none; }
-
-.tl-col {
-  scroll-snap-align: start; 
-  min-width: 40px; flex: 0 0 40px; /* Ширина колонки */
-  display: flex; flex-direction: column; 
-  height: 100%; position: relative; cursor: pointer;
-  overflow: visible !important; /* Важно! Чтобы легенда не обрезалась */
-}
-
-.tl-bar {
-  width: 100%; max-width: 28px; background: var(--accent);
-  border-radius: 4px 4px 0 0; transition: height 0.3s ease, background 0.2s;
-  position: relative;
-}
-
-.tl-bar.selected { background: #00ff00 !important; box-shadow: 0 0 10px rgba(0, 255, 0, 0.6); }
-
-.tl-label {
-  height: 40px; /* Фиксированная высота под дату */
-  flex-shrink: 0;
-  display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-  font-size: 10px; color: var(--fg-dim); line-height: 1.1; padding-top: 8px;
-}
-
-.tl-legend {
-  position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
-  color: var(--accent); font-size: 12px; font-weight: 600;
-  white-space: nowrap; text-shadow: 0 0 4px rgba(0,0,0,0.9);
-  pointer-events: none; z-index: 10;
-}
-
-.tl-col:focus, .tl-col:active, .tl-bar:focus, .tl-bar:active {
-  outline: none !important;
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-.tl-col::before {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  top: 10%;
-  height: 1px;
-  background: rgba(255,255,255,0.03);
-  pointer-events: none;
-}
-
-.tl-col::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  bottom: 30px;
-  height: 1px;
-  background: rgba(255,255,255,0.1);
-  pointer-events: none;
-}
-
-.tl-container { flex: 1; display: flex; gap: 0; overflow-x: auto; overflow-y: hidden; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); background-image: linear-gradient(to top, var(--border) 1px, transparent 1px); background-size: 100% calc(50% - 16px); background-position: 0 0; padding: 0; margin: 0; -webkit-overflow-scrolling: touch; }
-
-.tl-col { width: 40px; flex: 0 0 40px; display: flex; flex-direction: column; height: 100%; position: relative; }
-
-.tl-bar-wrap { flex: 1; width: 100%; display: flex; align-items: flex-end; justify-content: center; padding: 0 4px; box-sizing: border-box; }
-
-.tl-bar { width: 100%; background: var(--accent); border-radius: 3px 3px 0 0; transition: height 0.2s, opacity 0.15s; cursor: pointer; }
-
-.tl-bar.selected { background: var(--green); box-shadow: 0 0 8px var(--green); }
-
-.tl-bar.empty { background: transparent; cursor: default; pointer-events: none; }
-
-.tl-label { height: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 10px; color: var(--fg-dim); line-height: 1.1; flex-shrink: 0; }
-
 /* === Починка нижнего меню === */
 
 
@@ -574,12 +496,6 @@ div[style*="justify-content: space-between"] {
 
 .tab.tab-active {
   color: var(--accent) !important;
-}
-
-/* === Динамическая ширина столбиков (ровно 7 на экран) === */
-.tl-col {
-  width: calc(100% / 7) !important; /* Ровно 1/7 от ширины контейнера */
-  flex: 0 0 calc(100% / 7) !important;
 }
 
 /* === Плавающий тултип над столбиком === */

@@ -1,0 +1,83 @@
+/* Стили аналитики */
+.an-stats {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.an-stat {
+  flex: 1;
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+}
+
+.an-stat-label {
+  font-size: 11px;
+  color: var(--fg-dim);
+  margin-bottom: 4px;
+}
+
+.an-stat-val {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.an-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 14px 0 8px;
+  color: var(--fg-dim);
+}
+
+.an-block {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.an-month-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.an-month-label { width: 60px; color: var(--fg-dim); }
+
+.an-month-bar-wrap {
+  flex: 1;
+  height: 14px;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.an-month-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+}
+
+.an-month-val { width: 60px; text-align: right; font-weight: 600; }
+
+.an-top-row {
+  font-size: 13px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.an-top-row:last-child { border-bottom: none; }
+
+.an-top-rank { color: var(--fg-dim); margin-right: 4px; }
+
+.an-trend {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px;
+}
