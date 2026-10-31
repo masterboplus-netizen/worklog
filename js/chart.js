@@ -134,7 +134,7 @@ function renderActivityPageV2() {
         let maxVal = 0;
         for (let i = startIndex; i <= endIndex && i < allDates.length; i++) {
             let v = 0;
-            for (const sess of window.DATA.sessions || []) {
+            for (const sess of mergeMidnightSessions(window.DATA.sessions || [])) {
                 if (sess.date === allDates[i]) {
                     if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE.metric === 'events') v += sess.events || 0;
@@ -160,7 +160,7 @@ function renderActivityPageV2() {
 
         scrollContainer.querySelectorAll('.tl-col').forEach(col => {
             let v = 0;
-            for (const sess of window.DATA.sessions || []) {
+            for (const sess of mergeMidnightSessions(window.DATA.sessions || [])) {
                 if (sess.date === col.dataset.date) {
                     if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE.metric === 'events') v += sess.events || 0;
@@ -210,7 +210,7 @@ function renderActivityPageV2() {
 
         // Считаем значение
         let v = 0;
-        for (const sess of window.DATA.sessions || []) {
+        for (const sess of mergeMidnightSessions(window.DATA.sessions || [])) {
             if (sess.date === dateStr) {
                 if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
                 else if (CHART_STATE.metric === 'events') v += sess.events || 0;
