@@ -228,13 +228,18 @@ function renderActivityPageV2() {
         t.innerHTML = `<div style="font-weight:600;color:#fff;font-size:13px;padding:4px 8px;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
         document.body.appendChild(t);
 
-        // Позиционируем
-        const rect = col.getBoundingClientRect();
-        const bar = col.querySelector('.tl-bar');
-        
-        t.style.left = (rect.left + (rect.width / 2)) + 'px';
-        t.style.top = (rect.top + (rect.height - bar.getBoundingClientRect().height) - 40) + 'px';
-        t.style.transform = 'translateX(-50%)';
+        // Позиционируем (с защитой от ошибок)
+        try {
+            const rect = col.getBoundingClientRect();
+            const bar = col.querySelector('.tl-bar');
+            const barHeight = bar ? bar.getBoundingClientRect().height : 0;
+            
+            t.style.left = (rect.left + (rect.width / 2)) + 'px';
+            t.style.top = (rect.top + (rect.height - barHeight) - 40) + 'px';
+            t.style.transform = 'translateX(-50%)';
+        } catch (err) {
+            alert('Ошибка позиционирования тултипа: ' + err.message);
+        }
     });
 
     // 7. СМЕНА МЕТРИКИ
