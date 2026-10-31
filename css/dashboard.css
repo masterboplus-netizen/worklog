@@ -1,0 +1,331 @@
+.progress-bar {
+  height: 6px;
+  background: var(--bg3);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* === Chart v4: labels-row (синхронно с barsWrap) === */
+
+
+/* === Hero Rings (v5) === */
+.hero-rings {
+  margin-bottom: 20px;
+}
+
+.hero-main {
+  display: flex;
+  justify-content: center;
+
+}
+
+.ring-center {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ring-value {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--fg);
+  line-height: 1.1;
+}
+
+.ring-sub {
+  font-size: 11px;
+  color: var(--fg-dim);
+  margin-top: 4px;
+}
+
+.hero-mini {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+}
+
+.mini-ring {
+  position: relative;
+  width: 92px;
+  height: 92px;
+}
+
+.mini-center {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.mini-ico {
+  font-size: 14px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.mini-val {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--fg);
+  line-height: 1.05;
+  text-align: center;
+}
+
+/* === Mini rings labels (v6) === */
+.mini-block {
+  flex: 0 0 auto;
+  width: 104px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.mini-label {
+  font-size: 11px;
+  color: var(--fg-dim);
+  text-align: center;
+}
+
+/* === Hero ring bigger (v7) === */
+
+.ring-value {
+  font-size: 42px;
+}
+
+.ring-sub {
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* === Hero ring max (v8) === */
+
+.ring-value {
+  font-size: 42px;
+}
+
+.ring-sub {
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+/* === Ring-wrap final === */
+.ring-wrap {
+  position: relative;
+  width: 270px;
+  height: 270px;
+  flex: 0 0 auto;
+}
+
+/* === Projects tab + отступ секции после колец === */
+.hero-rings {
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+/* === Mini labels: 2 строки + фикс. ширина === */
+.hero-mini {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.mini-block {
+  flex: 0 0 auto;
+  width: 104px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.mini-label {
+  text-align: center;
+  min-height: 32px;
+}
+
+.mini-lbl-title {
+  font-size: 13px;
+  color: var(--fg);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.mini-lbl-period {
+  font-size: 12px;
+  color: var(--fg-dim);
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+/* === Mini: подписи сверху + distance как было === */
+.hero-mini {
+  display: flex;
+  justify-content: space-around;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.mini-block {
+  flex: 0 0 auto;
+  width: 104px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.mini-label {
+  text-align: center;
+  min-height: 30px;
+}
+
+.mini-lbl-title {
+  font-size: 12px;
+  color: var(--fg);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.mini-lbl-period {
+  font-size: 11px;
+  color: var(--fg-dim);
+  line-height: 1.2;
+  margin-top: 1px;
+}
+
+/* === Hero ring: иконка + крупный шрифт (v10) === */
+.ring-wrap {
+  width: 290px;
+  height: 290px;
+}
+
+.ring-icon {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.ring-label {
+  font-size: 14px;
+  color: var(--fg-dim);
+  margin-bottom: 6px;
+}
+
+.ring-value {
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ring-sub {
+  font-size: 14px;
+  color: var(--fg-dim);
+  margin-top: 8px;
+}
+
+/* === Mini rings: цифры без эмодзи, крупнее === */
+.mini-val {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--fg);
+  line-height: 1.05;
+  text-align: center;
+}
+
+/* === Ring-value: уменьшен для длинных значений (359ч 42м) === */
+.ring-value {
+  font-size: 44px;
+  letter-spacing: -1px;
+}
+
+.ring-center {
+  pointer-events: none;
+}
+
+.ring-center .edit-goal {
+  pointer-events: auto !important;
+}
+
+/* === Сияние для прогресса колец === */
+.ring-svg circle
+
+/* Усиливаем сияние для главного кольца */
+.ring-wrap .ring-svg circle
+
+/* === ПРИНУДИТЕЛЬНОЕ СИЯНИЕ ДЛЯ КОЛЕЦ === */
+
+
+
+/* === АНИМАЦИЯ КОЛЕЦ (OFFSET) И СИЯНИЕ === */
+
+
+
+/* === ФИКС: Убираем любые фоны и тени у контейнеров колец === */
+.mini-ring, .ring-wrap {
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+/* Чтобы пульсация не была слишком навязчивой на малых кольцах */
+.mini-ring 
+
+/* === ПУЛЬСАЦИЯ КОЛЕЦ (ЧИСТАЯ, БЕЗ DROP-SHADOW) === */
+
+  50% { opacity: 1; }
+
+/* Задаем базовую толщину для всех колец */
+.mini-ring 
+.ring-wrap 
+
+/* === ПУЛЬСАЦИЯ ЧЕРЕЗ МАСШТАБ (РАБОТАЕТ ВЕЗДЕ) === */
+
+  50% { transform: scale(1.02); }
+
+/* Задаем базовую толщину для каждого размера кольца */
+.mini-ring 
+.ring-wrap 
+
+/* === ДЫХАНИЕ ДЛЯ МАЛЫХ КОЛЕЦ === */
+
+  50% { stroke-width: 9px; }
+
+.mini-ring .ring-progress {
+  animation: breatheMini 2.5s infinite ease-in-out;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
+}
+
+.ring-wrap .ring-progress {
+  animation: breatheBig 2.5s infinite ease-in-out;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
+}
+
+.mini-ring .ring-progress {
+  animation: breatheMini 2s infinite ease-in-out;
+}
+
+.ring-wrap .ring-progress {
+  animation: breatheBig 2s infinite ease-in-out;
+}
+
+.ring-breathing {
+  animation: ringPulse 2.5s ease-in-out infinite;
+}

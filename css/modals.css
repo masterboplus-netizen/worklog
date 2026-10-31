@@ -1,0 +1,55 @@
+/* === Goal bottom sheet === */
+.goal-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.15s ease;
+}
+
+.goal-sheet {
+  background: var(--bg);
+  width: 100%;
+  max-width: 480px;
+  border-radius: 20px 20px 0 0;
+  padding: 20px 16px 24px;
+  position: relative;
+  animation: slideUp 0.2s ease;
+}
+
+.goal-sheet-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--bg3);
+  border: none;
+  color: var(--fg);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.goal-sheet-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 20px;
+  color: var(--fg);
+}
+
+.goal-sheet-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.goal-sheet-actions {
+  display: flex;
+  gap: 10px;
+}
