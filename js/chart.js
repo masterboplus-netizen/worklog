@@ -189,9 +189,13 @@ function renderActivityPageV2() {
         if (!col) return;
         const dateStr = col.dataset.date;
 
+        // Сбрасываем старый тултип
+        const oldT = document.getElementById('global-chart-tooltip');
+        if (oldT) oldT.remove();
+
+        // Если кликнули на тот же день — просто снимаем выделение и выходим
         if (CHART_STATE.selectedDay === dateStr) {
             CHART_STATE.selectedDay = null;
-            tooltip.style.display = 'none';
             updateChart();
             return;
         }
@@ -199,42 +203,38 @@ function renderActivityPageV2() {
         CHART_STATE.selectedDay = dateStr;
         updateChart();
 
-        const targetCol = scrollContainer.querySelector(`.tl-col[data-date="${dateStr}"]`);
-        if (targetCol) {
-            let v = 0;
-            for (const sess of window.DATA.sessions || []) {
-                if (sess.date === dateStr) {
-                    if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
-                    else if (CHART_STATE.metric === 'events') v += sess.events || 0;
-                    else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
-                    else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
-                }
+        // Считаем значение
+        let v = 0;
+        for (const sess of window.DATA.sessions || []) {
+            if (sess.date === dateStr) {
+                if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
+                else if (CHART_STATE.metric === 'events') v += sess.events || 0;
+                else if (CHART_STATE.metric === 'screens') v += sess.screens || 0;
+                else if (CHART_STATE.metric === 'tasks') v += sess.tasks_done || 0;
             }
-            
-            let text = String(v);
-            if (CHART_STATE.metric === 'duration') {
-                const h = Math.floor(v / 60);
-                const m = v % 60;
-                text = (h > 0 ? h + 'ч ' : '') + m + 'м';
-            }
-
-            // Пересоздаем тултип прямо здесь, чтобы не было конфликтов
-            const oldT = document.getElementById('global-chart-tooltip');
-            if (oldT) oldT.remove();
-            const t = document.createElement('div');
-            t.id = 'global-chart-tooltip';
-            t.style.cssText = 'position: fixed; z-index: 99999; display: block; pointer-events: none;';
-            t.innerHTML = `<div style="font-weight:600;color:#fff;font-size:13px;padding:4px 8px;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
-            document.body.appendChild(t);
-            tooltip = t; // обновляем ссылку
-
-            const rect = targetCol.getBoundingClientRect();
-            const bar = targetCol.querySelector('.tl-bar');
-            
-            tooltip.style.left = (rect.left + (rect.width / 2)) + 'px';
-            tooltip.style.top = (rect.top + (rect.height - bar.getBoundingClientRect().height) - 40) + 'px';
-            tooltip.style.transform = 'translateX(-50%)';
         }
+        
+        let text = String(v);
+        if (CHART_STATE.metric === 'duration') {
+            const h = Math.floor(v / 60);
+            const m = v % 60;
+            text = (h > 0 ? h + 'ч ' : '') + m + 'м';
+        }
+
+        // Создаем тултип
+        const t = document.createElement('div');
+        t.id = 'global-chart-tooltip';
+        t.style.cssText = 'position: fixed; z-index: 99999; display: block; pointer-events: none;';
+        t.innerHTML = `<div style="font-weight:600;color:#fff;font-size:13px;padding:4px 8px;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${text}</div>`;
+        document.body.appendChild(t);
+
+        // Позиционируем
+        const rect = col.getBoundingClientRect();
+        const bar = col.querySelector('.tl-bar');
+        
+        t.style.left = (rect.left + (rect.width / 2)) + 'px';
+        t.style.top = (rect.top + (rect.height - bar.getBoundingClientRect().height) - 40) + 'px';
+        t.style.transform = 'translateX(-50%)';
     });
 
     // 7. СМЕНА МЕТРИКИ
