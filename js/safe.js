@@ -251,6 +251,7 @@ const _safeUnlock = async () => {
       showSafe();
     }
   } catch(e) {
+    alert("СЕЙФ: Ошибка расшифровки: " + e.message);
     showSafe();
   }
 };
