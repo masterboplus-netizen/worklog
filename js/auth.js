@@ -46,7 +46,7 @@ async function tryUnlock(pin) {
     const enc = await resp.json();
     DATA = await decryptData(pin, enc);
     return true;
-  } catch(e) { return false; }
+  } catch(e) { alert("ОШИБКА РАСШИФРОВКИ: " + e.message); return false; }
 }
 
 async function submitPin(pin) {
