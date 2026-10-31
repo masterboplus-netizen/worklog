@@ -53,3 +53,141 @@
   display: flex;
   gap: 10px;
 }
+
+/* Перенесено из layout.css */
+.goal-step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg3);
+  color: var(--fg);
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.goal-step:active { background: var(--accent); }
+
+.goal-unit {
+  font-size: 20px;
+  color: var(--fg-dim);
+}
+
+.goal-cancel, .goal-save {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.goal-cancel {
+  background: var(--bg3);
+  color: var(--fg);
+}
+
+.goal-save {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* === Goal scroll-picker === */
+
+.goal-picker-item {
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  font-size: 22px;
+  color: var(--fg-dim);
+  scroll-snap-align: center;
+  transition: color 0.15s, font-size 0.15s;
+}
+
+.goal-picker-item.active {
+  color: var(--fg);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.goal-picker::before, .goal-picker::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 60px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.goal-picker::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--bg3) 0%, transparent 100%);
+}
+
+.goal-picker::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--bg3) 0%, transparent 100%);
+}
+
+/* === Goal picker: padding, чтобы 1 и 24 были видны === */
+.goal-picker {
+  height: 180px;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  background: var(--bg3);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  padding: 60px 0;
+  box-sizing: content-box;
+  scroll-padding: 60px 0;
+}
+
+.goal-picker-item {
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  font-size: 22px;
+  color: var(--fg-dim);
+  scroll-snap-align: center;
+  transition: color 0.15s, font-size 0.15s;
+}
+
+.goal-picker-item.active {
+  color: var(--fg);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.goal-picker::before, .goal-picker::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 60px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.goal-picker::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--bg3) 0%, transparent 100%);
+}
+
+.goal-picker::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--bg3) 0%, transparent 100%);
+}
+
+/* === Goal picker: spacer сверху/снизу === */
+.goal-picker {
+  padding: 0;
+  scroll-padding: 0;
+}
+
+.goal-picker-spacer {
+  height: 60px;
+  flex-shrink: 0;
+}
