@@ -104,6 +104,8 @@ function _safeBind() {
         HOLD_TIMER = setTimeout(() => {
           _safeVibrate(60);
           SAFE_STEP++;
+          const timerDisplay = document.getElementById("safe-timer");
+          if (timerDisplay) { timerDisplay.textContent = "Точка " + SAFE_STEP + " из " + SAFE_TARGET_ANGLES.length; timerDisplay.style.color = "#4A9EFF"; }
           HOLD_TIMER = null;
 
           if (SAFE_STEP === SAFE_TARGET_ANGLES.length) {
