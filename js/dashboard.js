@@ -1,3 +1,4 @@
+let HERO_MODE = 'today';
 // МОДУЛЬ: ДАШБОРД
 
 function getProgressColor(percent) {
@@ -43,9 +44,26 @@ function renderHeroRings() {
   }
 
   // 3. Переменные для большого кольца
-  const heroValue = todayMin;
-  const heroLabel = 'Сегодня';
-  const heroSub = 'Среднее ' + fmtH(t.avgPerDay);
+  let heroValue = todayMin;
+  let heroLabel = 'Сегодня';
+  let heroSub = 'Среднее ' + fmtH(t.avgPerDay);
+
+  if (HERO_MODE === 'last_session') {
+      const sorted = [...(window.DATA.sessions || [])].sort((a, b) => {
+          if (a.date !== b.date) return b.date.localeCompare(a.date);
+          return (b.start || '').localeCompare(a.start || '');
+      });
+      if (sorted.length > 0) {
+          const last = sorted[0];
+          heroValue = last.duration_min || 0;
+          heroLabel = 'Последняя';
+          heroSub = last.date.split('-').reverse().join('.') + ' (' + last.start + ')';
+      } else {
+          heroValue = 0;
+          heroLabel = 'Последняя';
+          heroSub = 'Нет данных';
+      }
+  }
   
   const pctDur = Math.min(100, Math.round(heroValue / (t.avgPerDay > 0 ? t.avgPerDay : 480) * 100));
   const ringColor = getProgressColor(pctDur);
@@ -82,13 +100,10 @@ function renderHeroRings() {
   const heroRing = document.getElementById('hero-ring');
   if (heroRing) {
     heroRing.addEventListener('click', () => {
-      const periods = ['today', 'week', 'month', 'all'];
-      const labels = { today: 'Сегодня', week: 'Неделя', month: 'Месяц', all: 'Всё время' };
-      let curIdx = periods.indexOf(HERO_MODE || 'today');
-      curIdx = (curIdx + 1) % periods.length;
-      HERO_MODE = periods[curIdx];
-      renderDashboard(); // Перерисовываем
+      HERO_MODE = (HERO_MODE === 'today') ? 'last_session' : 'today';
+      renderDashboard();
     });
+  }
   }
 
   // Обработчики для маленьких колец (сообщения, скрины, задачи)
@@ -110,7 +125,6 @@ function renderHeroRings() {
       renderDashboard();
     });
   }
-}
 
 function renderDashboard() {
   const c = document.getElementById('content');
