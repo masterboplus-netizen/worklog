@@ -3,555 +3,27 @@
   "updated": "2026-10-26T02:35:00",
   "projects": [
     {
-      "id": "bo81",
-      "name": "Бо 8.1",
-      "color": "#4A9EFF",
-      "status": "active",
-      "plan": [
-        {
-          "phase": "1. MVP",
-          "status": "done",
-          "items": [
-            {
-              "text": "Онбординг, роли (5)",
-              "done": true
-            },
-            {
-              "text": "Объекты, задачи, финансы",
-              "done": true
-            },
-            {
-              "text": "CRM (клиенты, сделки)",
-              "done": true
-            },
-            {
-              "text": "Фото объекта",
-              "done": true
-            },
-            {
-              "text": "Web-дашборд",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "2. Комнаты, ЭОМ, сметы",
-          "status": "done",
-          "items": [
-            {
-              "text": "Комнаты, обход стен",
-              "done": true
-            },
-            {
-              "text": "Сессии замеров, проёмы, ниши",
-              "done": true
-            },
-            {
-              "text": "ЭОМ: щиты, группы, трассы",
-              "done": true
-            },
-            {
-              "text": "Сантехника: коллекторы, трассы",
-              "done": true
-            },
-            {
-              "text": "Сметы ЭОМ + импорт прайсов",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "3. PDF + компоненты",
-          "status": "done",
-          "items": [
-            {
-              "text": "PDF: щит, ЭОМ, сантехника",
-              "done": true
-            },
-            {
-              "text": "Ручные компоненты щита",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "4. Рефакторинг",
-          "status": "88%",
-          "items": [
-            {
-              "text": "callbacks/tasks, estimates, kpi, finance",
-              "done": true
-            },
-            {
-              "text": "callbacks/objects, reports, misc, personal",
-              "done": true
-            },
-            {
-              "text": "text/objects, tasks, finances, personal, crm, misc, rooms",
-              "done": true
-            },
-            {
-              "text": "handle_text → text/* (90%) — parse.py вынесен",
-              "done": true
-            },
-            {
-              "text": "rooms.py (аудит 100%, 2 мертвых удалены, архитектура готова, старт выноса в сессии 21)",
-              "done": true
-            },
-            {
-              "text": "modules/ → core/ (176 импортов)",
-              "done": false
-            },
-            {
-              "text": "Реструктуризация документации (docs)",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "5. UX/Доработки",
-          "status": "planned",
-          "items": [
-            {
-              "text": "Универсальный приёмник файлов",
-              "done": false
-            },
-            {
-              "text": "Полиш ЭОМ (nav_from)",
-              "done": false
-            },
-            {
-              "text": "Полиш parser.py, comms.py",
-              "done": false
-            }
-          ]
-        },
-        {
-          "phase": "6. Интеграции",
-          "status": "planned",
-          "items": [
-            {
-              "text": "Google Sheets (синхронизация смет)",
-              "done": false
-            },
-            {
-              "text": "1С / Мой Склад",
-              "done": false
-            },
-            {
-              "text": "Экспорт в Excel/CSV",
-              "done": false
-            },
-            {
-              "text": "Email-отчёты",
-              "done": false
-            }
-          ]
-        },
-        {
-          "phase": "7. Маркетплейсы",
-          "status": "planned",
-          "items": [
-            {
-              "text": "Импорт цен (Leroy Merlin, Petrovich, OBI)",
-              "done": false
-            },
-            {
-              "text": "Парсинг каталогов",
-              "done": false
-            },
-            {
-              "text": "Сравнение цен поставщиков",
-              "done": false
-            },
-            {
-              "text": "Автозаказ материалов",
-              "done": false
-            }
-          ]
-        },
-        {
-          "phase": "8. Масштабирование",
-          "status": "planned",
-          "items": [
-            {
-              "text": "Многопользовательский режим",
-              "done": false
-            },
-            {
-              "text": "Расширенная web-панель",
-              "done": false
-            },
-            {
-              "text": "REST API",
-              "done": false
-            },
-            {
-              "text": "Вебхуки",
-              "done": false
-            }
-          ]
-        },
-        {
-          "phase": "9. Аналитика и AI",
-          "status": "planned",
-          "items": [
-            {
-              "text": "Графики прогресса",
-              "done": false
-            },
-            {
-              "text": "Прогнозы сроков",
-              "done": false
-            },
-            {
-              "text": "AI-помощник (голосовой ввод)",
-              "done": false
-            },
-            {
-              "text": "Автокатегоризация расходов",
-              "done": false
-            }
-          ]
-        },
-        {
-          "phase": "10. Мобильное приложение",
-          "status": "planned",
-          "items": [
-            {
-              "text": "Нативное iOS / Android",
-              "done": false
-            },
-            {
-              "text": "Push-уведомления",
-              "done": false
-            },
-            {
-              "text": "AR-замеры",
-              "done": false
-            }
-          ]
-        },
-        {
-          "phase": "11. Биллинг / Монетизация",
-          "status": "planned",
-          "items": [
-            {
-              "text": "Подписки (Free / Pro / Business)",
-              "done": false
-            },
-            {
-              "text": "Лимиты по тарифу",
-              "done": false
-            },
-            {
-              "text": "Оплата (ЮKassa, Stripe)",
-              "done": false
-            },
-            {
-              "text": "Реферальная программа",
-              "done": false
-            }
-          ]
-        },
-        {
-          "phase": "12. Архитектура и дисциплина (Бо 8.1)",
-          "status": "planned",
-          "items": [
-            {
-              "text": "Создать AI_CONTEXT.md (паспорт проекта для ИИ)",
-              "done": false
-            },
-            {
-              "text": "Написать test_bot.py (сторож: проверка БД и импортов)",
-              "done": false
-            },
-            {
-              "text": "Добавить логирование (logging) во все модули",
-              "done": false
-            },
-            {
-              "text": "Вынести логику SQLite в отдельный файл (db.py)",
-              "done": false
-            },
-            {
-              "text": "Вынести генерацию PDF в отдельный модуль",
-              "done": false
-            },
-            {
-              "text": "Настроить регулярный бэкап bo72.db",
-              "done": false
-            }
-          ]
-        }
-      ],
-      "started": "2026-07-01"
+      "id": "bo-core",
+      "name": "Бо Ядро"
+    },
+    {
+      "id": "kheraborina",
+      "name": "Хераборина"
     },
     {
       "id": "bo-web",
-      "name": "Бо Веб",
-      "color": "#007aff",
-      "status": "active",
-      "plan": [
-        {
-          "phase": "Фаза 1: MVP (Фронтенд и UI)",
-          "status": "active",
-          "items": [
-            {
-              "text": "Домен и SSL (masterbo.work.gd)",
-              "done": true
-            },
-            {
-              "text": "Постоянная шапка (лого, название, SVG-кнопки)",
-              "done": true
-            },
-            {
-              "text": "Нижнее меню (2 ряда, 8 разделов)",
-              "done": true
-            },
-            {
-              "text": "Центральная кнопка '+'",
-              "done": true
-            },
-            {
-              "text": "Свайп-меню (открытие/закрытие)",
-              "done": true
-            },
-            {
-              "text": "PWA и кэш (sw.js, версии)",
-              "done": true
-            },
-            {
-              "text": "Рефакторинг app2.js (XSS, клики)",
-              "done": true
-            },
-            {
-              "text": "API: список объектов",
-              "done": true
-            },
-            {
-              "text": "Фронт: подключить API объектов (fetch)",
-              "done": false
-            },
-            {
-              "text": "Фронт: экран Комнаты",
-              "done": false
-            },
-            {
-              "text": "Фронт: экран Замеры",
-              "done": false
-            }
-          ]
-        },
-        {
-          "phase": "Фаза 2: ЭОМ и Сантехника",
-          "status": "pending",
-          "items": [
-            {
-              "text": "API: щиты и группы",
-              "done": false
-            },
-            {
-              "text": "Фронт: экран Электрика",
-              "done": false
-            },
-            {
-              "text": "API: коллекторы",
-              "done": false
-            },
-            {
-              "text": "Фронт: экран Сантехника",
-              "done": false
-            }
-          ]
-        },
-        {
-          "phase": "Фаза 3: Финансы и CRM",
-          "status": "pending",
-          "items": [
-            {
-              "text": "API: финансы",
-              "done": false
-            },
-            {
-              "text": "Фронт: экран Финансы",
-              "done": false
-            },
-            {
-              "text": "Фронт: добавление замеров",
-              "done": false
-            }
-          ]
-        }
-      ]
+      "name": "Бо Веб"
     },
     {
       "id": "fclub1952",
-      "name": "ФК Богородское 1952",
-      "color": "#e63946",
-      "status": "active",
-      "plan": [
-        {
-          "phase": "1. Парсинг сайта",
-          "status": "done",
-          "items": [
-            {
-              "text": "Скачать chronicle.htm",
-              "done": true
-            },
-            {
-              "text": "Скачать comanda.html",
-              "done": true
-            },
-            {
-              "text": "Скачать картинки",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "2. Приложение",
-          "status": "active",
-          "items": [
-            {
-              "text": "Создать Flask main.py",
-              "done": false
-            },
-            {
-              "text": "Сделать шаблон comanda.html",
-              "done": false
-            },
-            {
-              "text": "Настроить вывод данных",
-              "done": false
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "worklog",
-      "name": "Хераборина",
-      "color": "#4A9EFF",
-      "status": "active",
-      "started": "2026-10-14",
-      "plan": [
-        {
-          "phase": "1. MVP (Каркас)",
-          "status": "completed",
-          "items": [
-            {
-              "text": "Вход по PIN-коду",
-              "done": true
-            },
-            {
-              "text": "AES-256-GCM шифрование",
-              "done": true
-            },
-            {
-              "text": "Базовый дашборд (круги, метрики)",
-              "done": true
-            },
-            {
-              "text": "Дневник сессий",
-              "done": true
-            },
-            {
-              "text": "PWA (офлайн-кэш, манифест)",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "2. График и Активность",
-          "status": "in_progress",
-          "items": [
-            {
-              "text": "Перенос графика на отдельную вкладку",
-              "done": true
-            },
-            {
-              "text": "Легенда (bar-label) по тапу",
-              "done": true
-            },
-            {
-              "text": "Ярко-зеленый выбранный столбик",
-              "done": true
-            },
-            {
-              "text": "Кнопки периодов (День/Неделя/Месяц)",
-              "done": true
-            },
-            {
-              "text": "Кнопки метрик (Время/Сообщения/Скрины)",
-              "done": true
-            },
-            {
-              "text": "Добавить горизонтальные линии и оси Y",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "3. Дизайн и UX",
-          "status": "in_progress",
-          "items": [
-            {
-              "text": "Анимация вылета кругов",
-              "done": true
-            },
-            {
-              "text": "Пасхалка на лого",
-              "done": true
-            },
-            {
-              "text": "Фикс скролла и отступов",
-              "done": true
-            },
-            {
-              "text": "Стилизация PIN-пада (восьмиугольники)",
-              "done": true
-            },
-            {
-              "text": "Аккордеоны на дашборде",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "4. Будущее (Идеи)",
-          "status": "planned",
-          "items": [
-            {
-              "text": "Выбор года/месяца в графике",
-              "done": false
-            },
-            {
-              "text": "Экспорт данных в CSV/JSON",
-              "done": false
-            },
-            {
-              "text": "Статистика по проектам (аналитика)",
-              "done": false
-            },
-            {
-              "text": "Тёмная/Светлая тема (переключатель)",
-              "done": false
-            },
-            {
-              "text": "Голосовой ввод заметок",
-              "done": false
-            }
-          ]
-        }
-      ]
+      "name": "ФК Богородское"
     }
   ],
   "sessions": [
     {
       "id": "s_20261014_1",
       "date": "2026-10-14",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "20:41",
       "end": "22:03",
       "duration_min": 82,
@@ -562,7 +34,7 @@
     {
       "id": "s_20261015_1",
       "date": "2026-10-15",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "14:30",
       "end": "22:40",
       "duration_min": 490,
@@ -573,7 +45,7 @@
     {
       "id": "s_20261015_2",
       "date": "2026-10-15",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "23:52",
       "end": "02:54",
       "duration_min": 182,
@@ -584,7 +56,7 @@
     {
       "id": "s_20261016_1",
       "date": "2026-10-16",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "11:17",
       "end": "13:51",
       "duration_min": 154,
@@ -595,7 +67,7 @@
     {
       "id": "s_20261016_2",
       "date": "2026-10-16",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "14:16",
       "end": "15:20",
       "duration_min": 64,
@@ -606,7 +78,7 @@
     {
       "id": "s_20261016_3",
       "date": "2026-10-16",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "20:24",
       "end": "23:59",
       "duration_min": 215,
@@ -617,7 +89,7 @@
     {
       "id": "s_20261017_1",
       "date": "2026-10-17",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "00:00",
       "end": "00:44",
       "duration_min": 44,
@@ -628,7 +100,7 @@
     {
       "id": "s_20261017_3",
       "date": "2026-10-17",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "17:33",
       "end": "20:44",
       "duration_min": 191,
@@ -639,7 +111,7 @@
     {
       "id": "s_20261017_4",
       "date": "2026-10-17",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "21:25",
       "end": "22:20",
       "duration_min": 55,
@@ -650,7 +122,7 @@
     {
       "id": "s_20261018_1",
       "date": "2026-10-18",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "00:20",
       "end": "00:54",
       "duration_min": 34,
@@ -661,7 +133,7 @@
     {
       "id": "s_20261018_2",
       "date": "2026-10-18",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "10:16",
       "end": "23:00",
       "duration_min": 660,
@@ -672,7 +144,7 @@
     {
       "id": "s_20261019_1",
       "date": "2026-10-19",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "12:26",
       "end": "16:35",
       "duration_min": 249,
@@ -683,7 +155,7 @@
     {
       "id": "s_20261019_3",
       "date": "2026-10-19",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "20:48",
       "end": "23:36",
       "duration_min": 168,
@@ -694,7 +166,7 @@
     {
       "id": "s_20261020_1",
       "date": "2026-10-20",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "09:54",
       "end": "13:38",
       "duration_min": 224,
@@ -705,7 +177,7 @@
     {
       "id": "s_20261020_2",
       "date": "2026-10-20",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "13:42",
       "end": "14:40",
       "duration_min": 58,
@@ -716,7 +188,7 @@
     {
       "id": "s_20261020_3",
       "date": "2026-10-20",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "19:59",
       "end": "22:25",
       "duration_min": 146,
@@ -727,7 +199,7 @@
     {
       "id": "s_20261021_1",
       "date": "2026-10-21",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "11:00",
       "end": "14:10",
       "duration_min": 190,
@@ -782,7 +254,7 @@
     {
       "id": "s_20261022_1",
       "date": "2026-10-22",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "12:30",
       "end": "15:18",
       "duration_min": 168,
@@ -793,7 +265,7 @@
     {
       "id": "s_20261022_2",
       "date": "2026-10-22",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "18:26",
       "end": "20:03",
       "duration_min": 97,
@@ -804,7 +276,7 @@
     {
       "id": "s_20261022_3",
       "date": "2026-10-22",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "20:13",
       "end": "22:09",
       "duration_min": 116,
@@ -815,7 +287,7 @@
     {
       "id": "s_20261022_6",
       "date": "2026-10-22",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "22:13",
       "end": "23:52",
       "duration_min": 99,
@@ -826,7 +298,7 @@
     {
       "id": "s_20261023_2",
       "date": "2026-10-23",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "00:15",
       "end": "01:17",
       "duration_min": 62,
@@ -837,7 +309,7 @@
     {
       "id": "s_20261023_3",
       "date": "2026-10-23",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "05:00",
       "end": "05:24",
       "duration_min": 24,
@@ -848,7 +320,7 @@
     {
       "id": "s_20261023_4",
       "date": "2026-10-23",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "12:05",
       "end": "14:30",
       "duration_min": 145,
@@ -859,7 +331,7 @@
     {
       "id": "s_20261023_5",
       "date": "2026-10-23",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "14:30",
       "end": "16:22",
       "duration_min": 112,
@@ -870,7 +342,7 @@
     {
       "id": "s_20261023_6",
       "date": "2026-10-23",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "16:08",
       "end": "16:44",
       "duration_min": 36,
@@ -881,7 +353,7 @@
     {
       "id": "s_20261023_7",
       "date": "2026-10-23",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "19:45",
       "end": "22:20",
       "duration_min": 155,
@@ -892,7 +364,7 @@
     {
       "id": "s_20261023_8",
       "date": "2026-10-23",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "23:15",
       "end": "23:59",
       "duration_min": 44,
@@ -903,7 +375,7 @@
     {
       "id": "s_20261024_1",
       "date": "2026-10-24",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "00:00",
       "end": "01:15",
       "duration_min": 75,
@@ -914,7 +386,7 @@
     {
       "id": "s_20261024_2",
       "date": "2026-10-24",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "01:16",
       "end": "02:40",
       "duration_min": 84,
@@ -925,7 +397,7 @@
     {
       "id": "s_20261024_3",
       "date": "2026-10-24",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "12:34",
       "end": "14:00",
       "duration_min": 86,
@@ -936,7 +408,7 @@
     {
       "id": "s_20261025_1",
       "date": "2026-10-25",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "15:14",
       "end": "19:42",
       "duration_min": 268,
@@ -947,7 +419,7 @@
     {
       "id": "s_20261025_2",
       "date": "2026-10-25",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "21:00",
       "end": "22:23",
       "duration_min": 83,
@@ -958,7 +430,7 @@
     {
       "id": "s_20261025_3",
       "date": "2026-10-25",
-      "project": "bo81",
+      "project": "bo-core",
       "start": "22:24",
       "end": "23:59",
       "duration_min": 95,
@@ -969,7 +441,7 @@
     {
       "id": "s_20261026_5",
       "date": "2026-10-26",
-      "project": "worklog",
+      "project": "kheraborina",
       "start": "00:00",
       "end": "02:30",
       "duration_min": 150,
@@ -983,7 +455,7 @@
       "start": "02:31",
       "end": "03:55",
       "duration_min": 84,
-      "project": "bo81",
+      "project": "bo-core",
       "note": "Хераборина: футер загрузки, фикс иконки PWA, CSS график, аналитика. Параллельная работа.",
       "events": 35,
       "screens": 12
@@ -994,7 +466,7 @@
       "start": "11:38",
       "end": "13:20",
       "duration_min": 102,
-      "project": "bo81",
+      "project": "bo-core",
       "note": "Хераборина: генеральная уборка (чистка CSS, HTML, бэкапов), обязательный PIN, склейка сессий, футер, фикс меню.",
       "events": 28,
       "screens": 8
@@ -1005,7 +477,7 @@
       "start": "16:30",
       "end": "20:50",
       "duration_min": 260,
-      "project": "bo81",
+      "project": "bo-core",
       "note": "Хераборина: фикс меню, график, кнопки в один ряд, чистка 400 строк CSS, модалка создателей.",
       "events": 60,
       "screens": 20,
@@ -1017,7 +489,7 @@
       "start": "21:00",
       "end": "23:25",
       "duration_min": 145,
-      "project": "bo81",
+      "project": "bo-core",
       "note": "Хераборина: правки графика, добавлена кнопка Задачи (5 задач), модалка создателей, чистка CSS. ГЛАВНОЕ: меню так и не удалось идеально выровнять (верх и низ смещены).",
       "events": 50,
       "screens": 20,
@@ -1028,7 +500,7 @@
       "start": "23:27",
       "end": "23:59",
       "duration_min": 32,
-      "project": "worklog",
+      "project": "kheraborina",
       "note": "Хераборина: старт работы над выравниванием меню графика, попытки выровнять верхнее и нижнее меню, чистка конфликтов CSS.",
       "events": 10,
       "screens": 5,
@@ -1040,7 +512,7 @@
       "start": "00:00",
       "end": "02:01",
       "duration_min": 121,
-      "project": "worklog",
+      "project": "kheraborina",
       "note": "Хераборина: продолжение выравнивания, чистка CSS-мусора, удаление инлайн-стилей, бэкапы, откаты.",
       "events": 15,
       "screens": 8,
@@ -1052,7 +524,7 @@
       "start": "14:06",
       "end": "14:53",
       "duration_min": 47,
-      "project": "worklog",
+      "project": "kheraborina",
       "note": "Хераборина: финальная попытка выровнять меню (flex, space-between), добавлена кнопка Задачи, модалка создателей.",
       "events": 20,
       "screens": 10,
@@ -1065,7 +537,7 @@
       "start": "15:28",
       "end": "16:11",
       "duration_min": 43,
-      "project": "Хераборина",
+      "project": "kheraborina",
       "note": "Редизайн календаря: сетка (неделя/месяц/год/30 дней), навигация в одну строку, клики по дням и месяцам, фиксы багов с рамками. Обновление кэша до v=225.",
       "events": 40,
       "screens": 15,
@@ -1077,7 +549,7 @@
       "start": "00:00",
       "end": "05:25",
       "duration_min": 325,
-      "project": "Хераборина",
+      "project": "kheraborina",
       "note": "Эпичная ночная сессия (5.5 часов): внедрение горизонтальной ленты графика (Time Line), динамическая ось Y, анимация входа, переключение месяцев, фиксы отображения легенды и оси. Множество итераций и откатов. В итоге: рабочий график с лентой, но ось Y требует финальной шлифовки.",
       "events": 150,
       "screens": 30,
@@ -1089,7 +561,7 @@
       "start": "12:00",
       "end": "17:00",
       "duration_min": 300,
-      "project": "bo81",
+      "project": "bo-core",
       "note": "Редизайн графиков (тултип, оси), календаря, анимация колец (дыхание, цвета), фикс скролла и математики прогресса.",
       "events": 0,
       "screens": 0,
@@ -1101,7 +573,7 @@
       "start": "21:00",
       "end": "23:30",
       "duration_min": 150,
-      "project": "bo81",
+      "project": "bo-core",
       "note": "Полный редизайн сейфа (попытка), фикс кольца дашборда, тест вибрации, откат на PIN-код, очистка мусора.",
       "events": 0,
       "screens": 0,
@@ -1113,7 +585,7 @@
       "start": "23:32",
       "end": "23:59",
       "duration_min": 27,
-      "project": "bo81",
+      "project": "bo-core",
       "note": "Эксперименты с 'слепым сейфом', откат на стабильную версию, удаление PIN-кода. (Часть 1)",
       "events": 0,
       "screens": 0,
@@ -1125,7 +597,7 @@
       "start": "00:00",
       "end": "01:04",
       "duration_min": 64,
-      "project": "bo81",
+      "project": "bo-core",
       "note": "Эксперименты с 'слепым сейфом', откат на стабильную версию, удаление PIN-кода. (Часть 2)",
       "events": 50,
       "screens": 5,
@@ -1161,7 +633,7 @@
       "start": "00:00",
       "end": "02:38",
       "duration_min": 158,
-      "project": "worklog",
+      "project": "kheraborina",
       "note": "Работа над Херабориной (Сейф, график, календарь). Продолжение после полуночи.",
       "events": 0,
       "screens": 0,
@@ -1173,7 +645,7 @@
       "start": "14:30",
       "end": "17:00",
       "duration_min": 150,
-      "project": "worklog",
+      "project": "kheraborina",
       "note": "Рефакторинг склейки сессий (15 мин), фикс графика, восстановление колец, борьба с дублями renderHeroRings",
       "events": 0,
       "screens": 0,
@@ -1221,7 +693,7 @@
       "start": "13:00",
       "end": "14:15",
       "duration_min": 75,
-      "project": "worklog",
+      "project": "kheraborina",
       "note": "Починка графика (кнопки, тултип, ось Y, капсула). Жесткая отладка и фикс синтаксиса ui.js после неудачных патчей.",
       "events": 45,
       "screens": 30,
@@ -1233,7 +705,7 @@
       "start": "14:47",
       "end": "16:11",
       "duration_min": 84,
-      "project": "worklog",
+      "project": "kheraborina",
       "note": "Починка графика (18ч -> 12ч). Восстановление карточек сессий. Фикс синтаксиса ui.js. Разбивка ui.js на 4 модуля. Разбивка CSS на 8 файлов. Возврат цветов, анимации и дыхания колец. Создание add_session.py.",
       "events": 25,
       "screens": 35,
@@ -1245,7 +717,7 @@
       "start": "17:55",
       "end": "23:59",
       "duration_min": 364,
-      "project": "bo74",
+      "project": "bo-core",
       "note": "Рефакторинг документации, STRICT MODE в README, чистка мусора, правка Git-конфликтов, попытка переименования в Master Boss",
       "events": 66,
       "screens": 19,
@@ -1269,7 +741,7 @@
       "start": "00:00",
       "end": "01:46",
       "duration_min": 106,
-      "project": "bo74",
+      "project": "bo-core",
       "note": "Рефакторинг документации, STRICT MODE в README, чистка мусора, правка Git-конфликтов, попытка переименования в Master Boss",
       "events": 20,
       "screens": 6,
