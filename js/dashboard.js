@@ -124,6 +124,7 @@ function renderHeroRings() {
     });
   }
 
+}
 function renderDashboard() {
   window.renderDashboard = renderDashboard; // Делаем глобальной при первом вызове
   const c = document.getElementById('content');
@@ -143,4 +144,3 @@ function renderDashboard() {
 // Делаем функцию глобальной сразу после загрузки файла
 
 window.renderDashboard = renderDashboard;
-}

@@ -10,15 +10,15 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="css/base.css?v=201">
-<link rel="stylesheet" href="css/layout.css?v=201">
-<link rel="stylesheet" href="css/dashboard.css?v=201">
-<link rel="stylesheet" href="css/diary.css?v=201">
-<link rel="stylesheet" href="css/analytics.css?v=201">
-<link rel="stylesheet" href="css/chart.css?v=201">
-<link rel="stylesheet" href="css/modals.css?v=201">
-<link rel="stylesheet" href="css/safe.css?v=201">
-<link rel="stylesheet" href="css/projects.css?v=201">
+<link rel="stylesheet" href="css/base.css?v=202">
+<link rel="stylesheet" href="css/layout.css?v=202">
+<link rel="stylesheet" href="css/dashboard.css?v=202">
+<link rel="stylesheet" href="css/diary.css?v=202">
+<link rel="stylesheet" href="css/analytics.css?v=202">
+<link rel="stylesheet" href="css/chart.css?v=202">
+<link rel="stylesheet" href="css/modals.css?v=202">
+<link rel="stylesheet" href="css/safe.css?v=202">
+<link rel="stylesheet" href="css/projects.css?v=202">
 
 <style>
 .segmented-control {
@@ -155,13 +155,13 @@
 </div>
 <!-- === КОНЕЦ СЕЙФА === -->
 
-<script src="crypto.js?v=201"></script>
-<script src="js/utils.js?v=201"></script>
-<script src="js/diary.js?v=201"></script>
-<script src="js/dashboard.js?v=201"></script>
-<script src="js/projects.js?v=201"></script>
-<script src="js/chart.js?v=201"></script>
-<script src="js/auth.js?v=201"></script>
+<script src="crypto.js?v=202"></script>
+<script src="js/utils.js?v=202"></script>
+<script src="js/diary.js?v=202"></script>
+<script src="js/dashboard.js?v=202"></script>
+<script src="js/projects.js?v=202"></script>
+<script src="js/chart.js?v=202"></script>
+<script src="js/auth.js?v=202"></script>
 
 
 <script>
@@ -169,10 +169,20 @@ if ('serviceWorker' in navigator) {
   // Service Worker отключен для сброса кэша
 }
 </script>
-<script src="app.js?v=201"></script>
-<script src="js/safe.js?v=201"></script>
+<script src="app.js?v=202"></script>
+<script src="js/safe.js?v=202"></script>
 
 
 
+
+<script>
+window.onerror = function(msg, url, line, col, error) {
+  var el = document.createElement('div');
+  el.style.cssText = 'position:fixed;top:0;left:0;right:0;background:red;color:#fff;padding:15px;z-index:99999;font-size:14px;font-family:monospace;white-space:pre-wrap;';
+  el.textContent = 'JS ERROR: ' + msg + '\n' + (url||'') + ':' + line + ':' + col;
+  document.body.appendChild(el);
+  return false;
+};
+</script>
 </body>
 </html>
