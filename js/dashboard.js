@@ -138,3 +138,7 @@ function renderDashboard() {
   }
 }
 
+
+
+// Делаем функцию глобальной сразу после загрузки файла
+window.renderDashboard = renderDashboard;
