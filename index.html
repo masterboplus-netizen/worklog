@@ -171,5 +171,18 @@ if ('serviceWorker' in navigator) {
 </script>
 <script src="app.js?v=192"></script>
 <script src="js/safe.js?v=192"></script>
+
+<script>
+  setTimeout(() => {
+    console.log('ТЕСТ: Вызываю renderDashboard...');
+    if (typeof renderDashboard === 'function') {
+      renderDashboard();
+      console.log('ТЕСТ: Вызов прошел успешно!');
+    } else {
+      alert('ТЕСТ: renderDashboard НЕ СУЩЕСТВУЕТ!');
+    }
+  }, 3000);
+</script>
+
 </body>
 </html>
