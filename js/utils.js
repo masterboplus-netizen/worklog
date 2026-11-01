@@ -6,6 +6,8 @@ let MINI_SCR_PERIOD = 'day';
 let MINI_TIME_PERIOD = 'avg';
 let MINI_TASKS_PERIOD = 'day';
 const MINI_PERIODS_MSG = ['day', 'week', 'month', 'all'];
+const MINI_PERIODS_SCR = ['day', 'week', 'month', 'all'];
+const MINI_PERIODS_TASKS = ['day', 'week', 'month', 'all'];
 const MINI_PERIODS_TIME = ['avg', 'week', 'month', 'all'];
 const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц', all: 'Всё', avg: 'Среднее/день'};
 
@@ -57,21 +59,7 @@ function getProgressColor(percent) {
 
 
 // === АНИМАЦИЯ КОЛЕЦ ===
-/* Функция перенесена в dashboard.js */
-function _old_animateRings() {
-  setTimeout(() => {
-    document.querySelectorAll('.ring-progress').forEach(ring => {
-      const targetOffset = ring.getAttribute('data-target-offset');
-      if (targetOffset !== null) {
-        ring.style.transition = 'stroke-dashoffset 1s ease-out';
-        ring.style.strokeDashoffset = targetOffset;
-      }
-    });
-  }, 50); // Небольшая задержка, чтобы DOM успел отрисоваться
-}
 
-
-  animateRings();
 
 
 

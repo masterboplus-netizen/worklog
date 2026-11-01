@@ -75,11 +75,6 @@ function switchTab(name) {
       el.classList.add('hidden');
   });
 
-  // ПРИНУДИТЕЛЬНО СКРЫВАЕМ ВСЕ ТУЛТИПЫ И ЛЕГЕНДЫ ГРАФИКА ПРИ СМЕНЕ ВКЛАДКИ
-  document.querySelectorAll('.floating-tooltip, #global-chart-tooltip, #tl-legend-bar').forEach(el => {
-      el.style.display = 'none';
-      el.classList.add('hidden');
-  });
 
   ['content', 'content-diary', 'content-projects', 'content-activity'].forEach(id => {
     const el = document.getElementById(id);
@@ -194,4 +189,4 @@ function showCreators() {
 
 
 // Глобальная ссылка
-window.renderDashboard = renderDashboard;
+if (typeof renderDashboard === 'function') window.renderDashboard = renderDashboard;

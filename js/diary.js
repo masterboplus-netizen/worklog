@@ -123,7 +123,7 @@ function renderDiary() {
   const now = new Date();
   let curDate = new Date(now.getFullYear(), now.getMonth() + (CALENDAR_VIEW === 'month' ? CALENDAR_OFFSET : 0), now.getDate() + (CALENDAR_VIEW === 'week' ? CALENDAR_OFFSET * 7 : (CALENDAR_VIEW === '30days' ? CALENDAR_OFFSET : 0)));
   if (CALENDAR_VIEW === 'year') curDate.setFullYear(curDate.getFullYear() + CALENDAR_OFFSET);
-  
+
   const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
   const monthsShort = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
 
@@ -204,11 +204,11 @@ function renderDiary() {
         const ds = _localDate(d);
         const hasData = !!dayStats[ds];
         const isToday = ds === todayStr;
-        
+
         let bg = 'transparent';
         let col = 'var(--fg-dim)';
         if (isToday) { bg = 'rgba(255, 255, 255, 0.2)'; col = '#fff'; }
-        
+
         let cellHtml = `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:7px; border-radius:50%; background:${bg}; color:${col}; position:relative;">${d.getDate()}`;
         if (hasData) {
              cellHtml += `<div style="position:absolute; bottom:0px; width:2px; height:2px; border-radius:50%; background:var(--accent);"></div>`;
@@ -267,9 +267,9 @@ function renderDiary() {
       if (CALENDAR_VIEW === 'year') return sd.getFullYear() === curDate.getFullYear();
       return sd >= start && sd <= end;
   });
-  
+
   if (CALENDAR_SELECTED_DAY) filtered = filtered.filter(s => s.date === CALENDAR_SELECTED_DAY);
-  
+
   filtered.sort((a, b) => {
     if (a.date !== b.date) return b.date.localeCompare(a.date);
     return (b.start || '').localeCompare(a.start || '');
@@ -337,7 +337,6 @@ function renderDiary() {
     CALENDAR_SELECTED_DAY = null; renderDiary();
   });
 }
-
 function formatDiaryDate(iso) {
   const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
   const days = ['вс','пн','вт','ср','чт','пт','сб'];
@@ -345,4 +344,3 @@ function formatDiaryDate(iso) {
   if (isNaN(d.getTime())) return iso;
   return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + days[d.getDay()];
 }
-

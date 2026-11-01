@@ -1,4 +1,3 @@
-let HERO_MODE = 'today';
 // МОДУЛЬ: ДАШБОРД
 
 function getProgressColor(percent) {
@@ -104,7 +103,6 @@ function renderHeroRings() {
       renderDashboard();
     });
   }
-  }
 
   // Обработчики для маленьких колец (сообщения, скрины, задачи)
   const minis = div.querySelectorAll('.mini-ring');
@@ -115,7 +113,8 @@ function renderHeroRings() {
       renderDashboard();
     });
     minis[1].addEventListener('click', () => {
-      MINI_SCR_PERIOD = MINI_PERIODS_MSG[idx];
+      const idx = (MINI_PERIODS_SCR.indexOf(MINI_SCR_PERIOD) + 1) % MINI_PERIODS_SCR.length;
+      MINI_SCR_PERIOD = MINI_PERIODS_SCR[idx];
       renderDashboard();
     });
     minis[2].addEventListener('click', () => {
@@ -144,4 +143,4 @@ function renderDashboard() {
 // Делаем функцию глобальной сразу после загрузки файла
 
 window.renderDashboard = renderDashboard;
-window.renderDashboard = renderDashboard;
+}
