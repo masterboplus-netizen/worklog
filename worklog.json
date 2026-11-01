@@ -4,19 +4,545 @@
   "projects": [
     {
       "id": "bo-core",
-      "name": "Бо Ядро"
+      "name": "Бо Ядро",
+      "color": "#4A9EFF",
+      "status": "active",
+      "plan": [
+        {
+          "phase": "1. MVP",
+          "status": "done",
+          "items": [
+            {
+              "text": "Онбординг, роли (5)",
+              "done": true
+            },
+            {
+              "text": "Объекты, задачи, финансы",
+              "done": true
+            },
+            {
+              "text": "CRM (клиенты, сделки)",
+              "done": true
+            },
+            {
+              "text": "Фото объекта",
+              "done": true
+            },
+            {
+              "text": "Web-дашборд",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "2. Комнаты, ЭОМ, сметы",
+          "status": "done",
+          "items": [
+            {
+              "text": "Комнаты, обход стен",
+              "done": true
+            },
+            {
+              "text": "Сессии замеров, проёмы, ниши",
+              "done": true
+            },
+            {
+              "text": "ЭОМ: щиты, группы, трассы",
+              "done": true
+            },
+            {
+              "text": "Сантехника: коллекторы, трассы",
+              "done": true
+            },
+            {
+              "text": "Сметы ЭОМ + импорт прайсов",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "3. PDF + компоненты",
+          "status": "done",
+          "items": [
+            {
+              "text": "PDF: щит, ЭОМ, сантехника",
+              "done": true
+            },
+            {
+              "text": "Ручные компоненты щита",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "4. Рефакторинг",
+          "status": "88%",
+          "items": [
+            {
+              "text": "callbacks/tasks, estimates, kpi, finance",
+              "done": true
+            },
+            {
+              "text": "callbacks/objects, reports, misc, personal",
+              "done": true
+            },
+            {
+              "text": "text/objects, tasks, finances, personal, crm, misc, rooms",
+              "done": true
+            },
+            {
+              "text": "handle_text → text/* (90%) — parse.py вынесен",
+              "done": true
+            },
+            {
+              "text": "rooms.py (аудит 100%, 2 мертвых удалены, архитектура готова, старт выноса в сессии 21)",
+              "done": true
+            },
+            {
+              "text": "modules/ → core/ (176 импортов)",
+              "done": false
+            },
+            {
+              "text": "Реструктуризация документации (docs)",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "5. UX/Доработки",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Универсальный приёмник файлов",
+              "done": false
+            },
+            {
+              "text": "Полиш ЭОМ (nav_from)",
+              "done": false
+            },
+            {
+              "text": "Полиш parser.py, comms.py",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "6. Интеграции",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Google Sheets (синхронизация смет)",
+              "done": false
+            },
+            {
+              "text": "1С / Мой Склад",
+              "done": false
+            },
+            {
+              "text": "Экспорт в Excel/CSV",
+              "done": false
+            },
+            {
+              "text": "Email-отчёты",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "7. Маркетплейсы",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Импорт цен (Leroy Merlin, Petrovich, OBI)",
+              "done": false
+            },
+            {
+              "text": "Парсинг каталогов",
+              "done": false
+            },
+            {
+              "text": "Сравнение цен поставщиков",
+              "done": false
+            },
+            {
+              "text": "Автозаказ материалов",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "8. Масштабирование",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Многопользовательский режим",
+              "done": false
+            },
+            {
+              "text": "Расширенная web-панель",
+              "done": false
+            },
+            {
+              "text": "REST API",
+              "done": false
+            },
+            {
+              "text": "Вебхуки",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "9. Аналитика и AI",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Графики прогресса",
+              "done": false
+            },
+            {
+              "text": "Прогнозы сроков",
+              "done": false
+            },
+            {
+              "text": "AI-помощник (голосовой ввод)",
+              "done": false
+            },
+            {
+              "text": "Автокатегоризация расходов",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "10. Мобильное приложение",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Нативное iOS / Android",
+              "done": false
+            },
+            {
+              "text": "Push-уведомления",
+              "done": false
+            },
+            {
+              "text": "AR-замеры",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "11. Биллинг / Монетизация",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Подписки (Free / Pro / Business)",
+              "done": false
+            },
+            {
+              "text": "Лимиты по тарифу",
+              "done": false
+            },
+            {
+              "text": "Оплата (ЮKassa, Stripe)",
+              "done": false
+            },
+            {
+              "text": "Реферальная программа",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "12. Архитектура и дисциплина (Бо 8.1)",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Создать AI_CONTEXT.md (паспорт проекта для ИИ)",
+              "done": false
+            },
+            {
+              "text": "Написать test_bot.py (сторож: проверка БД и импортов)",
+              "done": false
+            },
+            {
+              "text": "Добавить логирование (logging) во все модули",
+              "done": false
+            },
+            {
+              "text": "Вынести логику SQLite в отдельный файл (db.py)",
+              "done": false
+            },
+            {
+              "text": "Вынести генерацию PDF в отдельный модуль",
+              "done": false
+            },
+            {
+              "text": "Настроить регулярный бэкап bo72.db",
+              "done": false
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "kheraborina",
-      "name": "Хераборина"
+      "name": "Хераборина",
+      "color": "#4A9EFF",
+      "status": "active",
+      "plan": [
+        {
+          "phase": "1. MVP (Каркас)",
+          "status": "completed",
+          "items": [
+            {
+              "text": "Вход по PIN-коду",
+              "done": true
+            },
+            {
+              "text": "AES-256-GCM шифрование",
+              "done": true
+            },
+            {
+              "text": "Базовый дашборд (круги, метрики)",
+              "done": true
+            },
+            {
+              "text": "Дневник сессий",
+              "done": true
+            },
+            {
+              "text": "PWA (офлайн-кэш, манифест)",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "2. График и Активность",
+          "status": "in_progress",
+          "items": [
+            {
+              "text": "Перенос графика на отдельную вкладку",
+              "done": true
+            },
+            {
+              "text": "Легенда (bar-label) по тапу",
+              "done": true
+            },
+            {
+              "text": "Ярко-зеленый выбранный столбик",
+              "done": true
+            },
+            {
+              "text": "Кнопки периодов (День/Неделя/Месяц)",
+              "done": true
+            },
+            {
+              "text": "Кнопки метрик (Время/Сообщения/Скрины)",
+              "done": true
+            },
+            {
+              "text": "Добавить горизонтальные линии и оси Y",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "3. Дизайн и UX",
+          "status": "in_progress",
+          "items": [
+            {
+              "text": "Анимация вылета кругов",
+              "done": true
+            },
+            {
+              "text": "Пасхалка на лого",
+              "done": true
+            },
+            {
+              "text": "Фикс скролла и отступов",
+              "done": true
+            },
+            {
+              "text": "Стилизация PIN-пада (восьмиугольники)",
+              "done": true
+            },
+            {
+              "text": "Аккордеоны на дашборде",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "4. Будущее (Идеи)",
+          "status": "planned",
+          "items": [
+            {
+              "text": "Выбор года/месяца в графике",
+              "done": false
+            },
+            {
+              "text": "Экспорт данных в CSV/JSON",
+              "done": false
+            },
+            {
+              "text": "Статистика по проектам (аналитика)",
+              "done": false
+            },
+            {
+              "text": "Тёмная/Светлая тема (переключатель)",
+              "done": false
+            },
+            {
+              "text": "Голосовой ввод заметок",
+              "done": false
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "bo-web",
-      "name": "Бо Веб"
+      "name": "Бо Веб",
+      "color": "#007aff",
+      "status": "active",
+      "plan": [
+        {
+          "phase": "Фаза 1: MVP (Фронтенд и UI)",
+          "status": "active",
+          "items": [
+            {
+              "text": "Домен и SSL (masterbo.work.gd)",
+              "done": true
+            },
+            {
+              "text": "Постоянная шапка (лого, название, SVG-кнопки)",
+              "done": true
+            },
+            {
+              "text": "Нижнее меню (2 ряда, 8 разделов)",
+              "done": true
+            },
+            {
+              "text": "Центральная кнопка '+'",
+              "done": true
+            },
+            {
+              "text": "Свайп-меню (открытие/закрытие)",
+              "done": true
+            },
+            {
+              "text": "PWA и кэш (sw.js, версии)",
+              "done": true
+            },
+            {
+              "text": "Рефакторинг app2.js (XSS, клики)",
+              "done": true
+            },
+            {
+              "text": "API: список объектов",
+              "done": true
+            },
+            {
+              "text": "Фронт: подключить API объектов (fetch)",
+              "done": false
+            },
+            {
+              "text": "Фронт: экран Комнаты",
+              "done": false
+            },
+            {
+              "text": "Фронт: экран Замеры",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "Фаза 2: ЭОМ и Сантехника",
+          "status": "pending",
+          "items": [
+            {
+              "text": "API: щиты и группы",
+              "done": false
+            },
+            {
+              "text": "Фронт: экран Электрика",
+              "done": false
+            },
+            {
+              "text": "API: коллекторы",
+              "done": false
+            },
+            {
+              "text": "Фронт: экран Сантехника",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "Фаза 3: Финансы и CRM",
+          "status": "pending",
+          "items": [
+            {
+              "text": "API: финансы",
+              "done": false
+            },
+            {
+              "text": "Фронт: экран Финансы",
+              "done": false
+            },
+            {
+              "text": "Фронт: добавление замеров",
+              "done": false
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fclub1952",
-      "name": "ФК Богородское"
+      "name": "ФК Богородское",
+      "color": "#e63946",
+      "status": "active",
+      "plan": [
+        {
+          "phase": "1. Парсинг сайта",
+          "status": "done",
+          "items": [
+            {
+              "text": "Скачать chronicle.htm",
+              "done": true
+            },
+            {
+              "text": "Скачать comanda.html",
+              "done": true
+            },
+            {
+              "text": "Скачать картинки",
+              "done": true
+            }
+          ]
+        },
+        {
+          "phase": "2. Приложение",
+          "status": "active",
+          "items": [
+            {
+              "text": "Создать Flask main.py",
+              "done": false
+            },
+            {
+              "text": "Сделать шаблон comanda.html",
+              "done": false
+            },
+            {
+              "text": "Настроить вывод данных",
+              "done": false
+            }
+          ]
+        }
+      ]
     }
   ],
   "sessions": [
