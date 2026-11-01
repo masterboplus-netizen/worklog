@@ -46,7 +46,16 @@ async function tryUnlock(pin) {
     const enc = await resp.json();
     DATA = await decryptData(pin, enc);
     return true;
-  } catch(e) {  return false; }
+  } catch(e) {
+    const errDiv = document.getElementById('debug-error');
+    if (errDiv) errDiv.remove();
+    const d = document.createElement('div');
+    d.id = 'debug-error';
+    d.style.cssText = 'position:fixed; bottom:10px; left:10px; right:10px; background:red; color:white; padding:15px; z-index:99999; font-size:14px; border-radius:8px;';
+    d.textContent = 'ОШИБКА: ' + e.message;
+    document.body.appendChild(d);
+    return false;
+  }
 }
 
 async function submitPin(pin) {
