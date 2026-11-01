@@ -35,7 +35,7 @@ async function init() {
     showSafe();
   } else {
     tryUnlock('201186').then(ok => {
-      if (ok) { showScreen('dashboard'); renderDashboard(); }
+      if (ok) { showScreen('dashboard'); if (typeof renderDashboard === 'function') renderDashboard(); }
       else { alert('Ошибка загрузки данных'); }
     });
   }
@@ -190,4 +190,8 @@ function showCreators() {
 
 
 
+
+
+
+// Глобальная ссылка
 window.renderDashboard = renderDashboard;
