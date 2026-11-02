@@ -23,7 +23,7 @@ async function loadDataFromSupabase() {
         const { data: tasks, error: e3 } = await supabase.from('worklog_tasks').select('*').order('order_num');
         if (e3) throw e3;
 
-        const { data: sessions, error: e4 } = await supabase.from('worklog_sessions').select('*').order('date', { ascending: false });
+        const { data: sessions, error: e4 } = await supabase.from('worklog_sessions').select('*').order('date', { ascending: false }).order('start_time', { ascending: false });
         if (e4) throw e4;
 
         // Приводим данные из базы к формату старого JSON
