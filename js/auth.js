@@ -41,6 +41,14 @@ function updatePinDisplay() {
 
 async function tryUnlock(pin) {
   try {
+    // ВМЕСТО расшифровки файла - загружаем из Supabase
+    if (typeof loadDataFromSupabase === 'function') {
+      const ok = await loadDataFromSupabase();
+      if (ok) return true;
+      else throw new Error('Ошибка загрузки из Supabase');
+    }
+    
+    // Если функции нет (старый режим) - падаем обратно на файл
     const resp = await fetch('data.encrypted.json?_=' + Date.now());
     if (!resp.ok) throw new Error('fetch');
     const enc = await resp.json();
