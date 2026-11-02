@@ -1322,6 +1322,18 @@
       "events": 20,
       "screens": 7,
       "tasks_done": 1
+    },
+    {
+      "id": "s_20261102_1",
+      "date": "2026-11-02",
+      "start": "16:16",
+      "end": "18:30",
+      "duration_min": 134,
+      "project": "bo-web",
+      "note": "Добавление плавающей капсулы (камера, диктофон, плюс), настройка drag-and-drop, фикс конфликтов Git с подмодулем",
+      "events": 30,
+      "screens": 10,
+      "tasks_done": 1
     }
   ],
   "baseline": {
