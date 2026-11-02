@@ -26,7 +26,6 @@ async function init() {
 
   setupTabs();
 
-  // СРАЗУ ОТКРЫВАЕМ ДАШБОРД (без PIN)
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
   
@@ -46,11 +45,8 @@ async function init() {
       }
     });
   } else {
-    // Резерв: если функция не загрузилась
-    tryUnlock('201186').then(ok => {
-      if (ok) { showScreen('dashboard'); if (typeof renderDashboard === 'function') renderDashboard(); }
-      else { alert('Ошибка загрузки данных'); }
-    });
+    alert('Критическая ошибка: модуль Supabase не загружен.');
+    showScreen('dashboard'); // Показываем пустой экран
   }
 }
 
