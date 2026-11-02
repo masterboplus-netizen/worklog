@@ -42,12 +42,20 @@ function mergeMidnightSessions(sessions) {
   }
 
   return merged.sort((a, b) => {
-    if (a.date !== b.date) return b.date.localeCompare(a.date);
+    const dateA = a.date || '';
+    const dateB = b.date || '';
+    if (dateA !== dateB) return dateB.localeCompare(dateA);
+
     // Сортируем по времени окончания (по убыванию)
-    let endA = a.end; let endB = b.end;
+    let endA = a.end || '';
+    let endB = b.end || '';
+    const startA = a.start || '';
+    const startB = b.start || '';
+
     // Если конец "меньше" начала (ночная), считаем его позже
-    if (endA < a.start) endA = '24' + endA;
-    if (endB < b.start) endB = '24' + endB;
+    if (endA && startA && endA < startA) endA = '24' + endA;
+    if (endB && startB && endB < startB) endB = '24' + endB;
+    
     return endB.localeCompare(endA);
   });
 
