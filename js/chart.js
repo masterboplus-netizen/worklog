@@ -149,7 +149,7 @@ function renderActivityPageV2() {
 
         let yHTML = '';
         const midVal = Math.round(maxVal / 2);
-        const topVal = Math.round(maxVal);
+        const topVal = Math.ceil(maxVal / 60) * 60; // Округление вверх до целого часа
         const formatLbl = (val) => CHART_STATE.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
         
         // Позиционируем абсолютно: 0 - внизу, mid - посередине, top - сверху
