@@ -49,7 +49,7 @@ async function tryUnlock(pin) {
     }
     
     // Если функции нет - выбрасываем ошибку (отключаем старый файл)
-    throw new Error('loadDataFromSupabase недоступна. Проверь консоль.');
+    return false; // Если функции нет, просто возвращаем false
   } catch(e) {
     const errDiv = document.getElementById('debug-error');
     if (errDiv) errDiv.remove();

@@ -63,7 +63,7 @@ async function loadDataFromSupabase() {
                 // ОТЛАДКА: смотрим, что пришло из базы
         if (window.DATA.sessions.length > 0) {
             const first = window.DATA.sessions[0];
-            console.log("ПЕРВАЯ СЕССИЯ ИЗ БАЗЫ:", JSON.stringify(first, null, 2));
+            
             
         }
         
