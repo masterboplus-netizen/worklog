@@ -17,7 +17,7 @@ function renderProjects() {
   for (const p of window.DATA.projects || []) {
     const hrs = byProj[p.id] || 0;
     let totalItems = 0, doneItems = 0;
-    for (const ph of p.plan || []) {
+    for (const ph of (p.plan || []).filter(ph => !ph.is_archived)) {
       const items = ph.items || [];
       totalItems += items.length;
       doneItems += items.filter(it => typeof it === 'object' && it.done).length;
@@ -35,7 +35,7 @@ function renderProjects() {
       '<div class="project-meta">Выполнено: ' + doneItems + ' из ' + totalItems + ' (' + pct + '%) · ' + (p.status || '') + '</div>';
     const phasesDiv = document.createElement('div');
     phasesDiv.className = 'phases hidden';
-    for (const ph of p.plan || []) {
+    for (const ph of (p.plan || []).filter(ph => !ph.is_archived)) {
       const items = ph.items || [];
       const total = items.length;
       const done = items.filter(it => typeof it === 'object' && it.done).length;
