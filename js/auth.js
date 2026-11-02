@@ -48,12 +48,8 @@ async function tryUnlock(pin) {
       else throw new Error('Ошибка загрузки из Supabase');
     }
     
-    // Если функции нет (старый режим) - падаем обратно на файл
-    const resp = await fetch('data.encrypted.json?_=' + Date.now());
-    if (!resp.ok) throw new Error('fetch');
-    const enc = await resp.json();
-    DATA = await decryptData(pin, enc);
-    return true;
+    // Если функции нет - выбрасываем ошибку (отключаем старый файл)
+    throw new Error('loadDataFromSupabase недоступна. Проверь консоль.');
   } catch(e) {
     const errDiv = document.getElementById('debug-error');
     if (errDiv) errDiv.remove();
