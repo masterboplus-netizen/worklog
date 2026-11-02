@@ -30,10 +30,18 @@ async function init() {
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
   
-  // Загружаем данные (расшифровываем с нашим паролем)
-  if (typeof showSafe === 'function') {
-    showSafe();
+  // Загружаем данные из Supabase (без сейфа и PIN)
+  if (typeof loadDataFromSupabase === 'function') {
+    loadDataFromSupabase().then(ok => {
+      if (ok) {
+        showScreen('dashboard');
+        if (typeof renderDashboard === 'function') renderDashboard();
+      } else {
+        alert('Ошибка загрузки из Supabase');
+      }
+    });
   } else {
+    // Резерв: если функция не загрузилась
     tryUnlock('201186').then(ok => {
       if (ok) { showScreen('dashboard'); if (typeof renderDashboard === 'function') renderDashboard(); }
       else { alert('Ошибка загрузки данных'); }
