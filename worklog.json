@@ -9,277 +9,395 @@
       "status": "active",
       "plan": [
         {
-          "phase": "1. MVP",
-          "status": "done",
+          "phase": "1. Фундамент",
+          "status": "active",
           "items": [
             {
-              "text": "Онбординг, роли (5)",
-              "done": true
-            },
-            {
-              "text": "Объекты, задачи, финансы",
-              "done": true
-            },
-            {
-              "text": "CRM (клиенты, сделки)",
-              "done": true
-            },
-            {
-              "text": "Фото объекта",
-              "done": true
-            },
-            {
-              "text": "Web-дашборд",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "2. Комнаты, ЭОМ, сметы",
-          "status": "done",
-          "items": [
-            {
-              "text": "Комнаты, обход стен",
-              "done": true
-            },
-            {
-              "text": "Сессии замеров, проёмы, ниши",
-              "done": true
-            },
-            {
-              "text": "ЭОМ: щиты, группы, трассы",
-              "done": true
-            },
-            {
-              "text": "Сантехника: коллекторы, трассы",
-              "done": true
-            },
-            {
-              "text": "Сметы ЭОМ + импорт прайсов",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "3. PDF + компоненты",
-          "status": "done",
-          "items": [
-            {
-              "text": "PDF: щит, ЭОМ, сантехника",
-              "done": true
-            },
-            {
-              "text": "Ручные компоненты щита",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "4. Рефакторинг",
-          "status": "88%",
-          "items": [
-            {
-              "text": "callbacks/tasks, estimates, kpi, finance",
-              "done": true
-            },
-            {
-              "text": "callbacks/objects, reports, misc, personal",
-              "done": true
-            },
-            {
-              "text": "text/objects, tasks, finances, personal, crm, misc, rooms",
-              "done": true
-            },
-            {
-              "text": "handle_text → text/* (90%) — parse.py вынесен",
-              "done": true
-            },
-            {
-              "text": "rooms.py (аудит 100%, 2 мертвых удалены, архитектура готова, старт выноса в сессии 21)",
-              "done": true
-            },
-            {
-              "text": "modules/ → core/ (176 импортов)",
+              "text": "Проектирование БД (СУБД, схемы, индексы)",
               "done": false
             },
             {
-              "text": "Реструктуризация документации (docs)",
-              "done": true
-            }
-          ]
-        },
-        {
-          "phase": "5. UX/Доработки",
-          "status": "planned",
-          "items": [
-            {
-              "text": "Универсальный приёмник файлов",
+              "text": "Авторизация (SMS, токены, хеширование)",
               "done": false
             },
             {
-              "text": "Полиш ЭОМ (nav_from)",
+              "text": "Профиль (аватар, контакты, Telegram)",
               "done": false
             },
             {
-              "text": "Полиш parser.py, comms.py",
+              "text": "Роли (Admin, Prorab, Master, Client)",
+              "done": false
+            },
+            {
+              "text": "Настройки UI (темы, язык, уведомления)",
+              "done": false
+            },
+            {
+              "text": "Системные (логи, бэкап, мониторинг)",
               "done": false
             }
           ]
         },
         {
-          "phase": "6. Интеграции",
-          "status": "planned",
+          "phase": "2. Объекты и Комнаты",
+          "status": "active",
           "items": [
             {
-              "text": "Google Sheets (синхронизация смет)",
+              "text": "Управление объектами (CRUD, архив)",
               "done": false
             },
             {
-              "text": "1С / Мой Склад",
+              "text": "Иерархия (Этажи)",
               "done": false
             },
             {
-              "text": "Экспорт в Excel/CSV",
+              "text": "Управление комнатами (CRUD)",
               "done": false
             },
             {
-              "text": "Email-отчёты",
+              "text": "Справочники (типы, статусы)",
+              "done": false
+            },
+            {
+              "text": "Визуализация (плитка, прогресс)",
               "done": false
             }
           ]
         },
         {
-          "phase": "7. Маркетплейсы",
-          "status": "planned",
+          "phase": "3. Замеры и Геометрия",
+          "status": "active",
           "items": [
             {
-              "text": "Импорт цен (Leroy Merlin, Petrovich, OBI)",
+              "text": "Сессии замеров",
               "done": false
             },
             {
-              "text": "Парсинг каталогов",
+              "text": "Обход стен (длина, угол)",
               "done": false
             },
             {
-              "text": "Сравнение цен поставщиков",
+              "text": "Проемы (окна, двери)",
               "done": false
             },
             {
-              "text": "Автозаказ материалов",
+              "text": "Ниши (глубина, ширина)",
+              "done": false
+            },
+            {
+              "text": "Наклоны и углы",
+              "done": false
+            },
+            {
+              "text": "Расчеты (площади, периметр)",
+              "done": false
+            },
+            {
+              "text": "3D и PNG рендер",
               "done": false
             }
           ]
         },
         {
-          "phase": "8. Масштабирование",
-          "status": "planned",
+          "phase": "4. Ремонтные Работы",
+          "status": "active",
           "items": [
             {
-              "text": "Многопользовательский режим",
+              "text": "Справочник работ",
               "done": false
             },
             {
-              "text": "Расширенная web-панель",
+              "text": "Создание задач-работ",
               "done": false
             },
             {
-              "text": "REST API",
+              "text": "Выполнение (фото до/после)",
               "done": false
             },
             {
-              "text": "Вебхуки",
+              "text": "Контроль качества (чек-листы)",
+              "done": false
+            },
+            {
+              "text": "Сдача объекта",
               "done": false
             }
           ]
         },
         {
-          "phase": "9. Аналитика и AI",
-          "status": "planned",
+          "phase": "5. Инженерные Системы",
+          "status": "active",
           "items": [
             {
-              "text": "Графики прогресса",
+              "text": "ЭОМ (щиты, группы, трассы)",
               "done": false
             },
             {
-              "text": "Прогнозы сроков",
+              "text": "Сантехника (коллекторы, трассы)",
               "done": false
             },
             {
-              "text": "AI-помощник (голосовой ввод)",
+              "text": "Освещение",
               "done": false
             },
             {
-              "text": "Автокатегоризация расходов",
+              "text": "HVAC (вентиляция)",
               "done": false
             }
           ]
         },
         {
-          "phase": "10. Мобильное приложение",
-          "status": "planned",
+          "phase": "6. Экономика и Сметы",
+          "status": "active",
           "items": [
             {
-              "text": "Нативное iOS / Android",
+              "text": "Справочники (материалы, работы)",
               "done": false
             },
             {
-              "text": "Push-уведомления",
+              "text": "Смета комнаты",
               "done": false
             },
             {
-              "text": "AR-замеры",
+              "text": "Сводная смета",
+              "done": false
+            },
+            {
+              "text": "Финансы (маржа, рентабельность)",
+              "done": false
+            },
+            {
+              "text": "Внеплановые работы",
               "done": false
             }
           ]
         },
         {
-          "phase": "11. Биллинг / Монетизация",
-          "status": "planned",
+          "phase": "7. CRM (Клиенты и Сделки)",
+          "status": "active",
           "items": [
             {
-              "text": "Подписки (Free / Pro / Business)",
+              "text": "База клиентов",
               "done": false
             },
             {
-              "text": "Лимиты по тарифу",
+              "text": "Воронка продаж",
               "done": false
             },
             {
-              "text": "Оплата (ЮKassa, Stripe)",
+              "text": "История взаимодействия",
               "done": false
             },
             {
-              "text": "Реферальная программа",
+              "text": "Задачи по клиентам",
               "done": false
             }
           ]
         },
         {
-          "phase": "12. Архитектура и дисциплина (Бо 8.1)",
-          "status": "planned",
+          "phase": "8. Финансы",
+          "status": "active",
           "items": [
             {
-              "text": "Создать AI_CONTEXT.md (паспорт проекта для ИИ)",
+              "text": "Бюджет объекта",
               "done": false
             },
             {
-              "text": "Написать test_bot.py (сторож: проверка БД и импортов)",
+              "text": "Учет расходов/доходов",
               "done": false
             },
             {
-              "text": "Добавить логирование (logging) во все модули",
+              "text": "Cash Flow",
               "done": false
             },
             {
-              "text": "Вынести логику SQLite в отдельный файл (db.py)",
+              "text": "Личные финансы",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "9. HR (Персонал)",
+          "status": "active",
+          "items": [
+            {
+              "text": "База мастеров",
               "done": false
             },
             {
-              "text": "Вынести генерацию PDF в отдельный модуль",
+              "text": "KPI и рейтинг",
               "done": false
             },
             {
-              "text": "Настроить регулярный бэкап bo72.db",
+              "text": "Расчет зарплат",
+              "done": false
+            },
+            {
+              "text": "График смен",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "10. Документооборот",
+          "status": "active",
+          "items": [
+            {
+              "text": "Договоры",
+              "done": false
+            },
+            {
+              "text": "Акты КС-2/КС-3",
+              "done": false
+            },
+            {
+              "text": "Блокчейн-акты",
+              "done": false
+            },
+            {
+              "text": "Архив документов",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "11. Интеграции и Маркетплейсы",
+          "status": "active",
+          "items": [
+            {
+              "text": "1С и Банки",
+              "done": false
+            },
+            {
+              "text": "CAD/BIM экспорт",
+              "done": false
+            },
+            {
+              "text": "Маркетплейсы (Ozon, WB)",
+              "done": false
+            },
+            {
+              "text": "Парсинг цен",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "12. ИИ и Автоматизация",
+          "status": "active",
+          "items": [
+            {
+              "text": "Голос (Whisper)",
+              "done": false
+            },
+            {
+              "text": "OCR (чеки)",
+              "done": false
+            },
+            {
+              "text": "Авто-исправления",
+              "done": false
+            },
+            {
+              "text": "Самообучение",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "13. Интерфейсы",
+          "status": "active",
+          "items": [
+            {
+              "text": "Telegram-бот",
+              "done": false
+            },
+            {
+              "text": "Веб-приложение",
+              "done": false
+            },
+            {
+              "text": "Мобильное приложение",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "14. Аналитика",
+          "status": "active",
+          "items": [
+            {
+              "text": "Дашборды",
+              "done": false
+            },
+            {
+              "text": "Отчеты",
+              "done": false
+            },
+            {
+              "text": "Прогнозы",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "15. Архитектура и Монетизация",
+          "status": "active",
+          "items": [
+            {
+              "text": "Рефакторинг",
+              "done": false
+            },
+            {
+              "text": "Тарифы и подписки",
+              "done": false
+            },
+            {
+              "text": "API",
+              "done": false
+            },
+            {
+              "text": "Безопасность",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "16. Интернет-магазин",
+          "status": "active",
+          "items": [
+            {
+              "text": "Витрина товаров",
+              "done": false
+            },
+            {
+              "text": "Корзина и заказ",
+              "done": false
+            },
+            {
+              "text": "Оплата и доставка",
+              "done": false
+            }
+          ]
+        },
+        {
+          "phase": "17. Биржа труда",
+          "status": "active",
+          "items": [
+            {
+              "text": "Профили мастеров",
+              "done": false
+            },
+            {
+              "text": "Профили заказчиков",
+              "done": false
+            },
+            {
+              "text": "Умный поиск",
+              "done": false
+            },
+            {
+              "text": "Рейтинг и отзывы",
               "done": false
             }
           ]
