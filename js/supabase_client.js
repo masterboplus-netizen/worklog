@@ -26,10 +26,24 @@ async function loadDataFromSupabase() {
         const { data: sessions, error: e4 } = await supabase.from('worklog_sessions').select('*').order('date', { ascending: false });
         if (e4) throw e4;
 
+        // Приводим данные из базы к формату старого JSON
+        const mappedSessions = (sessions || []).map(s => ({
+            id: s.id,
+            date: s.date,
+            start: s.start_time,     // Переименовываем
+            end: s.end_time,         // Переименовываем
+            project: s.project_id,   // Переименовываем
+            duration_min: s.duration_min || 0,
+            events: s.events || 0,
+            screens: s.screens || 0,
+            tasks_done: s.tasks_done || 0,
+            note: s.note || ''
+        }));
+
         window.DATA = {
             projects: projects || [],
-            sessions: sessions || [],
-            baseline: sessions.find(s => s.id === 'baseline') || { minutes: 0, messages: 0 }
+            sessions: mappedSessions,
+            baseline: { minutes: 336, messages: 0 } // Временно, или найдем в сессиях
         };
 
         window.DATA.projects.forEach(proj => {
@@ -50,7 +64,7 @@ async function loadDataFromSupabase() {
         if (window.DATA.sessions.length > 0) {
             const first = window.DATA.sessions[0];
             console.log("ПЕРВАЯ СЕССИЯ ИЗ БАЗЫ:", JSON.stringify(first, null, 2));
-            alert("Первая сессия: date=" + first.date + ", start=" + first.start_time + ", project=" + first.project_id);
+            
         }
         
         console.log("✅ Данные загружены из Supabase");
