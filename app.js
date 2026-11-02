@@ -106,6 +106,10 @@ function switchTab(name) {
       if (c) { c.classList.remove('hidden'); if (typeof renderActivityPageV2 === 'function') { renderActivityPageV2(); } else { renderActivityPage(); } }
       const t = document.getElementById('tab-activity'); if (t) t.classList.add('tab-active');
     } else {
+      // Сбрасываем режим кольца на "Сегодня" при переходе на дашборд
+      if (typeof HERO_MODE !== 'undefined') {
+          HERO_MODE = 'today';
+      }
       const c = document.getElementById('content');
       if (c) { c.classList.remove('hidden'); renderDashboard(); }
       const t = document.getElementById('tab-dashboard'); if (t) t.classList.add('tab-active');
