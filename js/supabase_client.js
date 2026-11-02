@@ -2,16 +2,29 @@
 const SUPABASE_URL = "https://ruomhtlvyqmaqhqqsfqn.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1b21odGx2eXFtYXFocXFzZnFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMzOTQwMjUsImV4cCI6MjEwODk3MDAyNX0.7FWm5KVmMqyVxNjXMhcGhgzb6nD8aLfie7cxBlohIO4";
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
 async function loadDataFromSupabase() {
     try {
         console.log("Загрузка данных из Supabase...");
         
-        const { data: projects } = await supabase.from('worklog_projects').select('*');
-        const { data: phases } = await supabase.from('worklog_phases').select('*').order('order_num');
-        const { data: tasks } = await supabase.from('worklog_tasks').select('*').order('order_num');
-        const { data: sessions } = await supabase.from('worklog_sessions').select('*').order('date', { ascending: false });
+        // Проверяем, загрузилась ли библиотека
+        if (typeof window.supabase === 'undefined') {
+            throw new Error('Библиотека supabase-js не загружена');
+        }
+
+        // Создаем клиент внутри функции
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const { data: projects, error: e1 } = await supabase.from('worklog_projects').select('*');
+        if (e1) throw e1;
+
+        const { data: phases, error: e2 } = await supabase.from('worklog_phases').select('*').order('order_num');
+        if (e2) throw e2;
+
+        const { data: tasks, error: e3 } = await supabase.from('worklog_tasks').select('*').order('order_num');
+        if (e3) throw e3;
+
+        const { data: sessions, error: e4 } = await supabase.from('worklog_sessions').select('*').order('date', { ascending: false });
+        if (e4) throw e4;
 
         window.DATA = {
             projects: projects || [],
@@ -37,6 +50,14 @@ async function loadDataFromSupabase() {
         return true;
     } catch (e) {
         console.error("❌ Ошибка загрузки из Supabase:", e);
+        // Показываем ошибку на экране
+        const errDiv = document.getElementById('debug-error');
+        if (errDiv) errDiv.remove();
+        const d = document.createElement('div');
+        d.id = 'debug-error';
+        d.style.cssText = 'position:fixed; bottom:10px; left:10px; right:10px; background:red; color:white; padding:15px; z-index:99999; font-size:14px; border-radius:8px;';
+        d.textContent = 'ОШИБКА SUPABASE: ' + e.message;
+        document.body.appendChild(d);
         return false;
     }
 }
