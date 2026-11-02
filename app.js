@@ -30,12 +30,17 @@ async function init() {
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
   
-  // Загружаем данные из Supabase (без сейфа и PIN)
+  // Загружаем данные из Supabase
   if (typeof loadDataFromSupabase === 'function') {
     loadDataFromSupabase().then(ok => {
       if (ok) {
-        showScreen('dashboard');
-        if (typeof renderDashboard === 'function') renderDashboard();
+        // ВОЗВРАЩАЕМ СЕЙФ
+        if (typeof showSafe === 'function') {
+            showSafe();
+        } else {
+            showScreen('dashboard');
+            if (typeof renderDashboard === 'function') renderDashboard();
+        }
       } else {
         alert('Ошибка загрузки из Supabase');
       }
