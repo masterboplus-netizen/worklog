@@ -68,7 +68,9 @@ function renderProjects() {
               for (const sub of it.subtasks) {
                   const subLine = document.createElement('div');
                   subLine.style.cssText = 'padding: 2px 0; color: var(--fg); ' + (sub.done ? 'opacity: 0.8;' : 'opacity: 1;');
-                  subLine.innerHTML = (sub.done ? '✅ ' : '⏳ ') + sub.text;
+                  // Убираем префикс "Хераборина: " из текста подзадачи
+                  let subText = sub.text.replace(/^Хераборина[:\s]+/i, '');
+                  subLine.innerHTML = (sub.done ? '✅ ' : '⏳ ') + subText;
                   subList.appendChild(subLine);
               }
               itemsList.appendChild(subList);
