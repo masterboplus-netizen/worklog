@@ -24,9 +24,8 @@ async function loadDataFromSupabase() {
         if (e3) throw e3;
 
         const { data: subtasks, error: e3_sub } = await supabase.from('worklog_subtasks').select('*');
-        if (e3_sub) throw e3_sub;
-
         const { data: subtasks, error: e3_sub } = await supabase.from('worklog_subtasks').select('*');
+        if (e3_sub) throw e3_sub;
         if (e3_sub) throw e3_sub;
 
         const { data: sessions, error: e4 } = await supabase.from('worklog_sessions').select('*').order('date', { ascending: false }).order('start_time', { ascending: false });
