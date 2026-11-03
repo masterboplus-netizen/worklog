@@ -67,8 +67,8 @@ function renderProjects() {
               
               for (const sub of it.subtasks) {
                   const subLine = document.createElement('div');
-                  subLine.style.cssText = 'padding: 2px 0; color: var(--fg-dim); ' + (sub.done ? 'text-decoration: line-through; opacity: 0.6;' : '');
-                  subLine.innerHTML = (sub.done ? '🔹 ' : '▫️ ') + sub.text;
+                  subLine.style.cssText = 'padding: 2px 0; color: var(--fg); ' + (sub.done ? 'opacity: 0.8;' : 'opacity: 1;');
+                  subLine.innerHTML = (sub.done ? '✅ ' : '⏳ ') + sub.text;
                   subList.appendChild(subLine);
               }
               itemsList.appendChild(subList);
