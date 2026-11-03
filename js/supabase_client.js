@@ -23,6 +23,12 @@ async function loadDataFromSupabase() {
         const { data: tasks, error: e3 } = await supabase.from('worklog_tasks').select('*').order('order_num');
         if (e3) throw e3;
 
+        const { data: subtasks, error: e3_sub } = await supabase.from('worklog_subtasks').select('*');
+        if (e3_sub) throw e3_sub;
+
+        const { data: subtasks, error: e3_sub } = await supabase.from('worklog_subtasks').select('*');
+        if (e3_sub) throw e3_sub;
+
         const { data: sessions, error: e4 } = await supabase.from('worklog_sessions').select('*').order('date', { ascending: false }).order('start_time', { ascending: false });
         if (e4) throw e4;
 
@@ -54,7 +60,17 @@ async function loadDataFromSupabase() {
                     items: tasks.filter(t => t.phase_id === ph.id).map(t => ({
                         text: t.name,
                         done: t.status === 'done',
-                        status: t.status
+                        status: t.status,
+                        subtasks: (subtasks || []).filter(st => st.task_id === t.id).map(st => ({
+                            text: st.name,
+                            done: st.status === 'done',
+                            status: st.status
+                        })),
+                        subtasks: (subtasks || []).filter(st => st.task_id === t.id).map(st => ({
+                            text: st.name,
+                            done: st.status === 'done',
+                            status: st.status
+                        }))
                     }))
                 };
             });

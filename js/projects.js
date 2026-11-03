@@ -50,8 +50,37 @@ function renderProjects() {
         if (typeof it === 'object') {
           const line = document.createElement('div');
           line.className = 'phase-item' + (it.done ? ' done' : '');
-          line.textContent = (it.done ? '✅ ' : '⏳ ') + it.text;
+          
+          let html = (it.done ? '✅ ' : '⏳ ') + it.text;
+          if (it.subtasks && it.subtasks.length > 0) {
+              html += ' <span style="opacity:0.5;font-size:10px;margin-left:4px;">▼</span>';
+          }
+          line.innerHTML = html;
+          
           itemsList.appendChild(line);
+
+          // Если есть подзадачи — создаем контейнер и вешаем клик
+          if (it.subtasks && it.subtasks.length > 0) {
+              const subList = document.createElement('div');
+              subList.className = 'subtask-list hidden';
+              subList.style.cssText = 'padding-left: 20px; font-size: 12px; margin-top: 4px; border-left: 1px solid var(--border); margin-bottom: 4px;';
+              
+              for (const sub of it.subtasks) {
+                  const subLine = document.createElement('div');
+                  subLine.style.cssText = 'padding: 2px 0; color: var(--fg-dim); ' + (sub.done ? 'text-decoration: line-through; opacity: 0.6;' : '');
+                  subLine.innerHTML = (sub.done ? '🔹 ' : '▫️ ') + sub.text;
+                  subList.appendChild(subLine);
+              }
+              itemsList.appendChild(subList);
+
+              line.style.cursor = 'pointer';
+              line.addEventListener('click', (e) => {
+                  e.stopPropagation(); // Чтобы не закрылась вся фаза
+                  subList.classList.toggle('hidden');
+                  const arrow = line.querySelector('span');
+                  if (arrow) arrow.textContent = subList.classList.contains('hidden') ? '▼' : '▲';
+              });
+          }
         }
       }
       phDiv.appendChild(itemsList);
