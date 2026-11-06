@@ -97,10 +97,11 @@ function calcTotals() {
   const today = _localDate(now);
   const weekAgo = _localDate(new Date(now - 7 * 86400000));
   const monthAgo = _localDate(new Date(now - 30 * 86400000));
-  const base = window.DATA.baseline || {};
-  const baseMin = base.minutes || 0;
-  const baseMsgs = base.messages || 0;
+  
   let total = 0, week = 0, month = 0, todayMin = 0, screens = 0, msgs = 0;
+  
+  // 1. Считаем сумму за каждый день
+  const dailyTotals = {};
   for (const s of window.DATA.sessions || []) {
     total += s.duration_min || 0;
     if (s.date >= weekAgo) week += s.duration_min || 0;
@@ -108,11 +109,25 @@ function calcTotals() {
     if (s.date === today) todayMin += s.duration_min || 0;
     screens += s.screens || 0;
     msgs += s.events || 0;
+    
+    dailyTotals[s.date] = (dailyTotals[s.date] || 0) + (s.duration_min || 0);
   }
-  const uniqueDays = new Set((window.DATA.sessions || []).map(x => x.date)).size;
+  
+  // 2. Считаем среднее ЗА ДЕНЬ (сумма / количество активных дней)
+  const activeDays = Object.keys(dailyTotals).length;
+  const avgPerDay = activeDays > 0 ? Math.round(total / activeDays) : 0;
+
   return {
-    total: total + baseMin, totalNoBase: total, week, month, todayMin, screens, msgs: msgs + baseMsgs,
-    count: (window.DATA.sessions || []).length, daysCount: uniqueDays, avgPerDay: Math.round(total / Math.max(1, uniqueDays))
+    total: total, 
+    totalNoBase: total, 
+    week, 
+    month, 
+    todayMin, 
+    screens, 
+    msgs,
+    count: (window.DATA.sessions || []).length, 
+    daysCount: activeDays, 
+    avgPerDay: avgPerDay
   };
 }
 
