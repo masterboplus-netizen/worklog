@@ -62,11 +62,6 @@ async function loadDataFromSupabase() {
                             text: st.name,
                             done: st.status === 'done',
                             status: st.status
-                        })),
-                        subtasks: (subtasks || []).filter(st => st.task_id === t.id).map(st => ({
-                            text: st.name,
-                            done: st.status === 'done',
-                            status: st.status
                         }))
                     }))
                 };
