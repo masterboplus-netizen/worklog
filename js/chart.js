@@ -118,7 +118,7 @@ function renderActivityPageV2() {
     const updateChart = () => {
         const scrollLeft = scrollContainer.scrollLeft;
         const containerWidth = scrollContainer.clientWidth;
-        const colWidth = containerWidth / 7;
+        const colWidth = (containerWidth / 7) || 1;
 
         const startIndex = Math.floor(scrollLeft / colWidth);
         const endIndex = Math.min(allDates.length - 1, Math.ceil((scrollLeft + containerWidth) / colWidth));
