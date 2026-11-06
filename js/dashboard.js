@@ -72,14 +72,30 @@ function renderHeroRings() {
   const scrVal = _sumRange(_sessions, MINI_SCR_PERIOD, 'screens');
   const tasksVal = _sumRange(_sessions, MINI_TASKS_PERIOD, 'tasks_done');
   
-  const maxMsg = Math.max(1, ...sessions.map(s => s.events || 0));
-  const pctMsg = Math.min(100, Math.round(msgVal / maxMsg * 100));
+  // Считаем среднее за день для малых колец
+  const dailyStats = {};
+  for (const s of window.DATA.sessions || []) {
+      if (!dailyStats[s.date]) dailyStats[s.date] = { msg: 0, scr: 0, tasks: 0 };
+      dailyStats[s.date].msg += s.events || 0;
+      dailyStats[s.date].scr += s.screens || 0;
+      dailyStats[s.date].tasks += s.tasks_done || 0;
+  }
+  const activeDays = Math.max(1, Object.keys(dailyStats).length);
   
-  const maxScr = Math.max(1, ...sessions.map(s => s.screens || 0));
-  const pctScr = Math.min(100, Math.round(scrVal / maxScr * 100));
-  
-  const maxTasks = Math.max(1, ...sessions.map(s => s.tasks_done || 0));
-  const pctTasks = Math.min(100, Math.round(tasksVal / maxTasks * 100));
+  let totalMsg = 0, totalScr = 0, totalTasks = 0;
+  for (const d in dailyStats) {
+      totalMsg += dailyStats[d].msg;
+      totalScr += dailyStats[d].scr;
+      totalTasks += dailyStats[d].tasks;
+  }
+
+  const avgMsg = Math.max(1, Math.round(totalMsg / activeDays));
+  const avgScr = Math.max(1, Math.round(totalScr / activeDays));
+  const avgTasks = Math.max(1, Math.round(totalTasks / activeDays));
+
+  const pctMsg = Math.min(100, Math.round(msgVal / avgMsg * 100));
+  const pctScr = Math.min(100, Math.round(scrVal / avgScr * 100));
+  const pctTasks = Math.min(100, Math.round(tasksVal / avgTasks * 100));
 
   // 5. Отрисовка (оригинальная верстка)
   const div = document.createElement('div');
