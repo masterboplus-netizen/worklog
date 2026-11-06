@@ -52,9 +52,15 @@ function mergeMidnightSessions(sessions) {
     const startA = a.start || '';
     const startB = b.start || '';
 
-    // Если конец "меньше" начала (ночная), считаем его позже
-    if (endA && startA && endA < startA) endA = '24' + endA;
-    if (endB && startB && endB < startB) endB = '24' + endB;
+    // Если конец "меньше" начала (ночная сессия), добавляем 24 часа для корректной сортировки
+    if (endA && startA && endA < startA) {
+        const [h, m] = endA.split(':');
+        endA = (parseInt(h) + 24).toString().padStart(2, '0') + ':' + m;
+    }
+    if (endB && startB && endB < startB) {
+        const [h, m] = endB.split(':');
+        endB = (parseInt(h) + 24).toString().padStart(2, '0') + ':' + m;
+    }
     
     return endB.localeCompare(endA);
   });
