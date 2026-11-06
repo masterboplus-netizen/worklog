@@ -125,7 +125,7 @@ function openAnalyticsSheet(projectId) {
   const totalEvents = sessions.reduce((acc, s) => acc + (s.events || 0), 0);
   const totalScreens = sessions.reduce((acc, s) => acc + (s.screens || 0), 0);
   const uniqueDays = new Set(sessions.map(s => s.date)).size;
-  const avgPerDay = uniqueDays ? Math.round(totalMin / uniqueDays) : 0;
+  const avgPerDay = uniqueDays > 0 ? Math.round(totalMin / uniqueDays) : 0;
 
   // Создаем оверлей
   const overlay = document.createElement('div');
