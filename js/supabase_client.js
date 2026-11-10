@@ -50,7 +50,13 @@ async function loadDataFromSupabase() {
         };
 
         window.DATA.projects.forEach(proj => {
-            proj.plan = phases.filter(ph => ph.project_id === proj.id).map(ph => {
+            // Берем только модули (parent_id пустой)
+            const projectModules = phases.filter(ph => ph.project_id === proj.id && !ph.parent_id);
+            
+            proj.plan = projectModules.map(ph => {
+                // Для каждого модуля ищем его эпики
+                const moduleEpics = phases.filter(e => e.parent_id === ph.id);
+                
                 return {
                     phase: ph.name,
                     status: ph.status,
@@ -62,6 +68,20 @@ async function loadDataFromSupabase() {
                             text: st.name,
                             done: st.status === 'done',
                             status: st.status
+                        }))
+                    })),
+                    epics: moduleEpics.map(e => ({
+                        name: e.name,
+                        status: e.status,
+                        items: tasks.filter(t => t.phase_id === e.id).map(t => ({
+                            text: t.name,
+                            done: t.status === 'done',
+                            status: t.status,
+                            subtasks: (subtasks || []).filter(st => st.task_id === t.id).map(st => ({
+                                text: st.name,
+                                done: st.status === 'done',
+                                status: st.status
+                            }))
                         }))
                     }))
                 };
