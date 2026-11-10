@@ -109,10 +109,12 @@ function renderProjects() {
           const epicPct = epicTotal ? Math.round(epicDone / epicTotal * 100) : 0;
           const epicIcon = epicPct === 100 ? '✅' : (epicPct > 0 ? '🟡' : '📋');
 
-          epicDiv.innerHTML = '<div style="font-size:13px; color:var(--fg); margin-bottom:4px;">' + epicIcon + ' ' + epic.name + ' <span style="opacity:0.5;font-size:11px;">' + epicPct + '%</span></div>';
+          const epicHead = document.createElement('div');
+          epicHead.style.cssText = 'font-size:13px; color:var(--fg); margin-bottom:4px; cursor:pointer; user-select:none;';
+          epicHead.innerHTML = '<span style="display:inline-block;transition:transform 0.2s;" class="epic-arrow">▶</span> ' + epicIcon + ' ' + epic.name + ' <span style="opacity:0.5;font-size:11px;">' + epicPct + '%</span>';
 
           const epicItemsList = document.createElement('div');
-          epicItemsList.style.cssText = 'padding-left: 16px;';
+          epicItemsList.style.cssText = 'padding-left: 24px; display:none;';
 
           for (const it of epic.items) {
             const line = document.createElement('div');
@@ -122,6 +124,15 @@ function renderProjects() {
             epicItemsList.appendChild(line);
           }
 
+          epicHead.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = epicItemsList.style.display === 'none';
+            epicItemsList.style.display = isHidden ? 'block' : 'none';
+            const arrow = epicHead.querySelector('.epic-arrow');
+            if (arrow) arrow.style.transform = isHidden ? 'rotate(90deg)' : 'rotate(0deg)';
+          });
+
+          epicDiv.appendChild(epicHead);
           epicDiv.appendChild(epicItemsList);
           epicsContainer.appendChild(epicDiv);
         }
