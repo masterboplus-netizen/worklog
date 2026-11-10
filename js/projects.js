@@ -21,6 +21,14 @@ function renderProjects() {
       const items = ph.items || [];
       totalItems += items.length;
       doneItems += items.filter(it => typeof it === 'object' && it.done).length;
+      // Учитываем задачи эпиков
+      if (ph.epics) {
+        for (const epic of ph.epics) {
+          const epicItems = epic.items || [];
+          totalItems += epicItems.length;
+          doneItems += epicItems.filter(it => typeof it === 'object' && it.done).length;
+        }
+      }
     }
     const pct = totalItems ? Math.round(doneItems / totalItems * 100) : 0;
     const card = document.createElement('div');
