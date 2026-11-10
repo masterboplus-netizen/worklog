@@ -93,6 +93,42 @@ function renderProjects() {
           }
         }
       }
+      // === РЕНДЕР ЭПИКОВ (вложенных) ===
+      if (ph.epics && ph.epics.length > 0) {
+        const epicsContainer = document.createElement('div');
+        epicsContainer.className = 'phase-epics';
+        epicsContainer.style.cssText = 'padding-left: 16px; border-left: 2px solid var(--bg3); margin: 8px 0 8px 16px;';
+
+        for (const epic of ph.epics) {
+          const epicDiv = document.createElement('div');
+          epicDiv.className = 'epic';
+          epicDiv.style.cssText = 'margin-bottom: 8px;';
+
+          const epicTotal = epic.items.length;
+          const epicDone = epic.items.filter(it => it.done).length;
+          const epicPct = epicTotal ? Math.round(epicDone / epicTotal * 100) : 0;
+          const epicIcon = epicPct === 100 ? '✅' : (epicPct > 0 ? '🟡' : '📋');
+
+          epicDiv.innerHTML = '<div style="font-size:13px; color:var(--fg); margin-bottom:4px;">' + epicIcon + ' ' + epic.name + ' <span style="opacity:0.5;font-size:11px;">' + epicPct + '%</span></div>';
+
+          const epicItemsList = document.createElement('div');
+          epicItemsList.style.cssText = 'padding-left: 16px;';
+
+          for (const it of epic.items) {
+            const line = document.createElement('div');
+            line.className = 'phase-item' + (it.done ? ' done' : '');
+            line.style.cssText = 'font-size:12px; padding:2px 0;';
+            line.innerHTML = (it.done ? '✅ ' : '⏳ ') + it.text;
+            epicItemsList.appendChild(line);
+          }
+
+          epicDiv.appendChild(epicItemsList);
+          epicsContainer.appendChild(epicDiv);
+        }
+
+        phDiv.appendChild(epicsContainer);
+      }
+
       phDiv.appendChild(itemsList);
       phDiv.addEventListener('click', () => { phDiv.classList.toggle('open'); itemsList.classList.toggle('hidden'); });
       phasesDiv.appendChild(phDiv);
