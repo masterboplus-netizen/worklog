@@ -122,6 +122,20 @@ function renderProjects() {
             line.style.cssText = 'font-size:12px; padding:2px 0;';
             line.innerHTML = (it.done ? '✅ ' : '⏳ ') + it.text;
             epicItemsList.appendChild(line);
+
+            // Подзадачи эпика
+            if (it.subtasks && it.subtasks.length > 0) {
+              const subList = document.createElement('div');
+              subList.style.cssText = 'padding-left: 16px; font-size: 11px; margin-top: 2px; border-left: 1px solid var(--border); margin-bottom: 2px;';
+              for (const sub of it.subtasks) {
+                const subLine = document.createElement('div');
+                subLine.style.cssText = 'padding: 1px 0; color: var(--fg); ' + (sub.done ? 'opacity: 0.8;' : 'opacity: 1;');
+                let subText = sub.text.replace(/^Хераборина[:\s]+/i, '');
+                subLine.innerHTML = (sub.done ? '✅ ' : '⏳ ') + subText;
+                subList.appendChild(subLine);
+              }
+              epicItemsList.appendChild(subList);
+            }
           }
 
           epicHead.addEventListener('click', (e) => {
