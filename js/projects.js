@@ -45,8 +45,17 @@ function renderProjects() {
     phasesDiv.className = 'phases hidden';
     for (const ph of (p.plan || []).filter(ph => !ph.is_archived)) {
       const items = ph.items || [];
-      const total = items.length;
-      const done = items.filter(it => typeof it === 'object' && it.done).length;
+      let total = items.length;
+      let done = items.filter(it => typeof it === 'object' && it.done).length;
+      // Если у модуля есть эпики, считаем прогресс по ним
+      if (ph.epics && ph.epics.length > 0) {
+        total = 0;
+        done = 0;
+        for (const epic of ph.epics) {
+          total += epic.items.length;
+          done += epic.items.filter(it => it.done).length;
+        }
+      }
       const phPct = total ? Math.round(done / total * 100) : 0;
       const statusIcon = phPct === 100 ? '✅' : (phPct > 0 ? '🟡' : '📋');
       const phDiv = document.createElement('div');
