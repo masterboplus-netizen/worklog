@@ -616,10 +616,20 @@ function renderActivityPageV2() {
         }
 
         let maxVal = 0;
+        // Берем только уникальные сессии, чтобы не было дублей
+        const uniqueSessions = [];
+        const seenIds = new Set();
+        for (const sess of window.DATA.sessions || []) {
+            if (!seenIds.has(sess.id)) {
+                seenIds.add(sess.id);
+                uniqueSessions.push(sess);
+            }
+        }
+
         for (let i = startIndex; i <= endIndex && i < allDates.length; i++) {
             const dateStr = allDates[i];
             let v = 0;
-            for (const sess of window.DATA.sessions || []) {
+            for (const sess of uniqueSessions) {
                 if (sess.date === dateStr) {
                     if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
