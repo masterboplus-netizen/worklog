@@ -436,3 +436,11 @@ function renderDiary() {
     CALENDAR_SELECTED_DAY = null; renderDiary();
   });
 } // Закрываем renderDiary
+
+function formatDiaryDate(iso) {
+  const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  const days = ['вс','пн','вт','ср','чт','пт','сб'];
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d.getTime())) return iso;
+  return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + days[d.getDay()];
+}
