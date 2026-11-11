@@ -631,6 +631,18 @@ function renderActivityPageV2() {
         }
         if (maxVal === 0) maxVal = CHART_STATE_V2.metric === 'duration' ? 720 : 10;
 
+        // Округляем максимальное значение до кратного 4 (чтобы деления были красивыми)
+        if (CHART_STATE_V2.metric === 'duration') {
+            // Для времени: округляем до целого часа, затем делаем кратным 4 часам
+            const hours = Math.ceil(maxVal / 60);
+            const roundedHours = Math.ceil(hours / 4) * 4;
+            maxVal = roundedHours * 60;
+        } else {
+            // Для остальных метрик: округляем до кратного 4
+            const rounded = Math.ceil(maxVal / 4) * 4;
+            maxVal = rounded === 0 ? 4 : rounded;
+        }
+
         // Отрисовка Оси Y (абсолютное позиционирование)
         let yHTML = '';
         const step = maxVal / 4;
