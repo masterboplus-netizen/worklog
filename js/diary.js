@@ -411,7 +411,6 @@ function renderDiary() {
                   }
               }
           });
-          });
 
           listDiv.appendChild(item);
       });
