@@ -760,5 +760,11 @@ function renderActivityPageV2() {
     };
     c.removeEventListener('click', hideTooltip);
     c.addEventListener('click', hideTooltip);
+
+    // ПРИНУДИТЕЛЬНЫЙ ПЕРВЫЙ РЕНДЕР ОСИ (до скролла)
+    // Вызываем updateChart сразу после построения ленты
+    setTimeout(() => {
+        updateChart();
+    }, 50);
 }
 // === ОБНОВЛЕННЫЙ DASHBOARD С АНИМАЦИЕЙ ===
