@@ -62,6 +62,7 @@ async function loadDataFromSupabase() {
             screens: s.screens || 0,
             tasks_done: s.tasks_done || 0,
             note: s.note || '',
+            errors_count: s.errors_count || 0,
             linked_tasks: tasksBySession[s.id] || []
         }));
 

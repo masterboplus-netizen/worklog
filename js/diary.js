@@ -328,11 +328,12 @@ function renderDiary() {
           item.className = 'diary-item';
 
           let countersHTML = '';
-          if (s.events || s.screens || s.tasks_done) {
+          if (s.events || s.screens || s.tasks_done || s.errors_count) {
               countersHTML = '<div class="diary-counters">';
               if (s.events)     countersHTML += `📨 ${s.events} `;
               if (s.screens)    countersHTML += `📸 ${s.screens} `;
-              if (s.tasks_done) countersHTML += `✅ ${s.tasks_done}`;
+              if (s.tasks_done) countersHTML += `✅ ${s.tasks_done} `;
+              if (s.errors_count) countersHTML += `🐛 ${s.errors_count}`;
               countersHTML += '</div>';
           }
 
