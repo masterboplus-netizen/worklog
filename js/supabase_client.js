@@ -34,8 +34,16 @@ async function loadDataFromSupabase() {
         (subtasks || []).forEach(st => {
             if (st.session_id) {
                 if (!tasksBySession[st.session_id]) tasksBySession[st.session_id] = [];
+                
                 const parentTask = (tasks || []).find(t => t.id === st.task_id);
+                const parentPhase = parentTask ? (phases || []).find(ph => ph.id === parentTask.phase_id) : null;
+                // Ищем проект. Сначала смотрим на проект фазы, если нет - на проект сессии (на всякий случай)
+                const projId = parentPhase ? parentPhase.project_id : null;
+                const parentProject = projId ? (projects || []).find(p => p.id === projId) : null;
+
                 tasksBySession[st.session_id].push({
+                    project: parentProject ? parentProject.name : 'Неизвестный проект',
+                    phase: parentPhase ? parentPhase.name : 'Неизвестная фаза',
                     task: parentTask ? parentTask.name : 'Задача не найдена',
                     subtask: st.name,
                     status: st.status

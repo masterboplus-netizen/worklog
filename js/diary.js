@@ -115,7 +115,7 @@ function mergeMidnightSessions(sessions) {
       if (s.project) projects.add(s.project);
       if (s.linked_tasks) {
           s.linked_tasks.forEach(lt => {
-              const key = lt.task + '|' + lt.subtask;
+              const key = lt.project + '|' + lt.phase + '|' + lt.task + '|' + lt.subtask;
               if (!allLinkedTasks.some(x => x.key === key)) {
                   allLinkedTasks.push({ key, ...lt });
               }
@@ -134,7 +134,7 @@ function mergeMidnightSessions(sessions) {
       events: totalEvents,
       screens: totalScreens,
       tasks_done: totalTasks,
-      linked_tasks: allLinkedTasks.map(t => ({ task: t.task, subtask: t.subtask, status: t.status }))
+      linked_tasks: allLinkedTasks.map(t => ({ project: t.project, phase: t.phase, task: t.task, subtask: t.subtask, status: t.status }))
     };
   }
 }
@@ -333,7 +333,7 @@ function renderDiary() {
             <div class="diary-note">${s.note || ''}</div>
             ${s.linked_tasks && s.linked_tasks.length ? `
                 <div class="diary-linked-tasks" style="margin-top: 8px; font-size: 12px; color: var(--fg-dim); border-top: 1px solid var(--border); padding-top: 6px;">
-                    ${s.linked_tasks.map(t => `<div>• ${t.task} → ${t.subtask} (${t.status})</div>`).join('')}
+                    ${s.linked_tasks.map(t => `<div>• <b>${t.project}</b> → ${t.phase} → ${t.task} → ${t.subtask} (${t.status})</div>`).join('')}
                 </div>
             ` : ''}
           `;
