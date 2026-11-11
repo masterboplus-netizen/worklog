@@ -605,7 +605,7 @@ function renderActivityPageV2() {
         const colWidth = 40;
 
         const startIndex = Math.floor(scrollLeft / colWidth);
-        const endIndex = Math.min(allDates.length - 1, Math.ceil((scrollLeft + containerWidth) / colWidth));
+        const endIndex = Math.min(allDates.length - 1, Math.floor((scrollLeft + containerWidth) / colWidth));
 
         if (allDates[startIndex]) {
             const d = new Date(allDates[startIndex] + 'T00:00:00');
@@ -656,7 +656,7 @@ function renderActivityPageV2() {
         let yHTML = '';
         const step = maxVal / 4;
         // Верхняя метка (100%)
-        const topVal = Math.round(step * 4);
+        const topVal = maxVal;
         const topLbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(topVal / 60) + 'ч') : String(topVal);
         yHTML += `<div style="position: absolute; top: 0; right: 8px; transform: translateY(0);">${topLbl}</div>`;
         
