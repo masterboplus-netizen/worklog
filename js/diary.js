@@ -337,13 +337,75 @@ function renderDiary() {
           }
 
           const tagsHTML = s.tags && s.tags.length ? `<div style="margin-top:4px; font-size:11px; color:var(--accent);">${s.tags.join(' ')}</div>` : '';
-          // Формируем список задач (плоский) и иерархию для раскрытия
+          // Формируем список задач (плоский)
           const uniqueTasks = {};
           if (s.linked_tasks) {
               s.linked_tasks.forEach(t => {
                   if (!uniqueTasks[t.task]) uniqueTasks[t.task] = [];
                   uniqueTasks[t.task].push(t);
               });
+          }
+          
+          let tasksHTML = '';
+          if (Object.keys(uniqueTasks).length > 0) {
+              tasksHTML = '<div class="diary-tasks-list" style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; display: flex; flex-direction: column; gap: 8px;">';
+              Object.entries(uniqueTasks).forEach(([taskName, taskDetails]) => {
+                  tasksHTML += `<div style="background: rgba(255,255,255,0.02); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">`;
+                  tasksHTML += `<div style="font-size: 13px; color: var(--fg); font-weight: 500;">${taskName}</div>`;
+                  tasksHTML += `</div>`;
+              });
+              tasksHTML += '</div>';
+          }
+          
+          // Скрытая детализация (заметка + иерархия)
+          let detailsHTML = '';
+          if (s.note || Object.keys(uniqueTasks).length > 0) {
+              detailsHTML = '<div class="diary-details" style="display: none; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">';
+              if (s.note) {
+                  detailsHTML += `<div style="font-size: 12px; color: var(--fg-dim); margin-bottom: 12px;">${s.note}</div>`;
+              }
+              if (Object.keys(uniqueTasks).length > 0) {
+                  Object.entries(uniqueTasks).forEach(([taskName, taskDetails]) => {
+                      detailsHTML += `<div style="margin-bottom: 8px;">`;
+                      detailsHTML += `<div style="font-size: 12px; color: var(--fg); font-weight: 600; margin-bottom: 4px;">${taskName}</div>`;
+                      taskDetails.forEach(t => {
+                          detailsHTML += `<div style="font-size: 11px; color: var(--fg-dim); padding-left: 8px; margin-bottom: 2px;">${t.project} → ${t.phase} → ${t.subtask} (${t.status})</div>`;
+                      });
+                      detailsHTML += `</div>`;
+                  });
+              }
+              detailsHTML += '</div>';
+          }
+          
+          const noteText = s.note || '';
+          const shortNote = noteText.length > 60 ? noteText.substring(0, 60) + '...' : noteText;
+          
+          item.style.cursor = 'pointer';
+          item.style.background = 'rgba(255,255,255,0.03)';
+          item.style.borderRadius = '12px';
+          item.style.padding = '16px';
+          item.style.marginBottom = '12px';
+          item.style.border = '1px solid rgba(255,255,255,0.05)';
+          
+          item.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                <div style="font-size:12px; color:var(--fg-dim); font-weight:600;">${projName[s.project] || s.project || '–'}</div>
+                <div style="font-size:11px; color:var(--fg-dim);">${s.start || '?'} → ${s.end || '?'} · <span style="color:var(--accent); font-weight:600;">${fmtH(s.duration_min || 0)}</span></div>
+            </div>
+            <div style="font-size:13px; color:var(--fg); line-height:1.4; margin-bottom:8px;">${shortNote}</div>
+            ${countersHTML}
+            ${tagsHTML}
+            ${tasksHTML}
+            ${detailsHTML}
+          `;
+          
+          item.addEventListener('click', () => {
+              const details = item.querySelector('.diary-details');
+              if (details) {
+                  details.style.display = details.style.display === 'none' ? 'block' : 'none';
+              }
+          });
+
           }
           
           let tasksHTML = '';
