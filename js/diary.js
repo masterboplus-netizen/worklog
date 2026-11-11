@@ -494,7 +494,8 @@ function renderDiary() {
     if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30; else CALENDAR_OFFSET++;
     CALENDAR_SELECTED_DAY = null; renderDiary();
   });
-}
+} // Закрываем renderDiary
+
 function formatDiaryDate(iso) {
   const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
   const days = ['вс','пн','вт','ср','чт','пт','сб'];
