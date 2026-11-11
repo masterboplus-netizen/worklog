@@ -380,7 +380,6 @@ function renderDiary() {
           }
           
           const noteText = s.note || '';
-          const shortNote = noteText.length > 80 ? noteText.substring(0, 80) + '...' : noteText;
           
           item.style.cursor = 'pointer';
           item.style.background = 'rgba(255,255,255,0.03)';
@@ -390,15 +389,12 @@ function renderDiary() {
           item.style.border = '1px solid rgba(255,255,255,0.05)';
           
           item.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-                <div style="font-size:12px; color:var(--fg-dim); font-weight:600;">${projName[s.project] || s.project || '–'}</div>
-                <div style="font-size:11px; color:var(--fg-dim);">${s.start || '?'} → ${s.end || '?'} · <span style="color:var(--accent); font-weight:600;">${fmtH(s.duration_min || 0)}</span></div>
-            </div>
-            <div style="font-size:13px; color:var(--fg); line-height:1.4; margin-bottom:8px;">${shortNote}</div>
+            <div style="font-size:12px; color:var(--fg-dim); margin-bottom:4px;">${s.start || '?'} → ${s.end || '?'} · <span style="color:var(--accent); font-weight:600;">${fmtH(s.duration_min || 0)}</span></div>
+            <div style="font-size:16px; color:var(--fg); font-weight:700; margin-bottom:8px;">${projName[s.project] || s.project || '–'}</div>
             ${countersHTML}
             ${tagsHTML}
             ${tasksHTML}
-            ${detailsHTML}
+            ${detailsHTML.replace('margin-top: 12px;', 'margin-top: 12px;').replace('<div style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">', `<div style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">${noteText ? `<div style="font-size: 13px; color: var(--fg-dim); margin-bottom: 12px;">${noteText}</div>` : ''}`)}
           `;
           
           item.addEventListener('click', () => {
