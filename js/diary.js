@@ -77,6 +77,7 @@ function mergeMidnightSessions(sessions) {
     let totalEvents = 0, totalScreens = 0, totalTasks = 0;
     let notes = [];
     const projects = new Set();
+    const allLinkedTasks = [];
 
     const intervals = group.map(s => ({ start: s.startMs, end: s.endMs }))
                             .sort((a, b) => a.start - b.start);
@@ -112,6 +113,14 @@ function mergeMidnightSessions(sessions) {
       totalTasks += s.tasks_done || 0;
       if (s.note) notes.push(s.note);
       if (s.project) projects.add(s.project);
+      if (s.linked_tasks) {
+          s.linked_tasks.forEach(lt => {
+              const key = lt.task + '|' + lt.subtask;
+              if (!allLinkedTasks.some(x => x.key === key)) {
+                  allLinkedTasks.push({ key, ...lt });
+              }
+          });
+      }
     }
 
     return {
@@ -124,7 +133,8 @@ function mergeMidnightSessions(sessions) {
       note: notes.join(' '),
       events: totalEvents,
       screens: totalScreens,
-      tasks_done: totalTasks
+      tasks_done: totalTasks,
+      linked_tasks: allLinkedTasks.map(t => ({ task: t.task, subtask: t.subtask, status: t.status }))
     };
   }
 }
@@ -321,6 +331,11 @@ function renderDiary() {
             ${countersHTML}
             <div class="diary-proj">${projName[s.project] || s.project || '–'}</div>
             <div class="diary-note">${s.note || ''}</div>
+            ${s.linked_tasks && s.linked_tasks.length ? `
+                <div class="diary-linked-tasks" style="margin-top: 8px; font-size: 12px; color: var(--fg-dim); border-top: 1px solid var(--border); padding-top: 6px;">
+                    ${s.linked_tasks.map(t => `<div>• ${t.task} → ${t.subtask} (${t.status})</div>`).join('')}
+                </div>
+            ` : ''}
           `;
           listDiv.appendChild(item);
       });

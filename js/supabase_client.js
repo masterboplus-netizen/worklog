@@ -30,17 +30,31 @@ async function loadDataFromSupabase() {
         if (e4) throw e4;
 
         // Приводим данные из базы к формату старого JSON
+        const tasksBySession = {};
+        (subtasks || []).forEach(st => {
+            if (st.session_id) {
+                if (!tasksBySession[st.session_id]) tasksBySession[st.session_id] = [];
+                const parentTask = (tasks || []).find(t => t.id === st.task_id);
+                tasksBySession[st.session_id].push({
+                    task: parentTask ? parentTask.name : 'Задача не найдена',
+                    subtask: st.name,
+                    status: st.status
+                });
+            }
+        });
+
         const mappedSessions = (sessions || []).map(s => ({
             id: s.id,
             date: s.date,
-            start: s.start_time,     // Переименовываем
-            end: s.end_time,         // Переименовываем
-            project: s.project_id,   // Переименовываем
+            start: s.start_time,
+            end: s.end_time,
+            project: s.project_id,
             duration_min: s.duration_min || 0,
             events: s.events || 0,
             screens: s.screens || 0,
             tasks_done: s.tasks_done || 0,
-            note: s.note || ''
+            note: s.note || '',
+            linked_tasks: tasksBySession[s.id] || []
         }));
 
         window.DATA = {
