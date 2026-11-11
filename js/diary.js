@@ -333,7 +333,16 @@ function renderDiary() {
             <div class="diary-note">${s.note || ''}</div>
             ${s.linked_tasks && s.linked_tasks.length ? `
                 <div class="diary-linked-tasks" style="margin-top: 8px; font-size: 12px; color: var(--fg-dim); border-top: 1px solid var(--border); padding-top: 6px;">
-                    ${s.linked_tasks.map(t => `<div>• <b>${t.project}</b> → ${t.phase} → ${t.task} → ${t.subtask} (${t.status})</div>`).join('')}
+                    ${Object.entries(s.linked_tasks.reduce((acc, t) => {
+                        if (!acc[t.project]) acc[t.project] = [];
+                        acc[t.project].push(t);
+                        return acc;
+                    }, {})).map(([proj, tasks]) => `
+                        <div style="margin-bottom: 4px;">
+                            <b style="color: var(--fg);">${proj}</b>
+                            ${tasks.map(t => `<div style="margin-left: 8px;">• ${t.phase} → ${t.task} → ${t.subtask} (${t.status})</div>`).join('')}
+                        </div>
+                    `).join('')}
                 </div>
             ` : ''}
           `;
