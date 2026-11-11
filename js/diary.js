@@ -349,37 +349,38 @@ function renderDiary() {
           
           let tasksHTML = '';
           if (Object.keys(uniqueTasks).length > 0) {
-              tasksHTML = '<div class="diary-tasks-list" style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; display: flex; flex-direction: column; gap: 8px;">';
+              tasksHTML = '<div class="diary-tasks-list" style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">';
               Object.entries(uniqueTasks).forEach(([taskName, taskDetails]) => {
-                  tasksHTML += `<div style="background: rgba(255,255,255,0.02); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">`;
-                  tasksHTML += `<div style="font-size: 13px; color: var(--fg); font-weight: 500;">${taskName}</div>`;
-                  tasksHTML += `</div>`;
+                  tasksHTML += `<div style="font-size: 13px; color: var(--fg); font-weight: 500; display: flex; align-items: center; gap: 6px;">• ${taskName}</div>`;
               });
               tasksHTML += '</div>';
           }
           
-          // Скрытая детализация (заметка + иерархия)
+          // Скрытая детализация (иерархия: Задача -> Фаза -> Эпик -> Подзадачи)
           let detailsHTML = '';
-          if (s.note || Object.keys(uniqueTasks).length > 0) {
-              detailsHTML = '<div class="diary-details" style="display: none; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">';
-              if (s.note) {
-                  detailsHTML += `<div style="font-size: 12px; color: var(--fg-dim); margin-bottom: 12px;">${s.note}</div>`;
-              }
-              if (Object.keys(uniqueTasks).length > 0) {
-                  Object.entries(uniqueTasks).forEach(([taskName, taskDetails]) => {
-                      detailsHTML += `<div style="margin-bottom: 8px;">`;
-                      detailsHTML += `<div style="font-size: 12px; color: var(--fg); font-weight: 600; margin-bottom: 4px;">${taskName}</div>`;
-                      taskDetails.forEach(t => {
-                          detailsHTML += `<div style="font-size: 11px; color: var(--fg-dim); padding-left: 8px; margin-bottom: 2px;">${t.project} → ${t.phase} → ${t.subtask} (${t.status})</div>`;
-                      });
-                      detailsHTML += `</div>`;
+          if (Object.keys(uniqueTasks).length > 0) {
+              detailsHTML = '<div class="diary-details" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out;">';
+              detailsHTML += '<div style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">';
+              Object.entries(uniqueTasks).forEach(([taskName, taskDetails]) => {
+                  const parentInfo = taskDetails[0];
+                  detailsHTML += `<div style="margin-bottom: 12px;">`;
+                  detailsHTML += `<div style="font-size: 14px; color: var(--fg); font-weight: 600; margin-bottom: 6px;">${taskName}</div>`;
+                  
+                  detailsHTML += `<div style="font-size: 12px; color: var(--fg-dim); margin-left: 8px; border-left: 1px solid var(--fg-dim); padding-left: 8px;">`;
+                  detailsHTML += `<div><b>Фаза:</b> ${parentInfo.phase}</div>`;
+                  detailsHTML += `<div><b>Эпик:</b> ${parentInfo.project}</div>`;
+                  detailsHTML += `<div style="margin-top: 4px;"><b>Подзадачи:</b></div>`;
+                  
+                  taskDetails.forEach(t => {
+                      detailsHTML += `<div style="font-size: 12px; color: var(--fg-dim); padding-left: 8px; margin-bottom: 2px;">- ${t.subtask} (${t.status})</div>`;
                   });
-              }
-              detailsHTML += '</div>';
+                  detailsHTML += `</div></div>`;
+              });
+              detailsHTML += '</div></div>';
           }
           
           const noteText = s.note || '';
-          const shortNote = noteText.length > 60 ? noteText.substring(0, 60) + '...' : noteText;
+          const shortNote = noteText.length > 80 ? noteText.substring(0, 80) + '...' : noteText;
           
           item.style.cursor = 'pointer';
           item.style.background = 'rgba(255,255,255,0.03)';
@@ -403,8 +404,13 @@ function renderDiary() {
           item.addEventListener('click', () => {
               const details = item.querySelector('.diary-details');
               if (details) {
-                  details.style.display = details.style.display === 'none' ? 'block' : 'none';
+                  if (details.style.maxHeight === '0px' || details.style.maxHeight === '') {
+                      details.style.maxHeight = details.scrollHeight + 'px';
+                  } else {
+                      details.style.maxHeight = '0px';
+                  }
               }
+          });
           });
 
           listDiv.appendChild(item);
