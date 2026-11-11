@@ -337,30 +337,65 @@ function renderDiary() {
           }
 
           const tagsHTML = s.tags && s.tags.length ? `<div style="margin-top:4px; font-size:11px; color:var(--accent);">${s.tags.join(' ')}</div>` : '';
-          const tasksHTML = s.linked_tasks && s.linked_tasks.length ? `
-                <div class="diary-linked-tasks" style="margin-top: 8px; font-size: 12px; color: var(--fg-dim); border-top: 1px solid var(--border); padding-top: 6px; display:none;">
-                    ${Object.entries(s.linked_tasks.reduce((acc, t) => {
-                        if (!acc[t.project]) acc[t.project] = [];
-                        acc[t.project].push(t);
-                        return acc;
-                    }, {})).map(([proj, tasks]) => `
-                        <div style="margin-bottom: 4px;">
-                            <b style="color: var(--fg);">${proj}</b>
-                            ${tasks.map(t => `<div style="margin-left: 8px;">• ${t.phase} → ${t.task} → ${t.subtask} (${t.status})</div>`).join('')}
-                        </div>
-                    `).join('')}
-                </div>
-            ` : '';
+          // Формируем список задач (плоский) и иерархию для раскрытия
+          const uniqueTasks = {};
+          if (s.linked_tasks) {
+              s.linked_tasks.forEach(t => {
+                  if (!uniqueTasks[t.task]) uniqueTasks[t.task] = [];
+                  uniqueTasks[t.task].push(t);
+              });
+          }
           
-          item.style.cursor = 'pointer';
+          let tasksHTML = '';
+          if (Object.keys(uniqueTasks).length > 0) {
+              tasksHTML = '<div class="diary-tasks-list" style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; display: flex; flex-direction: column; gap: 8px;">';
+              Object.entries(uniqueTasks).forEach(([taskName, taskDetails]) => {
+                  tasksHTML += `<div class="task-item" style="cursor: pointer; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">`;
+                  tasksHTML += `<div style="font-size: 13px; color: var(--fg); font-weight: 500;">${taskName}</div>`;
+                  // Скрытая иерархия
+                  tasksHTML += `<div class="task-hierarchy" style="display: none; margin-top: 8px; padding-left: 8px; border-left: 2px solid var(--accent);">`;
+                  taskDetails.forEach(t => {
+                      tasksHTML += `<div style="font-size: 11px; color: var(--fg-dim); margin-bottom: 4px;">`;
+                      tasksHTML += `<span style="color: var(--accent);">${t.project}</span> → ${t.phase} → ${t.subtask} (${t.status})`;
+                      tasksHTML += `</div>`;
+                  });
+                  tasksHTML += `</div></div>`;
+              });
+              tasksHTML += '</div>';
+          }
+          
+          const noteText = s.note || '';
+          const shortNote = noteText.length > 100 ? noteText.substring(0, 100) + '...' : noteText;
+          
+          item.style.background = 'rgba(255,255,255,0.03)';
+          item.style.borderRadius = '12px';
+          item.style.padding = '16px';
+          item.style.marginBottom = '12px';
+          item.style.border = '1px solid rgba(255,255,255,0.05)';
+          
           item.innerHTML = `
-            <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                <div style="font-size:12px; color:var(--fg-dim); font-weight:600;">${projName[s.project] || s.project || '–'}</div>
+                <div style="font-size:11px; color:var(--fg-dim);">${s.start || '?'} → ${s.end || '?'} · <span style="color:var(--accent); font-weight:600;">${fmtH(s.duration_min || 0)}</span></div>
+            </div>
+            <div style="font-size:13px; color:var(--fg); line-height:1.4; margin-bottom:8px;">${shortNote}</div>
             ${countersHTML}
-            <div class="diary-proj">${projName[s.project] || s.project || '–'}</div>
-            <div class="diary-note">${s.note || ''}</div>
             ${tagsHTML}
             ${tasksHTML}
           `;
+          
+          // Обработчик клика по задачам для раскрытия иерархии
+          const taskItems = item.querySelectorAll('.task-item');
+          taskItems.forEach(ti => {
+              ti.addEventListener('click', (e) => {
+                  e.stopPropagation(); // Чтобы не срабатывал клик по всей карточке, если он есть
+                  const hierarchy = ti.querySelector('.task-hierarchy');
+                  if (hierarchy) {
+                      hierarchy.style.display = hierarchy.style.display === 'none' ? 'block' : 'none';
+                  }
+              });
+          });
+
           
           item.addEventListener('click', () => {
               const tasksDiv = item.querySelector('.diary-linked-tasks');
