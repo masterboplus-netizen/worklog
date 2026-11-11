@@ -169,10 +169,8 @@ function renderDiary() {
   const viewCapsule = document.createElement('div');
   viewCapsule.className = 'segmented-control';
   viewCapsule.innerHTML = `
-    <button class="${CALENDAR_VIEW === 'week' ? 'active' : ''}" data-view="week">Неделя</button>
     <button class="${CALENDAR_VIEW === 'month' ? 'active' : ''}" data-view="month">Месяц</button>
     <button class="${CALENDAR_VIEW === 'year' ? 'active' : ''}" data-view="year">Год</button>
-    <button class="${CALENDAR_VIEW === '30days' ? 'active' : ''}" data-view="30days">30 дней</button>
   `;
   c.appendChild(viewCapsule);
 
@@ -272,15 +270,27 @@ function renderDiary() {
   }
   c.appendChild(grid);
 
-  // 4. КАПСУЛА РЕЖИМА
+  // 4. НИЖНЯЯ СТРОКА (Список + Сессии/24ч)
+  const bottomRow = document.createElement('div');
+  bottomRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-top: 24px;';
+  
+  const listBtn = document.createElement('button');
+  listBtn.className = 'segmented-control';
+  listBtn.style.cssText = 'padding: 6px 12px; font-size: 12px; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--fg); cursor: pointer;';
+  listBtn.innerHTML = 'Список';
+  listBtn.onclick = () => { alert('Экран списка сессий в разработке'); };
+  
   const modeCapsule = document.createElement('div');
   modeCapsule.className = 'segmented-control';
-  modeCapsule.style.marginTop = '24px';
+  modeCapsule.style.cssText = 'margin: 0; transform: scale(0.8); transform-origin: right center;';
   modeCapsule.innerHTML = `
     <button class="${DIARY_MODE === 'sessions' ? 'active' : ''}" data-mode="sessions">Сессии</button>
     <button class="${DIARY_MODE === '24h' ? 'active' : ''}" data-mode="24h">24ч</button>
   `;
-  c.appendChild(modeCapsule);
+  
+  bottomRow.appendChild(listBtn);
+  bottomRow.appendChild(modeCapsule);
+  c.appendChild(bottomRow);
 
   // 5. СПИСОК
   const listDiv = document.createElement('div');
@@ -326,13 +336,9 @@ function renderDiary() {
               countersHTML += '</div>';
           }
 
-          item.innerHTML = `
-            <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
-            ${countersHTML}
-            <div class="diary-proj">${projName[s.project] || s.project || '–'}</div>
-            <div class="diary-note">${s.note || ''}</div>
-            ${s.linked_tasks && s.linked_tasks.length ? `
-                <div class="diary-linked-tasks" style="margin-top: 8px; font-size: 12px; color: var(--fg-dim); border-top: 1px solid var(--border); padding-top: 6px;">
+          const tagsHTML = s.tags && s.tags.length ? `<div style="margin-top:4px; font-size:11px; color:var(--accent);">${s.tags.join(' ')}</div>` : '';
+          const tasksHTML = s.linked_tasks && s.linked_tasks.length ? `
+                <div class="diary-linked-tasks" style="margin-top: 8px; font-size: 12px; color: var(--fg-dim); border-top: 1px solid var(--border); padding-top: 6px; display:none;">
                     ${Object.entries(s.linked_tasks.reduce((acc, t) => {
                         if (!acc[t.project]) acc[t.project] = [];
                         acc[t.project].push(t);
@@ -344,8 +350,25 @@ function renderDiary() {
                         </div>
                     `).join('')}
                 </div>
-            ` : ''}
+            ` : '';
+          
+          item.style.cursor = 'pointer';
+          item.innerHTML = `
+            <div class="diary-time">${s.start || '?'} → ${s.end || '?'} · <span class="diary-dur">${fmtH(s.duration_min || 0)}</span></div>
+            ${countersHTML}
+            <div class="diary-proj">${projName[s.project] || s.project || '–'}</div>
+            <div class="diary-note">${s.note || ''}</div>
+            ${tagsHTML}
+            ${tasksHTML}
           `;
+          
+          item.addEventListener('click', () => {
+              const tasksDiv = item.querySelector('.diary-linked-tasks');
+              if (tasksDiv) {
+                  tasksDiv.style.display = tasksDiv.style.display === 'none' ? 'block' : 'none';
+              }
+          });
+          
           listDiv.appendChild(item);
       });
   }
