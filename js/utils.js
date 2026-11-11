@@ -524,7 +524,7 @@ function renderActivityPageV2() {
     // Ось Y
     const yAxis = document.createElement('div');
     yAxis.id = 'tl-y-axis';
-    yAxis.style.cssText = 'width: 40px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 30px; padding-top: 0;';
+    yAxis.style.cssText = 'width: 40px; position: relative; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: 100%; padding-bottom: 30px; padding-top: 0;';
     
     // Лента
     const scrollContainer = document.createElement('div');
@@ -631,14 +631,22 @@ function renderActivityPageV2() {
         }
         if (maxVal === 0) maxVal = CHART_STATE_V2.metric === 'duration' ? 720 : 10;
 
-        // Отрисовка Оси Y
+        // Отрисовка Оси Y (абсолютное позиционирование)
         let yHTML = '';
         const step = maxVal / 4;
-        for (let i = 4; i >= 0; i--) {
-            const val = Math.round(step * i);
-            const lbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(val / 60) + 'ч') : String(val);
-            yHTML += '<div>' + lbl + '</div>';
-        }
+        // Верхняя метка (100%)
+        const topVal = Math.round(step * 4);
+        const topLbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(topVal / 60) + 'ч') : String(topVal);
+        yHTML += `<div style="position: absolute; top: 0; right: 8px; transform: translateY(0);">${topLbl}</div>`;
+        
+        // Центральная метка (50%)
+        const midVal = Math.round(step * 2);
+        const midLbl = CHART_STATE_V2.metric === 'duration' ? (Math.floor(midVal / 60) + 'ч') : String(midVal);
+        yHTML += `<div style="position: absolute; top: 50%; right: 8px; transform: translateY(-50%);">${midLbl}</div>`;
+        
+        // Нижняя метка (0%)
+        yHTML += `<div style="position: absolute; bottom: 30px; right: 8px; transform: translateY(0);">0</div>`;
+        
         yAxis.innerHTML = yHTML;
 
         // Отрисовка столбиков и легенды
