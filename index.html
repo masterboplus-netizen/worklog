@@ -213,11 +213,13 @@ window.onerror = function(msg, url, line, col, error) {
 </script>
 
 <script type="module">
-  import { initFloatingMenu } from "./js/widget_capsule.js";
   document.addEventListener("DOMContentLoaded", initFloatingMenu);
 </script>
 <script type="module">
-  import { initFloatingMenu } from "./js/widget_capsule.js";
+  document.addEventListener("DOMContentLoaded", initFloatingMenu);
+</script>
+<script type="module">
+  import { initFloatingMenu } from "./js/widget_capsule.js?v=255";
   document.addEventListener("DOMContentLoaded", initFloatingMenu);
 </script>
 </body>
