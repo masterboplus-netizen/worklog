@@ -133,10 +133,11 @@ function renderActivityPageV2() {
 
         let maxVal = 0;
         const uniqueSessions = [];
-        const seenIds = new Set();
+        const seenTimes = new Set();
         for (const sess of window.DATA.sessions || []) {
-            if (!seenIds.has(sess.id)) {
-                seenIds.add(sess.id);
+            const key = sess.date + '|' + sess.start + '|' + sess.end;
+            if (!seenTimes.has(key)) {
+                seenTimes.add(key);
                 uniqueSessions.push(sess);
             }
         }
