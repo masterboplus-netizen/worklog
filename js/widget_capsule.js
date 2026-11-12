@@ -14,7 +14,6 @@ export function initFloatingMenu() {
   capsule.id = 'floating-capsule';
   capsule.style.cssText = 'position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; margin-left: 24px;';
 
-  // СТРЕЛКА ВНУТРИ КАПСУЛЫ (как в MasterBoss)
   const toggleBtn = document.createElement('button');
   toggleBtn.id = 'toggle-capsule';
   toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s ease;"><path d="M15 18l-6-6 6-6"/></svg>';
@@ -39,20 +38,19 @@ export function initFloatingMenu() {
 
   let isCollapsed = false;
   function toggleCollapse(force = false) {
-    const btn = document.getElementById('toggle-capsule');
     isCollapsed = force ? true : !isCollapsed;
     if (isCollapsed) {
       capsule.style.transform = 'translateX(100%)';
-      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'; // Стрелка смотрит влево (открыть)
+      document.getElementById('toggle-icon').style.transform = 'rotate(180deg)'; // Стрелка влево (свернуть)
     } else {
       capsule.style.transform = 'translateX(0)';
-      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>'; // Стрелка смотрит вправо (свернуть)
+      document.getElementById('toggle-icon').style.transform = 'rotate(0deg)'; // Стрелка вправо (открыть)
     }
   }
 
   toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleCollapse(); });
 
-  // === СЕЙФ ===
+  // === СКРЫТИЕ НА СЕЙФЕ ===
   const safeScreen = document.getElementById('scroll-pin-screen');
   if (safeScreen) {
     const update = () => {
