@@ -8,21 +8,17 @@ export const CAPSULE_ITEMS = [
 export function initFloatingMenu() {
   const wrapper = document.createElement('div');
   wrapper.id = 'floating-capsule-wrapper';
-  // Прижимаем к правому краю
   wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
 
   const capsule = document.createElement('div');
   capsule.id = 'floating-capsule';
-  // margin-left: 24px — оставляем место для стрелки слева
   capsule.style.cssText = 'position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; margin-left: 24px;';
 
-  // Стрелка (слева от капсулы)
   const toggleBtn = document.createElement('button');
   toggleBtn.id = 'toggle-capsule';
   toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
   toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
 
-  // Кнопки меню
   CAPSULE_ITEMS.forEach(item => {
     const btn = document.createElement('div');
     btn.className = 'nav-item';
@@ -45,7 +41,6 @@ export function initFloatingMenu() {
   function toggleCollapse(force = false) {
     isCollapsed = force ? true : !isCollapsed;
     if (isCollapsed) {
-      // Капсула уезжает вправо (за экран), стрелка (absolute) остается на месте
       capsule.style.transform = 'translateX(100%)';
       document.getElementById('toggle-icon').style.transform = 'rotate(0deg)';
     } else {
@@ -55,4 +50,23 @@ export function initFloatingMenu() {
   }
 
   toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleCollapse(); });
+
+  // === СКРЫТИЕ НА ЭКРАНЕ СЕЙФА ===
+  // Проверяем при загрузке
+  if (document.getElementById('scroll-pin-screen') && !document.getElementById('scroll-pin-screen').classList.contains('hidden')) {
+    wrapper.style.display = 'none';
+  }
+
+  // Следим за появлением сейфа (через MutationObserver, но только для этого)
+  const observer = new MutationObserver(() => {
+    const safeScreen = document.getElementById('scroll-pin-screen');
+    if (safeScreen) {
+      if (!safeScreen.classList.contains('hidden')) {
+        wrapper.style.display = 'none';
+      } else {
+        wrapper.style.display = 'flex';
+      }
+    }
+  });
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'], subtree: true });
 }
