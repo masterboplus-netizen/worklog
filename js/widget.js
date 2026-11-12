@@ -11,7 +11,7 @@ const CAPSULE_ITEMS = [
 function setupWidget() {
     const wrapper = document.createElement('div');
     wrapper.id = 'floating-capsule-wrapper';
-    wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
+    wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: stretch;';
 
     const capsule = document.createElement('div');
     capsule.id = 'floating-capsule';
@@ -31,11 +31,11 @@ function setupWidget() {
         capsule.appendChild(btn);
     });
 
-    // Стрелка СБОКУ от капсулы (справа), как в bo-web
+    // Стрелка (язычок) — часть обертки, но визуально прилегает к капсуле
     const toggleBtn = document.createElement('button');
     toggleBtn.id = 'toggle-capsule';
     toggleBtn.innerHTML = '<svg id="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
-    toggleBtn.style.cssText = 'width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; position: absolute; right: 0;';
+    toggleBtn.style.cssText = 'width: 24px; background: var(--bg2); border: 1px solid var(--border); border-left: none; border-radius: 0 8px 8px 0; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
 
     wrapper.appendChild(capsule);
     wrapper.appendChild(toggleBtn);
@@ -47,12 +47,9 @@ function setupWidget() {
         if (isCollapsed) {
             capsule.style.transform = 'translateX(100%)';
             document.getElementById('toggle-icon').style.transform = 'rotate(180deg)';
-            wrapper.style.pointerEvents = 'none';
-            toggleBtn.style.pointerEvents = 'auto';
         } else {
             capsule.style.transform = 'translateX(0)';
             document.getElementById('toggle-icon').style.transform = 'rotate(0deg)';
-            wrapper.style.pointerEvents = 'auto';
         }
     }
 
