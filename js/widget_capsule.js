@@ -39,6 +39,7 @@ export function initFloatingMenu() {
 
   let isCollapsed = false;
   function toggleCollapse(force = false) {
+    const btn = document.getElementById('toggle-capsule');
     isCollapsed = force ? true : !isCollapsed;
     if (isCollapsed) {
       capsule.style.transform = 'translateX(100%)';
