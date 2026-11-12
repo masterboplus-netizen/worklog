@@ -28,7 +28,6 @@ export function initFloatingMenu() {
     btn.title = item.title;
     btn.addEventListener('click', () => {
       if (typeof window.switchTab === 'function') window.switchTab(item.id);
-      toggleCollapse(true);
     });
     capsule.appendChild(btn);
   });
