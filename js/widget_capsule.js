@@ -51,35 +51,23 @@ export function initFloatingMenu() {
 
   toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleCollapse(); });
 
-  // === СКРЫТИЕ НА ЭКРАНЕ СЕЙФА ===
-  // Проверяем при загрузке
-  if (document.getElementById('scroll-pin-screen') && !document.getElementById('scroll-pin-screen').classList.contains('hidden')) {
-    wrapper.style.display = 'none';
+  // === СКРЫТИЕ НА СЕЙФЕ ===
+  // Смотрим на видимость дашборда, а не сейфа
+  const dashboard = document.getElementById('dashboard');
+  
+  function updateVisibility() {
+    if (!dashboard) return;
+    // Если дашборд виден (display не none), значит мы не на сейфе
+    if (dashboard.style.display === 'none') {
+      wrapper.style.display = 'none';
+    } else {
+      wrapper.style.display = 'flex';
+    }
   }
 
-  // Следим за появлением сейфа (через MutationObserver, но только для этого)
-  const observer = new MutationObserver(() => {
-    const safeScreen = document.getElementById('scroll-pin-screen');
-    if (safeScreen) {
-      if (!safeScreen.classList.contains('hidden')) {
-        wrapper.style.display = 'none';
-      } else {
-        wrapper.style.display = 'flex';
-      }
-    }
-  });
-  observer.observe(document.body, { attributes: true, attributeFilter: ['class'], subtree: true });
-  // === СКРЫТИЕ НА СЕЙФЕ ===
-  const safeScreen = document.getElementById("scroll-pin-screen");
-  if (safeScreen) {
-    const update = () => {
-      if (safeScreen.style.display === "block") {
-        wrapper.style.display = "none";
-      } else {
-        wrapper.style.display = "flex";
-      }
-    };
-    update();
-    new MutationObserver(update).observe(safeScreen, { attributes: true, attributeFilter: ["style"] });
+  // Проверяем сразу и подписываемся на изменения
+  updateVisibility();
+  if (dashboard) {
+    new MutationObserver(updateVisibility).observe(dashboard, { attributes: true, attributeFilter: ['style', 'class'] });
   }
 }
