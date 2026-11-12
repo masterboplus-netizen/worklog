@@ -48,10 +48,10 @@ function setupWidget() {
         isCollapsed = force ? true : !isCollapsed;
         if (isCollapsed) {
             capsule.style.transform = 'translateX(100%)';
-            document.getElementById('toggle-icon').style.transform = 'rotate(180deg)';
+            document.getElementById('toggle-icon').style.transform = 'rotate(0deg)';
         } else {
             capsule.style.transform = 'translateX(0)';
-            document.getElementById('toggle-icon').style.transform = 'rotate(0deg)';
+            document.getElementById('toggle-icon').style.transform = 'rotate(180deg)';
         }
     }
 
