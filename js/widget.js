@@ -1,4 +1,4 @@
-// ТОЧНАЯ КОПИЯ MASTERBOSS ДЛЯ ХЕРАБОРИНЫ
+// ВИДЖЕТ-КАПСУЛА (ФИНАЛ, строго по MasterBoss)
 
 const CAPSULE_ITEMS = [
     { id: 'dashboard', title: 'Дашборд', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>' },
@@ -29,9 +29,9 @@ function renderCapsule() {
     if (cfg.enabled) {
       const item = CAPSULE_ITEMS.find(i => i.id === cfg.id);
       if (item) {
-        html += `<div class="nav-item" id="${item.id}" onclick="switchTab('${item.id}')" style="display: flex; align-items: center; justify-content: center; width: auto; padding: 6px 8px; cursor: pointer; gap: 8px;">
+        html += `<div class="nav-item" id="${item.id}" onclick="switchTab('${item.id}')" style="display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; flex-direction: column; cursor: pointer; gap: 2px; color: var(--fg);">
           ${item.icon}
-          <span style="font-size: 11px;">${item.title}</span>
+          <span style="font-size:9px; text-align:center; line-height:1;">${item.title}</span>
         </div>`;
       }
     }
@@ -40,85 +40,39 @@ function renderCapsule() {
 }
 
 function initFloatingMenu() {
-  const wrapper = document.getElementById('floating-capsule-wrapper');
+  // Проверяем, есть ли уже контейнер, если нет — создаем
+  let wrapper = document.getElementById('floating-capsule-wrapper');
+  if (!wrapper) {
+    wrapper = document.createElement('div');
+    wrapper.id = 'floating-capsule-wrapper';
+    wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
+
+    wrapper.innerHTML = `
+      <div id="floating-capsule" style="display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 4px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease;">
+        <div id="capsule-dynamic-items" style="display: flex; flex-direction: column; gap: 8px;"></div>
+      </div>
+      <button id="toggle-capsule" style="width: 20px; height: 60px; background: var(--bg2); border: 1px solid var(--border); border-left: none; border-radius: 0 8px 8px 0; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s;"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    `;
+    document.body.appendChild(wrapper);
+  }
+
   const capsule = document.getElementById('floating-capsule');
   const toggleBtn = document.getElementById('toggle-capsule');
   const toggleIcon = document.getElementById('toggle-icon');
   const container = document.getElementById('capsule-dynamic-items');
 
-  if (!wrapper || !capsule || !toggleBtn || !container) {
-      // Если HTML еще не вставлен, создаем его
-      return;
-  }
-
   renderCapsule();
 
-  if (typeof Sortable !== 'undefined') {
-    new Sortable(container, {
-      animation: 200,
-      delay: 1500,
-      delayOnTouchOnly: true,
-      ghostClass: 'sortable-ghost',
-      dragClass: 'sortable-drag',
-      onChoose: function(evt) {
-        document.body.style.overflow = 'hidden';
-        capsule.classList.add('capsule-shaking');
-        if (navigator.vibrate) navigator.vibrate(50);
-        evt.item.style.transform = 'scale(1.15)';
-        evt.item.style.zIndex = '1000';
-        evt.item.style.boxShadow = '0 8px 24px rgba(0,0,0,0.6)';
-        evt.item.style.borderRadius = '12px';
-        evt.item.style.background = 'var(--bg2)';
-      },
-      onUnchoose: function(evt) {
-        if (!evt.item.classList.contains('sortable-drag')) {
-          capsule.classList.remove('capsule-shaking');
-        }
-      },
-      onEnd: function(evt) {
-        document.body.style.overflow = '';
-        capsule.classList.remove('capsule-shaking');
-        setTimeout(() => {
-          container.querySelectorAll('.nav-item').forEach(el => {
-            el.style.transform = '';
-            el.style.zIndex = '';
-            el.style.boxShadow = '';
-            el.style.borderRadius = '';
-            el.style.background = '';
-            el.style.opacity = '';
-            el.classList.remove('sortable-ghost', 'sortable-drag', 'sortable-chosen', 'sortable-fallback');
-          });
-        }, 50);
-        const newOrder = [];
-        container.querySelectorAll('.nav-item').forEach(el => {
-          newOrder.push({ id: el.id, enabled: true });
-        });
-        const savedConfig = JSON.parse(localStorage.getItem('widget_config')) || [];
-        savedConfig.forEach(c => {
-          if (!newOrder.find(n => n.id === c.id) && !c.enabled) {
-            newOrder.push({ id: c.id, enabled: false });
-          }
-        });
-        localStorage.setItem('widget_config', JSON.stringify(newOrder));
-      }
-    });
-  }
-
-  document.addEventListener('click', (e) => {
-    if (capsule.classList.contains('capsule-shaking') && !e.target.closest('#floating-capsule')) {
-      capsule.classList.remove('capsule-shaking');
-    }
-  });
-
+  // Свайп/перетаскивание капсулы
   let isDragging = false;
   let startY = 0;
   let currentTop = wrapper.getBoundingClientRect().top;
   let isCollapsed = false;
 
   wrapper.addEventListener('touchstart', (e) => {
-    if (capsule.classList.contains('capsule-shaking')) return;
-    if (e.target.closest('.nav-item')) return;
-    if (e.target.closest('#toggle-capsule')) return;
+    if (e.target.closest('.nav-item') || e.target.closest('#toggle-capsule')) return;
     isDragging = true;
     startY = e.touches[0].clientY;
     currentTop = wrapper.getBoundingClientRect().top;
@@ -126,7 +80,7 @@ function initFloatingMenu() {
   }, { passive: false });
 
   wrapper.addEventListener('touchmove', (e) => {
-    if (!isDragging || capsule.classList.contains('capsule-shaking')) return;
+    if (!isDragging) return;
     e.preventDefault();
     const deltaY = e.touches[0].clientY - startY;
     const newTop = currentTop + deltaY;
@@ -143,50 +97,23 @@ function initFloatingMenu() {
     }
   });
 
-  wrapper.addEventListener('mousedown', (e) => {
-    if (capsule.classList.contains('capsule-shaking')) return;
-    if (e.target.closest('.nav-item')) return;
-    if (e.target.closest('#toggle-capsule')) return;
-    isDragging = true;
-    startY = e.clientY;
-    currentTop = wrapper.getBoundingClientRect().top;
-    wrapper.style.transition = 'none';
-  });
-
-  window.addEventListener('mousemove', (e) => {
-    if (!isDragging || capsule.classList.contains('capsule-shaking')) return;
-    const deltaY = e.clientY - startY;
-    const newTop = currentTop + deltaY;
-    if (newTop > 70 && newTop < window.innerHeight - wrapper.offsetHeight - 90) {
-      wrapper.style.bottom = 'auto';
-      wrapper.style.top = newTop + 'px';
-    }
-  });
-
-  window.addEventListener('mouseup', () => {
-    if (isDragging) {
-      isDragging = false;
-      wrapper.style.transition = 'transform 0.3s ease';
-    }
-  });
-
   function toggleCollapse() {
     isCollapsed = !isCollapsed;
     if (isCollapsed) {
+      // Прячем капсулу, оставляем только язычок
       capsule.style.transform = 'translateX(100%)';
-      toggleIcon.style.transform = 'rotate(180deg)';
-      wrapper.style.pointerEvents = 'none';
-      toggleBtn.style.pointerEvents = 'auto';
+      capsule.style.position = 'absolute';
+      capsule.style.right = '20px'; // Сдвигаем влево, чтобы освободить место стрелке
+      toggleIcon.style.transform = 'rotate(180deg)'; // Крутим вправо (назад)
     } else {
       capsule.style.transform = 'translateX(0)';
-      toggleIcon.style.transform = 'rotate(0deg)';
-      wrapper.style.pointerEvents = 'auto';
+      capsule.style.position = 'relative';
+      capsule.style.right = '0';
+      toggleIcon.style.transform = 'rotate(0deg)'; // Крутим влево (открыто)
     }
   }
 
   toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); e.preventDefault(); toggleCollapse(); });
-  toggleBtn.addEventListener('touchend', (e) => { e.preventDefault(); toggleCollapse(); });
 }
 
-// Запуск после загрузки DOM
 document.addEventListener('DOMContentLoaded', initFloatingMenu);
