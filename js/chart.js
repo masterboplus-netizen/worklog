@@ -132,9 +132,10 @@ function renderActivityPageV2() {
         }
 
         let maxVal = 0;
+        const mergedSessions = mergeMidnightSessions(window.DATA.sessions || []);
         for (let i = startIndex; i <= endIndex && i < allDates.length; i++) {
             let v = 0;
-            for (const sess of (window.DATA.sessions || [])) {
+            for (const sess of mergedSessions) {
                 if (sess.date === allDates[i]) {
                     if (CHART_STATE.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE.metric === 'events') v += sess.events || 0;
