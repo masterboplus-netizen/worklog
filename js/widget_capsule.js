@@ -14,9 +14,10 @@ export function initFloatingMenu() {
   capsule.id = 'floating-capsule';
   capsule.style.cssText = 'position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; margin-left: 24px;';
 
+  // Стрелка ВНУТРИ капсулы
   const toggleBtn = document.createElement('button');
   toggleBtn.id = 'toggle-capsule';
-  toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
+  toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s;"><path d="M15 18l-6-6 6-6"/></svg>';
   toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
 
   CAPSULE_ITEMS.forEach(item => {
@@ -28,6 +29,7 @@ export function initFloatingMenu() {
     btn.title = item.title;
     btn.addEventListener('click', () => {
       if (typeof window.switchTab === 'function') window.switchTab(item.id);
+      // Убрал toggleCollapse(true), чтобы капсула не сворачивалась при переходе
     });
     capsule.appendChild(btn);
   });
@@ -41,32 +43,22 @@ export function initFloatingMenu() {
     isCollapsed = force ? true : !isCollapsed;
     if (isCollapsed) {
       capsule.style.transform = 'translateX(100%)';
-      document.getElementById('toggle-icon').style.transform = 'rotate(180deg)';
+      document.getElementById('toggle-icon').style.transform = 'rotate(180deg)'; // Стрелка смотрит влево (свернуть)
     } else {
       capsule.style.transform = 'translateX(0)';
-      document.getElementById('toggle-icon').style.transform = 'rotate(0deg)';
+      document.getElementById('toggle-icon').style.transform = 'rotate(0deg)'; // Стрелка смотрит вправо (открыть)
     }
   }
 
   toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleCollapse(); });
 
-  // === СКРЫТИЕ НА СЕЙФЕ ===
-  // Смотрим на видимость дашборда, а не сейфа
-  const dashboard = document.getElementById('dashboard');
-  
-  function updateVisibility() {
-    if (!dashboard) return;
-    // Если дашборд виден (display не none), значит мы не на сейфе
-    if (dashboard.style.display === 'none') {
-      wrapper.style.display = 'none';
-    } else {
-      wrapper.style.display = 'flex';
-    }
-  }
-
-  // Проверяем сразу и подписываемся на изменения
-  updateVisibility();
-  if (dashboard) {
-    new MutationObserver(updateVisibility).observe(dashboard, { attributes: true, attributeFilter: ['style', 'class'] });
+  // === ЛОГИКА СЕЙФА ===
+  const safeScreen = document.getElementById('scroll-pin-screen');
+  if (safeScreen) {
+    const update = () => {
+      wrapper.style.display = (safeScreen.style.display === 'block') ? 'none' : 'flex';
+    };
+    update();
+    new MutationObserver(update).observe(safeScreen, { attributes: true, attributeFilter: ['style'] });
   }
 }
