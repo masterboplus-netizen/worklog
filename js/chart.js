@@ -114,6 +114,17 @@ function renderActivityPageV2() {
         iterDate.setDate(iterDate.getDate() + 1);
     }
 
+    // Объявляем uniqueSessions на уровне функции, чтобы она была доступна везде
+    const uniqueSessions = [];
+    const seenTimes = new Set();
+    for (const sess of window.DATA.sessions || []) {
+        const key = sess.date + '|' + sess.start + '|' + sess.end;
+        if (!seenTimes.has(key)) {
+            seenTimes.add(key);
+            uniqueSessions.push(sess);
+        }
+    }
+
     // 5. ОБНОВЛЕНИЕ (ОСЬ Y - 3 ДЕЛЕНИЯ)
     const updateChart = () => {
         const scrollLeft = scrollContainer.scrollLeft;
@@ -129,16 +140,6 @@ function renderActivityPageV2() {
             yearSpan.textContent = d.getFullYear();
             CHART_STATE.currentMonth = d.getMonth();
             CHART_STATE.currentYear = d.getFullYear();
-        }
-
-        const uniqueSessions = [];
-        const seenTimes = new Set();
-        for (const sess of window.DATA.sessions || []) {
-            const key = sess.date + '|' + sess.start + '|' + sess.end;
-            if (!seenTimes.has(key)) {
-                seenTimes.add(key);
-                uniqueSessions.push(sess);
-            }
         }
 
         let maxVal = 0;
