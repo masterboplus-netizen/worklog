@@ -208,5 +208,29 @@ window.onerror = function(msg, url, line, col, error) {
 
     </div>
 </div>
+<div id="floating-capsule-wrapper" style="position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;">
+    <div id="floating-capsule" style="display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease;">
+        <div class="nav-item" data-tab="dashboard" onclick="switchTab('dashboard')" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; color: var(--fg);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+            <span style="font-size:9px;">Дашборд</span>
+        </div>
+        <div class="nav-item" data-tab="diary" onclick="switchTab('diary')" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; color: var(--fg);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <span style="font-size:9px;">Календарь</span>
+        </div>
+        <div class="nav-item" data-tab="projects" onclick="switchTab('projects')" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; color: var(--fg);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18v13H3z"/><path d="M3 7l2-4h14l2 4"/><path d="M12 11v6"/></svg>
+            <span style="font-size:9px;">Проекты</span>
+        </div>
+        <div class="nav-item" data-tab="activity" onclick="switchTab('activity')" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; color: var(--fg);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+            <span style="font-size:9px;">График</span>
+        </div>
+    </div>
+    <button id="toggle-capsule" style="width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s;"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+</div>
+  <script src="js/widget2.js?v=227"></script>
 </body>
 </html>
