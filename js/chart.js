@@ -131,7 +131,6 @@ function renderActivityPageV2() {
             CHART_STATE.currentYear = d.getFullYear();
         }
 
-        let maxVal = 0;
         const uniqueSessions = [];
         const seenTimes = new Set();
         for (const sess of window.DATA.sessions || []) {
@@ -141,6 +140,8 @@ function renderActivityPageV2() {
                 uniqueSessions.push(sess);
             }
         }
+
+        let maxVal = 0;
         for (let i = startIndex; i <= endIndex && i < allDates.length; i++) {
             let v = 0;
             for (const sess of uniqueSessions) {
