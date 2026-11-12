@@ -39,13 +39,15 @@ export function initFloatingMenu() {
   let isCollapsed = false;
   function toggleCollapse(force = false) {
     isCollapsed = force ? true : !isCollapsed;
-    const icon = document.getElementById('toggle-icon');
+    const btn = document.getElementById('toggle-capsule');
     if (isCollapsed) {
       capsule.style.transform = 'translateX(100%)';
-      if (icon) icon.innerHTML = '<path d="M15 18l-6-6 6-6"/>';
+      // Закрыта: показываем стрелку влево <
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
     } else {
       capsule.style.transform = 'translateX(0)';
-      if (icon) icon.innerHTML = '<path d="M9 18l6-6-6-6"/>';
+      // Открыта: показываем стрелку вправо >
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
     }
   }
 
