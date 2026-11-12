@@ -1,4 +1,4 @@
-// МОДУЛЬ: ВИДЖЕТ-КАПСУЛА (v5, MasterBoss style)
+// ТОЧНАЯ КОПИЯ MASTERBOSS ДЛЯ ХЕРАБОРИНЫ
 
 const CAPSULE_ITEMS = [
     { id: 'dashboard', title: 'Дашборд', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>' },
@@ -7,62 +7,186 @@ const CAPSULE_ITEMS = [
     { id: 'activity', title: 'График', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>' }
 ];
 
-function setupWidget() {
-    const wrapper = document.createElement('div');
-    wrapper.id = 'floating-capsule-wrapper';
-    wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
+function renderCapsule() {
+  const container = document.getElementById('capsule-dynamic-items');
+  if (!container) return;
 
-    // Контейнер для самой капсулы (иконки), который будет скрываться
-    const capsuleContainer = document.createElement('div');
-    capsuleContainer.id = 'floating-capsule-container';
-    capsuleContainer.style.cssText = 'overflow: hidden; transition: max-width 0.3s ease; max-width: 80px; border-radius: 16px 0 0 16px; background: var(--bg2); border: 1px solid var(--border); border-right: none; box-shadow: -4px 0 12px rgba(0,0,0,0.5);';
+  let config = localStorage.getItem('widget_config');
+  if (!config) {
+    config = [
+      { id: 'dashboard', enabled: true },
+      { id: 'diary', enabled: true },
+      { id: 'projects', enabled: true },
+      { id: 'activity', enabled: true }
+    ];
+    localStorage.setItem('widget_config', JSON.stringify(config));
+  } else {
+    config = JSON.parse(config);
+  }
 
-    const capsule = document.createElement('div');
-    capsule.id = 'floating-capsule';
-    capsule.style.cssText = 'display: flex; flex-direction: column; gap: 8px; padding: 12px 8px; width: 64px; box-sizing: border-box;';
-
-    CAPSULE_ITEMS.forEach(item => {
-        const btn = document.createElement('div');
-        btn.className = 'nav-item';
-        btn.dataset.tab = item.id;
-        btn.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 48px; height: 48px; cursor: pointer; border-radius: 8px; color: var(--fg);';
-        btn.innerHTML = `${item.icon}<span style="font-size:9px; text-align:center; line-height:1;">${item.title}</span>`;
-        btn.title = item.title;
-        btn.addEventListener('click', () => {
-            if (typeof switchTab === 'function') switchTab(item.id);
-            toggleCollapse(true);
-        });
-        capsule.appendChild(btn);
-    });
-
-    capsuleContainer.appendChild(capsule);
-
-    // Кнопка-язычок (всегда прижата к краю)
-    const toggleBtn = document.createElement('button');
-    toggleBtn.id = 'toggle-capsule';
-    toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
-    toggleBtn.style.cssText = 'width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-left: none; border-radius: 0 8px 8px 0; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 2;';
-
-    wrapper.appendChild(capsuleContainer);
-    wrapper.appendChild(toggleBtn);
-    document.body.appendChild(wrapper);
-
-    let isCollapsed = false;
-    function toggleCollapse(force = false) {
-        isCollapsed = force ? true : !isCollapsed;
-        if (isCollapsed) {
-            capsuleContainer.style.maxWidth = '0px';
-            document.getElementById('toggle-icon').style.transform = 'rotate(180deg)';
-        } else {
-            capsuleContainer.style.maxWidth = '80px';
-            document.getElementById('toggle-icon').style.transform = 'rotate(0deg)';
-        }
+  let html = '';
+  config.forEach(cfg => {
+    if (cfg.enabled) {
+      const item = CAPSULE_ITEMS.find(i => i.id === cfg.id);
+      if (item) {
+        html += `<div class="nav-item" id="${item.id}" onclick="switchTab('${item.id}')" style="display: flex; align-items: center; justify-content: center; width: auto; padding: 6px 8px; cursor: pointer; gap: 8px;">
+          ${item.icon}
+          <span style="font-size: 11px;">${item.title}</span>
+        </div>`;
+      }
     }
-
-    toggleBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleCollapse();
-    });
+  });
+  container.innerHTML = html;
 }
 
-document.addEventListener('DOMContentLoaded', setupWidget);
+function initFloatingMenu() {
+  const wrapper = document.getElementById('floating-capsule-wrapper');
+  const capsule = document.getElementById('floating-capsule');
+  const toggleBtn = document.getElementById('toggle-capsule');
+  const toggleIcon = document.getElementById('toggle-icon');
+  const container = document.getElementById('capsule-dynamic-items');
+
+  if (!wrapper || !capsule || !toggleBtn || !container) {
+      // Если HTML еще не вставлен, создаем его
+      return;
+  }
+
+  renderCapsule();
+
+  if (typeof Sortable !== 'undefined') {
+    new Sortable(container, {
+      animation: 200,
+      delay: 1500,
+      delayOnTouchOnly: true,
+      ghostClass: 'sortable-ghost',
+      dragClass: 'sortable-drag',
+      onChoose: function(evt) {
+        document.body.style.overflow = 'hidden';
+        capsule.classList.add('capsule-shaking');
+        if (navigator.vibrate) navigator.vibrate(50);
+        evt.item.style.transform = 'scale(1.15)';
+        evt.item.style.zIndex = '1000';
+        evt.item.style.boxShadow = '0 8px 24px rgba(0,0,0,0.6)';
+        evt.item.style.borderRadius = '12px';
+        evt.item.style.background = 'var(--bg2)';
+      },
+      onUnchoose: function(evt) {
+        if (!evt.item.classList.contains('sortable-drag')) {
+          capsule.classList.remove('capsule-shaking');
+        }
+      },
+      onEnd: function(evt) {
+        document.body.style.overflow = '';
+        capsule.classList.remove('capsule-shaking');
+        setTimeout(() => {
+          container.querySelectorAll('.nav-item').forEach(el => {
+            el.style.transform = '';
+            el.style.zIndex = '';
+            el.style.boxShadow = '';
+            el.style.borderRadius = '';
+            el.style.background = '';
+            el.style.opacity = '';
+            el.classList.remove('sortable-ghost', 'sortable-drag', 'sortable-chosen', 'sortable-fallback');
+          });
+        }, 50);
+        const newOrder = [];
+        container.querySelectorAll('.nav-item').forEach(el => {
+          newOrder.push({ id: el.id, enabled: true });
+        });
+        const savedConfig = JSON.parse(localStorage.getItem('widget_config')) || [];
+        savedConfig.forEach(c => {
+          if (!newOrder.find(n => n.id === c.id) && !c.enabled) {
+            newOrder.push({ id: c.id, enabled: false });
+          }
+        });
+        localStorage.setItem('widget_config', JSON.stringify(newOrder));
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (capsule.classList.contains('capsule-shaking') && !e.target.closest('#floating-capsule')) {
+      capsule.classList.remove('capsule-shaking');
+    }
+  });
+
+  let isDragging = false;
+  let startY = 0;
+  let currentTop = wrapper.getBoundingClientRect().top;
+  let isCollapsed = false;
+
+  wrapper.addEventListener('touchstart', (e) => {
+    if (capsule.classList.contains('capsule-shaking')) return;
+    if (e.target.closest('.nav-item')) return;
+    if (e.target.closest('#toggle-capsule')) return;
+    isDragging = true;
+    startY = e.touches[0].clientY;
+    currentTop = wrapper.getBoundingClientRect().top;
+    wrapper.style.transition = 'none';
+  }, { passive: false });
+
+  wrapper.addEventListener('touchmove', (e) => {
+    if (!isDragging || capsule.classList.contains('capsule-shaking')) return;
+    e.preventDefault();
+    const deltaY = e.touches[0].clientY - startY;
+    const newTop = currentTop + deltaY;
+    if (newTop > 70 && newTop < window.innerHeight - wrapper.offsetHeight - 90) {
+      wrapper.style.bottom = 'auto';
+      wrapper.style.top = newTop + 'px';
+    }
+  }, { passive: false });
+
+  wrapper.addEventListener('touchend', () => {
+    if (isDragging) {
+      isDragging = false;
+      wrapper.style.transition = 'transform 0.3s ease';
+    }
+  });
+
+  wrapper.addEventListener('mousedown', (e) => {
+    if (capsule.classList.contains('capsule-shaking')) return;
+    if (e.target.closest('.nav-item')) return;
+    if (e.target.closest('#toggle-capsule')) return;
+    isDragging = true;
+    startY = e.clientY;
+    currentTop = wrapper.getBoundingClientRect().top;
+    wrapper.style.transition = 'none';
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging || capsule.classList.contains('capsule-shaking')) return;
+    const deltaY = e.clientY - startY;
+    const newTop = currentTop + deltaY;
+    if (newTop > 70 && newTop < window.innerHeight - wrapper.offsetHeight - 90) {
+      wrapper.style.bottom = 'auto';
+      wrapper.style.top = newTop + 'px';
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      wrapper.style.transition = 'transform 0.3s ease';
+    }
+  });
+
+  function toggleCollapse() {
+    isCollapsed = !isCollapsed;
+    if (isCollapsed) {
+      capsule.style.transform = 'translateX(100%)';
+      toggleIcon.style.transform = 'rotate(180deg)';
+      wrapper.style.pointerEvents = 'none';
+      toggleBtn.style.pointerEvents = 'auto';
+    } else {
+      capsule.style.transform = 'translateX(0)';
+      toggleIcon.style.transform = 'rotate(0deg)';
+      wrapper.style.pointerEvents = 'auto';
+    }
+  }
+
+  toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); e.preventDefault(); toggleCollapse(); });
+  toggleBtn.addEventListener('touchend', (e) => { e.preventDefault(); toggleCollapse(); });
+}
+
+// Запуск после загрузки DOM
+document.addEventListener('DOMContentLoaded', initFloatingMenu);
