@@ -69,4 +69,17 @@ export function initFloatingMenu() {
     }
   });
   observer.observe(document.body, { attributes: true, attributeFilter: ['class'], subtree: true });
+  // === СКРЫТИЕ НА СЕЙФЕ ===
+  const safeScreen = document.getElementById("scroll-pin-screen");
+  if (safeScreen) {
+    const update = () => {
+      if (safeScreen.style.display === "block") {
+        wrapper.style.display = "none";
+      } else {
+        wrapper.style.display = "flex";
+      }
+    };
+    update();
+    new MutationObserver(update).observe(safeScreen, { attributes: true, attributeFilter: ["style"] });
+  }
 }
