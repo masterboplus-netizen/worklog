@@ -12,13 +12,15 @@ export function initFloatingMenu() {
 
   const capsule = document.createElement('div');
   capsule.id = 'floating-capsule';
-  capsule.style.cssText = 'position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease;';
+  capsule.style.cssText = 'position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; margin-right: 24px;';
 
+  // Стрелка
   const toggleBtn = document.createElement('button');
   toggleBtn.id = 'toggle-capsule';
   toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
-  toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
+  toggleBtn.style.cssText = 'position: absolute; right: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-left: none; border-radius: 0 8px 8px 0; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
 
+  // Кнопки меню
   CAPSULE_ITEMS.forEach(item => {
     const btn = document.createElement('div');
     btn.className = 'nav-item';
@@ -41,6 +43,7 @@ export function initFloatingMenu() {
   function toggleCollapse(force = false) {
     isCollapsed = force ? true : !isCollapsed;
     if (isCollapsed) {
+      // Капсула уезжает вправо (за экран), а стрелка остается, так как она absolute
       capsule.style.transform = 'translateX(100%)';
       document.getElementById('toggle-icon').style.transform = 'rotate(0deg)';
     } else {
