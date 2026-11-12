@@ -1,14 +1,20 @@
-// МОДУЛЬ: ВИДЖЕТ-КАПСУЛА (МЕНЮ)
+// МОДУЛЬ: ВИДЖЕТ-КАПСУЛА (боковая панель)
 function setupWidgetMenu() {
-    // 1. Создаем контейнер виджета
+    // 1. Создаем контейнер (справа, по центру)
     const widget = document.createElement('div');
     widget.id = 'widget-menu';
-    widget.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: 10px;';
+    widget.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
 
-    // 2. Создаем выпадающее меню (скрытое)
-    const menuItems = document.createElement('div');
-    menuItems.id = 'widget-menu-items';
-    menuItems.style.cssText = 'display: none; flex-direction: column; gap: 8px; background: var(--bg2); padding: 8px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.5);';
+    // 2. Язычок (свернутое состояние)
+    const toggleBtn = document.createElement('button');
+    toggleBtn.id = 'widget-toggle';
+    toggleBtn.innerHTML = '&lt;'; // Стрелка влево (свернуто)
+    toggleBtn.style.cssText = 'width: 32px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;';
+
+    // 3. Панель с меню (скрытая)
+    const panel = document.createElement('div');
+    panel.id = 'widget-panel';
+    panel.style.cssText = 'display: none; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px; border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; box-shadow: -4px 0 12px rgba(0,0,0,0.5);';
 
     const tabs = [
         { id: 'dashboard', label: '🏠 Дашборд' },
@@ -23,39 +29,33 @@ function setupWidgetMenu() {
         btn.className = 'widget-item';
         btn.dataset.tab = tab.id;
         btn.textContent = tab.label;
-        btn.style.cssText = 'display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: transparent; border: none; color: var(--fg); font-size: 14px; border-radius: 8px; cursor: pointer; white-space: nowrap;';
-        menuItems.appendChild(btn);
+        btn.style.cssText = 'display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: transparent; border: none; color: var(--fg); font-size: 14px; border-radius: 8px; cursor: pointer; white-space: nowrap; text-align: left;';
+        panel.appendChild(btn);
     });
 
-    // 3. Создаем кнопку-капсулу
-    const capsuleBtn = document.createElement('button');
-    capsuleBtn.id = 'widget-btn';
-    capsuleBtn.innerHTML = '☰';
-    capsuleBtn.style.cssText = 'width: 56px; height: 56px; border-radius: 50%; background: var(--accent); border: none; color: #fff; font-size: 24px; cursor: pointer; box-shadow: 0 4px 12px rgba(74, 158, 255, 0.4); display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease;';
-
-    widget.appendChild(menuItems);
-    widget.appendChild(capsuleBtn);
+    widget.appendChild(panel);
+    widget.appendChild(toggleBtn);
     document.body.appendChild(widget);
 
     // 4. Логика
     let isOpen = false;
 
-    capsuleBtn.addEventListener('click', () => {
+    toggleBtn.addEventListener('click', () => {
         isOpen = !isOpen;
-        menuItems.style.display = isOpen ? 'flex' : 'none';
-        capsuleBtn.style.transform = isOpen ? 'rotate(90deg)' : 'rotate(0deg)';
+        panel.style.display = isOpen ? 'flex' : 'none';
+        toggleBtn.innerHTML = isOpen ? '&gt;' : '&lt;';
     });
 
     // Обработка кликов по пунктам
-    menuItems.querySelectorAll('.widget-item').forEach(item => {
+    panel.querySelectorAll('.widget-item').forEach(item => {
         item.addEventListener('click', () => {
             const tab = item.dataset.tab;
             if (tab && typeof switchTab === 'function') {
                 switchTab(tab);
             }
             isOpen = false;
-            menuItems.style.display = 'none';
-            capsuleBtn.style.transform = 'rotate(0deg)';
+            panel.style.display = 'none';
+            toggleBtn.innerHTML = '&lt;';
         });
     });
 }
