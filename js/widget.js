@@ -9,19 +9,22 @@ const CAPSULE_ITEMS = [
 ];
 
 function setupWidget() {
+    // 1. Обертка (справа, по центру)
     const wrapper = document.createElement('div');
     wrapper.id = 'floating-capsule-wrapper';
     wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
 
+    // 2. Сама капсула (с иконками)
     const capsule = document.createElement('div');
     capsule.id = 'floating-capsule';
-    capsule.style.cssText = 'display: flex; flex-direction: column; gap: 4px; background: var(--bg2); padding: 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; width: 56px;';
+    // ВАЖНО: фиксированная ширина (56px) и overflow hidden (чтобы не вылезало)
+    capsule.style.cssText = 'display: flex; flex-direction: column; gap: 4px; background: var(--bg2); padding: 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; width: 56px; overflow: hidden;';
 
     CAPSULE_ITEMS.forEach(item => {
         const btn = document.createElement('div');
         btn.className = 'nav-item';
         btn.dataset.tab = item.id;
-        btn.style.cssText = 'display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; cursor: pointer; border-radius: 8px; color: var(--fg);';
+        btn.style.cssText = 'display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; cursor: pointer; border-radius: 8px; color: var(--fg); flex-shrink: 0;';
         btn.innerHTML = item.icon;
         btn.title = item.title;
         btn.addEventListener('click', () => {
@@ -31,11 +34,11 @@ function setupWidget() {
         capsule.appendChild(btn);
     });
 
-    // Стрелка внутри капсулы (внизу)
+    // 3. Стрелка (внутри капсулы, внизу)
     const toggleBtn = document.createElement('button');
     toggleBtn.id = 'toggle-capsule';
     toggleBtn.innerHTML = '<svg id="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
-    toggleBtn.style.cssText = 'width: 40px; height: 24px; background: transparent; border: none; border-top: 1px solid var(--border); color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 4px; padding-top: 4px;';
+    toggleBtn.style.cssText = 'width: 40px; height: 24px; background: transparent; border: none; border-top: 1px solid var(--border); color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 4px; padding-top: 4px; flex-shrink: 0;';
 
     capsule.appendChild(toggleBtn);
     wrapper.appendChild(capsule);
