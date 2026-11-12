@@ -5,6 +5,8 @@ const $$ = (sel) => document.querySelectorAll(sel);
 async function init() {
   const btnHeart = $('#btn-heart');
   if (btnHeart) btnHeart.addEventListener('click', showCreators);
+  const btnProfile = document.querySelector("#btn-profile");
+  if (btnProfile) btnProfile.addEventListener("click", showJoke);
 
   document.addEventListener('click', (e) => {
     if (e.target.closest('#btn-lock')) {
