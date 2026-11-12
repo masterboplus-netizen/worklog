@@ -94,8 +94,7 @@
 <!-- Дашборд (скрыт по умолчанию) -->
 <div id="dashboard" class="screen active">
 <header class="topbar">
-  <button id="burger-btn" style="background:transparent; border:none; color:var(--fg); font-size:24px; cursor:pointer; padding:8px; margin-right:8px;">☰</button>
-<div class="logo" id="logo-btn" style="cursor: pointer;">
+  <div class="logo" id="logo-btn" style="cursor: pointer;">
     <img src="icon.svg" alt="" class="logo-icon" style="width:32px;height:32px;vertical-align:middle;margin-right:8px;border-radius:50%;">
     Хераборина
   </div>
@@ -188,13 +187,6 @@ window.onerror = function(msg, url, line, col, error) {
   return false;
 };
 </script>
-<div id="burger-menu" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; flex-direction:column; justify-content:center; align-items:center;">
-    <button class="burger-item" data-tab="dashboard" style="margin:10px; font-size:20px; background:transparent; border:none; color:var(--fg);">Дашборд</button>
-    <button class="burger-item" data-tab="diary" style="margin:10px; font-size:20px; background:transparent; border:none; color:var(--fg);">Календарь</button>
-    <button class="burger-item" data-tab="projects" style="margin:10px; font-size:20px; background:transparent; border:none; color:var(--fg);">Проекты</button>
-    <button class="burger-item" data-tab="activity" style="margin:10px; font-size:20px; background:transparent; border:none; color:var(--fg);">График</button>
-    <button class="burger-item" data-tab="profile" style="margin:10px; font-size:20px; background:transparent; border:none; color:var(--fg);">Профиль</button>
-    <button id="burger-close" style="margin-top:20px; font-size:16px; background:transparent; border:1px solid var(--fg); color:var(--fg); padding:8px 16px; border-radius:8px;">Закрыть</button>
-</div>
+
 </body>
 </html>
