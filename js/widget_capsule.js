@@ -42,10 +42,10 @@ export function initFloatingMenu() {
     isCollapsed = force ? true : !isCollapsed;
     if (isCollapsed) {
       capsule.style.transform = 'translateX(100%)';
-      document.getElementById('toggle-icon').style.transform = 'rotate(180deg)'; // Стрелка смотрит влево (открыть)
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>'; // Стрелка смотрит влево (открыть)
     } else {
       capsule.style.transform = 'translateX(0)';
-      document.getElementById('toggle-icon').style.transform = 'rotate(0deg)'; // Стрелка смотрит вправо (свернуть)
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>'; // Стрелка смотрит вправо (свернуть)
     }
   }
 
