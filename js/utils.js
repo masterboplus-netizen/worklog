@@ -600,6 +600,7 @@ function renderActivityPageV2() {
 
     // 6. ЛОГИКА ОБНОВЛЕНИЯ
     const updateChart = () => {
+        const mergedSessions = mergeMidnightSessions(window.DATA.sessions || []);
         const scrollLeft = scrollContainer.scrollLeft;
         const containerWidth = scrollContainer.clientWidth;
         const colWidth = 40;
@@ -629,7 +630,7 @@ function renderActivityPageV2() {
         for (let i = startIndex; i <= endIndex && i < allDates.length; i++) {
             const dateStr = allDates[i];
             let v = 0;
-            for (const sess of uniqueSessions) {
+            for (const sess of mergedSessions) {
                 if (sess.date === dateStr) {
                     if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
@@ -675,7 +676,7 @@ function renderActivityPageV2() {
         cols.forEach(col => {
             const dateStr = col.dataset.date;
             let v = 0;
-            for (const sess of window.DATA.sessions || []) {
+            for (const sess of mergedSessions) {
                 if (sess.date === dateStr) {
                     if (CHART_STATE_V2.metric === 'duration') v += sess.duration_min || 0;
                     else if (CHART_STATE_V2.metric === 'events') v += sess.events || 0;
