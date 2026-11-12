@@ -8,19 +8,17 @@ export const CAPSULE_ITEMS = [
 export function initFloatingMenu() {
   const wrapper = document.createElement('div');
   wrapper.id = 'floating-capsule-wrapper';
-  // Прижимаем к правому краю
   wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
-
-  // Стрелка (слева от капсулы)
-  const toggleBtn = document.createElement('button');
-  toggleBtn.id = 'toggle-capsule';
-  toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s ease;"><path d="M15 18l-6-6 6-6"/></svg>';
-  toggleBtn.style.cssText = 'width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;';
 
   const capsule = document.createElement('div');
   capsule.id = 'floating-capsule';
-  // Капсула с отступом слева для стрелки
-  capsule.style.cssText = 'display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease;';
+  capsule.style.cssText = 'position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; margin-left: 24px;';
+
+  // СТРЕЛКА ВНУТРИ КАПСУЛЫ (как в MasterBoss)
+  const toggleBtn = document.createElement('button');
+  toggleBtn.id = 'toggle-capsule';
+  toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s ease;"><path d="M15 18l-6-6 6-6"/></svg>';
+  toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
 
   CAPSULE_ITEMS.forEach(item => {
     const btn = document.createElement('div');
@@ -31,13 +29,11 @@ export function initFloatingMenu() {
     btn.title = item.title;
     btn.addEventListener('click', () => {
       if (typeof window.switchTab === 'function') window.switchTab(item.id);
-      // Больше не сворачиваем автоматически
     });
     capsule.appendChild(btn);
   });
 
-  // Собираем: сначала стрелка, потом капсула
-  wrapper.appendChild(toggleBtn);
+  capsule.appendChild(toggleBtn);
   wrapper.appendChild(capsule);
   document.body.appendChild(wrapper);
 
@@ -45,21 +41,17 @@ export function initFloatingMenu() {
   function toggleCollapse(force = false) {
     isCollapsed = force ? true : !isCollapsed;
     if (isCollapsed) {
-      // Прячем капсулу (уезжает вправо)
       capsule.style.transform = 'translateX(100%)';
-      // Стрелка смотрит влево (указывает, что можно развернуть)
-      document.getElementById('toggle-icon').style.transform = 'rotate(180deg)';
+      document.getElementById('toggle-icon').style.transform = 'rotate(180deg)'; // Стрелка смотрит влево (открыть)
     } else {
-      // Показываем капсулу
       capsule.style.transform = 'translateX(0)';
-      // Стрелка смотрит вправо (указывает, что можно свернуть)
-      document.getElementById('toggle-icon').style.transform = 'rotate(0deg)';
+      document.getElementById('toggle-icon').style.transform = 'rotate(0deg)'; // Стрелка смотрит вправо (свернуть)
     }
   }
 
   toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleCollapse(); });
 
-  // === ЛОГИКА СЕЙФА ===
+  // === СЕЙФ ===
   const safeScreen = document.getElementById('scroll-pin-screen');
   if (safeScreen) {
     const update = () => {
