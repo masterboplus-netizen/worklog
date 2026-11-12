@@ -15,7 +15,8 @@ function setupWidget() {
 
     const capsule = document.createElement('div');
     capsule.id = 'floating-capsule';
-    capsule.style.cssText = 'display: flex; flex-direction: column; gap: 4px; background: var(--bg2); padding: 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; width: 56px;';
+    // Убираем width: 56px, чтобы капсула была по содержимому (40px + padding)
+    capsule.style.cssText = 'display: flex; flex-direction: column; gap: 4px; background: var(--bg2); padding: 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease;';
 
     CAPSULE_ITEMS.forEach(item => {
         const btn = document.createElement('div');
@@ -31,7 +32,7 @@ function setupWidget() {
         capsule.appendChild(btn);
     });
 
-    // Стрелка (язычок) — часть обертки, но визуально прилегает к капсуле
+    // Стрелка (вплотную к капсуле, как в bo-web)
     const toggleBtn = document.createElement('button');
     toggleBtn.id = 'toggle-capsule';
     toggleBtn.innerHTML = '<svg id="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
