@@ -1,5 +1,4 @@
-// ВИДЖЕТ-КАПСУЛА (РАБОЧАЯ ВЕРСИЯ С ПРОВЕРКОЙ СЕЙФА)
-
+// ВИДЖЕТ-КАПСУЛА (ФИНАЛ)
 const CAPSULE_ITEMS = [
     { id: 'dashboard', title: 'Дашборд', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>' },
     { id: 'diary', title: 'Календарь', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' },
@@ -8,26 +7,13 @@ const CAPSULE_ITEMS = [
 ];
 
 function setupWidget() {
-    // Проверяем, не открыт ли сейф. Если открыт — виджет не показываем.
-    // Сейф обычно имеет id "scroll-pin-screen" (судя по index.html)
-    const safeScreen = document.getElementById('scroll-pin-screen');
-    if (safeScreen && !safeScreen.classList.contains('hidden')) {
-        // Если сейф виден, подождем и проверим еще раз через секунду
-        setTimeout(setupWidget, 1000);
-        return;
-    }
-
-    // Если виджет уже есть, удаляем (чтобы не было дублей)
     const oldWrapper = document.getElementById('floating-capsule-wrapper');
     if (oldWrapper) oldWrapper.remove();
 
-    // Создаем обертку
     const wrapper = document.createElement('div');
     wrapper.id = 'floating-capsule-wrapper';
-    // Прижимаем к правому краю, по центру экрана
     wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
 
-    // Создаем капсулу
     const capsule = document.createElement('div');
     capsule.id = 'floating-capsule';
     capsule.style.cssText = 'display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease;';
@@ -46,7 +32,6 @@ function setupWidget() {
         capsule.appendChild(btn);
     });
 
-    // Создаем язычок (стрелку)
     const toggleBtn = document.createElement('button');
     toggleBtn.id = 'toggle-capsule';
     toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
@@ -74,19 +59,4 @@ function setupWidget() {
     });
 }
 
-// Запускаем после загрузки DOM
 document.addEventListener('DOMContentLoaded', setupWidget);
-
-// Отслеживаем появление сейфа, чтобы скрыть виджет
-const observer = new MutationObserver(() => {
-    const safeScreen = document.getElementById('scroll-pin-screen');
-    const wrapper = document.getElementById('floating-capsule-wrapper');
-    if (safeScreen && wrapper) {
-        if (!safeScreen.classList.contains('hidden')) {
-            wrapper.style.display = 'none';
-        } else {
-            wrapper.style.display = 'flex';
-        }
-    }
-});
-observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
