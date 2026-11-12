@@ -182,14 +182,6 @@
 <script src="js/calendar.js"></script>
 <script src="js/sessions.js"></script>
 <script src="js/widget.js?v=215"></script>
-<div id="floating-capsule-wrapper" style="position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 10000; display: flex;">
-    <div id="floating-capsule" style="position: relative; display: flex; flex-direction: column; align-items: center; padding: 8px 4px; gap: 2px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; z-index: 10000;">
-        <div id="toggle-capsule" style="position: absolute; left: -30px; top: 50%; transform: translateY(-50%); width: 30px; height: 80px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--fg-dim); background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; z-index: 10002;">
-            <svg id="toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s ease;"><path d="M15 18l-6-6 6-6"/></svg>
-        </div>
-        <div id="capsule-dynamic-items" style="display: flex; flex-direction: column; gap: 4px; max-height: 50vh; overflow-y: auto; scrollbar-width: none;"></div>
-    </div>
-</div>
 <script src="js/app.js?v=211"></script>
 <script src="js/safe.js?v=211"></script>
 
@@ -206,6 +198,14 @@ window.onerror = function(msg, url, line, col, error) {
 };
 </script>
 
+    </div>
+</div>
+<div id="floating-capsule-wrapper" style="position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 10000; display: flex;">
+    <div id="floating-capsule" style="position: relative; display: flex; flex-direction: column; align-items: center; padding: 8px 4px; gap: 2px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; z-index: 10000;">
+        <div id="toggle-capsule" style="position: absolute; left: -30px; top: 50%; transform: translateY(-50%); width: 30px; height: 80px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--fg-dim); background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; z-index: 10002;">
+            <svg id="toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s ease;"><path d="M15 18l-6-6 6-6"/></svg>
+        </div>
+        <div id="capsule-dynamic-items" style="display: flex; flex-direction: column; gap: 4px; max-height: 50vh; overflow-y: auto; scrollbar-width: none;"></div>
     </div>
 </div>
 </body>
