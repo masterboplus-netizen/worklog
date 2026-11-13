@@ -45,18 +45,20 @@ export function initFloatingMenu() {
 
   function checkSheetAndMove() {
     const pinScreen = document.getElementById('scroll-pin-screen');
-    if (pinScreen && pinScreen.style.display !== 'none' && !pinScreen.classList.contains('hidden')) {
+    
       wrapper.style.display = 'none';
       return;
+    } else {
+      wrapper.style.display = 'flex';
     }
-}
 
     const sheet = document.getElementById('calendar-sheet');
     if (sheet && sheet.classList.contains('open')) {
       const sheetHeight = sheet.offsetHeight || (window.innerHeight * 0.8);
       const capsuleHeight = wrapper.offsetHeight || 300;
       const newTop = window.innerHeight - sheetHeight - capsuleHeight - 20;
-        if (newTop > 60) {
+      
+      if (newTop > 60) {
         wrapper.style.top = newTop + 'px';
         wrapper.style.transform = 'none';
         return;
@@ -67,6 +69,7 @@ export function initFloatingMenu() {
       wrapper.style.transform = 'translateY(-50%)';
     }
   }
+
   function toggleCollapse(force = false) {
     isCollapsed = force ? true : !isCollapsed;
     if (isCollapsed) {
