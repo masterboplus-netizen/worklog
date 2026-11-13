@@ -49,7 +49,6 @@ export function initFloatingMenu() {
       wrapper.style.display = 'none';
       return;
     } else {
-      wrapper.style.display = 'flex';
     }
     }
 
