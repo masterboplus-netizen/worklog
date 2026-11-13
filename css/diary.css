@@ -508,3 +508,61 @@
 .date-strip-item.selected .date-strip-day {
   color: #fff;
 }
+
+
+/* === КАЛЕНДАРНАЯ ШТОРКА: ЛЕНТА И РАСКРЫТИЕ === */
+.calendar-sheet {
+  transform: translateY(calc(100% - 126px));
+  overflow: visible;
+}
+.calendar-sheet.open {
+  transform: translateY(0);
+}
+.calendar-sheet:not(.open) .sheet-content {
+  display: none;
+}
+.calendar-sheet.open .sheet-content {
+  display: block;
+}
+.calendar-sheet.open #sheet-toggle svg {
+  transform: rotate(180deg);
+  transition: transform .2s ease;
+}
+#sheet-toggle svg {
+  transition: transform .2s ease;
+}
+.date-strip {
+  display: flex;
+  justify-content: flex-start;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  margin: 8px 12px 12px;
+  padding: 0 2px;
+  box-sizing: border-box;
+}
+.date-strip::-webkit-scrollbar {
+  display: none;
+}
+.date-strip-item {
+  box-sizing: border-box;
+  flex: 0 0 calc((100% - 36px) / 7);
+  min-width: 0;
+  padding: 7px 2px;
+  border: 0;
+  font: inherit;
+  scroll-snap-align: start;
+}
+.date-strip-dot {
+  width: 5px;
+  height: 5px;
+  margin-top: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.date-strip-item.selected .date-strip-dot {
+  background: #fff;
+}

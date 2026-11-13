@@ -11,23 +11,23 @@
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<link rel="stylesheet" href="css/base.css?v=266">
+<link rel="stylesheet" href="css/base.css?v=267">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<link rel="stylesheet" href="css/layout.css?v=266">
+<link rel="stylesheet" href="css/layout.css?v=267">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<link rel="stylesheet" href="css/dashboard.css?v=266">
+<link rel="stylesheet" href="css/dashboard.css?v=267">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<link rel="stylesheet" href="css/diary.css?v=266">
+<link rel="stylesheet" href="css/diary.css?v=267">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<link rel="stylesheet" href="css/analytics.css?v=266">
+<link rel="stylesheet" href="css/analytics.css?v=267">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<link rel="stylesheet" href="css/chart.css?v=266">
+<link rel="stylesheet" href="css/chart.css?v=267">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<link rel="stylesheet" href="css/modals.css?v=266">
+<link rel="stylesheet" href="css/modals.css?v=267">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<link rel="stylesheet" href="css/safe.css?v=266">
+<link rel="stylesheet" href="css/safe.css?v=267">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-<link rel="stylesheet" href="css/projects.css?v=266">
+<link rel="stylesheet" href="css/projects.css?v=267">
 
 <style>
 .segmented-control {
@@ -164,15 +164,15 @@
 </div>
 <!-- === КОНЕЦ СЕЙФА === -->
 
-<script src="crypto.js?v=266"></script>
+<script src="crypto.js?v=267"></script>
 <script src="js/supabase.min.js"></script>
   <script src="js/supabase_client.js"></script>
-  <script src="js/utils.js?v=266"></script>
-<script src="js/diary.js?v=266"></script>
-<script src="js/dashboard.js?v=266"></script>
-<script src="js/projects.js?v=266"></script>
-<script src="js/chart.js?v=266"></script>
-<script src="js/auth.js?v=266"></script>
+  <script src="js/utils.js?v=267"></script>
+<script src="js/diary.js?v=267"></script>
+<script src="js/dashboard.js?v=267"></script>
+<script src="js/projects.js?v=267"></script>
+<script src="js/chart.js?v=267"></script>
+<script src="js/auth.js?v=267"></script>
 
 
 <script>
@@ -182,8 +182,8 @@
 <script src="js/calendar.js"></script>
 <script src="js/sessions.js"></script>
 
-<script src="js/app.js?v=266"></script>
-<script src="js/safe.js?v=266"></script>
+<script src="js/app.js?v=267"></script>
+<script src="js/safe.js?v=267"></script>
 
 
 
@@ -215,12 +215,13 @@ window.onerror = function(msg, url, line, col, error) {
 
 
 <script type="module">
-  import { initFloatingMenu } from "./js/widget_capsule.js?v=266";
+  import { initFloatingMenu } from "./js/widget_capsule.js?v=267";
   document.addEventListener("DOMContentLoaded", initFloatingMenu);
 </script>
 <div id="calendar-sheet" class="calendar-sheet">
   <div id="sheet-toggle" style="position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 60px; height: 40px; background: var(--bg2); border: 1px solid var(--border); border-bottom: none; border-radius: 12px 12px 0 0; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></div>
   <div class="sheet-handle" id="sheet-handle"></div>
+  <div class="date-strip" id="date-strip"></div>
   <div class="sheet-content" id="sheet-content"></div>
 </div>
 </body>

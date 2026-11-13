@@ -17,8 +17,9 @@ const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц',
 
 let DIARY_MODE = 'sessions';
 let CALENDAR_VIEW = 'month';
-let CALENDAR_OFFSET = 0;
-let CALENDAR_SELECTED_DAY = null;
+let CALENDAR_CURSOR = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let CALENDAR_SELECTED_DAYS = new Set();
+let CALENDAR_STRIP_SCROLL_LEFT = null;
 
 // Переменные для графика (V1)
 let CHART_OFFSET_MONTHS = 0;

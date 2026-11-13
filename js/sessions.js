@@ -1,4 +1,71 @@
+
 // МОДУЛЬ: СПИСОК СЕССИЙ
+
+
+// === ЛЕНТА ДАТ ПОД КАЛЕНДАРЁМ ===
+function renderDateStrip() {
+  const strip = document.getElementById('date-strip');
+  if (!strip || !window.DATA) return;
+
+  const savedScroll = CALENDAR_STRIP_SCROLL_LEFT;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayStr = _localDate(today);
+
+  const dates = (window.DATA.sessions || [])
+    .map(s => s.date)
+    .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d) && d <= todayStr)
+    .sort();
+
+  let firstDate;
+  if (dates.length) {
+    const p = dates[0].split('-').map(Number);
+    firstDate = new Date(p[0], p[1] - 1, p[2]);
+  } else {
+    firstDate = new Date(today);
+    firstDate.setDate(firstDate.getDate() - 6);
+  }
+
+  const activeDays = new Set(dates);
+  strip.innerHTML = '';
+
+  for (let d = new Date(firstDate); d <= today; d.setDate(d.getDate() + 1)) {
+    const date = new Date(d);
+    const ds = _localDate(date);
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'date-strip-item';
+    if (ds === todayStr) item.classList.add('today');
+    if (CALENDAR_SELECTED_DAYS.has(ds)) item.classList.add('selected');
+
+    const weekday = date.toLocaleDateString('ru-RU', { weekday: 'short' }).replace('.', '');
+    item.innerHTML =
+      `<span class="date-strip-day">${weekday}</span>` +
+      `<span class="date-strip-num">${date.getDate()}</span>` +
+      (activeDays.has(ds) ? '<span class="date-strip-dot"></span>' : '');
+
+    item.addEventListener('click', () => {
+      if (CALENDAR_SELECTED_DAYS.has(ds)) CALENDAR_SELECTED_DAYS.delete(ds);
+      else CALENDAR_SELECTED_DAYS.add(ds);
+      renderDiary();
+      if (document.getElementById('calendar-sheet')?.classList.contains('open')) {
+        renderDiaryFull();
+      }
+    });
+    strip.appendChild(item);
+  }
+
+  strip.onscroll = () => {
+    CALENDAR_STRIP_SCROLL_LEFT = strip.scrollLeft;
+  };
+
+  if (savedScroll === null) {
+    strip.scrollLeft = strip.scrollWidth;
+  } else {
+    strip.scrollLeft = savedScroll;
+  }
+  CALENDAR_STRIP_SCROLL_LEFT = strip.scrollLeft;
+}
 
 // === СПИСОК (для вкладки) ===
 function renderDiary() {
@@ -6,24 +73,7 @@ function renderDiary() {
   if (!c || !window.DATA) return;
   c.innerHTML = '';
 
-  const now = new Date();
-  let curDate = new Date(now.getFullYear(), now.getMonth() + (CALENDAR_VIEW === 'month' ? CALENDAR_OFFSET : 0), now.getDate() + (CALENDAR_VIEW === 'week' ? CALENDAR_OFFSET * 7 : (CALENDAR_VIEW === '30days' ? CALENDAR_OFFSET : 0)));
-  if (CALENDAR_VIEW === 'year') curDate.setFullYear(curDate.getFullYear() + CALENDAR_OFFSET);
-
-  let start, end;
-  if (CALENDAR_VIEW === 'year') {
-    start = new Date(curDate.getFullYear(), 0, 1);
-    end = new Date(curDate.getFullYear(), 11, 31);
-  } else if (CALENDAR_VIEW === 'month') {
-    start = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
-    end = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);
-  } else if (CALENDAR_VIEW === 'week') {
-    start = new Date(curDate); start.setDate(curDate.getDate() - (curDate.getDay() === 0 ? 6 : curDate.getDay() - 1));
-    end = new Date(start); end.setDate(start.getDate() + 6);
-  } else if (CALENDAR_VIEW === '30days') {
-    start = new Date(curDate); end = new Date(curDate); end.setDate(start.getDate() + 29);
-  }
-
+  renderDateStrip();
   // 4. НИЖНЯЯ СТРОКА (Список + Сессии/24ч)
   const bottomRow = document.createElement('div');
   bottomRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-top: 24px;';
@@ -50,13 +100,10 @@ function renderDiary() {
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '16px';
   let baseSessions = DIARY_MODE === 'sessions' ? mergeMidnightSessions(window.DATA.sessions || []) : (window.DATA.sessions || []);
-  let filtered = baseSessions.filter(s => {
-      const sd = new Date(s.date + 'T00:00:00');
-      if (CALENDAR_VIEW === 'year') return sd.getFullYear() === curDate.getFullYear();
-      return sd >= start && sd <= end;
-  });
-
-  if (CALENDAR_SELECTED_DAY) filtered = filtered.filter(s => s.date === CALENDAR_SELECTED_DAY);
+  let filtered = baseSessions;
+  if (CALENDAR_SELECTED_DAYS.size > 0) {
+    filtered = filtered.filter(s => CALENDAR_SELECTED_DAYS.has(s.date));
+  }
 
   filtered.sort((a, b) => {
     if (a.date !== b.date) return b.date.localeCompare(a.date);
@@ -67,7 +114,7 @@ function renderDiary() {
   for (const p of window.DATA.projects || []) projName[p.id] = p.name;
 
   if (filtered.length === 0) {
-      listDiv.innerHTML = '<div class="empty" style="padding:20px 0;">Нет записей за этот период</div>';
+      listDiv.innerHTML = '<div class="empty" style="padding:20px 0;">Нет записей за выбранные даты</div>';
   } else {
       let lastDate = '';
       filtered.forEach(s => {
@@ -181,32 +228,17 @@ function renderDiary() {
 
 // === ПОЛНЫЙ КАЛЕНДАРЬ (для шторки) ===
 function renderDiaryFull() {
-  const c = document.getElementById('content-diary');
+  const c = document.getElementById('sheet-content');
   if (!c || !window.DATA) return;
   c.innerHTML = '';
 
-  const now = new Date();
-  let curDate = new Date(now.getFullYear(), now.getMonth() + (CALENDAR_VIEW === 'month' ? CALENDAR_OFFSET : 0), now.getDate() + (CALENDAR_VIEW === 'week' ? CALENDAR_OFFSET * 7 : (CALENDAR_VIEW === '30days' ? CALENDAR_OFFSET : 0)));
-  if (CALENDAR_VIEW === 'year') curDate.setFullYear(curDate.getFullYear() + CALENDAR_OFFSET);
+  const months = ['Январь','Февраль','Март','Апрель','Май','Июнь',
+    'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
-  const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-  const monthsShort = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+  const year = CALENDAR_CURSOR.getFullYear();
+  const month = CALENDAR_CURSOR.getMonth();
+  const todayStr = _localDate(new Date());
 
-  let start, end;
-  if (CALENDAR_VIEW === 'year') {
-    start = new Date(curDate.getFullYear(), 0, 1);
-    end = new Date(curDate.getFullYear(), 11, 31);
-  } else if (CALENDAR_VIEW === 'month') {
-    start = new Date(curDate.getFullYear(), curDate.getMonth(), 1);
-    end = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 0);
-  } else if (CALENDAR_VIEW === 'week') {
-    start = new Date(curDate); start.setDate(curDate.getDate() - (curDate.getDay() === 0 ? 6 : curDate.getDay() - 1));
-    end = new Date(start); end.setDate(start.getDate() + 6);
-  } else if (CALENDAR_VIEW === '30days') {
-    start = new Date(curDate); end = new Date(curDate); end.setDate(start.getDate() + 29);
-  }
-
-  // 1. КАПСУЛА ВИДОВ
   const viewCapsule = document.createElement('div');
   viewCapsule.className = 'segmented-control';
   viewCapsule.innerHTML = `
@@ -215,120 +247,131 @@ function renderDiaryFull() {
   `;
   c.appendChild(viewCapsule);
 
-  // 2. НАВИГАЦИЯ
   const navRow = document.createElement('div');
-  navRow.style.cssText = 'display:flex; justify-content:center; align-items:center; gap:16px; margin: 16px 0; font-size:20px; font-weight:600; color:var(--fg);';
+  navRow.style.cssText =
+    'display:flex;justify-content:center;align-items:center;gap:16px;margin:16px 0;font-size:20px;font-weight:600;color:var(--fg);';
 
   const prevBtn = document.createElement('button');
-  prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
-  prevBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); cursor:pointer;';
+  prevBtn.textContent = '‹';
+  prevBtn.style.cssText = 'background:transparent;border:0;color:var(--fg);font-size:28px;cursor:pointer;';
 
   const nextBtn = document.createElement('button');
-  nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
-  nextBtn.style.cssText = 'background:transparent; border:none; color:var(--fg); cursor:pointer;';
+  nextBtn.textContent = '›';
+  nextBtn.style.cssText = 'background:transparent;border:0;color:var(--fg);font-size:28px;cursor:pointer;';
 
   const title = document.createElement('div');
-  if (CALENDAR_VIEW === 'year') title.textContent = curDate.getFullYear() + ' год';
-  else if (CALENDAR_VIEW === 'month') title.textContent = months[curDate.getMonth()] + ' ' + curDate.getFullYear();
-  else if (CALENDAR_VIEW === '30days') {
-      const endD = new Date(start); endD.setDate(start.getDate() + 29);
-      title.textContent = start.getDate() + ' ' + monthsShort[start.getMonth()] + ' – ' + endD.getDate() + ' ' + monthsShort[endD.getMonth()];
-  } else {
-      title.textContent = 'Неделя';
-  }
+  title.textContent = CALENDAR_VIEW === 'year'
+    ? year + ' год'
+    : months[month] + ' ' + year;
 
-  navRow.appendChild(prevBtn);
-  navRow.appendChild(title);
-  navRow.appendChild(nextBtn);
+  navRow.append(prevBtn, title, nextBtn);
   c.appendChild(navRow);
 
-  // 3. СЕТКА
+  const dayStats = {};
+  for (const s of window.DATA.sessions || []) {
+    dayStats[s.date] = (dayStats[s.date] || 0) + (s.duration_min || 0);
+  }
+
   const grid = document.createElement('div');
   grid.className = 'calendar-grid';
 
-  const dayStats = {};
-  for (const s of window.DATA.sessions || []) dayStats[s.date] = (dayStats[s.date] || 0) + (s.duration_min || 0);
-  const todayStr = _localDate(new Date());
-
   if (CALENDAR_VIEW === 'year') {
-    grid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 8px; margin-bottom: 24px; padding: 0 4px;';
+    grid.style.cssText =
+      'display:grid;grid-template-columns:repeat(3,1fr);gap:16px 8px;margin-bottom:24px;padding:0 4px;';
+
     for (let m = 0; m < 12; m++) {
-      const mDiv = document.createElement('div');
-      mDiv.innerHTML = '<div style="font-size:12px;color:var(--fg-dim);margin-bottom:4px;text-align:center;">' + months[m].slice(0,3) + '</div>';
-      const miniGrid = document.createElement('div');
-      miniGrid.style.cssText = 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;';
+      const monthCard = document.createElement('div');
+      monthCard.style.cursor = 'pointer';
+      monthCard.innerHTML =
+        `<div style="font-size:12px;color:var(--fg-dim);margin-bottom:4px;text-align:center;">${months[m].slice(0,3)}</div>`;
 
-      const mStart = new Date(curDate.getFullYear(), m, 1);
-      const mEnd = new Date(curDate.getFullYear(), m + 1, 0);
-      const firstDow = mStart.getDay() === 0 ? 6 : mStart.getDay() - 1;
+      const mini = document.createElement('div');
+      mini.style.cssText =
+        'display:grid;grid-template-columns:repeat(7,1fr);gap:2px;';
 
-      for (let i = 0; i < firstDow; i++) miniGrid.innerHTML += '<div></div>';
-      for (let d = new Date(mStart); d <= mEnd; d.setDate(d.getDate() + 1)) {
+      const first = new Date(year, m, 1);
+      const last = new Date(year, m + 1, 0);
+      const offset = first.getDay() === 0 ? 6 : first.getDay() - 1;
+
+      for (let i = 0; i < offset; i++) mini.innerHTML += '<div></div>';
+
+      for (let d = new Date(first); d <= last; d.setDate(d.getDate() + 1)) {
         const ds = _localDate(d);
-        const hasData = !!dayStats[ds];
-        const isToday = ds === todayStr;
-
-        let bg = 'transparent';
-        let col = 'var(--fg-dim)';
-        if (isToday) { bg = 'rgba(255, 255, 255, 0.2)'; col = '#fff'; }
-
-        let cellHtml = `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:7px; border-radius:50%; background:${bg}; color:${col}; position:relative;">${d.getDate()}`;
-        if (hasData) {
-             cellHtml += `<div style="position:absolute; bottom:0px; width:2px; height:2px; border-radius:50%; background:var(--accent);"></div>`;
-        }
-        cellHtml += `</div>`;
-        miniGrid.innerHTML += cellHtml;
+        const today = ds === todayStr;
+        const dot = dayStats[ds]
+          ? '<span style="position:absolute;bottom:0;width:3px;height:3px;border-radius:50%;background:var(--accent);"></span>'
+          : '';
+        mini.innerHTML +=
+          `<div style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:7px;border-radius:50%;background:${today ? 'rgba(255,255,255,.2)' : 'transparent'};color:${today ? '#fff' : 'var(--fg-dim)'};position:relative;">${d.getDate()}${dot}</div>`;
       }
-      mDiv.style.cursor = 'pointer';
-      miniGrid.style.pointerEvents = 'none';
-      mDiv.addEventListener('click', () => {
+
+      mini.style.pointerEvents = 'none';
+      monthCard.appendChild(mini);
+      monthCard.addEventListener('click', () => {
+        CALENDAR_CURSOR = new Date(year, m, 1);
         CALENDAR_VIEW = 'month';
-        CALENDAR_OFFSET = m - new Date().getMonth() + (curDate.getFullYear() - new Date().getFullYear()) * 12;
-        CALENDAR_SELECTED_DAY = null;
         renderDiaryFull();
       });
-      mDiv.appendChild(miniGrid);
-      grid.appendChild(mDiv);
+      grid.appendChild(monthCard);
     }
   } else {
-    ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(d => {
-      const el = document.createElement('div'); el.className = 'cal-dow'; el.textContent = d; grid.appendChild(el);
+    ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(day => {
+      const el = document.createElement('div');
+      el.className = 'cal-dow';
+      el.textContent = day;
+      grid.appendChild(el);
     });
-    const firstDow = start.getDay() === 0 ? 6 : start.getDay() - 1;
-    for (let i = 0; i < firstDow; i++) grid.appendChild(document.createElement('div'));
+
+    const start = new Date(year, month, 1);
+    const end = new Date(year, month + 1, 0);
+    const offset = start.getDay() === 0 ? 6 : start.getDay() - 1;
+
+    for (let i = 0; i < offset; i++) {
+      grid.appendChild(document.createElement('div'));
+    }
 
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
       const ds = _localDate(d);
       const cell = document.createElement('div');
       cell.className = 'cal-day';
+
       if (ds === todayStr) cell.classList.add('today');
-      if (ds === CALENDAR_SELECTED_DAY) cell.classList.add('selected');
+      if (CALENDAR_SELECTED_DAYS.has(ds)) cell.classList.add('selected');
+
       cell.innerHTML = `<div class="cal-num">${d.getDate()}</div>`;
       if (dayStats[ds]) cell.innerHTML += '<div class="cal-dot"></div>';
-      cell.addEventListener('click', () => { CALENDAR_SELECTED_DAY = CALENDAR_SELECTED_DAY === ds ? null : ds; renderDiaryFull(); });
+
+      cell.addEventListener('click', () => {
+        if (CALENDAR_SELECTED_DAYS.has(ds)) CALENDAR_SELECTED_DAYS.delete(ds);
+        else CALENDAR_SELECTED_DAYS.add(ds);
+        renderDiary();
+        renderDiaryFull();
+      });
       grid.appendChild(cell);
     }
   }
+
   c.appendChild(grid);
 
-  viewCapsule.querySelectorAll('button[data-view]').forEach(b => {
-      b.addEventListener('click', () => {
-          CALENDAR_VIEW = b.dataset.view;
-          CALENDAR_OFFSET = 0;
-          CALENDAR_SELECTED_DAY = null;
-          renderDiaryFull();
-      });
+  viewCapsule.querySelectorAll('button[data-view]').forEach(button => {
+    button.addEventListener('click', () => {
+      CALENDAR_VIEW = button.dataset.view;
+      renderDiaryFull();
+    });
   });
+
   prevBtn.addEventListener('click', () => {
-    if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET -= 30; else CALENDAR_OFFSET--;
-    CALENDAR_SELECTED_DAY = null; renderDiaryFull();
+    if (CALENDAR_VIEW === 'year') CALENDAR_CURSOR.setFullYear(CALENDAR_CURSOR.getFullYear() - 1);
+    else CALENDAR_CURSOR.setMonth(CALENDAR_CURSOR.getMonth() - 1);
+    renderDiaryFull();
   });
+
   nextBtn.addEventListener('click', () => {
-    if (CALENDAR_VIEW === '30days') CALENDAR_OFFSET += 30; else CALENDAR_OFFSET++;
-    CALENDAR_SELECTED_DAY = null; renderDiaryFull();
+    if (CALENDAR_VIEW === 'year') CALENDAR_CURSOR.setFullYear(CALENDAR_CURSOR.getFullYear() + 1);
+    else CALENDAR_CURSOR.setMonth(CALENDAR_CURSOR.getMonth() + 1);
+    renderDiaryFull();
   });
 }
-
 
 // === УПРАВЛЕНИЕ ШТОРКОЙ ===
 document.addEventListener('DOMContentLoaded', () => {
@@ -338,20 +381,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   toggle.addEventListener('click', () => {
     const isOpen = sheet.classList.toggle('open');
-    if (isOpen) {
-      const sheetContent = document.getElementById('sheet-content');
-      if (sheetContent) {
-        sheetContent.innerHTML = '';
-        const tempDiv = document.createElement('div');
-        tempDiv.id = 'content-diary';
-        sheetContent.appendChild(tempDiv);
-        if (typeof renderDiaryFull === 'function') renderDiaryFull();
-      }
-      const icon = document.getElementById('sheet-toggle-icon');
-      if (icon) icon.style.transform = 'rotate(180deg)';
-    } else {
-      const icon = document.getElementById('sheet-toggle-icon');
-      if (icon) icon.style.transform = 'rotate(0deg)';
-    }
+    if (isOpen) renderDiaryFull();
   });
 });
