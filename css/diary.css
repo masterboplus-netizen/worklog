@@ -512,7 +512,7 @@
 
 /* === КАЛЕНДАРНАЯ ШТОРКА: ЛЕНТА И РАСКРЫТИЕ === */
 .calendar-sheet {
-  transform: translateY(calc(100% - 126px));
+  transform: translateY(100%);
   overflow: visible;
 }
 .calendar-sheet.open {
@@ -608,3 +608,5 @@
 .year-month-btn.active .year-month-dot {
   background: #fff;
 }
+
+.calendar-sheet:not(.open) { display: none !important; }
