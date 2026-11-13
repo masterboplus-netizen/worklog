@@ -72,10 +72,14 @@ function setupTabs() {
 }
 
 function switchTab(name) {
-  // 0. ЗАКРЫВАЕМ ШТОРКУ КАЛЕНДАРЯ, ЕСЛИ УХОДИМ С НЕЕ
-  if (name !== 'diary') {
-    const sheet = document.getElementById('calendar-sheet');
-    if (sheet) sheet.classList.remove('open');
+  // Управление шторкой календаря
+  const sheet = document.getElementById('calendar-sheet');
+  if (sheet) {
+    if (name === 'diary') {
+      sheet.classList.add('open');
+    } else {
+      sheet.classList.remove('open');
+    }
   }
 
   // 1. СБРОС СКРОЛЛА ВВЕРХ ПРИ СМЕНЕ ВКЛАДКИ
