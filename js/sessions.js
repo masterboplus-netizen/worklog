@@ -302,3 +302,109 @@ function renderDiary() {
   });
 } // Закрываем renderDiary
 
+
+// === ЛЕНТА ДАТ (для вкладки Календарь) ===
+function renderDateStrip() {
+  const c = document.getElementById('content-diary');
+  if (!c || !window.DATA) return;
+  c.innerHTML = '';
+
+  // 1. Заголовок
+  const header = document.createElement('div');
+  header.style.cssText = 'font-size: 20px; font-weight: 600; color: var(--fg); margin-bottom: 16px; padding: 0 4px;';
+  header.textContent = 'Календарь';
+  c.appendChild(header);
+
+  // 2. Лента дат (7 дней, начиная с сегодня)
+  const strip = document.createElement('div');
+  strip.className = 'date-strip';
+
+  const now = new Date();
+  const todayStr = _localDate(now);
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now);
+    d.setDate(now.getDate() + i);
+    const ds = _localDate(d);
+    const isToday = ds === todayStr;
+
+    const item = document.createElement('div');
+    item.className = 'date-strip-item' + (isToday ? ' today' : '');
+    item.innerHTML = `
+      <div class="date-strip-day">${['Вс','Пн','Вт','Ср','Чт','Пт','Сб'][d.getDay()]}</div>
+      <div class="date-strip-num">${d.getDate()}</div>
+    `;
+    item.addEventListener('click', () => {
+      CALENDAR_SELECTED_DAY = ds;
+      // Здесь можно обновлять список сессий под лентой
+      // Пока просто вызываем renderDiary для обновления (опционально)
+      // renderDiary(); // Пока не вызываем, чтобы не ломать
+    });
+    strip.appendChild(item);
+  }
+  c.appendChild(strip);
+
+  // 3. Кнопка "Показать календарь" (открывает шторку)
+  const openBtn = document.createElement('button');
+  openBtn.textContent = 'Показать полный календарь';
+  openBtn.style.cssText = 'width: 100%; padding: 12px; margin-top: 16px; background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; color: var(--fg); font-size: 14px; cursor: pointer;';
+  openBtn.addEventListener('click', () => {
+    const sheet = document.getElementById('calendar-sheet');
+    const sheetContent = document.getElementById('sheet-content');
+    if (sheet && sheetContent) {
+      // Рендерим полный календарь в шторку
+      sheetContent.innerHTML = '';
+      const tempDiv = document.createElement('div');
+      tempDiv.id = 'content-diary';
+      sheetContent.appendChild(tempDiv);
+      // Временно подменяем ID, чтобы renderDiary отрисовал в шторке
+      const originalContent = document.getElementById('content-diary');
+      originalContent.id = 'content-diary-original';
+      tempDiv.id = 'content-diary';
+      renderDiary();
+      originalContent.id = 'content-diary';
+      tempDiv.id = 'content-diary-sheet';
+      sheet.classList.add('open');
+    }
+  });
+  c.appendChild(openBtn);
+
+  // 4. Список сессий (упрощенный, только сегодня)
+  const listHeader = document.createElement('div');
+  listHeader.style.cssText = 'font-size: 14px; font-weight: 600; color: var(--fg-dim); margin: 24px 0 12px; text-transform: uppercase; letter-spacing: 0.5px;';
+  listHeader.textContent = 'Сессии сегодня';
+  c.appendChild(listHeader);
+
+  const todaySessions = (window.DATA.sessions || []).filter(s => s.date === todayStr);
+  if (todaySessions.length === 0) {
+    c.innerHTML += '<div style="color: var(--fg-dim); font-size: 14px;">Нет сессий за сегодня</div>';
+  } else {
+    const projName = {};
+    for (const p of window.DATA.projects || []) projName[p.id] = p.name;
+
+    todaySessions.forEach(s => {
+      const item = document.createElement('div');
+      item.className = 'diary-item';
+      item.style.cursor = 'pointer';
+      item.style.background = 'rgba(255,255,255,0.03)';
+      item.style.borderRadius = '12px';
+      item.style.padding = '16px';
+      item.style.marginBottom = '12px';
+      item.style.border = '1px solid rgba(255,255,255,0.05)';
+
+      item.innerHTML = `
+        <div style="font-size:12px; color:var(--fg-dim); margin-bottom:4px;">${s.start || '?'} → ${s.end || '?'} · <span style="color:var(--accent); font-weight:600;">${fmtH(s.duration_min || 0)}</span></div>
+        <div style="font-size:16px; color:var(--fg); font-weight:700; margin-bottom:8px;">${projName[s.project] || s.project || '–'}</div>
+      `;
+      c.appendChild(item);
+    });
+  }
+}
+
+// Закрытие шторки по клику на фон (если нужно)
+document.addEventListener('click', (e) => {
+  const sheet = document.getElementById('calendar-sheet');
+  if (sheet && sheet.classList.contains('open') && !e.target.closest('#calendar-sheet')) {
+    sheet.classList.remove('open');
+  }
+});
