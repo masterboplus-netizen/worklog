@@ -72,6 +72,16 @@ function setupTabs() {
 }
 
 function switchTab(name) {
+  // Управление шторкой календаря
+  const sheet = document.getElementById('calendar-sheet');
+  if (sheet) {
+    if (name === 'diary') {
+      sheet.style.display = 'flex';
+    } else {
+      sheet.style.display = 'none';
+    }
+  }
+
 
   // 1. СБРОС СКРОЛЛА ВВЕРХ ПРИ СМЕНЕ ВКЛАДКИ
   const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity'];
