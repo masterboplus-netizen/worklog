@@ -76,9 +76,11 @@ function switchTab(name) {
   const sheet = document.getElementById('calendar-sheet');
   if (sheet) {
     if (name === 'diary') {
+      sheet.style.display = 'flex';
       sheet.classList.add('open');
     } else {
       sheet.classList.remove('open');
+      sheet.style.display = 'none';
     }
   }
 
