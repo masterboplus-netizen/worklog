@@ -81,16 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Логика скрытия виджета на сейфе
 
   const checkSafe = () => {
-    const wrapper = document.getElementById('floating-capsule-wrapper');
-    const safe = document.getElementById('scroll-pin-screen');
-    if (wrapper && safe) {
-      if (safe.classList.contains('hidden')) {
-        wrapper.style.display = 'flex';
-      } else {
-        wrapper.style.display = 'none';
-      }
+  const wrapper = document.getElementById('floating-capsule-wrapper');
+  const safe = document.getElementById('scroll-pin-screen');
+  if (wrapper && safe) {
+    // Если у сейфа стоит display: none (он скрыт) — показываем виджет
+    if (safe.style.display === 'none') {
+      wrapper.style.display = 'flex';
+    } else {
+      wrapper.style.display = 'none';
     }
-  };
+  }
+};
 
   const safeScreen = document.getElementById('scroll-pin-screen');
   if (safeScreen) {
