@@ -45,7 +45,8 @@ export function initFloatingMenu() {
 
   function checkSheetAndMove() {
     const pinScreen = document.getElementById('scroll-pin-screen');
-    
+
+    if (pinScreen && pinScreen.style.display !== 'none' && pinScreen.classList.contains('hidden') === false) {
       wrapper.style.display = 'none';
       return;
     } else {
@@ -57,7 +58,7 @@ export function initFloatingMenu() {
       const sheetHeight = sheet.offsetHeight || (window.innerHeight * 0.8);
       const capsuleHeight = wrapper.offsetHeight || 300;
       const newTop = window.innerHeight - sheetHeight - capsuleHeight - 20;
-      
+
       if (newTop > 60) {
         wrapper.style.top = newTop + 'px';
         wrapper.style.transform = 'none';
@@ -65,6 +66,7 @@ export function initFloatingMenu() {
       }
     }
 
+    if (isDragging === false) {
       wrapper.style.top = '50%';
       wrapper.style.transform = 'translateY(-50%)';
     }
@@ -96,7 +98,7 @@ export function initFloatingMenu() {
   }, { passive: false });
 
   wrapper.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
+    if (isDragging === false) return;
     e.preventDefault();
     const deltaY = e.touches[0].clientY - startY;
     let newTop = startTop + deltaY;
@@ -124,7 +126,7 @@ export function initFloatingMenu() {
   });
 
   window.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
+    if (isDragging === false) return;
     const deltaY = e.clientY - startY;
     let newTop = startTop + deltaY;
     const minTop = 100;
