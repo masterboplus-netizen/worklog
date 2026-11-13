@@ -423,3 +423,88 @@
 .period-filter-row, .month-year-filter {
   display: contents !important;
 }
+/* === ШТОРКА КАЛЕНДАРЯ === */
+.calendar-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80vh;
+  background: var(--bg2);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.6);
+  z-index: 10000;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-sheet.open {
+  transform: translateY(0);
+}
+
+.sheet-handle {
+  width: 48px;
+  height: 6px;
+  background: var(--fg-dim);
+  border-radius: 3px;
+  margin: 12px auto;
+  cursor: grab;
+  opacity: 0.5;
+}
+
+.sheet-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 16px 16px;
+}
+
+/* === ЛЕНТА ДАТ (неделя) === */
+.date-strip {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 12px 0;
+  padding: 0 4px;
+}
+
+.date-strip-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  border-radius: 12px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.05);
+  transition: all 0.2s;
+}
+
+.date-strip-item.today {
+  background: rgba(74, 158, 255, 0.2);
+  color: var(--accent);
+}
+
+.date-strip-item.selected {
+  background: var(--accent);
+  color: #fff;
+}
+
+.date-strip-day {
+  font-size: 10px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+}
+
+.date-strip-num {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.date-strip-item.selected .date-strip-num,
+.date-strip-item.selected .date-strip-day {
+  color: #fff;
+}
