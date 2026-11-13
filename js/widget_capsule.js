@@ -16,7 +16,8 @@ export function initFloatingMenu() {
 
   const toggleBtn = document.createElement('button');
   toggleBtn.id = 'toggle-capsule';
-  toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+  // Изначально капсула открыта, поэтому стрелка смотрит вправо (>)
+  toggleBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
   toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
 
   CAPSULE_ITEMS.forEach(item => {
@@ -37,22 +38,22 @@ export function initFloatingMenu() {
   document.body.appendChild(wrapper);
 
   let isCollapsed = false;
-  function toggleCollapse(force = false) {
-    isCollapsed = force ? true : !isCollapsed;
-    const btn = document.getElementById('toggle-capsule');
+  function toggleCollapse() {
+    isCollapsed = !isCollapsed;
     if (isCollapsed) {
+      // Закрываем: уезжает, стрелка смотрит влево (<)
       capsule.style.transform = 'translateX(100%)';
-      // Закрыта: показываем стрелку влево <
-      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
+      toggleBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
     } else {
+      // Открываем: возвращается, стрелка смотрит вправо (>)
       capsule.style.transform = 'translateX(0)';
-      // Открыта: показываем стрелку вправо >
-      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+      toggleBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
     }
   }
 
   toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleCollapse(); });
 
+  // === СКРЫТИЕ НА СЕЙФЕ ===
   const safeScreen = document.getElementById('scroll-pin-screen');
   if (safeScreen) {
     const update = () => {
