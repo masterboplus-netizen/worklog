@@ -57,7 +57,6 @@ export function initFloatingMenu() {
       const sheetHeight = sheet.offsetHeight || (window.innerHeight * 0.8);
       const capsuleHeight = wrapper.offsetHeight || 300;
       const newTop = window.innerHeight - sheetHeight - capsuleHeight - 20;
-      if (newTop > 60) {
         wrapper.style.top = newTop + 'px';
         wrapper.style.transform = 'none';
         return;
