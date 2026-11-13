@@ -8,31 +8,29 @@ export const CAPSULE_ITEMS = [
 export function initFloatingMenu() {
   const wrapper = document.createElement('div');
   wrapper.id = 'floating-capsule-wrapper';
-  wrapper.style.cssText = 'position: fixed; right: 0; top: 75%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
+  wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center; transition: top 0.4s ease, transform 0.3s ease;';
 
   const capsule = document.createElement('div');
   capsule.id = 'floating-capsule';
-  capsule.style.cssText = 'position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease; margin-left: 24px;';
+  capsule.style.cssText = 'position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease;';
 
   const toggleBtn = document.createElement('button');
   toggleBtn.id = 'toggle-capsule';
-  // Изначально капсула открыта, поэтому стрелка смотрит вправо (>)
-  toggleBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
-  toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 75%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
+  toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s ease;"><path d="M15 18l-6-6 6-6"/></svg>';
+  toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
 
   CAPSULE_ITEMS.forEach(item => {
     const btn = document.createElement('div');
     btn.className = 'nav-item';
     btn.dataset.tab = item.id;
-    btn.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; border-radius: 8px; color: var(--fg); transition: color 0.2s;';
+    btn.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; border-radius: 8px; color: var(--fg);';
     btn.innerHTML = `${item.icon}<span style="font-size:9px; text-align:center; line-height:1;">${item.title}</span>`;
     btn.title = item.title;
-    btn.addEventListener('click', () => {
-      // Подсветка активной
-      capsule.querySelectorAll('.nav-item').forEach(el => el.style.color = 'var(--fg)');
-      btn.style.color = 'var(--accent)';
-      // Переключение вкладки
+    btn.addEventListener('click', (e) => {
+      if (isDragging) return;
       if (typeof window.switchTab === 'function') window.switchTab(item.id);
+      toggleCollapse(true);
+      setTimeout(checkSheetAndMove, 100);
     });
     capsule.appendChild(btn);
   });
@@ -42,28 +40,99 @@ export function initFloatingMenu() {
   document.body.appendChild(wrapper);
 
   let isCollapsed = false;
-  function toggleCollapse() {
-    isCollapsed = !isCollapsed;
-    if (isCollapsed) {
-      // Закрываем: уезжает, стрелка смотрит влево (<)
-      capsule.style.transform = 'translateX(100%)';
-      toggleBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
+  let isDragging = false;
+  let startY = 0;
+  let startTop = 0;
+
+  function checkSheetAndMove() {
+    const sheet = document.getElementById('calendar-sheet');
+    if (!sheet) return;
+    const isSheetOpen = sheet.classList.contains('open');
+    if (isSheetOpen) {
+      wrapper.style.top = '40%';
     } else {
-      // Открываем: возвращается, стрелка смотрит вправо (>)
-      capsule.style.transform = 'translateX(0)';
-      toggleBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+      if (!isDragging) wrapper.style.top = '50%';
     }
   }
 
-  toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleCollapse(); });
-
-  // === СКРЫТИЕ НА СЕЙФЕ ===
-  const safeScreen = document.getElementById('scroll-pin-screen');
-  if (safeScreen) {
-    const update = () => {
-      wrapper.style.display = (safeScreen.style.display === 'block') ? 'none' : 'flex';
-    };
-    update();
-    new MutationObserver(update).observe(safeScreen, { attributes: true, attributeFilter: ['style'] });
+  function toggleCollapse(force = false) {
+    isCollapsed = force ? true : !isCollapsed;
+    if (isCollapsed) {
+      capsule.style.transform = 'translateX(100%)';
+      document.getElementById('toggle-icon').style.transform = 'rotate(0deg)';
+    } else {
+      capsule.style.transform = 'translateX(0)';
+      document.getElementById('toggle-icon').style.transform = 'rotate(180deg)';
+    }
   }
+
+  toggleBtn.addEventListener('click', (e) => { 
+    if (isDragging) return;
+    e.stopPropagation(); 
+    toggleCollapse(); 
+  });
+
+  wrapper.addEventListener('touchstart', (e) => {
+    if (e.target.closest('.nav-item') || e.target.closest('#toggle-capsule')) return;
+    isDragging = true;
+    startY = e.touches[0].clientY;
+    startTop = wrapper.getBoundingClientRect().top;
+    wrapper.style.transition = 'none';
+  }, { passive: false });
+
+  wrapper.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const deltaY = e.touches[0].clientY - startY;
+    let newTop = startTop + deltaY;
+    const minTop = 100;
+    const maxTop = window.innerHeight - wrapper.offsetHeight - 60;
+    if (newTop < minTop) newTop = minTop;
+    if (newTop > maxTop) newTop = maxTop;
+    wrapper.style.top = newTop + 'px';
+    wrapper.style.transform = 'none';
+  }, { passive: false });
+
+  wrapper.addEventListener('touchend', () => {
+    isDragging = false;
+    wrapper.style.transition = 'top 0.4s ease, transform 0.3s ease';
+    wrapper.style.transform = 'translateY(0)'; 
+    wrapper.style.top = wrapper.getBoundingClientRect().top + 'px';
+  });
+
+  wrapper.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.nav-item') || e.target.closest('#toggle-capsule')) return;
+    isDragging = true;
+    startY = e.clientY;
+    startTop = wrapper.getBoundingClientRect().top;
+    wrapper.style.transition = 'none';
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const deltaY = e.clientY - startY;
+    let newTop = startTop + deltaY;
+    const minTop = 100;
+    const maxTop = window.innerHeight - wrapper.offsetHeight - 60;
+    if (newTop < minTop) newTop = minTop;
+    if (newTop > maxTop) newTop = maxTop;
+    wrapper.style.top = newTop + 'px';
+    wrapper.style.transform = 'none';
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      wrapper.style.transition = 'top 0.4s ease, transform 0.3s ease';
+      wrapper.style.transform = 'translateY(0)';
+      wrapper.style.top = wrapper.getBoundingClientRect().top + 'px';
+    }
+  });
+
+  setTimeout(checkSheetAndMove, 500);
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#sheet-toggle')) {
+      setTimeout(checkSheetAndMove, 100);
+    }
+  });
 }
