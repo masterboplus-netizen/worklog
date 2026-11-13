@@ -28,6 +28,10 @@ async function init() {
 
   setupTabs();
 
+  // Скрываем шторку календаря при старте (до первого переключения вкладок)
+  const sheet = document.getElementById('calendar-sheet');
+  if (sheet) sheet.style.display = 'none';
+
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
   
