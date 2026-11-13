@@ -615,3 +615,13 @@
 .calendar-sheet.open .date-strip {
     display: none !important;
 }
+
+/* Стрелка: вверх (закрыта), вниз (открыта) */
+.calendar-sheet:not(.open) #sheet-toggle-icon {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+}
+.calendar-sheet.open #sheet-toggle-icon {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
