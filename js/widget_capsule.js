@@ -41,6 +41,7 @@ toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform:
     isCollapsed = force ? true : !isCollapsed;
     capsule.style.transform = isCollapsed ? 'translateX(100%)' : 'translateX(0)';
     document.getElementById('toggle-icon').style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
+}
 
   toggleBtn.addEventListener('click', (e) => { 
     if (isDragging) return;
