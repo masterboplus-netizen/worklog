@@ -89,29 +89,7 @@ function renderDiary() {
   }
   c.appendChild(strip);
 
-  // Кнопка открытия шторки (стрелка)
-  const openSheetBtn = document.createElement('button');
-  openSheetBtn.innerHTML = 'Открыть календарь <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
-  openSheetBtn.style.cssText = 'width: 100%; padding: 12px; margin: 12px 0; background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; color: var(--fg); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;';
-  openSheetBtn.addEventListener('click', () => {
-    const sheet = document.getElementById('calendar-sheet');
-    const sheetContent = document.getElementById('sheet-content');
-    if (sheet && sheetContent) {
-      sheetContent.innerHTML = '';
-      const tempDiv = document.createElement('div');
-      tempDiv.id = 'content-diary-sheet';
-      sheetContent.appendChild(tempDiv);
-      // Рендерим календарь в шторку
-      const originalContent = document.getElementById('content-diary');
-      originalContent.id = 'content-diary-original';
-      tempDiv.id = 'content-diary';
-      renderDiaryFull();
-      originalContent.id = 'content-diary';
-      tempDiv.id = 'content-diary-sheet';
-      sheet.classList.add('open');
-    }
-  });
-  c.appendChild(openSheetBtn);
+  
 
 
   // 4. НИЖНЯЯ СТРОКА (Список + Сессии/24ч)
@@ -455,73 +433,7 @@ function renderDiaryFull() {
   c.appendChild(navRow);
 
   // 3. СЕТКА
-  const grid = document.createElement('div');
-  grid.className = 'calendar-grid';
-
-  const dayStats = {};
-  for (const s of window.DATA.sessions || []) dayStats[s.date] = (dayStats[s.date] || 0) + (s.duration_min || 0);
-  const todayStr = _localDate(new Date());
-
-  if (CALENDAR_VIEW === 'year') {
-    grid.style.cssText = 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px 8px; margin-bottom: 24px; padding: 0 4px;';
-    for (let m = 0; m < 12; m++) {
-      const mDiv = document.createElement('div');
-      mDiv.innerHTML = '<div style="font-size:12px;color:var(--fg-dim);margin-bottom:4px;text-align:center;">' + months[m].slice(0,3) + '</div>';
-      const miniGrid = document.createElement('div');
-      miniGrid.style.cssText = 'display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;';
-
-      const mStart = new Date(curDate.getFullYear(), m, 1);
-      const mEnd = new Date(curDate.getFullYear(), m + 1, 0);
-      const firstDow = mStart.getDay() === 0 ? 6 : mStart.getDay() - 1;
-
-      for (let i = 0; i < firstDow; i++) miniGrid.innerHTML += '<div></div>';
-      for (let d = new Date(mStart); d <= mEnd; d.setDate(d.getDate() + 1)) {
-        const ds = _localDate(d);
-        const hasData = !!dayStats[ds];
-        const isToday = ds === todayStr;
-
-        let bg = 'transparent';
-        let col = 'var(--fg-dim)';
-        if (isToday) { bg = 'rgba(255, 255, 255, 0.2)'; col = '#fff'; }
-
-        let cellHtml = `<div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:7px; border-radius:50%; background:${bg}; color:${col}; position:relative;">${d.getDate()}`;
-        if (hasData) {
-             cellHtml += `<div style="position:absolute; bottom:0px; width:2px; height:2px; border-radius:50%; background:var(--accent);"></div>`;
-        }
-        cellHtml += `</div>`;
-        miniGrid.innerHTML += cellHtml;
-      }
-      mDiv.style.cursor = 'pointer';
-      miniGrid.style.pointerEvents = 'none';
-      mDiv.addEventListener('click', () => {
-        CALENDAR_VIEW = 'month';
-        CALENDAR_OFFSET = m - new Date().getMonth() + (curDate.getFullYear() - new Date().getFullYear()) * 12;
-        CALENDAR_SELECTED_DAY = null;
-        renderDiaryFull();
-      });
-      mDiv.appendChild(miniGrid);
-      grid.appendChild(mDiv);
-    }
-  } else {
-    ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(d => {
-      const el = document.createElement('div'); el.className = 'cal-dow'; el.textContent = d; grid.appendChild(el);
-    });
-    const firstDow = start.getDay() === 0 ? 6 : start.getDay() - 1;
-    for (let i = 0; i < firstDow; i++) grid.appendChild(document.createElement('div'));
-
-    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      const ds = _localDate(d);
-      const cell = document.createElement('div');
-      cell.className = 'cal-day';
-      if (ds === todayStr) cell.classList.add('today');
-      if (ds === CALENDAR_SELECTED_DAY) cell.classList.add('selected');
-      cell.innerHTML = `<div class="cal-num">${d.getDate()}</div>`;
-      if (dayStats[ds]) cell.innerHTML += '<div class="cal-dot"></div>';
-      cell.addEventListener('click', () => { CALENDAR_SELECTED_DAY = CALENDAR_SELECTED_DAY === ds ? null : ds; renderDiaryFull(); });
-      grid.appendChild(cell);
-    }
-  }
-  c.appendChild(grid);
+  
 
   viewCapsule.querySelectorAll('button[data-view]').forEach(b => {
       b.addEventListener('click', () => {
@@ -540,3 +452,23 @@ function renderDiaryFull() {
     CALENDAR_SELECTED_DAY = null; renderDiaryFull();
   });
 }
+
+// === УПРАВЛЕНИЕ ШТОРКОЙ ===
+document.addEventListener('DOMContentLoaded', () => {
+  const sheet = document.getElementById('calendar-sheet');
+  const toggle = document.getElementById('sheet-toggle');
+  if (sheet && toggle) {
+    toggle.addEventListener('click', () => {
+      sheet.classList.toggle('open');
+      if (sheet.classList.contains('open')) {
+        const sheetContent = document.getElementById('sheet-content');
+        if (sheetContent && !sheetContent.hasChildNodes()) {
+          const tempDiv = document.createElement('div');
+          tempDiv.id = 'content-diary';
+          sheetContent.appendChild(tempDiv);
+          if (typeof renderDiaryFull === 'function') renderDiaryFull();
+        }
+      }
+    });
+  }
+});

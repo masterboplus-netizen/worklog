@@ -219,6 +219,7 @@ window.onerror = function(msg, url, line, col, error) {
   document.addEventListener("DOMContentLoaded", initFloatingMenu);
 </script>
 <div id="calendar-sheet" class="calendar-sheet">
+  <div id="sheet-toggle" style="position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 60px; height: 40px; background: var(--bg2); border: 1px solid var(--border); border-bottom: none; border-radius: 12px 12px 0 0; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></div>
   <div class="sheet-handle" id="sheet-handle"></div>
   <div class="sheet-content" id="sheet-content"></div>
 </div>
