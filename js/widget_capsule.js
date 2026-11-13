@@ -74,3 +74,25 @@ export function initFloatingMenu() {
   
   setTimeout(hideOnSafe, 500);
 }
+// Вызов функции для создания виджета при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+  initFloatingMenu();
+  
+  // Логика скрытия виджета на сейфе
+  const hideOnSafe = () => {
+    const wrapper = document.getElementById('floating-capsule-wrapper');
+    const safe = document.getElementById('scroll-pin-screen');
+    if (wrapper && safe) {
+      // Если сейф виден (нет класса hidden) — скрываем виджет
+      if (!safe.classList.contains('hidden')) {
+        wrapper.style.display = 'none';
+      } else {
+        wrapper.style.display = 'flex';
+      }
+    }
+  };
+  
+  // Проверяем каждые 500мс (надежнее, чем события)
+  setTimeout(hideOnSafe, 500);
+  setInterval(hideOnSafe, 500);
+});
