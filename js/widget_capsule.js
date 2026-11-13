@@ -24,10 +24,14 @@ export function initFloatingMenu() {
     const btn = document.createElement('div');
     btn.className = 'nav-item';
     btn.dataset.tab = item.id;
-    btn.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; border-radius: 8px; color: var(--fg);';
+    btn.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; border-radius: 8px; color: var(--fg); transition: color 0.2s;';
     btn.innerHTML = `${item.icon}<span style="font-size:9px; text-align:center; line-height:1;">${item.title}</span>`;
     btn.title = item.title;
     btn.addEventListener('click', () => {
+      // Подсветка активной
+      capsule.querySelectorAll('.nav-item').forEach(el => el.style.color = 'var(--fg)');
+      btn.style.color = 'var(--accent)';
+      // Переключение вкладки
       if (typeof window.switchTab === 'function') window.switchTab(item.id);
     });
     capsule.appendChild(btn);
