@@ -97,7 +97,7 @@ function switchTab(name) {
   try {
     if (name === 'diary') {
       const c = document.getElementById('content-diary');
-      if (c) { c.classList.remove('hidden'); renderDateStrip(); }
+      if (c) { c.classList.remove('hidden'); renderDiary(); }
       const t = document.getElementById('tab-diary'); if (t) t.classList.add('tab-active');
     } else if (name === 'projects') {
       const c = document.getElementById('content-projects');
