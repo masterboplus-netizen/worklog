@@ -48,9 +48,8 @@ export function initFloatingMenu() {
     if (pinScreen && pinScreen.style.display !== 'none' && !pinScreen.classList.contains('hidden')) {
       wrapper.style.display = 'none';
       return;
-    } else {
     }
-    }
+}
 
     const sheet = document.getElementById('calendar-sheet');
     if (sheet && sheet.classList.contains('open')) {
