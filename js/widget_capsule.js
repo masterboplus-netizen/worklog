@@ -46,11 +46,11 @@ export function initFloatingMenu() {
   function checkSheetAndMove() {
     const pinScreen = document.getElementById('scroll-pin-screen');
 
-    if (pinScreen && pinScreen.style.display !== 'none' && pinScreen.classList.contains('hidden') === false) {
+    // Если экран сейфа виден (нет класса hidden) — скрываем виджет
       wrapper.style.display = 'none';
       return;
     } else {
-      wrapper.style.display = 'flex';
+      wrapper.style.display = 'flex'; // Во всех остальных случаях показываем
     }
 
     const sheet = document.getElementById('calendar-sheet');
