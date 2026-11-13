@@ -17,7 +17,6 @@ export function initFloatingMenu() {
   toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
   toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
 toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
-document.getElementById('toggle-icon').style.transform = 'rotate(180deg)';
 
   CAPSULE_ITEMS.forEach(item => {
     const btn = document.createElement('div');
@@ -41,8 +40,7 @@ document.getElementById('toggle-icon').style.transform = 'rotate(180deg)';
   function toggleCollapse(force = false) {
     isCollapsed = force ? true : !isCollapsed;
     capsule.style.transform = isCollapsed ? 'translateX(100%)' : 'translateX(0)';
-    document.getElementById('toggle-icon').style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)';
-  }
+    document.getElementById('toggle-icon').style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
 
   toggleBtn.addEventListener('click', (e) => { 
     if (isDragging) return;
