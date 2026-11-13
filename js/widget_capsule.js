@@ -9,27 +9,23 @@ export function initFloatingMenu() {
   const wrapper = document.createElement('div');
   wrapper.id = 'floating-capsule-wrapper';
   wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center; transition: top 0.4s ease, transform 0.3s ease;';
-
   const capsule = document.createElement('div');
   capsule.id = 'floating-capsule';
   capsule.style.cssText = 'position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease;';
-
   const toggleBtn = document.createElement('button');
   toggleBtn.id = 'toggle-capsule';
-  toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s ease;"><path d="M15 18l-6-6 6-6"/></svg>';
+  toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
   toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
-
+  
   CAPSULE_ITEMS.forEach(item => {
     const btn = document.createElement('div');
     btn.className = 'nav-item';
     btn.dataset.tab = item.id;
     btn.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; border-radius: 8px; color: var(--fg);';
     btn.innerHTML = `${item.icon}<span style="font-size:9px; text-align:center; line-height:1;">${item.title}</span>`;
-    btn.title = item.title;
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', () => {
       if (isDragging) return;
       if (typeof window.switchTab === 'function') window.switchTab(item.id);
-      setTimeout(checkSheetAndMove, 100);
     });
     capsule.appendChild(btn);
   });
@@ -38,50 +34,12 @@ export function initFloatingMenu() {
   wrapper.appendChild(capsule);
   document.body.appendChild(wrapper);
 
-  let isCollapsed = false;
-  let isDragging = false;
-  let startY = 0;
-  let startTop = 0;
-
-  function checkSheetAndMove() {
-    const pinScreen = document.getElementById('scroll-pin-screen');
-
-    if (pinScreen && pinScreen.style.display !== "none" && pinScreen.classList.contains("hidden") === false) {
-    // Если экран сейфа виден (нет класса hidden) — скрываем виджет
-      wrapper.style.display = 'none';
-      return;
-    } else {
-      wrapper.style.display = 'flex'; // Во всех остальных случаях показываем
-    }
-
-    const sheet = document.getElementById('calendar-sheet');
-    if (sheet && sheet.classList.contains('open')) {
-      const sheetHeight = sheet.offsetHeight || (window.innerHeight * 0.8);
-      const capsuleHeight = wrapper.offsetHeight || 300;
-      const newTop = window.innerHeight - sheetHeight - capsuleHeight - 20;
-
-      if (newTop > 60) {
-        wrapper.style.top = newTop + 'px';
-        wrapper.style.transform = 'none';
-        return;
-      }
-    }
-
-    if (isDragging === false) {
-      wrapper.style.top = '50%';
-      wrapper.style.transform = 'translateY(-50%)';
-    }
-  }
+  let isCollapsed = false, isDragging = false, startY = 0, startTop = 0;
 
   function toggleCollapse(force = false) {
     isCollapsed = force ? true : !isCollapsed;
-    if (isCollapsed) {
-      capsule.style.transform = 'translateX(100%)';
-      document.getElementById('toggle-icon').style.transform = 'rotate(0deg)';
-    } else {
-      capsule.style.transform = 'translateX(0)';
-      document.getElementById('toggle-icon').style.transform = 'rotate(180deg)';
-    }
+    capsule.style.transform = isCollapsed ? 'translateX(100%)' : 'translateX(0)';
+    document.getElementById('toggle-icon').style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)';
   }
 
   toggleBtn.addEventListener('click', (e) => { 
@@ -92,65 +50,27 @@ export function initFloatingMenu() {
 
   wrapper.addEventListener('touchstart', (e) => {
     if (e.target.closest('.nav-item') || e.target.closest('#toggle-capsule')) return;
-    isDragging = true;
-    startY = e.touches[0].clientY;
-    startTop = wrapper.getBoundingClientRect().top;
+    isDragging = true; startY = e.touches[0].clientY; startTop = wrapper.getBoundingClientRect().top;
     wrapper.style.transition = 'none';
   }, { passive: false });
 
   wrapper.addEventListener('touchmove', (e) => {
-    if (isDragging === false) return;
-    e.preventDefault();
-    const deltaY = e.touches[0].clientY - startY;
-    let newTop = startTop + deltaY;
-    const minTop = 100;
-    const maxTop = window.innerHeight - wrapper.offsetHeight - 60;
-    if (newTop < minTop) newTop = minTop;
-    if (newTop > maxTop) newTop = maxTop;
-    wrapper.style.top = newTop + 'px';
-    wrapper.style.transform = 'none';
+    if (!isDragging) return; e.preventDefault();
+    let newTop = startTop + (e.touches[0].clientY - startY);
+    newTop = Math.max(100, Math.min(newTop, window.innerHeight - wrapper.offsetHeight - 60));
+    wrapper.style.top = newTop + 'px'; wrapper.style.transform = 'none';
   }, { passive: false });
 
   wrapper.addEventListener('touchend', () => {
     isDragging = false;
     wrapper.style.transition = 'top 0.4s ease, transform 0.3s ease';
-    wrapper.style.transform = 'translateY(0)'; 
-    wrapper.style.top = wrapper.getBoundingClientRect().top + 'px';
+    wrapper.style.transform = 'translateY(0)'; wrapper.style.top = wrapper.getBoundingClientRect().top + 'px';
   });
 
-  wrapper.addEventListener('mousedown', (e) => {
-    if (e.target.closest('.nav-item') || e.target.closest('#toggle-capsule')) return;
-    isDragging = true;
-    startY = e.clientY;
-    startTop = wrapper.getBoundingClientRect().top;
-    wrapper.style.transition = 'none';
-  });
-
-  window.addEventListener('mousemove', (e) => {
-    if (isDragging === false) return;
-    const deltaY = e.clientY - startY;
-    let newTop = startTop + deltaY;
-    const minTop = 100;
-    const maxTop = window.innerHeight - wrapper.offsetHeight - 60;
-    if (newTop < minTop) newTop = minTop;
-    if (newTop > maxTop) newTop = maxTop;
-    wrapper.style.top = newTop + 'px';
-    wrapper.style.transform = 'none';
-  });
-
-  window.addEventListener('mouseup', () => {
-    if (isDragging) {
-      isDragging = false;
-      wrapper.style.transition = 'top 0.4s ease, transform 0.3s ease';
-      wrapper.style.transform = 'translateY(0)';
-      wrapper.style.top = wrapper.getBoundingClientRect().top + 'px';
-    }
-  });
-
-  setTimeout(checkSheetAndMove, 500);
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('#sheet-toggle')) {
-      setTimeout(checkSheetAndMove, 100);
-    }
-  });
+  const hideOnSafe = () => {
+    const safe = document.getElementById('scroll-pin-screen');
+    wrapper.style.display = (safe && !safe.classList.contains('hidden')) ? 'none' : 'flex';
+  };
+  
+  setTimeout(hideOnSafe, 500);
 }
