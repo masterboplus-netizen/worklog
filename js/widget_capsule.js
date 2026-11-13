@@ -29,7 +29,6 @@ export function initFloatingMenu() {
     btn.addEventListener('click', (e) => {
       if (isDragging) return;
       if (typeof window.switchTab === 'function') window.switchTab(item.id);
-      toggleCollapse(true);
       setTimeout(checkSheetAndMove, 100);
     });
     capsule.appendChild(btn);
@@ -45,6 +44,13 @@ export function initFloatingMenu() {
   let startTop = 0;
 
   function checkSheetAndMove() {
+    const pinScreen = document.getElementById('scroll-pin-screen');
+      wrapper.style.display = 'none';
+      return;
+    } else {
+      wrapper.style.display = 'flex';
+    }
+
     const sheet = document.getElementById('calendar-sheet');
     if (!sheet) return;
     const isSheetOpen = sheet.classList.contains('open');
