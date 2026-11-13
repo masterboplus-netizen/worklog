@@ -72,6 +72,12 @@ function setupTabs() {
 }
 
 function switchTab(name) {
+  // 0. ЗАКРЫВАЕМ ШТОРКУ КАЛЕНДАРЯ, ЕСЛИ УХОДИМ С НЕЕ
+  if (name !== 'diary') {
+    const sheet = document.getElementById('calendar-sheet');
+    if (sheet) sheet.classList.remove('open');
+  }
+
   // 1. СБРОС СКРОЛЛА ВВЕРХ ПРИ СМЕНЕ ВКЛАДКИ
   const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity'];
   scrollContainers.forEach(id => {
