@@ -45,10 +45,12 @@ export function initFloatingMenu() {
 
   function checkSheetAndMove() {
     const pinScreen = document.getElementById('scroll-pin-screen');
+    if (pinScreen && pinScreen.style.display !== 'none' && !pinScreen.classList.contains('hidden')) {
       wrapper.style.display = 'none';
       return;
     } else {
       wrapper.style.display = 'flex';
+    }
     }
 
     const sheet = document.getElementById('calendar-sheet');
