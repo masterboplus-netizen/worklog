@@ -47,7 +47,7 @@ function showSafe() {
   screen.style.position = 'fixed';
   screen.style.top = '0'; screen.style.left = '0';
   screen.style.width = '100vw'; screen.style.height = '100vh';
-  screen.style.zIndex = '9999';
+  screen.style.zIndex = '10001';
   screen.style.alignItems = 'initial';
   screen.style.justifyContent = 'initial';
   screen.style.backgroundColor = 'var(--bg)';

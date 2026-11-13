@@ -276,43 +276,25 @@ function renderDiaryFull() {
   grid.className = 'calendar-grid';
 
   if (CALENDAR_VIEW === 'year') {
-    grid.style.cssText =
-      'display:grid;grid-template-columns:repeat(3,1fr);gap:16px 8px;margin-bottom:24px;padding:0 4px;';
+    grid.className = 'year-month-grid';
 
     for (let m = 0; m < 12; m++) {
-      const monthCard = document.createElement('div');
-      monthCard.style.cursor = 'pointer';
-      monthCard.innerHTML =
-        `<div style="font-size:12px;color:var(--fg-dim);margin-bottom:4px;text-align:center;">${months[m].slice(0,3)}</div>`;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'year-month-btn' + (m === month ? ' active' : '');
 
-      const mini = document.createElement('div');
-      mini.style.cssText =
-        'display:grid;grid-template-columns:repeat(7,1fr);gap:2px;';
+      const prefix = `${year}-${String(m + 1).padStart(2, '0')}-`;
+      const hasEntries = Object.keys(dayStats).some(ds => ds.startsWith(prefix));
 
-      const first = new Date(year, m, 1);
-      const last = new Date(year, m + 1, 0);
-      const offset = first.getDay() === 0 ? 6 : first.getDay() - 1;
+      btn.innerHTML = `<span>${months[m]}</span>${hasEntries ? '<i class="year-month-dot"></i>' : ''}`;
 
-      for (let i = 0; i < offset; i++) mini.innerHTML += '<div></div>';
-
-      for (let d = new Date(first); d <= last; d.setDate(d.getDate() + 1)) {
-        const ds = _localDate(d);
-        const today = ds === todayStr;
-        const dot = dayStats[ds]
-          ? '<span style="position:absolute;bottom:0;width:3px;height:3px;border-radius:50%;background:var(--accent);"></span>'
-          : '';
-        mini.innerHTML +=
-          `<div style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:7px;border-radius:50%;background:${today ? 'rgba(255,255,255,.2)' : 'transparent'};color:${today ? '#fff' : 'var(--fg-dim)'};position:relative;">${d.getDate()}${dot}</div>`;
-      }
-
-      mini.style.pointerEvents = 'none';
-      monthCard.appendChild(mini);
-      monthCard.addEventListener('click', () => {
+      btn.addEventListener('click', () => {
         CALENDAR_CURSOR = new Date(year, m, 1);
         CALENDAR_VIEW = 'month';
         renderDiaryFull();
       });
-      grid.appendChild(monthCard);
+
+      grid.appendChild(btn);
     }
   } else {
     ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(day => {

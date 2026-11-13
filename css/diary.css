@@ -566,3 +566,45 @@
 .date-strip-item.selected .date-strip-dot {
   background: #fff;
 }
+
+
+/* Годовой календарь — 12 кнопок */
+.year-month-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 8px 0 16px;
+  padding: 0 4px;
+}
+
+.year-month-btn {
+  min-height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg3);
+  color: var(--fg);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.year-month-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.year-month-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.year-month-btn.active .year-month-dot {
+  background: #fff;
+}
