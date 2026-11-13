@@ -68,7 +68,6 @@ export function initFloatingMenu() {
       wrapper.style.transform = 'translateY(-50%)';
     }
   }
-
   function toggleCollapse(force = false) {
     isCollapsed = force ? true : !isCollapsed;
     if (isCollapsed) {
