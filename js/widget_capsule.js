@@ -8,7 +8,7 @@ export const CAPSULE_ITEMS = [
 export function initFloatingMenu() {
   const wrapper = document.createElement('div');
   wrapper.id = 'floating-capsule-wrapper';
-  wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
+  wrapper.style.cssText = 'position: fixed; right: 0; top: 75%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center;';
 
   const capsule = document.createElement('div');
   capsule.id = 'floating-capsule';
@@ -18,7 +18,7 @@ export function initFloatingMenu() {
   toggleBtn.id = 'toggle-capsule';
   // Изначально капсула открыта, поэтому стрелка смотрит вправо (>)
   toggleBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
-  toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
+  toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 75%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
 
   CAPSULE_ITEMS.forEach(item => {
     const btn = document.createElement('div');
