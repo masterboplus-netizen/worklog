@@ -774,3 +774,21 @@
   width: calc(100% / 7) !important; /* Ровно 1/7 от ширины контейнера */
   flex: 0 0 calc(100% / 7) !important;
 }
+/* === ПЕРЕНЕСЕНО ИЗ LAYOUT.CSS (График/Активность) === */
+#content-activity {
+  display: block !important;
+  padding: 16px;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  padding-bottom: 20px !important;
+  background: var(--bg);
+  box-sizing: border-box;
+  height: auto !important; 
+  min-height: calc(100vh - 150px) !important; 
+  flex-direction: column !important;
+}
+
+#content-activity h2 {
+  margin-top: 10px !important;
+  padding-top: 0 !important;
+}
