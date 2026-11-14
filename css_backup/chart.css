@@ -1,0 +1,776 @@
+/* Стили графиков */
+/* === Гистограмма по дням === */
+.chart-days {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 120px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.chart-day {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 0;
+}
+
+/* === Chart v2: сетка, оси, столбики, переключатель метрики === */
+.chart-bars {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 4px;
+  height: 180px;
+}
+
+.chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 48px;
+  font-size: 10px;
+  color: var(--fg-dim);
+  text-align: right;
+  padding-right: 4px;
+}
+
+.chart-grid-line {
+  position: relative;
+  line-height: 1;
+}
+
+.chart-grid-label {
+  display: block;
+}
+
+.chart-bars-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  border-bottom: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  padding: 0 2px;
+  background-image: linear-gradient(to top, var(--border) 1px, transparent 1px);
+  background-size: 100% 25%;
+  background-position: 0 0;
+}
+
+.chart-col {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 2px;
+}
+
+.chart-bar:hover { opacity: 0.75; }
+
+/* === Chart v3: тултип + активная метрика + подписи дат === */
+
+.chart-tooltip {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--fg);
+  text-align: center;
+  display: inline-block;
+}
+
+/* === Chart v3.1: labels внутри barsWrap === */
+.chart-bars-wrap {
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+/* === Chart bar (cleanup) === */
+.chart-bar {
+  width: 100%;
+  max-width: 24px;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+  transition: opacity 0.15s;
+  cursor: pointer;
+}
+
+.chart-bar.empty {
+  background: transparent;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* === Chart labels (final) === */
+
+.chart-label {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  font-size: 9px;
+  color: var(--fg-dim);
+  overflow: visible;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+}
+
+/* =========================================
+   ЧИСТАЯ ЛЕГЕНДА ГРАФИКА (ФИНАЛ)
+   ========================================= */
+.chart-bar {
+  position: relative;
+  overflow: visible !important;
+}
+
+.chart-bar.selected 
+.bar-label {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(0,0,0,0.9);
+  z-index: 10;
+  pointer-events: none;
+  background: transparent; /* убираем фон */
+  border: none; /* убираем рамку */
+  padding: 0;
+}
+
+/* === Ярко-зеленый столбик при тапе === */
+.chart-bar.selected {
+  background: #00ff00 !important;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.6) !important;
+}
+
+.chart-bar.selected 
+.bar-label {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(0,0,0,0.9);
+  z-index: 10;
+  pointer-events: none;
+  background: transparent; /* убираем фон */
+  border: none; /* убираем рамку */
+  padding: 0;
+}
+
+/* === Легенда графика: не наезжает на кнопки === */
+.chart-bar 
+.bar-label {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(0,0,0,0.9);
+  z-index: 10;
+  pointer-events: none;
+  background: transparent; /* убираем фон */
+  border: none; /* убираем рамку */
+  padding: 0;
+}
+
+/* Чтобы легенда не перекрывала кнопки периодов, ограничим высоту графика */
+#content-activity .chart-bars {
+  margin-top: 40px !important; /* Отодвигаем график от кнопок */
+}
+
+/* ЖЕСТКИЙ ФИКС ДЛЯ PIN */
+
+
+/* === ФИКС: Выравнивание графика === */
+.chart-bars {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 4px;
+  height: 180px;
+  justify-content: flex-start; /* Прижимаем к левому краю */
+}
+
+.chart-y-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 30px; /* Уменьшаем ширину оси Y */
+  font-size: 10px;
+  color: var(--fg-dim);
+  text-align: right;
+  padding-right: 4px;
+}
+
+.chart-bars-wrap {
+  position: relative;
+  flex: 1; /* Занимает всё оставшееся место */
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  border-bottom: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  padding: 0 2px;
+  background-image: linear-gradient(to top, var(--border) 1px, transparent 1px);
+  background-size: 100% 25%;
+  background-position: 0 0;
+}
+
+/* Убираем отступ у первой колонки, чтобы она была вплотную к оси */
+.chart-col:first-child {
+  margin-left: 0;
+}
+
+/* === ФИКС: Выравнивание столбиков и дат === */
+.chart-bars-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.chart-label {
+  flex: 1 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* 8. Сама дата (равная доля, как и столбик) */
+.chart-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 0;
+}
+
+/* === РАБОЧИЙ ГРАФИК === */
+.chart-bars {
+  display: flex;
+  gap: 0;
+  margin: 12px 0 4px;
+  height: 180px;
+}
+
+.chart-y-axis {
+  width: 30px;
+  min-width: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--fg-dim);
+  text-align: right;
+  padding-right: 4px;
+  box-sizing: border-box;
+}
+
+.chart-bars-wrap {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  background-image: linear-gradient(to top, var(--border) 1px, transparent 1px);
+  background-size: 100% 25%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.chart-col {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-width: 0;
+}
+
+.chart-bar {
+  width: 100%;
+  max-width: 24px;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+  cursor: pointer;
+}
+
+.chart-bar.empty { background: transparent; pointer-events: none; }
+
+.chart-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 9px;
+  color: var(--fg-dim);
+  line-height: 1.1;
+  min-width: 0;
+}
+
+/* Выделенный столбик (яркий зеленый) */
+.chart-bar.selected {
+  background: #00ff00 !important; /* Яркий чистый зеленый */
+  box-shadow: 0 0 12px rgba(0, 255, 0, 0.6);
+  transition: all 0.2s ease;
+}
+
+.chart-labels-row {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.chart-spacer {
+  width: 30px;
+  min-width: 30px;
+  flex: 0 0 30px;
+  padding-right: 4px;
+  box-sizing: border-box;
+}
+
+.chart-labels {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}
+
+.chart-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 0;
+}
+
+/* === График v4 (чистая сетка) === */
+.chart-wrapper-v4 { display: flex; width: 100%; height: 220px; margin-bottom: 16px; box-sizing: border-box; }
+
+.chart-y-axis-v4 { width: 32px; display: flex; flex-direction: column; justify-content: space-between; font-size: 10px; color: var(--fg-dim); text-align: right; padding-right: 8px; box-sizing: border-box; height: calc(100% - 32px); margin-top: auto; margin-bottom: 32px; }
+
+.chart-legend-v4 { height: 24px; text-align: center; font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
+
+.chart-metric-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* === ИДЕАЛЬНЫЕ КНОПКИ ГРАФИКА (GRID) === */
+
+
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border-color: var(--accent) !important;
+}
+
+/* === Финальный стиль кнопок метрик (Таблетки) === */
+
+
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important; /* Легкая тень для объема */
+}
+
+/* На всякий случай скрываем старые легенды */
+.chart-legend-v4, #tl-legend-bar {
+  display: none !important;
+}
+
+/* === ИДЕАЛЬНАЯ СЕТКА ДЛЯ КНОПОК === */
+.chart-metrics-row-v4 {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+  margin: 16px 8px 16px 8px !important;
+  width: calc(100% - 16px) !important;
+  box-sizing: border-box !important;
+}
+
+.chart-metric-btn {
+  width: 100% !important;
+  text-align: center !important;
+  padding: 10px 0 !important;
+  font-size: 12px !important;
+  background: var(--bg2) !important;
+  border: 1px solid transparent !important;
+  border-radius: 20px !important;
+  color: var(--fg) !important;
+  transition: all 0.2s !important;
+  white-space: nowrap !important;
+  font-weight: 500 !important;
+}
+
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
+}
+
+/* === САМЫЙ ЖЕСТКИЙ ФИКС КНОПОК МЕТРИК === */
+.chart-metrics-row-v4 {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important; /* Ровно 4 колонки */
+  gap: 8px !important;
+  margin: 16px !important;
+  width: calc(100% - 32px) !important;
+  box-sizing: border-box !important;
+}
+
+.chart-metric-btn {
+  width: 100% !important;
+  text-align: center !important;
+  padding: 10px 0 !important; /* Убираем боковые отступы, чтобы текст влез */
+  font-size: 11px !important; /* Чуть меньше шрифт */
+  background: var(--bg2) !important;
+  border: 1px solid transparent !important;
+  border-radius: 20px !important;
+  color: var(--fg) !important;
+  white-space: nowrap !important; /* Запрещаем перенос строк */
+  font-weight: 500 !important;
+  overflow: hidden !important; /* Скрываем всё, что не влезло */
+  text-overflow: ellipsis !important; /* Но добавляем троеточие */
+  display: block !important;
+  box-sizing: border-box !important;
+}
+
+.chart-metric-btn.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3) !important;
+}
+
+/* Перенесено из layout.css */
+/* === Карточки метрик === */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.metric {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.metric-value.accent { color: var(--accent); }
+
+.metrics { grid-template-columns: repeat(4, 1fr); }
+
+.bar-label {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(0,0,0,0.9);
+  z-index: 10;
+  pointer-events: none;
+  background: transparent; /* убираем фон */
+  border: none; /* убираем рамку */
+  padding: 0;
+}
+
+/* Плашка с цифрой (без рамки, просто текст) */
+
+.bar-label {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(0,0,0,0.9);
+  z-index: 10;
+  pointer-events: none;
+  background: transparent; /* убираем фон */
+  border: none; /* убираем рамку */
+  padding: 0;
+}
+
+/* === ИДЕАЛЬНАЯ СЕТКА 4x1 === */
+
+
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 4px 0 !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
+
+/* === ОДИНАКОВЫЙ ШРИФТ ДЛЯ ВСЕХ КНОПОК === */
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--fg-dim) !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
+
+/* === ИДЕАЛЬНАЯ СЕТКА С ВЫРАВНИВАНИЕМ ПО ЛЕВОМУ КРАЮ ГРАФИКА === */
+.top-filter-row, .metric-switch {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 0 !important;
+  width: 100% !important;
+  padding: 0 16px !important;
+  box-sizing: border-box !important;
+  margin: 0 0 16px 0 !important;
+  align-items: center !important;
+  justify-items: center !important;
+}
+
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 4px 0 !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
+
+/* === СТИРАЕМ ВСЁ СТАРОЕ === */
+.top-filter-row, .metric-switch,
+.period-filter-row, .month-year-filter,
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  all: unset !important; /* Сбрасываем абсолютно все стили */
+}
+
+/* === НОВАЯ ЧИСТАЯ СЕТКА === */
+.top-filter-row, .metric-switch {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  width: 100% !important;
+  padding: 0 16px !important;
+  box-sizing: border-box !important;
+  margin: 0 0 16px 0 !important;
+  align-items: center !important;
+}
+
+.period-btn, .metric-btn, .month-btn, .year-btn {
+  display: block !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--fg-dim) !important;
+  text-align: left !important; /* Текст влево */
+  padding: 4px 0 !important;
+  cursor: pointer !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.period-btn.active, .metric-btn.active {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
+
+/* Оба меню в одну жесткую сетку */
+.top-filter-row, 
+.metric-switch {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    width: 100% !important;
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
+    margin: 0 0 16px 0 !important;
+    align-items: center !important;
+}
+
+/* Сами кнопки */
+.period-btn, .month-btn, .year-btn, .metric-btn {
+    display: flex !important;
+    background: transparent !important;
+    border: none !important;
+    color: var(--fg-dim) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    padding: 4px 0 !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+}
+
+/* 1-я кнопка (7 дней / Время) - сдвиг на 30px и прижатие влево */
+.top-filter-row button:nth-child(1),
+.metric-switch button:nth-child(1) {
+    padding-left: 30px !important;
+    justify-content: flex-start !important;
+}
+
+/* 2-я и 3-я кнопки - по центру */
+.top-filter-row button:nth-child(2),
+.top-filter-row button:nth-child(3),
+.metric-switch button:nth-child(2),
+.metric-switch button:nth-child(3) {
+    justify-content: center !important;
+}
+
+/* 4-я кнопка (2026 / Задачи) - прижатие вправо */
+.top-filter-row button:nth-child(4),
+.metric-switch button:nth-child(4) {
+    justify-content: flex-end !important;
+}
+
+/* Активный цвет */
+.period-btn.active, .metric-btn.active {
+    color: var(--fg) !important;
+    font-weight: 600 !important;
+}
+
+/* Из layout.css */
+/* === НОВАЯ ЛЕНТА ГРАФИКА (TIME LINE) - FLEXBOX === */
+.tl-container {
+  display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 0; gap: 0; scrollbar-width: none; -ms-overflow-style: none;
+  scroll-behavior: smooth; height: 100%; width: 100%; align-items: flex-end;
+}
+
+.tl-container::-webkit-scrollbar { display: none; }
+
+.tl-col {
+  scroll-snap-align: start; 
+  min-width: 40px; flex: 0 0 40px; /* Ширина колонки */
+  display: flex; flex-direction: column; 
+  height: 100%; position: relative; cursor: pointer;
+  overflow: visible !important; /* Важно! Чтобы легенда не обрезалась */
+}
+
+.tl-bar {
+  width: 100%; max-width: 28px; background: var(--accent);
+  border-radius: 4px 4px 0 0; transition: height 0.3s ease, background 0.2s;
+  position: relative;
+}
+
+.tl-bar.selected { background: #00ff00 !important; box-shadow: 0 0 10px rgba(0, 255, 0, 0.6); }
+
+.tl-label {
+  height: 40px; /* Фиксированная высота под дату */
+  flex-shrink: 0;
+  display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
+  font-size: 10px; color: var(--fg-dim); line-height: 1.1; padding-top: 8px;
+}
+
+.tl-legend {
+  position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+  color: var(--accent); font-size: 12px; font-weight: 600;
+  white-space: nowrap; text-shadow: 0 0 4px rgba(0,0,0,0.9);
+  pointer-events: none; z-index: 10;
+}
+
+.tl-col:focus, .tl-col:active, .tl-bar:focus, .tl-bar:active {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.tl-col::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: 10%;
+  height: 1px;
+  background: rgba(255,255,255,0.03);
+  pointer-events: none;
+}
+
+.tl-col::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 30px;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  pointer-events: none;
+}
+
+.tl-container { flex: 1; display: flex; gap: 0; overflow-x: auto; overflow-y: hidden; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); background-image: linear-gradient(to top, var(--border) 1px, transparent 1px); background-size: 100% calc(50% - 16px); background-position: 0 0; padding: 0; margin: 0; -webkit-overflow-scrolling: touch; }
+
+.tl-col { width: 40px; flex: 0 0 40px; display: flex; flex-direction: column; height: 100%; position: relative; }
+
+.tl-bar-wrap { flex: 1; width: 100%; display: flex; align-items: flex-end; justify-content: center; padding: 0 4px; box-sizing: border-box; }
+
+.tl-bar { width: 100%; background: var(--accent); border-radius: 3px 3px 0 0; transition: height 0.2s, opacity 0.15s; cursor: pointer; }
+
+.tl-bar.selected { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+.tl-bar.empty { background: transparent; cursor: default; pointer-events: none; }
+
+.tl-label { height: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 10px; color: var(--fg-dim); line-height: 1.1; flex-shrink: 0; }
+
+/* === Динамическая ширина столбиков (ровно 7 на экран) === */
+.tl-col {
+  width: calc(100% / 7) !important; /* Ровно 1/7 от ширины контейнера */
+  flex: 0 0 calc(100% / 7) !important;
+}
