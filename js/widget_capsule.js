@@ -8,7 +8,7 @@ export const CAPSULE_ITEMS = [
 export function initFloatingMenu() {
   const wrapper = document.createElement('div');
   wrapper.id = 'floating-capsule-wrapper';
-  wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9999; display: flex; align-items: center; transition: top 0.4s ease, transform 0.3s ease;';
+  wrapper.style.cssText = 'position: fixed; right: 0; top: 50%; transform: translateY(-50%); height: 400px; z-index: 9999; display: flex; align-items: center; transition: top 0.4s ease, transform 0.3s ease;';
   const capsule = document.createElement('div');
   capsule.id = 'floating-capsule';
   capsule.style.cssText = 'position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--bg2); padding: 12px 8px; border: 1px solid var(--border); border-right: none; border-radius: 16px 0 0 16px; box-shadow: -4px 0 12px rgba(0,0,0,0.5); transition: transform 0.3s ease;';
