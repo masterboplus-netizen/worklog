@@ -16,20 +16,39 @@ export function initFloatingMenu() {
   toggleBtn.id = 'toggle-capsule';
   toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
   // Вот здесь мы сразу поворачиваем кнопку на 180 градусов
-  toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%) rotate(180deg); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center;';
+  toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%) rotate(180deg); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10000;';
 
   CAPSULE_ITEMS.forEach(item => {
-    const btn = document.createElement('div');
-    btn.className = 'nav-item';
-    btn.dataset.tab = item.id;
-    btn.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; border-radius: 8px; color: var(--fg);';
-    btn.innerHTML = `${item.icon}<span style="font-size:9px; text-align:center; line-height:1;">${item.title}</span>`;
-    btn.addEventListener('click', () => {
-      if (isDragging) return;
-      if (typeof window.switchTab === 'function') window.switchTab(item.id);
+  const btn = document.createElement('div');
+  btn.className = 'nav-item';
+  btn.dataset.tab = item.id;
+  // Подсветка активной кнопки
+  btn.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 50px; height: 50px; cursor: pointer; border-radius: 8px; color: var(--fg); transition: background 0.2s;';
+  btn.innerHTML = `${item.icon}<span style="font-size:9px; text-align:center; line-height:1;">${item.title}</span>`;
+  
+  // Если это текущая вкладка — подсвечиваем
+  if (item.id === 'dashboard') {
+      btn.style.background = 'var(--bg3)';
+      btn.style.color = 'var(--accent)';
+  }
+
+  btn.addEventListener('click', () => {
+    if (isDragging) return;
+    
+    // Убираем подсветку у всех
+    capsule.querySelectorAll('.nav-item').forEach(el => {
+        el.style.background = 'transparent';
+        el.style.color = 'var(--fg)';
     });
-    capsule.appendChild(btn);
+    
+    // Подсвечиваем нажатую
+    btn.style.background = 'var(--bg3)';
+    btn.style.color = 'var(--accent)';
+
+    if (typeof window.switchTab === 'function') window.switchTab(item.id);
   });
+  capsule.appendChild(btn);
+});
 
   capsule.appendChild(toggleBtn);
   wrapper.appendChild(capsule);
