@@ -625,3 +625,32 @@
     transform: rotate(180deg);
     transition: transform 0.3s ease;
 }
+
+/* === ПЕРЕНЕСЕНО ИЗ LAYOUT.CSS (Дневник) === */
+#content-diary {
+  padding: 16px;
+  flex: 1;
+  max-width: 720px; 
+  margin: 0 auto; 
+  width: 100%;
+  padding-bottom: 80px !important;
+}
+
+.period-filter {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.lbl-date {
+  font-size: 10px;
+  color: var(--fg-dim);
+}
+
+.lbl-dow {
+  font-size: 9px;
+  color: var(--fg-dim);
+  opacity: 0.6;
+  margin-top: 1px;
+}

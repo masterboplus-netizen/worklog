@@ -142,28 +142,6 @@ to { transform: rotate(360deg); }
   background: var(--bg);
 }
 
-/* === Дневник === */
-#content-diary {
-  padding: 16px;
-  flex: 1;
-}
-
-#content-diary { max-width: 720px; margin: 0 auto; width: 100%; }
-
-/* === Фильтр периода (сессия Х-1) === */
-.period-filter {
-  display: inline-flex;
-  gap: 4px;
-  margin-left: 8px;
-  vertical-align: middle;
-}
-
-.lbl-date {
-  font-size: 10px;
-  color: var(--fg-dim);
-}
-
-.lbl-dow {
   font-size: 9px;
   color: var(--fg-dim);
   opacity: 0.6;
@@ -174,14 +152,6 @@ to { transform: rotate(360deg); }
   margin-top: 16px;
 }
 
-/* === Footer branding === */
-.footer-line {
-  font-size: 11px;
-  color: var(--fg-dim);
-  line-height: 1.4;
-}
-
-.footer-authors {
   font-size: 10px;
   opacity: 0.75;
 }
