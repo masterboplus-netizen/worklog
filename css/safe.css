@@ -12,3 +12,106 @@
   pointer-events: auto !important;
   touch-action: none !important;
 }
+/* === ПЕРЕНЕСЕНО ИЗ LAYOUT.CSS (Сейф) === */
+#scroll-pin-screen {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed !important;
+  inset: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: var(--bg) !important;
+  z-index: 9999 !important;
+  touch-action: none !important;
+}
+#scroll-pin-screen.active { display: flex !important; }
+
+#safe-dial-container { 
+  position: relative; 
+  width: 220px; 
+  height: 220px; 
+  margin: auto; 
+  touch-action: none; 
+  pointer-events: auto !important; 
+  z-index: 10; 
+}
+
+#safe-dial-rotator {
+  position: absolute;
+  inset: 0;
+  transition: none; 
+  filter: drop-shadow(0 0 15px rgba(255,165,0,0.8));
+}
+
+#safe-dial-lens {
+  position: absolute;
+  width: 60px; height: 60px;
+  background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,165,0,0.5) 50%, rgba(255,165,0,0) 100%);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+  opacity: 0;
+  z-index: 100;
+  box-shadow: 0 0 20px rgba(255,165,0,0.9);
+}
+#safe-dial-lens.active {
+  transform: translate(-50%, -50%) scale(1.2);
+  opacity: 1;
+}
+
+#safe-timer { 
+  position: absolute; 
+  top: 50%; left: 50%; 
+  transform: translate(-50%, -50%); 
+  z-index: 20; 
+  font-size: 18px; 
+  font-weight: 600; 
+  color: var(--fg); 
+  text-align: center; 
+  pointer-events: none; 
+  user-select: none; 
+  text-shadow: 0 0 10px rgba(0,0,0,0.8); 
+  width: 100px; 
+  line-height: 1.2; 
+}
+
+/* Старые колеса прокрутки */
+.scroll-wheels-container::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 0; right: 0;
+  height: 60px;
+  transform: translateY(-50%);
+  background: rgba(74, 158, 255, 0.1);
+  border-top: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 8px;
+}
+.scroll-wheel {
+  width: 60px; height: 180px;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  position: relative;
+  z-index: 2;
+}
+.scroll-wheel::-webkit-scrollbar { display: none; }
+.wheel-item {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--fg-dim);
+  scroll-snap-align: center;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.wheel-item.active { color: var(--accent); font-size: 26px; }
+.wheel-spacer { height: 60px; }
