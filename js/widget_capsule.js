@@ -16,7 +16,7 @@ export function initFloatingMenu() {
   toggleBtn.id = 'toggle-capsule';
   toggleBtn.innerHTML = '<svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
   // Вот здесь мы сразу поворачиваем кнопку на 180 градусов
-  toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%) rotate(0deg); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10000;';
+  toggleBtn.style.cssText = 'position: absolute; left: -24px; top: 50%; transform: translateY(-50%); width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10000;';
 
   CAPSULE_ITEMS.forEach(item => {
   const btn = document.createElement('div');
@@ -57,11 +57,15 @@ export function initFloatingMenu() {
   let isCollapsed = false, isDragging = false, startY = 0, startTop = 0;
 
   function toggleCollapse(force = false) {
-    isCollapsed = force ? true : !isCollapsed;
-    capsule.style.transform = isCollapsed ? 'translateX(100%)' : 'translateX(0)';
-    // Меняем поворот самой кнопки, а не иконки
-    toggleBtn.style.transform = isCollapsed ? 'translateY(-50%) rotate(0deg)' : 'translateY(-50%) rotate(180deg)';
+  isCollapsed = force ? true : !isCollapsed;
+  capsule.style.transform = isCollapsed ? 'translateX(100%)' : 'translateX(0)';
+  
+  // Вот здесь крутим иконку
+  const icon = document.getElementById('toggle-icon');
+  if (icon) {
+      icon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
   }
+}
 
   toggleBtn.addEventListener('click', (e) => { 
     if (isDragging) return;
