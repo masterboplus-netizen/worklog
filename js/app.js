@@ -3,6 +3,8 @@ const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
 async function init() {
+  console.log("👉 ШАГ 1: init() запущен");
+  alert("ШАГ 1: init() запущен");
   // Сейф временно отключен // if (typeof showSafe === "function") { showSafe(); }
   const btnHeart = $('#btn-heart');
   if (btnHeart) btnHeart.addEventListener('click', showCreators);
@@ -37,15 +39,21 @@ async function init() {
   if (loadingEl) loadingEl.classList.add('hidden');
   
   // Загружаем данные из Supabase
-  if (typeof loadDataFromSupabase === 'function') {
+  console.log("👉 ШАГ 2: Начинаем загрузку из Supabase");
+  alert("ШАГ 2: Начинаем загрузку");
+  if (typeof loadDataFromSupabase === "function") {
     loadDataFromSupabase().then(ok => {
+      console.log("👉 ШАГ 3: Supabase ответил, ok = " + ok);
+      alert("ШАГ 3: Supabase ответил, ok = " + ok);
       if (ok) {
         // ВОЗВРАЩАЕМ СЕЙФ
         if (typeof showSafe === 'function') {
             // showSafe();
         } else {
             showScreen('dashboard');
-            if (typeof renderDashboard === 'function') renderDashboard();
+            console.log("👉 ШАГ 4: Вызываем renderDashboard()");
+        alert("ШАГ 4: Вызываем renderDashboard()");
+        if (typeof renderDashboard === "function") renderDashboard();
         }
       } else {
         alert('Ошибка загрузки из Supabase');
