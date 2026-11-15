@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Хераборина</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<link rel="stylesheet" href="css/base.css?v=267">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<link rel="stylesheet" href="css/layout.css?v=267">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<link rel="stylesheet" href="css/dashboard.css?v=267">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<link rel="stylesheet" href="css/diary.css?v=267">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<link rel="stylesheet" href="css/analytics.css?v=267">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<link rel="stylesheet" href="css/chart.css?v=267">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<link rel="stylesheet" href="css/modals.css?v=267">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<link rel="stylesheet" href="css/safe.css?v=267">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<link rel="stylesheet" href="css/projects.css?v=267">
+
+<style>
+.segmented-control {
+  display: flex !important;
+  background: var(--bg3) !important;
+  border-radius: 20px !important;
+  padding: 4px !important;
+  margin: 24px 16px 16px 16px !important;
+  gap: 4px !important;
+  width: calc(100% - 32px) !important;
+  box-sizing: border-box !important;
+}
+.segmented-control button {
+  flex: 1 !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--fg-dim) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  padding: 8px 4px !important;
+  border-radius: 16px !important;
+  cursor: pointer !important;
+  font-family: inherit !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  outline: none !important;
+  -webkit-appearance: none !important;
+  text-align: center !important;
+}
+.segmented-control button.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3) !important;
+}
+
+.chart-tabs button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--fg-dim);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 4px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  outline: none;
+  text-align: center;
+}
+.chart-tabs button.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
+}
+.chart-tabs {
+  background: var(--bg3);
+  border-radius: 20px;
+  padding: 4px;
+}
+</style>
+
+</head>
+<body>
+<div id="app"></div>
+
+
+
+
+
+
+<!-- Дашборд (скрыт по умолчанию) -->
+<div id="dashboard" class="screen active">
+<header class="topbar">
+  <div class="logo" id="logo-btn" style="cursor: pointer;">
+    <img src="icon.svg" alt="" class="logo-icon" style="width:32px;height:32px;vertical-align:middle;margin-right:8px;border-radius:50%;">
+    Хераборина
+  </div>
+  <div class="topbar-actions">
+    <button id="btn-profile" class="btn-icon" title="Профиль">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </button>
+    <button id="btn-heart" class="btn-icon" title="Инфо">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+    </button>
+    <button id="btn-lock" class="btn-icon" title="Заблокировать">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="content"></main>
+<main id="content-diary" class="hidden"></main>
+<main id="content-projects" class="hidden"></main>
+<main id="content-activity" class="hidden"></main>
+</div>
+
+<div id="loading" class="screen hidden">
+<div class="spinner"></div>
+<p>Расшифровка…</p>
+</div>
+
+
+
+
+<!-- === СЛЕПОЙ СЕЙФ (v28) === -->
+<div id="scroll-pin-screen">
+  <div id="safe-dial-container" style="position: fixed; right: 20px; bottom: 70px; width: 220px; height: 220px; touch-action: none; z-index: 9999; margin: 0; padding: 0;">
+    <!-- Вращающийся диск -->
+    <div id="safe-dial-rotator">
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <circle cx="110" cy="110" r="90" fill="none" stroke="#FFA500" stroke-width="30"/>
+        <circle cx="110" cy="20" r="8" fill="#fff"/>
+      </svg>
+    </div>
+
+    <!-- Лупа под пальцем -->
+    <div id="safe-dial-lens"></div>
+
+    <!-- Таймер в центре (ПОВЕРХ КОЛЬЦА) -->
+    <div id="safe-timer">Коснись, чтобы начать</div>
+  </div>
+</div>
+<!-- === КОНЕЦ СЕЙФА === -->
+
+<script src="crypto.js?v=267"></script>
+<script src="js/supabase.min.js"></script>
+  <script src="js/supabase_client.js"></script>
+  <script src="js/utils.js?v=267"></script>
+<script src="js/diary.js?v=267"></script>
+<script src="js/dashboard.js?v=267"></script>
+<script src="js/projects.js?v=267"></script>
+<script src="js/chart.js?v=267"></script>
+<script src="js/auth.js?v=267"></script>
+
+
+<script>
+
+</script>
+<script src="js/menu.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/sessions.js"></script>
+
+<script src="js/app.js?v=267"></script>
+<script src="js/safe.js?v=267"></script>
+
+
+
+
+<script>
+window.onerror = function(msg, url, line, col, error) {
+  var el = document.createElement('div');
+  el.style.cssText = 'position:fixed;top:0;left:0;right:0;background:red;color:#fff;padding:15px;z-index:99999;font-size:14px;font-family:monospace;white-space:pre-wrap;';
+  el.textContent = 'JS ERROR: ' + msg + '\n' + (url||'') + ':' + line + ':' + col;
+  document.body.appendChild(el);
+  return false;
+};
+</script>
+
+    </div>
+</div>
+
+    <button id="toggle-capsule" style="width: 24px; height: 80px; background: var(--bg2); border: 1px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; color: var(--fg); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg id="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s;"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+</div>
+
+
+
+
+
+
+
+
+
+<script type="module">
+  import { initFloatingMenu } from "./js/widget_capsule.js?v=267";
+  document.addEventListener("DOMContentLoaded", initFloatingMenu);
+</script>
+<div id="calendar-sheet" class="calendar-sheet">
+  <div id="sheet-toggle" style="position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 60px; height: 40px; background: var(--bg2); border: 1px solid var(--border); border-bottom: none; border-radius: 12px 12px 0 0; cursor: pointer; display: flex; align-items: center; justify-content: center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg></div>
+  <div class="sheet-handle" id="sheet-handle"></div>
+  <div class="date-strip" id="date-strip"></div>
+  <div class="sheet-content" id="sheet-content"></div>
+</div>
+</body>
+</html>

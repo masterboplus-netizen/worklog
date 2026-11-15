@@ -368,8 +368,9 @@ function renderDiary() {
                   detailsHTML += `<div style="font-size: 14px; color: var(--fg); font-weight: 600; margin-bottom: 6px;">${taskName}</div>`;
                   
                   detailsHTML += `<div style="font-size: 12px; color: var(--fg-dim); margin-left: 8px; border-left: 1px solid var(--fg-dim); padding-left: 8px;">`;
-                  detailsHTML += `<div><b>Фаза:</b> ${parentInfo.phase}</div>`;
-                  detailsHTML += `<div><b>Эпик:</b> ${parentInfo.project}</div>`;
+                  detailsHTML += `<div><b>Проект:</b> ${parentInfo.project}</div>`;
+                  detailsHTML += `<div><b>Модуль:</b> ${parentInfo.module || '–'}</div>`;
+                  detailsHTML += `<div><b>Эпик:</b> ${parentInfo.epic}</div>`;
                   detailsHTML += `<div style="margin-top: 4px;"><b>Подзадачи:</b></div>`;
                   
                   taskDetails.forEach(t => {
