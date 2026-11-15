@@ -1,5 +1,5 @@
 // Данные кнопок капсулы: id (вкладка), title (подпись), icon (SVG), action (для совместимости)
-export const CAPSULE_ITEMS = [
+const CAPSULE_ITEMS = [
   { id: 'dashboard', title: 'Дашборд', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>', action: "window.switchTab('dashboard')" },
   { id: 'diary', title: 'Календарь', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>', action: "window.switchTab('diary')" },
   { id: 'projects', title: 'Проекты', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18v13H3z"/><path d="M3 7l2-4h14l2 4"/><path d="M12 11v6"/></svg>', action: "window.switchTab('projects')" },
@@ -11,7 +11,7 @@ const MIN_TOP = 2;                          // верхний край не бл
 const BOTTOM_GAP = 3;                       // нижний край не ближе 3px к низу
 
 // Точка входа: создаёт капсулу, вешает обработчики, вставляет в body
-export function initFloatingMenu() {
+window.initFloatingMenu = function() {
   // Обёртка: fixed, справа, по центру (top:50% + translateY(-50%))
   const wrapper = document.createElement('div');
   wrapper.id = 'floating-capsule-wrapper';
@@ -156,4 +156,4 @@ export function initFloatingMenu() {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') savePosition();
   });
-}
+};
