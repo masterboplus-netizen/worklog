@@ -3,7 +3,7 @@ const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
 async function init() {
-  if (typeof showSafe === "function") { showSafe(); }
+  // Сейф временно отключен // if (typeof showSafe === "function") { showSafe(); }
   const btnHeart = $('#btn-heart');
   if (btnHeart) btnHeart.addEventListener('click', showCreators);
   const btnProfile = document.querySelector("#btn-profile");
