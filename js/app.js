@@ -1,10 +1,9 @@
+// --- ГЛАВНЫЙ МОДУЛЬ (Дирижер) ---
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
 async function init() {
-  // СЕЙФ ОТКЛЮЧЕН
-  // if (typeof showSafe === "function") { showSafe(); }
-  
+  if (typeof showSafe === "function") { showSafe(); }
   const btnHeart = $('#btn-heart');
   if (btnHeart) btnHeart.addEventListener('click', showCreators);
   const btnProfile = document.querySelector("#btn-profile");
@@ -29,23 +28,32 @@ async function init() {
   }
 
   setupTabs();
+
+  // Скрываем шторку календаря при старте (до первого переключения вкладок)
+  const sheet = document.getElementById('calendar-sheet');
+  if (sheet) sheet.style.display = 'none';
+
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
-
+  
+  // Загружаем данные из Supabase
   if (typeof loadDataFromSupabase === 'function') {
     loadDataFromSupabase().then(ok => {
       if (ok) {
-        // СЕЙФ ОТКЛЮЧЕН
-        // if (typeof showSafe === 'function') { showSafe(); } else { ... }
-        showScreen('dashboard');
-        if (typeof renderDashboard === 'function') renderDashboard();
+        // ВОЗВРАЩАЕМ СЕЙФ
+        if (typeof showSafe === 'function') {
+            showSafe();
+        } else {
+            showScreen('dashboard');
+            if (typeof renderDashboard === 'function') renderDashboard();
+        }
       } else {
         alert('Ошибка загрузки из Supabase');
       }
     });
   } else {
     alert('Критическая ошибка: модуль Supabase не загружен.');
-    showScreen('dashboard');
+    showScreen('dashboard'); // Показываем пустой экран
   }
 }
 
@@ -68,33 +76,40 @@ function setupTabs() {
   if (tabProfile) tabProfile.addEventListener('click', showJoke);
 }
 
-window.switchTab = function(name) {
-  if (typeof window.setTab === 'function') window.setTab(name);
-
-  // Управление нижним баром
-  const bottomPanel = document.getElementById("bottom-panel");
-  if (bottomPanel) {
-    if (name === "diary") { bottomPanel.style.display = "flex"; } else { bottomPanel.style.display = "none"; }
-  }
-
+function switchTab(name) {
   const _t = document.getElementById('global-chart-tooltip');
   if (_t) _t.remove();
+  // Управление шторкой календаря
+  const sheet = document.getElementById('calendar-sheet');
+  if (sheet) {
+    if (name === 'diary') {
+      sheet.style.display = 'flex';
+    } else {
+      sheet.style.display = 'none';
+    }
+  }
 
-  ['content', 'content-diary', 'content-projects', 'content-activity'].forEach(id => {
+
+  // 1. СБРОС СКРОЛЛА ВВЕРХ ПРИ СМЕНЕ ВКЛАДКИ
+  const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity'];
+  scrollContainers.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.scrollTop = 0;
   });
   window.scrollTo(0, 0);
 
+  // 2. СКРЫВАЕМ ВСЕ ТУЛТИПЫ ПРИ СМЕНЕ ВКЛАДКИ
   document.querySelectorAll('.floating-tooltip, #global-chart-tooltip, #tl-legend-bar').forEach(el => {
-    el.style.display = 'none';
-    el.classList.add('hidden');
+      el.style.display = 'none';
+      el.classList.add('hidden');
   });
+
 
   ['content', 'content-diary', 'content-projects', 'content-activity'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.classList.add('hidden'); el.innerHTML = ''; }
   });
+
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab-active'));
 
   try {
@@ -111,7 +126,10 @@ window.switchTab = function(name) {
       if (c) { c.classList.remove('hidden'); if (typeof renderActivityPageV2 === 'function') { renderActivityPageV2(); } }
       const t = document.getElementById('tab-activity'); if (t) t.classList.add('tab-active');
     } else {
-      if (typeof HERO_MODE !== 'undefined') HERO_MODE = 'today';
+      // Сбрасываем режим кольца на "Сегодня" при переходе на дашборд
+      if (typeof HERO_MODE !== 'undefined') {
+          HERO_MODE = 'today';
+      }
       const c = document.getElementById('content');
       if (c) { c.classList.remove('hidden'); renderDashboard(); }
       const t = document.getElementById('tab-dashboard'); if (t) t.classList.add('tab-active');
@@ -119,6 +137,17 @@ window.switchTab = function(name) {
   } catch (e) {
     console.error('Ошибка при переключении вкладки:', e);
   }
+}
+
+function showScreen(name) {
+  ['pin-screen', 'dashboard', 'loading'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (id === name) el.classList.remove('hidden');
+    else el.classList.add('hidden');
+  });
+  const tabs = document.querySelector('.tabs');
+  if (tabs) tabs.style.display = (name === 'dashboard') ? 'flex' : 'none';
 }
 
 function showJoke() {
@@ -183,4 +212,14 @@ function showCreators() {
   setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
 
+
+// Делаем функцию глобальной для safe.js
+
+
+
+
+
+
+
+// Глобальная ссылка
 if (typeof renderDashboard === 'function') window.renderDashboard = renderDashboard;

@@ -47,10 +47,12 @@ function showSafe() {
   screen.style.position = 'fixed';
   screen.style.top = '0'; screen.style.left = '0';
   screen.style.width = '100vw'; screen.style.height = '100vh';
-  screen.style.zIndex = '9999';
+  screen.style.zIndex = '10001';
   screen.style.alignItems = 'initial';
   screen.style.justifyContent = 'initial';
   screen.style.backgroundColor = 'var(--bg)';
+  const dial = document.getElementById('safe-dial-container');
+  if (dial) { dial.style.display = 'block'; dial.style.zIndex = '99999'; }
 
   const dash = document.getElementById('dashboard');
   if (dash) dash.style.display = 'none';
@@ -73,6 +75,8 @@ function showSafe() {
 function _safeHide() {
   const screen = document.getElementById('scroll-pin-screen');
   if (screen) screen.style.display = 'none';
+  const dial = document.getElementById('safe-dial-container');
+  if (dial) dial.style.display = 'none';
   if (HOLD_TIMER) clearTimeout(HOLD_TIMER);
   if (COUNTDOWN_TIMER) clearInterval(COUNTDOWN_TIMER);
 }
@@ -248,3 +252,8 @@ const _safeUnlock = async () => {
       else if (typeof switchTab === 'function') switchTab('dashboard');
 }
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+  const lockBtn = document.getElementById('btn-lock');
+  if (lockBtn) lockBtn.addEventListener('click', (e) => { e.preventDefault(); showSafe(); });
+});

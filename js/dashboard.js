@@ -1,3 +1,8 @@
+if (typeof window.HERO_MODE === "undefined") window.HERO_MODE = "today";
+if (typeof window.MINI_MSG_PERIOD === "undefined") window.MINI_MSG_PERIOD = "day";
+if (typeof window.MINI_SCR_PERIOD === "undefined") window.MINI_SCR_PERIOD = "day";
+if (typeof window.MINI_TASKS_PERIOD === "undefined") window.MINI_TASKS_PERIOD = "day";
+if (typeof window.MINI_LABELS === "undefined") window.MINI_LABELS = {day: "День", week: "Неделя", month: "Месяц", all: "Всё"};
 // МОДУЛЬ: ДАШБОРД
 
 function getProgressColor(percent) {
@@ -134,8 +139,8 @@ function renderHeroRings() {
       renderDashboard();
     });
     minis[2].addEventListener('click', () => {
-      const idx = (MINI_PERIODS_MSG.indexOf(MINI_TASKS_PERIOD) + 1) % MINI_PERIODS_MSG.length;
-      MINI_TASKS_PERIOD = MINI_PERIODS_MSG[idx];
+      const idx = (MINI_PERIODS_TASKS.indexOf(MINI_TASKS_PERIOD) + 1) % MINI_PERIODS_MSG.length;
+      MINI_TASKS_PERIOD = MINI_PERIODS_TASKS[idx];
       renderDashboard();
     });
   }

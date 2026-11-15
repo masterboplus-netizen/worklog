@@ -17,3 +17,7 @@ Thumbs.db
 
 # Бэкапы docs
 docs/*.bak_*
+*.bak-*
+*.tar.gz
+b.id
+worklog.json.bak_*
