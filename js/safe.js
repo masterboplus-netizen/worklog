@@ -234,7 +234,7 @@ const _safeError = () => {
   if (timer) { timer.textContent = 'ОШИБКА'; timer.style.color = 'red'; }
 
   setTimeout(() => {
-    showSafe();
+    // showSafe();
   }, 1500);
 };
 

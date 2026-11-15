@@ -84,7 +84,7 @@ function lock() {
   
   // Жёстко вызываем showSafe
   if (typeof showSafe === 'function') {
-    showSafe();
+    // showSafe();
   } else {
     // Резервный вариант, если safe.js не загрузился
     const screen = document.getElementById('scroll-pin-screen');
