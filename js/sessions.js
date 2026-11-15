@@ -164,28 +164,6 @@ function renderDiary() {
 
   renderDateStrip();
 
-  // Нижняя строка (Список + Сессии/24ч)
-  const bottomRow = document.createElement('div');
-  bottomRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center; margin-top: 24px;';
-
-  const listBtn = document.createElement('button');
-  listBtn.className = 'segmented-control';
-  listBtn.style.cssText = 'padding: 6px 12px; font-size: 12px; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--fg); cursor: pointer;';
-  listBtn.innerHTML = 'Список';
-  listBtn.onclick = () => { console.log('Фильтр будет добавлен позже'); };
-
-  const modeCapsule = document.createElement('div');
-  modeCapsule.className = 'segmented-control';
-  modeCapsule.style.cssText = 'margin: 0; transform: scale(0.8); transform-origin: right center;';
-  modeCapsule.innerHTML = `
-    <button class="${DIARY_MODE === 'sessions' ? 'active' : ''}" data-mode="sessions">Сессии</button>
-    <button class="${DIARY_MODE === '24h' ? 'active' : ''}" data-mode="24h">24ч</button>
-  `;
-
-  bottomRow.appendChild(listBtn);
-  bottomRow.appendChild(modeCapsule);
-  c.appendChild(bottomRow);
-
   // Список
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '16px';
