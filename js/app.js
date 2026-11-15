@@ -23,7 +23,7 @@ async function init() {
     logoBtn.addEventListener('click', () => {
       if (!document.getElementById('content').classList.contains('hidden')) {
         renderDashboard();
-      } else {
+      } // else {
         switchTab('dashboard');
       }
     });
@@ -47,19 +47,19 @@ async function init() {
       alert("ШАГ 3: Supabase ответил, ok = " + ok);
       if (ok) {
         // ВОЗВРАЩАЕМ СЕЙФ
-        if (typeof showSafe === 'function') {
+        // if (typeof showSafe === 'function') {
             // showSafe();
-        } else {
+        } // else {
             showScreen('dashboard');
             console.log("👉 ШАГ 4: Вызываем renderDashboard()");
         alert("ШАГ 4: Вызываем renderDashboard()");
         if (typeof renderDashboard === "function") renderDashboard();
         }
-      } else {
+      } // else {
         alert('Ошибка загрузки из Supabase');
       }
     });
-  } else {
+  } // else {
     alert('Критическая ошибка: модуль Supabase не загружен.');
     showScreen('dashboard'); // Показываем пустой экран
   }
@@ -67,7 +67,7 @@ async function init() {
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
-} else {
+} // else {
   init();
 }
 
@@ -92,7 +92,7 @@ function switchTab(name) {
   if (sheet) {
     if (name === 'diary') {
       sheet.style.display = 'flex';
-    } else {
+    } // else {
       sheet.style.display = 'none';
     }
   }
@@ -133,7 +133,7 @@ function switchTab(name) {
       const c = document.getElementById('content-activity');
       if (c) { c.classList.remove('hidden'); if (typeof renderActivityPageV2 === 'function') { renderActivityPageV2(); } }
       const t = document.getElementById('tab-activity'); if (t) t.classList.add('tab-active');
-    } else {
+    } // else {
       // Сбрасываем режим кольца на "Сегодня" при переходе на дашборд
       if (typeof HERO_MODE !== 'undefined') {
           HERO_MODE = 'today';
