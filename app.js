@@ -1,8 +1,11 @@
+cd ~/workspace/worklog-app && cat > js/app.js << 'EOF'
 // --- ГЛАВНЫЙ МОДУЛЬ (Дирижер) ---
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
 async function init() {
+  // Сейф отключен при старте (вызывается только по кнопке)
+  
   const btnHeart = $('#btn-heart');
   if (btnHeart) btnHeart.addEventListener('click', showCreators);
 
@@ -29,24 +32,19 @@ async function init() {
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
   
-  // Загружаем данные из Supabase
+  // Загружаем данные из Supabase и сразу показываем Дашборд
   if (typeof loadDataFromSupabase === 'function') {
     loadDataFromSupabase().then(ok => {
       if (ok) {
-        // ВОЗВРАЩАЕМ СЕЙФ
-        if (typeof showSafe === 'function') {
-            showSafe();
-        } else {
-            showScreen('dashboard');
-            if (typeof renderDashboard === 'function') renderDashboard();
-        }
+        showScreen('dashboard');
+        if (typeof renderDashboard === 'function') renderDashboard();
       } else {
         alert('Ошибка загрузки из Supabase');
       }
     });
   } else {
     alert('Критическая ошибка: модуль Supabase не загружен.');
-    showScreen('dashboard'); // Показываем пустой экран
+    showScreen('dashboard');
   }
 }
 
@@ -70,7 +68,6 @@ function setupTabs() {
 }
 
 function switchTab(name) {
-  // 1. СБРОС СКРОЛЛА ВВЕРХ ПРИ СМЕНЕ ВКЛАДКИ
   const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity'];
   scrollContainers.forEach(id => {
     const el = document.getElementById(id);
@@ -78,12 +75,10 @@ function switchTab(name) {
   });
   window.scrollTo(0, 0);
 
-  // 2. СКРЫВАЕМ ВСЕ ТУЛТИПЫ ПРИ СМЕНЕ ВКЛАДКИ
   document.querySelectorAll('.floating-tooltip, #global-chart-tooltip, #tl-legend-bar').forEach(el => {
       el.style.display = 'none';
       el.classList.add('hidden');
   });
-
 
   ['content', 'content-diary', 'content-projects', 'content-activity'].forEach(id => {
     const el = document.getElementById(id);
@@ -106,7 +101,6 @@ function switchTab(name) {
       if (c) { c.classList.remove('hidden'); if (typeof renderActivityPageV2 === 'function') { renderActivityPageV2(); } else { renderActivityPage(); } }
       const t = document.getElementById('tab-activity'); if (t) t.classList.add('tab-active');
     } else {
-      // Сбрасываем режим кольца на "Сегодня" при переходе на дашборд
       if (typeof HERO_MODE !== 'undefined') {
           HERO_MODE = 'today';
       }
@@ -192,14 +186,9 @@ function showCreators() {
   setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
 
-
-// Делаем функцию глобальной для safe.js
-
-
-
-
-
-
-
-// Глобальная ссылка
 if (typeof renderDashboard === 'function') window.renderDashboard = renderDashboard;
+EOF
+
+git add js/app.js && \
+git commit -m "fix: полностью перезаписан app.js, сейф отключен, дашборд грузится" && \
+git push origin main
