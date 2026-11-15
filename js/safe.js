@@ -30,6 +30,7 @@ function _safeVibrate(ms) {
 }
 
 function showSafe() {
+  document.getElementById('scroll-pin-screen').style.display = 'block';
   SAFE_ROTATION = 0;
   SAFE_STEP = 0;
   SAFE_ACTIVE = false;
