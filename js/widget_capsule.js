@@ -1,3 +1,4 @@
+alert("ВИДЖЕТ: файл widget_capsule.js загружен");
 // Данные кнопок капсулы: id (вкладка), title (подпись), icon (SVG), action (для совместимости)
 const CAPSULE_ITEMS = [
   { id: 'dashboard', title: 'Дашборд', icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>', action: "window.switchTab('dashboard')" },
