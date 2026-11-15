@@ -46,17 +46,12 @@ async function init() {
       console.log("👉 ШАГ 3: Supabase ответил, ok = " + ok);
       alert("ШАГ 3: Supabase ответил, ok = " + ok);
       if (ok) {
-        // ВОЗВРАЩАЕМ СЕЙФ
-        // if (typeof showSafe === 'function') {
-            // showSafe();
-        } // else {
-            showScreen('dashboard');
-            console.log("👉 ШАГ 4: Вызываем renderDashboard()");
+        showScreen("dashboard");
+        console.log("👉 ШАГ 4: Вызываем renderDashboard()");
         alert("ШАГ 4: Вызываем renderDashboard()");
         if (typeof renderDashboard === "function") renderDashboard();
-        }
-      } // else {
-        alert('Ошибка загрузки из Supabase');
+      } else {
+        alert("Ошибка загрузки из Supabase");
       }
     });
   } // else {
