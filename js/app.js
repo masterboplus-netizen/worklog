@@ -42,7 +42,7 @@ async function init() {
       if (ok) {
         // ВОЗВРАЩАЕМ СЕЙФ
         if (typeof showSafe === 'function') {
-            showSafe();
+            // showSafe();
         } else {
             showScreen('dashboard');
             if (typeof renderDashboard === 'function') renderDashboard();
