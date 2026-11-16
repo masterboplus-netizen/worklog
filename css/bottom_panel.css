@@ -41,11 +41,12 @@
 }
 
 /* ==========================================
-   КАПСУЛА (общий класс для кнопок и переключателя)
+   КНОПКИ-КРУГИ (Фильтр, Календарь)
    ========================================== */
-.capsule {
-  height: 40px;
-  border-radius: 20px;
+.btn-icon-circle {
+  width: var(--capsule-height);
+  height: var(--capsule-height);
+  border-radius: 50%;
   background: var(--bg3);
   border: 1px solid var(--border);
   color: var(--fg);
@@ -54,22 +55,15 @@
   justify-content: center;
   padding: 0;
   flex-shrink: 0;
-  box-sizing: border-box;
   cursor: pointer;
 }
 
-/* Если это кнопка с иконкой (Фильтр, Календарь) — делаем её круглой */
-button.capsule {
-  width: 40px;
-  border-radius: 50%;
-}
-
-button.capsule svg {
+.btn-icon-circle svg {
   width: 20px;
   height: 20px;
 }
 
-button.capsule:active {
+.btn-icon-circle:active {
   background: var(--accent);
   color: #fff;
 }
@@ -78,7 +72,7 @@ button.capsule:active {
    ПЕРЕКЛЮЧАТЕЛЬ СЕССИИ / 24Ч
    ========================================== */
 #bottom-panel .segmented-control {
-  height: 40px;
+  height: var(--capsule-height);
   padding: 4px;
   box-sizing: border-box;
   background: var(--bg3);
@@ -90,7 +84,7 @@ button.capsule:active {
 }
 
 #bottom-panel .segmented-control button {
-  height: 30px;
+  height: calc(var(--capsule-height) - 8px);
   padding: 0 16px;
   display: flex;
   align-items: center;
@@ -98,7 +92,7 @@ button.capsule:active {
   border: none;
   background: transparent;
   color: var(--fg-dim);
-  border-radius: 15px;
+  border-radius: 16px;
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s;
