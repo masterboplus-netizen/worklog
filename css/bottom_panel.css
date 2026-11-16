@@ -113,3 +113,8 @@
   font-size: 20px;
   cursor: pointer;
 }
+
+/* Фиксируем высоту сетки под 6 строк (42 ячейки) */
+#calendar-modal .calendar-grid {
+  min-height: 280px; /* 6 строк * ~46px */
+}
