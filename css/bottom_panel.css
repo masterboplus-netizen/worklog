@@ -43,7 +43,7 @@
 /* ==========================================
    КНОПКИ-КРУГИ (Фильтр, Календарь)
    ========================================== */
-.btn-icon-circle {
+.capsule {
   width: var(--capsule-height);
   height: var(--capsule-height);
   border-radius: 50%;
@@ -58,12 +58,12 @@
   cursor: pointer;
 }
 
-.btn-icon-circle svg {
+.capsule svg {
   width: 20px;
   height: 20px;
 }
 
-.btn-icon-circle:active {
+.capsule:active {
   background: var(--accent);
   color: #fff;
 }

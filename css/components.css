@@ -103,3 +103,16 @@
   background: var(--accent);
   color: #fff;
 }
+
+/* Базовые стили для капсулы (кнопки и переключатели) */
+.capsule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--fg);
+  cursor: pointer;
+  box-sizing: border-box;
+}
