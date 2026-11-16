@@ -78,6 +78,7 @@
 
 /* Стили для модального окна календаря */
 #calendar-modal {
+  min-height: 420px;
   position: fixed;
   top: 50%;
   left: 50%;
