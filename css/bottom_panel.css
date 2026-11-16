@@ -1,0 +1,33 @@
+/* Стили для нижнего бара */
+#bottom-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  display: none; /* Скрыт по умолчанию, JS покажет */
+  flex-direction: column;
+}
+
+/* Лента дат */
+#date-strip {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 10px 16px;
+  scrollbar-width: none;
+}
+#date-strip::-webkit-scrollbar {
+  display: none;
+}
+
+/* Кнопки под лентой */
+#panel-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+}
