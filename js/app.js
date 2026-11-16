@@ -32,8 +32,7 @@ async function init() {
 
   setupTabs();
 
-  const sheet = document.getElementById('calendar-sheet');
-  if (sheet) sheet.style.display = 'none';
+    if (sheet) sheet.style.display = 'none';
 
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
@@ -85,8 +84,7 @@ function switchTab(name) {
   const _t = document.getElementById('global-chart-tooltip');
   if (_t) _t.remove();
 
-  const sheet = document.getElementById('calendar-sheet');
-  if (sheet) {
+    if (sheet) {
     if (name === 'diary') {
       sheet.style.display = 'flex';
     } else {

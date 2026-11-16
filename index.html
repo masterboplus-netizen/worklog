@@ -10,7 +10,6 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
-
 <style>
 .segmented-control {
   display: flex !important;
@@ -44,7 +43,6 @@
   color: #fff !important;
   box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3) !important;
 }
-
 .chart-tabs button {
   flex: 1;
   background: transparent;
@@ -72,7 +70,6 @@
   padding: 4px;
 }
 </style>
-
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <link rel="stylesheet" href="css/base.css?v=310">
 <link rel="stylesheet" href="css/layout.css?v=310">
@@ -86,12 +83,6 @@
 <link rel="stylesheet" href="css/safe.css?v=310">
 </head>
 <body>
-
-
-
-
-
-
 <!-- Дашборд (скрыт по умолчанию) -->
 <div id="dashboard" class="screen active">
 <header class="topbar">
@@ -121,21 +112,15 @@
     </button>
   </div>
 </header>
-
 <main id="content"></main>
 <main id="content-diary" class="hidden"></main>
 <main id="content-projects" class="hidden"></main>
 <main id="content-activity" class="hidden"></main>
 </div>
-
 <div id="loading" class="screen hidden">
 <div class="spinner"></div>
 <p>Расшифровка…</p>
 </div>
-
-
-
-
 <!-- === СЛЕПОЙ СЕЙФ (v28) === -->
 <div id="scroll-pin-screen" style="display: none;">
   <div id="safe-dial-container" style="display: none; position: fixed; right: 20px; bottom: 70px; width: 220px; height: 220px; touch-action: none; z-index: 9999; margin: 0; padding: 0;">
@@ -146,16 +131,13 @@
         <circle cx="110" cy="20" r="8" fill="#fff"/>
       </svg>
     </div>
-
     <!-- Лупа под пальцем -->
     <div id="safe-dial-lens"></div>
-
     <!-- Таймер в центре (ПОВЕРХ КОЛЬЦА) -->
     <div id="safe-timer">Приветик</div>
   </div>
 </div>
 <!-- === КОНЕЦ СЕЙФА === -->
-
 <script src="crypto.js?v=268"></script>
 <script src="js/supabase.min.js"></script>
   <script src="js/supabase_client.js"></script>
@@ -165,22 +147,14 @@
 <script src="js/projects.js?v=268"></script>
 <script src="js/chart.js?v=268"></script>
 <script src="js/auth.js?v=268"></script>
-
-
 <script>
-
 </script>
 <script src="js/menu.js"></script>
 <script src="js/calendar.js"></script>
 <script src="js/sessions.js"></script>
-
 <script src="js/bottom_panel.js?v=268"></script>
 <script src="js/app.js?v=268"></script>
 <script src="js/safe.js?v=268"></script>
-
-
-
-
 <script>
 window.onerror = function(msg, url, line, col, error) {
   var el = document.createElement('div');
@@ -190,22 +164,10 @@ window.onerror = function(msg, url, line, col, error) {
   return false;
 };
 </script>
-
-
   <script src="js/widget_capsule.js?v=268"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function() { if (typeof window.initFloatingMenu === "function") window.initFloatingMenu(); });
 </script>
-<div id="calendar-sheet" class="calendar-sheet">
-  
-  <div id="sheet-toggle" style="width: 100%; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-  <svg id="sheet-toggle-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
-</div>
-<div class="sheet-handle" id="sheet-handle"></div>
-  <div class="date-strip" id="date-strip"></div>
-  <div class="sheet-content" id="sheet-content"></div>
-</div>
-
 <div id="bottom-panel" style="display: none;">
   <div id="date-strip"></div>
   <div id="panel-controls">
@@ -217,6 +179,5 @@ window.onerror = function(msg, url, line, col, error) {
     </div>
   </div>
 </div>
-
 </body>
 </html>
