@@ -182,3 +182,38 @@
   width: 22px;
   height: 22px;
 }
+
+/* Выравниваем кнопки-круги по высоте с капсулой */
+#panel-controls {
+  align-items: center;
+}
+
+.btn-icon-circle {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon-circle svg {
+  width: 20px;
+  height: 20px;
+}
+
+#bottom-panel .segmented-control {
+  height: 38px;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+#bottom-panel .segmented-control button {
+  height: 30px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
