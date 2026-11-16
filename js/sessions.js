@@ -195,7 +195,7 @@ function renderDiary() {
 
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '16px';
-  let baseSessions = DIARY_MODE === 'sessions' ? mergeMidnightSessions(window.DATA.sessions || []) : (window.DATA.sessions || []);
+  let baseSessions = window.DIARY_MODE === 'sessions' ? mergeMidnightSessions(window.DATA.sessions || []) : (window.DATA.sessions || []);
   let filtered = baseSessions;
   if (CALENDAR_SELECTED_DAYS.size > 0) {
     filtered = filtered.filter(s => CALENDAR_SELECTED_DAYS.has(s.date));

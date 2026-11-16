@@ -235,13 +235,13 @@ document.addEventListener('DOMContentLoaded', () => {
       btnSessions.addEventListener('click', () => {
         btnSessions.classList.add('active');
         btn24h.classList.remove('active');
-        if (typeof DIARY_MODE !== 'undefined') DIARY_MODE = 'sessions';
+        window.DIARY_MODE = 'sessions';
         if (typeof renderDiary === 'function') renderDiary();
       });
       btn24h.addEventListener('click', () => {
         btn24h.classList.add('active');
         btnSessions.classList.remove('active');
-        if (typeof DIARY_MODE !== 'undefined') DIARY_MODE = '24h';
+        window.DIARY_MODE = '24h';
         if (typeof renderDiary === 'function') renderDiary();
       });
     }
