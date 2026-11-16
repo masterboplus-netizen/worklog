@@ -1,4 +1,8 @@
-/* Стили для нижнего бара */
+/* ==========================================
+   НИЖНИЙ БАР (bottom_panel.css)
+   ========================================== */
+
+/* Контейнер бара */
 #bottom-panel {
   position: fixed;
   bottom: 0;
@@ -7,60 +11,126 @@
   z-index: 1000;
   background: var(--bg);
   border-top: 1px solid var(--border);
-  display: none; /* Скрыт по умолчанию, JS покажет */
+  display: none;
   flex-direction: column;
 }
 
-/* Лента дат */
+/* Лента дат (снизу) */
 #date-strip {
+  order: 2;
   display: flex;
   overflow-x: auto;
   gap: 8px;
   padding: 10px 16px;
+  margin: 0 0 8px 0;
   scrollbar-width: none;
 }
 #date-strip::-webkit-scrollbar {
   display: none;
 }
 
-/* Кнопки под лентой */
+/* Кнопки управления (сверху) */
 #panel-controls {
+  order: 1;
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
 }
 
-/* Стили для кнопок в баре */
-#btn-filter, #btn-calendar {
-  padding: 8px 16px;
+/* ==========================================
+   КАПСУЛА (общий класс для кнопок и переключателя)
+   ========================================== */
+.capsule {
+  height: 40px;
+  border-radius: 20px;
   background: var(--bg3);
-  color: var(--fg);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 14px;
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
   cursor: pointer;
-  font-family: inherit;
 }
 
-#btn-filter:active, #btn-calendar:active {
+/* Если это кнопка с иконкой (Фильтр, Календарь) — делаем её круглой */
+button.capsule {
+  width: 40px;
+  border-radius: 50%;
+}
+
+button.capsule svg {
+  width: 20px;
+  height: 20px;
+}
+
+button.capsule:active {
   background: var(--accent);
   color: #fff;
 }
 
-/* Переключатель Сессии/24ч */
+/* ==========================================
+   ПЕРЕКЛЮЧАТЕЛЬ СЕССИИ / 24Ч
+   ========================================== */
+#bottom-panel .segmented-control {
+  height: 40px;
+  padding: 4px;
+  box-sizing: border-box;
+  background: var(--bg3);
+  border-radius: 20px;
+  display: flex;
+  gap: 4px;
+  width: auto;
+  margin: 0;
+}
 
-
-
+#bottom-panel .segmented-control button {
+  height: 30px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--fg-dim);
+  border-radius: 15px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
 
 #bottom-panel .segmented-control button.active {
   background: var(--accent);
   color: #fff;
 }
 
-/* Стили для модального окна календаря */
-
+/* ==========================================
+   МОДАЛЬНОЕ ОКНО КАЛЕНДАРЯ
+   ========================================== */
+#calendar-modal {
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 40%;
+  width: 90%;
+  max-width: 400px;
+  background: var(--bg2);
+  border-radius: 16px;
+  z-index: 10000;
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  min-height: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 16px;
+}
 
 #calendar-modal .modal-header {
   display: flex;
@@ -81,105 +151,4 @@
   color: var(--fg-dim);
   font-size: 20px;
   cursor: pointer;
-}
-
-
-
-
-
-/* Фиксированная высота модалки, чтобы не прыгала */
-#calendar-modal {
-  min-height: 420px;
-  max-height: 80vh;
-  overflow-y: auto;
-  box-sizing: border-box;
-  padding: 16px;
-  top: 40%;
-}
-
-/* Возвращаем позиционирование модалки */
-#calendar-modal {
-  position: fixed;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 400px;
-  background: var(--bg2);
-  border-radius: 16px;
-  z-index: 10000;
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-/* Меняем местами ленту и кнопки */
-#bottom-panel {
-  display: flex;
-  flex-direction: column;
-}
-
-#date-strip {
-  order: 2;
-  margin-top: 0;
-  margin-bottom: 8px;
-}
-
-#panel-controls {
-  order: 1;
-  border-top: none;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 8px;
-}
-
-
-.btn-icon-circle:active {
-  background: var(--accent);
-  color: #fff;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Делаем кнопки идеально круглыми */
-
-
-/* Подгоняем кнопки-круги под высоту капсулы */
-
-
-
-
-/* Кнопки-круги и капсула — одна высота 36px */
-.btn-icon-circle {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  color: var(--fg);
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.btn-icon-circle svg {
-}
-
-#bottom-panel .segmented-control {
-}
-
-#bottom-panel .segmented-control button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
