@@ -211,31 +211,6 @@
 .month-text:hover, .year-text:hover { background: var(--bg3); }
 .period-filter-row, .month-year-filter { display: contents !important; }
 
-/* === ШТОРКА КАЛЕНДАРЯ === */
-.calendar-sheet {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: auto; max-height: 80vh;
-  background: var(--bg2);
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.6);
-  z-index: 10000;
-  transform: translateY(calc(100% - 130px));
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
-}
-.calendar-sheet.open { transform: translateY(0); }
-.calendar-sheet:not(.open) .sheet-content { display: none; }
-.calendar-sheet.open .sheet-content { display: block; }
-
-.sheet-handle { width: 48px; height: 6px; background: var(--fg-dim); border-radius: 3px; margin: 12px auto; cursor: grab; opacity: 0.5; }
-.sheet-content { flex: 0 0 auto; overflow-y: auto; padding: 0 16px 30px; }
-
 /* === ЛЕНТА ДАТ (неделя) === */
 .date-strip {
   display: flex;
@@ -275,12 +250,6 @@
 .date-strip-dot { width: 5px; height: 5px; margin-top: 4px; border-radius: 50%; background: var(--accent); }
 .date-strip-item.selected .date-strip-dot { background: #fff; }
 
-/* Стрелка: вверх (закрыта), вниз (открыта) */
-.calendar-sheet:not(.open) #sheet-toggle-icon { transform: rotate(0deg); transition: transform 0.3s ease; }
-.calendar-sheet.open #sheet-toggle-icon { transform: rotate(180deg); transition: transform 0.3s ease; }
-.calendar-sheet.open #sheet-toggle svg { transform: rotate(180deg); transition: transform .2s ease; }
-#sheet-toggle svg { transition: transform .2s ease; }
-
 /* Годовой календарь — 12 кнопок */
 .year-month-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 8px 0 16px; padding: 0 4px; }
 .year-month-btn { min-height: 40px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg3); color: var(--fg); font: inherit; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
@@ -301,18 +270,3 @@
 .period-filter { display: inline-flex; gap: 4px; margin-left: 8px; vertical-align: middle; }
 .lbl-date { font-size: 10px; color: var(--fg-dim); }
 .lbl-dow { font-size: 9px; color: var(--fg-dim); opacity: 0.6; margin-top: 1px; }
-
-/* === ФИКС ПУСТОГО МЕСТА НАД ДАТАМИ В ШТОРКЕ === */
-.sheet-handle {
-  display: none !important; /* Убираем серую полоску */
-}
-
-#sheet-toggle {
-  height: 24px !important; /* Уменьшаем высоту контейнера стрелки */
-  margin: 0 !important;    /* Убираем отступы */
-  padding-top: 4px !important; /* Чуть-чуть отступа для красоты */
-}
-
-.date-strip {
-  margin-top: 0 !important; /* Прижимаем ленту дат к стрелке */
-}
