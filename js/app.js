@@ -224,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Календарь
     if (btnCalendar && modal) {
       btnCalendar.addEventListener('click', () => {
+        alert('Кнопка Календарь нажата (из app.js)');
         modal.classList.remove('hidden');
         if (typeof renderCalendarModal === 'function') renderCalendarModal();
       });
