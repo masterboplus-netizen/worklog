@@ -200,11 +200,5 @@ function renderDiary() {
 
   c.appendChild(listDiv);
 
-  modeCapsule.querySelectorAll('button[data-mode]').forEach(b => {
-    b.addEventListener('click', () => {
-      DIARY_MODE = b.dataset.mode;
-      renderDiary();
-    });
-  });
 }
 
