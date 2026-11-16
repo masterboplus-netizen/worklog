@@ -169,5 +169,18 @@ window.onerror = function(msg, url, line, col, error) {
   document.addEventListener("DOMContentLoaded", function() { if (typeof window.initFloatingMenu === "function") window.initFloatingMenu(); });
 </script>
 
+
+<div id="bottom-panel" style="display: none;">
+  <div id="date-strip"></div>
+  <div id="panel-controls">
+    <button id="btn-filter">Фильтр</button>
+    <button id="btn-calendar">Календарь</button>
+    <div class="segmented-control">
+      <button id="mode-sessions" class="active">Сессии</button>
+      <button id="mode-24h">24ч</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
