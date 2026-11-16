@@ -113,3 +113,17 @@
   padding: 16px;
   top: 40%;
 }
+
+/* Возвращаем позиционирование модалки */
+#calendar-modal {
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  background: var(--bg2);
+  border-radius: 16px;
+  z-index: 10000;
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
