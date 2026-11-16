@@ -190,7 +190,6 @@ function renderDiary() {
   const c = document.getElementById('content-diary');
   if (!c || !window.DATA) return;
   c.innerHTML = '';
-  if (typeof renderSessionsToolbar === 'function') renderSessionsToolbar();
 
   renderDateStrip();
 

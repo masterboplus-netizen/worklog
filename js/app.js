@@ -205,3 +205,45 @@ function showCreators() {
 
 // Глобальная ссылка
 if (typeof renderDashboard === 'function') window.renderDashboard = renderDashboard;
+
+// === ОБРАБОТЧИКИ КНОПОК БАРА ===
+document.addEventListener('DOMContentLoaded', () => {
+  // Ждем немного, чтобы кнопки точно появились в DOM
+  setTimeout(() => {
+    const btnFilter = document.getElementById('btn-filter');
+    const btnCalendar = document.getElementById('btn-calendar');
+    const modal = document.getElementById('calendar-modal');
+    const btnSessions = document.getElementById('mode-sessions');
+    const btn24h = document.getElementById('mode-24h');
+
+    // Фильтр
+    if (btnFilter) {
+      btnFilter.addEventListener('click', () => alert('Фильтры в разработке'));
+    }
+
+    // Календарь
+    if (btnCalendar && modal) {
+      btnCalendar.addEventListener('click', () => {
+        alert('Кнопка Календарь нажата (из app.js)');
+        modal.classList.remove('hidden');
+        if (typeof renderCalendarModal === 'function') renderCalendarModal();
+      });
+    }
+
+    // Переключатель Сессии / 24ч
+    if (btnSessions && btn24h) {
+      btnSessions.addEventListener('click', () => {
+        btnSessions.classList.add('active');
+        btn24h.classList.remove('active');
+        window.DIARY_MODE = 'sessions';
+        if (typeof renderDiary === 'function') renderDiary();
+      });
+      btn24h.addEventListener('click', () => {
+        btn24h.classList.add('active');
+        btnSessions.classList.remove('active');
+        window.DIARY_MODE = '24h';
+        if (typeof renderDiary === 'function') renderDiary();
+      });
+    }
+  }, 100);
+});
