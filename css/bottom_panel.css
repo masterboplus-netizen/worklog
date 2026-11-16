@@ -75,3 +75,40 @@
   background: var(--accent);
   color: #fff;
 }
+
+/* Стили для модального окна календаря */
+#calendar-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg2);
+  padding: 20px;
+  border-radius: 16px;
+  z-index: 2000;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+}
+
+#calendar-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+#calendar-modal .modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+#calendar-modal .modal-close {
+  background: transparent;
+  border: none;
+  color: var(--fg-dim);
+  font-size: 20px;
+  cursor: pointer;
+}

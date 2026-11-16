@@ -149,3 +149,76 @@ function formatDiaryDate(iso) {
   if (isNaN(d.getTime())) return iso;
   return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + days[d.getDay()];
 }
+
+// === МОДАЛЬНОЕ ОКНО КАЛЕНДАРЯ ===
+function renderCalendarModal() {
+  const modal = document.getElementById('calendar-modal');
+  if (!modal) return;
+
+  // Если окно уже открыто, очищаем его перед перерисовкой
+  modal.innerHTML = '';
+
+  // Заголовок и кнопка закрытия
+  const header = document.createElement('div');
+  header.className = 'modal-header';
+  header.innerHTML = `
+    <div class="modal-title">Выберите дату</div>
+    <button class="modal-close" onclick="document.getElementById('calendar-modal').classList.add('hidden')">✕</button>
+  `;
+  modal.appendChild(header);
+
+  // Контейнер для сетки
+  const grid = document.createElement('div');
+  grid.className = 'calendar-grid';
+  modal.appendChild(grid);
+
+  // Логика отрисовки сетки (берем из старого кода, но адаптируем под модалку)
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const todayStr = _localDate(today);
+
+  const dayStats = {};
+  for (const s of window.DATA?.sessions || []) {
+    dayStats[s.date] = (dayStats[s.date] || 0) + (s.duration_min || 0);
+  }
+
+  // Дни недели
+  ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(day => {
+    const el = document.createElement('div');
+    el.className = 'cal-dow';
+    el.textContent = day;
+    grid.appendChild(el);
+  });
+
+  const start = new Date(year, month, 1);
+  const end = new Date(year, month + 1, 0);
+  const offset = start.getDay() === 0 ? 6 : start.getDay() - 1;
+
+  for (let i = 0; i < offset; i++) {
+    grid.appendChild(document.createElement('div'));
+  }
+
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const ds = _localDate(d);
+    const cell = document.createElement('div');
+    cell.className = 'cal-day';
+
+    if (ds === todayStr) cell.classList.add('today');
+    if (CALENDAR_SELECTED_DAYS.has(ds)) cell.classList.add('selected');
+
+    cell.innerHTML = `<div class="cal-num">${d.getDate()}</div>`;
+    if (dayStats[ds]) cell.innerHTML += '<div class="cal-dot"></div>';
+
+    cell.addEventListener('click', () => {
+      if (CALENDAR_SELECTED_DAYS.has(ds)) CALENDAR_SELECTED_DAYS.delete(ds);
+      else CALENDAR_SELECTED_DAYS.add(ds);
+      renderDiary();
+      renderCalendarModal(); // Перерисовываем модалку
+    });
+    grid.appendChild(cell);
+  }
+
+  // Показываем модалку
+  modal.classList.remove('hidden');
+}
