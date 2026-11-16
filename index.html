@@ -16,12 +16,13 @@
 <link rel="stylesheet" href="css/layout.css?v=310">
 <link rel="stylesheet" href="css/components.css?v=310">
 <link rel="stylesheet" href="css/dashboard.css?v=310">
-<link rel="stylesheet" href="css/diary.css?v=310">
+<link rel="stylesheet" href="css/diary.css?v=312">
 <link rel="stylesheet" href="css/projects.css?v=310">
 <link rel="stylesheet" href="css/analytics.css?v=310">
 <link rel="stylesheet" href="css/chart.css?v=310">
 <link rel="stylesheet" href="css/modals.css?v=310">
 <link rel="stylesheet" href="css/bottom_panel.css?v=311">
+<link rel="stylesheet" href="css/sessions_toolbar.css?v=312">
 <link rel="stylesheet" href="css/safe.css?v=310">
 </head>
 <body>
@@ -84,23 +85,6 @@
 
 <div id="bottom-panel" style="display: none;">
   <div id="date-strip"></div>
-  <div id="panel-controls">
-    <button id="btn-filter" class="capsule">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-      </svg>
-    </button>
-    <button id="btn-calendar" class="capsule">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-        <path d="M16 2v4M8 2v4M3 10h18"></path>
-      </svg>
-    </button>
-    <div class="segmented-control">
-      <button id="mode-sessions" class="active">Сессии</button>
-      <button id="mode-24h">24ч</button>
-    </div>
-  </div>
 </div>
 <script src="crypto.js?v=268"></script>
 <script src="js/supabase.min.js"></script>
@@ -115,9 +99,10 @@
 </script>
 <script src="js/menu.js"></script>
 <script src="js/calendar.js"></script>
-<script src="js/sessions.js"></script>
+<script src="js/sessions.js?v=312"></script>
 <script src="js/bottom_panel.js?v=268"></script>
-<script src="js/app.js?v=268"></script>
+<script src="js/sessions_toolbar.js?v=312"></script>
+<script src="js/app.js?v=312"></script>
 <script src="js/safe.js?v=268"></script>
 <script>
 window.onerror = function(msg, url, line, col, error) {
