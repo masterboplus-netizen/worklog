@@ -50,26 +50,9 @@
 }
 
 /* Переключатель Сессии/24ч */
-#bottom-panel .segmented-control {
-  margin: 0;
-  padding: 4px;
-  background: var(--bg3);
-  border-radius: 20px;
-  display: flex;
-  gap: 4px;
-  width: auto;
-}
 
-#bottom-panel .segmented-control button {
-  padding: 6px 16px;
-  border: none;
-  background: transparent;
-  color: var(--fg-dim);
-  border-radius: 16px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
+
+
 
 #bottom-panel .segmented-control button.active {
   background: var(--accent);
@@ -167,26 +150,11 @@
   color: #fff;
 }
 
-/* Увеличиваем иконку внутри кнопки и делаем её круглой */
-.btn-icon-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50% !important;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.btn-icon-circle svg {
-  width: 22px;
-  height: 22px;
-}
 
-/* Выравниваем кнопки-круги по высоте с капсулой */
-#panel-controls {
-  align-items: center;
-}
+
+
+
 
 .btn-icon-circle {
   width: 38px;
@@ -199,27 +167,44 @@
   justify-content: center;
 }
 
-.btn-icon-circle svg {
-  width: 20px;
-  height: 20px;
-}
 
-#bottom-panel .segmented-control {
-  height: 38px;
-  padding: 4px;
-  box-sizing: border-box;
-}
 
-#bottom-panel .segmented-control button {
-  height: 30px;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
+
+
 
 /* Увеличиваем иконку фильтра */
 #btn-filter svg {
   width: 24px !important;
   height: 24px !important;
+}
+
+/* Одинаковая высота для кнопок и капсулы */
+.btn-icon-circle {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-icon-circle svg {
+  width: 22px;
+  height: 22px;
+}
+
+#bottom-panel .segmented-control {
+  height: 40px;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+#bottom-panel .segmented-control button {
+  height: 32px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
