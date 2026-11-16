@@ -165,6 +165,33 @@ function formatDiaryDate(dateStr) {
   return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + days[d.getDay()];
 }
 
+
+function mergeMidnightSessions(sessions) {
+  const result = [];
+  const midnightMap = {};
+  for (const s of sessions) {
+    const startH = parseInt(s.start.split(':')[0]);
+    const endH = parseInt(s.end.split(':')[0]);
+    if (startH > endH) {
+      const key = s.date + '_' + (s.project || '');
+      midnightMap[key].push(s);
+    } else {
+      result.push(s);
+    }
+  }
+  for (const key in midnightMap) {
+    const group = midnightMap[key];
+    if (group.length > 1) {
+      const merged = { ...group[0] };
+      merged.duration_min = group.reduce((sum, s) => sum + (s.duration_min || 0), 0);
+      result.push(merged);
+    } else {
+      result.push(group[0]);
+    }
+  }
+  return result;
+}
+
 // === СПИСОК (для вкладки) ===
 function renderDiary() {
   const c = document.getElementById('content-diary');
