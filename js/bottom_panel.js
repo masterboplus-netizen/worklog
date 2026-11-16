@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Функция, которую будет вызывать app.js при смене вкладки
   window.updateBottomPanel = function(tabName) {
+  alert('updateBottomPanel вызван с tabName: ' + tabName);
     if (tabName === 'diary') {
       bottomPanel.style.display = 'flex'; // Показываем только для календаря
     } else {
