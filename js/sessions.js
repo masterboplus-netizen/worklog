@@ -156,6 +156,15 @@ function renderSessionCard(s, projName) {
   return item;
 }
 
+
+function formatDiaryDate(dateStr) {
+  const d = new Date(dateStr);
+  if (isNaN(d)) return dateStr;
+  const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  const days = ['вс','пн','вт','ср','чт','пт','сб'];
+  return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + days[d.getDay()];
+}
+
 // === СПИСОК (для вкладки) ===
 function renderDiary() {
   const c = document.getElementById('content-diary');
