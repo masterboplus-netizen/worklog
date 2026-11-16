@@ -32,7 +32,6 @@ async function init() {
 
   setupTabs();
 
-    if (sheet) sheet.style.display = 'none';
 
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
@@ -84,13 +83,7 @@ function switchTab(name) {
   const _t = document.getElementById('global-chart-tooltip');
   if (_t) _t.remove();
 
-    if (sheet) {
-    if (name === 'diary') {
-      sheet.style.display = 'flex';
-    } else {
-      sheet.style.display = 'none';
-    }
-  }
+
 
   const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity'];
   scrollContainers.forEach(id => {
