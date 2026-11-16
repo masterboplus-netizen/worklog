@@ -118,3 +118,22 @@
 #calendar-modal .calendar-grid {
   min-height: 280px; /* 6 строк * ~46px */
 }
+
+/* Фикс: сетка не должна вылезать за края */
+#calendar-modal .calendar-grid {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+#calendar-modal .cal-day {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+}
+
+#calendar-modal .cal-day .cal-num {
+  width: 28px !important;
+  height: 28px !important;
+  font-size: 13px !important;
+}
