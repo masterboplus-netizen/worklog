@@ -46,38 +46,9 @@
 
 /* Перенесено из index.html (стили капсулы) */
 
-.segmented-control {
-  display: flex;
-  background: var(--bg3);
-  border-radius: 20px;
-  padding: 4px;
-  margin: 24px 16px 16px 16px;
-  gap: 4px;
-  width: calc(100% - 32px);
-  box-sizing: border-box;
-}
-.segmented-control button {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--fg-dim);
-  font-size: 13px;
-  font-weight: 500;
-  padding: 8px 4px;
-  border-radius: 16px;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  outline: none;
-  -webkit-appearance: none;
-  text-align: center;
-}
-.segmented-control button.active {
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
-}
+
+
+
 .chart-tabs button {
   flex: 1;
   background: transparent;
@@ -103,4 +74,32 @@
   background: var(--bg3);
   border-radius: 20px;
   padding: 4px;
+}
+
+/* Базовые стили для капсулы (без ширины, чтобы не ломать бар) */
+.segmented-control {
+  display: flex;
+  background: var(--bg3);
+  border-radius: 20px;
+  padding: 4px;
+  gap: 4px;
+  box-sizing: border-box;
+}
+
+.segmented-control button {
+  background: transparent;
+  border: none;
+  color: var(--fg-dim);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.segmented-control button.active {
+  background: var(--accent);
+  color: #fff;
 }
