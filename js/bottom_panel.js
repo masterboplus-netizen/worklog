@@ -28,3 +28,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Логика переключателя Сессии / 24ч
+document.addEventListener('DOMContentLoaded', () => {
+  const btnSessions = document.getElementById('mode-sessions');
+  const btn24h = document.getElementById('mode-24h');
+  
+  if (btnSessions && btn24h) {
+    btnSessions.addEventListener('click', () => {
+      btnSessions.classList.add('active');
+      btn24h.classList.remove('active');
+      if (typeof DIARY_MODE !== 'undefined') DIARY_MODE = 'sessions';
+      if (typeof renderDiary === 'function') renderDiary();
+    });
+    
+    btn24h.addEventListener('click', () => {
+      btn24h.classList.add('active');
+      btnSessions.classList.remove('active');
+      if (typeof DIARY_MODE !== 'undefined') DIARY_MODE = '24h';
+      if (typeof renderDiary === 'function') renderDiary();
+    });
+  }
+});
