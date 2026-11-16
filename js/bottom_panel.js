@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnFilter) btnFilter.addEventListener('click', () => alert('Фильтры в разработке'));
   if (btnCalendar && modal) {
     btnCalendar.addEventListener('click', () => {
-    alert('Кнопка Календарь нажата');
       modal.classList.remove('hidden');
       if (typeof renderCalendarModal === 'function') renderCalendarModal();
     });
