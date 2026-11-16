@@ -146,3 +146,23 @@
   border-bottom: 1px solid var(--border);
   margin-bottom: 8px;
 }
+
+/* Стили для кнопки-иконки в кружке */
+.btn-icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.btn-icon-circle:active {
+  background: var(--accent);
+  color: #fff;
+}
