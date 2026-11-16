@@ -46,9 +46,6 @@ function renderDateStrip() {
       if (CALENDAR_SELECTED_DAYS.has(ds)) CALENDAR_SELECTED_DAYS.delete(ds);
       else CALENDAR_SELECTED_DAYS.add(ds);
       renderDiary();
-      if (document.getElementById('calendar-sheet')?.classList.contains('open')) {
-        renderDiaryFull();
-      }
     });
     strip.appendChild(item);
   }
@@ -70,7 +67,6 @@ function renderSessionCard(s, projName) {
   const item = document.createElement('div');
   item.className = 'diary-item';
 
-  // Счётчики
   let countersHTML = '';
   if (s.events || s.screens || s.tasks_done || s.errors_count) {
     countersHTML = '<div class="diary-counters">';
@@ -81,10 +77,8 @@ function renderSessionCard(s, projName) {
     countersHTML += '</div>';
   }
 
-  // Теги
   const tagsHTML = s.tags && s.tags.length ? `<div style="margin-top:6px; display:flex; gap:4px; flex-wrap:wrap;">${s.tags.map(t => `<span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; color:var(--fg);">${t}</span>`).join('')}</div>` : '';
 
-  // Задачи (плоский список)
   const uniqueTasks = {};
   if (s.linked_tasks) {
     s.linked_tasks.forEach(t => {
@@ -102,7 +96,6 @@ function renderSessionCard(s, projName) {
     tasksHTML += '</div>';
   }
 
-  // Скрытая детализация
   let detailsHTML = '';
   if (Object.keys(uniqueTasks).length > 0) {
     detailsHTML = '<div class="diary-details" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out;">';
@@ -156,7 +149,6 @@ function renderSessionCard(s, projName) {
   return item;
 }
 
-
 function formatDiaryDate(dateStr) {
   const d = new Date(dateStr);
   if (isNaN(d)) return dateStr;
@@ -165,15 +157,16 @@ function formatDiaryDate(dateStr) {
   return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + days[d.getDay()];
 }
 
-
 function mergeMidnightSessions(sessions) {
   const result = [];
   const midnightMap = {};
   for (const s of sessions) {
+    if (!s.start || !s.end) { result.push(s); continue; }
     const startH = parseInt(s.start.split(':')[0]);
     const endH = parseInt(s.end.split(':')[0]);
     if (startH > endH) {
       const key = s.date + '_' + (s.project || '');
+      if (!midnightMap[key]) midnightMap[key] = [];
       midnightMap[key].push(s);
     } else {
       result.push(s);
@@ -200,7 +193,6 @@ function renderDiary() {
 
   renderDateStrip();
 
-  // Список
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '16px';
   let baseSessions = DIARY_MODE === 'sessions' ? mergeMidnightSessions(window.DATA.sessions || []) : (window.DATA.sessions || []);
@@ -229,12 +221,9 @@ function renderDiary() {
         listDiv.appendChild(dateHeader);
         lastDate = s.date;
       }
-      // Вместо огромного кода вызываем нашу новую функцию
       listDiv.appendChild(renderSessionCard(s, projName));
     });
   }
 
   c.appendChild(listDiv);
-
 }
-
