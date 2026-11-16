@@ -220,3 +220,14 @@
   justify-content: center;
   aspect-ratio: 1 / 1;
 }
+
+/* Подгоняем кнопки-круги под высоту капсулы */
+.btn-icon-circle {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.btn-icon-circle svg {
+  width: 18px !important;
+  height: 18px !important;
+}
