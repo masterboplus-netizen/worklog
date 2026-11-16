@@ -81,6 +81,7 @@ function setupTabs() {
 }
 
 function switchTab(name) {
+  if (typeof window.updateBottomPanel === "function") window.updateBottomPanel(name);
   const _t = document.getElementById('global-chart-tooltip');
   if (_t) _t.remove();
 
