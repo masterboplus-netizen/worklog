@@ -17,8 +17,9 @@ function renderTagsScreen() {
   wrap.className = 'section';
   wrap.style.cssText = 'padding:16px;';
   wrap.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <div style="font-size:20px;font-weight:700;">Теги</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <button id="tag-back-btn" style="background:transparent;border:0;color:var(--fg);font-size:24px;cursor:pointer;padding:0 4px;">‹</button>
+      <div style="font-size:20px;font-weight:700;flex:1;">Теги</div>
       <button id="tag-add-btn" class="pulse-btn" style="background:var(--accent);color:#fff;border:0;padding:8px 14px;border-radius:8px;cursor:pointer;">+ Добавить</button>
     </div>
     <div id="tags-list"></div>
@@ -26,6 +27,7 @@ function renderTagsScreen() {
   c.appendChild(wrap);
   renderTagsList();
   document.getElementById('tag-add-btn').addEventListener('click', () => openTagEditor());
+  document.getElementById('tag-back-btn').addEventListener('click', () => switchTab('settings'));
 }
 
 function renderTagsList() {
