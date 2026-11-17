@@ -6,14 +6,12 @@ async function loadDataFromSupabase() {
     try {
         console.log("Загрузка данных из Supabase...");
         
-        // Проверяем, загрузилась ли библиотека
         if (typeof window.supabase === 'undefined') {
             throw new Error('Библиотека supabase-js не загружена');
         }
 
-        // Создаем клиент внутри функции
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    window.supabaseClient = supabase;
+        window.supabaseClient = supabase;
 
         const { data: projects, error: e1 } = await supabase.from('worklog_projects').select('*');
         if (e1) throw e1;
@@ -35,9 +33,7 @@ async function loadDataFromSupabase() {
 
         const { data: tags, error: e6 } = await supabase.from('worklog_tags').select('*').order('name');
         if (e6) throw e6;
-        if (e5) throw e5;
 
-        // Приводим данные из базы к формату старого JSON
         const tasksBySession = {};
         (subtasks || []).forEach(st => {
             if (st.session_id) {
@@ -46,7 +42,7 @@ async function loadDataFromSupabase() {
                 const parentTask = (tasks || []).find(t => t.id === st.task_id);
                 const parentPhase = parentTask ? (phases || []).find(ph => ph.id === parentTask.phase_id) : null;
                 const parentModule = parentPhase ? (phases || []).find(ph => ph.id === parentPhase.parent_id) : null;
-                // Ищем проект. Сначала смотрим на проект фазы, если нет - на проект активности (на всякий случай)
+                
                 const projId = parentPhase ? parentPhase.project_id : null;
                 const parentProject = projId ? (projects || []).find(p => p.id === projId) : null;
 
@@ -89,15 +85,13 @@ async function loadDataFromSupabase() {
             projects: projects || [],
             sessions: mappedSessions,
             tags: tags || [],
-            baseline: { minutes: 336, messages: 0 } // Временно, или найдем в сессиях
+            baseline: { minutes: 336, messages: 0 }
         };
 
         window.DATA.projects.forEach(proj => {
-            // Берем только модули (parent_id пустой)
             const projectModules = phases.filter(ph => ph.project_id === proj.id && !ph.parent_id);
             
             proj.plan = projectModules.map(ph => {
-                // Для каждого модуля ищем его эпики
                 const moduleEpics = phases.filter(e => e.parent_id === ph.id);
                 
                 return {
@@ -107,10 +101,12 @@ async function loadDataFromSupabase() {
                         text: t.name,
                         done: t.status === 'done',
                         status: t.status,
+                        duration_min: t.duration_min || 0, // <--- ДОБАВЛЕНО
                         subtasks: (subtasks || []).filter(st => st.task_id === t.id).map(st => ({
                             text: st.name,
                             done: st.status === 'done',
-                            status: st.status
+                            status: st.status,
+                            duration_min: st.duration_min || 0 // <--- ДОБАВЛЕНО
                         }))
                     })),
                     epics: moduleEpics.map(e => ({
@@ -120,10 +116,12 @@ async function loadDataFromSupabase() {
                             text: t.name,
                             done: t.status === 'done',
                             status: t.status,
+                            duration_min: t.duration_min || 0, // <--- ДОБАВЛЕНО
                             subtasks: (subtasks || []).filter(st => st.task_id === t.id).map(st => ({
                                 text: st.name,
                                 done: st.status === 'done',
-                                status: st.status
+                                status: st.status,
+                                duration_min: st.duration_min || 0 // <--- ДОБАВЛЕНО
                             }))
                         }))
                     }))
@@ -131,18 +129,10 @@ async function loadDataFromSupabase() {
             });
         });
 
-                // ОТЛАДКА: смотрим, что пришло из базы
-        if (window.DATA.sessions.length > 0) {
-            const first = window.DATA.sessions[0];
-            
-            
-        }
-        
         console.log("✅ Данные загружены из Supabase");
         return true;
     } catch (e) {
         console.error("❌ Ошибка загрузки из Supabase:", e);
-        // Показываем ошибку на экране
         const errDiv = document.getElementById('debug-error');
         if (errDiv) errDiv.remove();
         const d = document.createElement('div');
