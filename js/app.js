@@ -3,9 +3,6 @@ const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
 async function init() {
-  console.log("👉 ШАГ 1: init() запущен");
-  alert("ШАГ 1: init() запущен");
-
   const btnHeart = $('#btn-heart');
   if (btnHeart) btnHeart.addEventListener('click', () => switchTab('settings'));
 
@@ -21,32 +18,16 @@ async function init() {
 
   const logoBtn = $('#logo-btn');
   if (logoBtn) {
-    logoBtn.addEventListener('click', () => {
-      if (!document.getElementById('content').classList.contains('hidden')) {
-        renderDashboard();
-      } else {
-        switchTab('dashboard');
-      }
-    });
+    logoBtn.addEventListener('click', () => switchTab('dashboard'));
   }
-
-  setupTabs();
 
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
 
-  console.log("👉 ШАГ 2: Начинаем загрузку из Supabase");
-  alert("ШАГ 2: Начинаем загрузку из Supabase");
-
   if (typeof loadDataFromSupabase === 'function') {
     loadDataFromSupabase().then(ok => {
-      console.log("👉 ШАГ 3: Supabase ответил, ok = " + ok);
-      alert("ШАГ 3: Supabase ответил, ok = " + ok);
-      
       if (ok) {
         showScreen('dashboard');
-        console.log("👉 ШАГ 4: Вызываем renderDashboard()");
-        alert("ШАГ 4: Вызываем renderDashboard()");
         if (typeof renderDashboard === 'function') renderDashboard();
       } else {
         alert('Ошибка загрузки из Supabase');
@@ -64,17 +45,11 @@ if (document.readyState === 'loading') {
   init();
 }
 
-// Функция оставлена пустой, так как нижние табы убраны
-function setupTabs() {
-  // Вкладок в нижней панели больше нет, навигация через капсулу
-}
-
 function switchTab(name) {
   if (typeof window.updateBottomPanel === "function") window.updateBottomPanel(name);
   const _t = document.getElementById('global-chart-tooltip');
   if (_t) _t.remove();
 
-  // Список всех контейнеров контента
   const containers = ['content', 'content-activity', 'content-projects', 'content-chart', 'content-settings', 'content-tags'];
   
   containers.forEach(id => {
@@ -82,7 +57,7 @@ function switchTab(name) {
     if (el) { 
       el.scrollTop = 0; 
       el.classList.add('hidden'); 
-      if (id === 'content-chart') el.innerHTML = ''; // Очищаем график при скрытии
+      if (id === 'content-chart' || id === 'content-settings' || id === 'content-tags') el.innerHTML = '';
     }
   });
   window.scrollTo(0, 0);
@@ -91,8 +66,6 @@ function switchTab(name) {
       el.style.display = 'none';
       el.classList.add('hidden');
   });
-
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab-active'));
 
   try {
     if (name === 'activity') {
@@ -116,7 +89,6 @@ function switchTab(name) {
       if (c) { c.classList.remove('hidden'); c.innerHTML = ''; if (typeof renderTagsScreen === 'function') renderTagsScreen(); }
     } 
     else {
-      // Дашборд по умолчанию
       if (typeof HERO_MODE !== 'undefined') HERO_MODE = 'today';
       const c = document.getElementById('content');
       if (c) { c.classList.remove('hidden'); if (typeof renderDashboard === 'function') renderDashboard(); }
@@ -176,7 +148,6 @@ window.closeJoke = function closeJoke() {
 function showCreators() {
   const old = document.getElementById('creators-modal');
   if (old) old.remove();
-
   const modal = document.createElement('div');
   modal.id = 'creators-modal';
   modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;';
@@ -199,12 +170,7 @@ function showCreators() {
   setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
 
-// Глобальная ссылка
-if (typeof renderDashboard === 'function') window.renderDashboard = renderDashboard;
-
-// === ОБРАБОТЧИКИ КНОПОК БАРА ===
 document.addEventListener('DOMContentLoaded', () => {
-  // Ждем немного, чтобы кнопки точно появились в DOM
   setTimeout(() => {
     const btnFilter = document.getElementById('btn-filter');
     const btnCalendar = document.getElementById('btn-calendar');
@@ -212,21 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSessions = document.getElementById('mode-activities');
     const btn24h = document.getElementById('mode-24h');
 
-    // Фильтр
-    if (btnFilter) {
-      btnFilter.addEventListener('click', () => alert('Фильтры в разработке'));
-    }
+    if (btnFilter) btnFilter.addEventListener('click', () => alert('Фильтры в разработке'));
 
-    // Календарь
     if (btnCalendar && modal) {
       btnCalendar.addEventListener('click', () => {
-        alert('Кнопка Календарь нажата (из app.js)');
         modal.classList.remove('hidden');
         if (typeof renderCalendarModal === 'function') renderCalendarModal();
       });
     }
 
-    // Переключатель Активность / 24ч
     if (btnSessions && btn24h) {
       btnSessions.addEventListener('click', () => {
         btnSessions.classList.add('active');
