@@ -13,6 +13,7 @@ async function loadDataFromSupabase() {
 
         // Создаем клиент внутри функции
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    window.supabaseClient = supabase;
 
         const { data: projects, error: e1 } = await supabase.from('worklog_projects').select('*');
         if (e1) throw e1;
@@ -30,6 +31,10 @@ async function loadDataFromSupabase() {
         if (e4) throw e4;
 
         const { data: incidents, error: e5 } = await supabase.from('worklog_incidents').select('id, session_id');
+        if (e5) throw e5;
+
+        const { data: tags, error: e6 } = await supabase.from('worklog_tags').select('*').order('name');
+        if (e6) throw e6;
         if (e5) throw e5;
 
         // Приводим данные из базы к формату старого JSON
