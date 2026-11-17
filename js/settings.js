@@ -8,7 +8,10 @@ function renderSettingsScreen() {
   wrap.className = 'section';
   wrap.style.cssText = 'padding:16px;';
   wrap.innerHTML = `
-    <h2 style="margin-bottom:16px;color:var(--fg);font-size:22px;">Настройки</h2>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h2 style="color:var(--fg);font-size:22px;margin:0;">Настройки</h2>
+      <button id="settings-close-btn" style="background:transparent;border:0;color:var(--fg-dim);font-size:24px;cursor:pointer;padding:4px;">✕</button>
+    </div>
     <div style="font-size:13px;color:var(--fg-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Активность</div>
     <div id="settings-tags-row" style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.05);cursor:pointer;margin-bottom:12px;">
       <div>
@@ -20,5 +23,6 @@ function renderSettingsScreen() {
   `;
   c.appendChild(wrap);
   document.getElementById('settings-tags-row').addEventListener('click', () => switchTab('tags'));
+  document.getElementById('settings-close-btn').addEventListener('click', () => switchTab('dashboard'));
 }
 window.renderSettingsScreen = renderSettingsScreen;
