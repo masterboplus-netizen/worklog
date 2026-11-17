@@ -211,62 +211,6 @@
 .month-text:hover, .year-text:hover { background: var(--bg3); }
 .period-filter-row, .month-year-filter { display: contents !important; }
 
-/* === ЛЕНТА ДАТ (неделя) === */
-.date-strip {
-  display: flex;
-  justify-content: flex-start;
-  gap: 6px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  scroll-snap-type: x mandatory;
-  margin: 8px 12px 12px;
-  padding: 0 2px;
-  box-sizing: border-box;
-}
-.date-strip::-webkit-scrollbar { display: none; }
-.date-strip-item {
-  box-sizing: border-box;
-  flex: 0 0 calc((100% - 36px) / 7);
-  min-width: 0;
-  padding: 7px 2px;
-  border: 0;
-  font: inherit;
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 12px;
-  cursor: pointer;
-  background: rgba(255,255,255,0.05);
-  transition: all 0.2s;
-}
-.date-strip-item.today { background: rgba(74, 158, 255, 0.2); color: var(--accent); }
-.date-strip-item.selected { background: var(--accent); color: #fff; }
-.date-strip-day { font-size: 10px; color: var(--fg-dim); text-transform: uppercase; }
-.date-strip-num { font-size: 16px; font-weight: 600; color: var(--fg); }
-.date-strip-item.selected .date-strip-num, .date-strip-item.selected .date-strip-day { color: #fff; }
-.date-strip-dot { width: 5px; height: 5px; margin-top: 4px; border-radius: 50%; background: var(--accent); }
-.date-strip-item.selected .date-strip-dot { background: #fff; }
-
-/* Годовой календарь — 12 кнопок */
-.year-month-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 8px 0 16px; padding: 0 4px; }
-.year-month-btn { min-height: 40px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg3); color: var(--fg); font: inherit; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
-.year-month-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-.year-month-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-.year-month-btn.active .year-month-dot { background: #fff; }
-.calendar-sheet.open .date-strip { display: none !important; }
-
-/* === ПЕРЕНЕСЕНО ИЗ LAYOUT.CSS (Дневник) === */
-#content-diary {
-  padding: 16px;
-  flex: 1;
-  max-width: 720px; 
-  margin: 0 auto; 
-  width: 100%;
-  padding-bottom: 120px !important;
-}
 .period-filter { display: inline-flex; gap: 4px; margin-left: 8px; vertical-align: middle; }
 .lbl-date { font-size: 10px; color: var(--fg-dim); }
 .lbl-dow { font-size: 9px; color: var(--fg-dim); opacity: 0.6; margin-top: 1px; }

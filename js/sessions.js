@@ -1,66 +1,5 @@
 // МОДУЛЬ: СПИСОК СЕССИЙ
 
-// === ЛЕНТА ДАТ ПОД КАЛЕНДАРЁМ ===
-function renderDateStrip() {
-  const strip = document.getElementById('date-strip');
-  if (!strip || !window.DATA) return;
-
-  const savedScroll = CALENDAR_STRIP_SCROLL_LEFT;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const todayStr = _localDate(today);
-
-  const dates = (window.DATA.sessions || [])
-    .map(s => s.date)
-    .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d) && d <= todayStr)
-    .sort();
-
-  let firstDate;
-  if (dates.length) {
-    const p = dates[0].split('-').map(Number);
-    firstDate = new Date(p[0], p[1] - 1, p[2]);
-  } else {
-    firstDate = new Date(today);
-    firstDate.setDate(firstDate.getDate() - 6);
-  }
-
-  const activeDays = new Set(dates);
-  strip.innerHTML = '';
-
-  for (let d = new Date(firstDate); d <= today; d.setDate(d.getDate() + 1)) {
-    const date = new Date(d);
-    const ds = _localDate(date);
-    const item = document.createElement('button');
-    item.type = 'button';
-    item.className = 'date-strip-item';
-    if (ds === todayStr) item.classList.add('today');
-    if (CALENDAR_SELECTED_DAYS.has(ds)) item.classList.add('selected');
-
-    const weekday = date.toLocaleDateString('ru-RU', { weekday: 'short' }).replace('.', '');
-    item.innerHTML =
-      `<span class="date-strip-day">${weekday}</span>` +
-      `<span class="date-strip-num">${date.getDate()}</span>` +
-      (activeDays.has(ds) ? '<span class="date-strip-dot"></span>' : '');
-
-    item.addEventListener('click', () => {
-      if (CALENDAR_SELECTED_DAYS.has(ds)) CALENDAR_SELECTED_DAYS.delete(ds);
-      else CALENDAR_SELECTED_DAYS.add(ds);
-      renderDiary();
-    });
-    strip.appendChild(item);
-  }
-
-  strip.onscroll = () => {
-    CALENDAR_STRIP_SCROLL_LEFT = strip.scrollLeft;
-  };
-
-  if (savedScroll === null) {
-    strip.scrollLeft = strip.scrollWidth;
-  } else {
-    strip.scrollLeft = savedScroll;
-  }
-  CALENDAR_STRIP_SCROLL_LEFT = strip.scrollLeft;
-}
 
 // === РЕНДЕР ОДНОЙ КАРТОЧКИ СЕССИИ ===
 function renderSessionCard(s, projName) {
@@ -191,7 +130,6 @@ function renderDiary() {
   if (!c || !window.DATA) return;
   c.innerHTML = '';
 
-  renderDateStrip();
 
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '16px';

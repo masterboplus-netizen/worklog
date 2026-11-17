@@ -15,19 +15,6 @@
   flex-direction: column;
 }
 
-/* Лента дат (снизу) */
-#date-strip {
-  order: 2;
-  display: flex;
-  overflow-x: auto;
-  gap: 8px;
-  padding: 10px 16px;
-  margin: 0 0 8px 0;
-  scrollbar-width: none;
-}
-#date-strip::-webkit-scrollbar {
-  display: none;
-}
 
 /* Кнопки управления (сверху) */
 #panel-controls {
