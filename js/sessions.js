@@ -23,17 +23,19 @@ function renderSessionCard(s, projName) {
   const item = document.createElement('div');
   item.className = 'diary-item';
 
-  let countersHTML = '';
-  if (s.events || s.screens || s.tasks_done || s.errors_count || s.incidents_count) {
-    const svgStyle = 'width:14px;height:14px;vertical-align:middle;margin-right:4px;';
-    countersHTML = '<div class="diary-counters" style="display:flex;gap:12px;align-items:center;">';
-    if (s.events) countersHTML += `<span style="display:flex;align-items:center;">${msgIcon(svgStyle)} ${s.events}</span>`;
-    if (s.screens) countersHTML += `<span style="display:flex;align-items:center;">${screenIcon(svgStyle)} ${s.screens}</span>`;
-    if (s.tasks_done) countersHTML += `<span style="display:flex;align-items:center;">${taskIcon(svgStyle)} ${s.tasks_done}</span>`;
-    if (s.errors_count) countersHTML += `<span style="display:flex;align-items:center;">${bugIcon(svgStyle)} ${s.errors_count}</span>`;
-    if (s.incidents_count) countersHTML += `<span style="display:flex;align-items:center;">${incidentIcon(svgStyle)} ${s.incidents_count}</span>`;
-    countersHTML += '</div>';
-  }
+  const svgStyle = 'width:14px;height:14px;vertical-align:middle;margin-right:4px;';
+  const cEvents = s.events || 0;
+  const cScreens = s.screens || 0;
+  const cTasks = s.tasks_done || 0;
+  const cErrors = s.errors_count || 0;
+  const cIncidents = s.incidents_count || 0;
+  let countersHTML = '<div class="diary-counters" style="display:flex;gap:12px;align-items:center;">';
+  countersHTML += `<span style="display:flex;align-items:center;" title="Сообщения">${msgIcon(svgStyle)} ${cEvents}</span>`;
+  countersHTML += `<span style="display:flex;align-items:center;" title="Скрины">${screenIcon(svgStyle)} ${cScreens}</span>`;
+  countersHTML += `<span style="display:flex;align-items:center;" title="Задачи">${taskIcon(svgStyle)} ${cTasks}</span>`;
+  countersHTML += `<span style="display:flex;align-items:center;" title="Ошибки">${bugIcon(svgStyle)} ${cErrors}</span>`;
+  countersHTML += `<span style="display:flex;align-items:center;" title="Инциденты">${incidentIcon(svgStyle)} ${cIncidents}</span>`;
+  countersHTML += '</div>';
 
   const tagsHTML = s.tags && s.tags.length ? `<div style="margin-top:6px; display:flex; gap:4px; flex-wrap:wrap;">${s.tags.map(t => `<span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; color:var(--fg);">${t}</span>`).join('')}</div>` : '';
 
