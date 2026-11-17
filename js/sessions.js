@@ -125,8 +125,8 @@ function mergeMidnightSessions(sessions) {
 }
 
 // === СПИСОК (для вкладки) ===
-function renderActivityLog() {
-  const c = document.getElementById('content-activity-log');
+function renderDiary() {
+  const c = document.getElementById('content-diary');
   if (!c || !window.DATA) return;
   c.innerHTML = '';
 
@@ -165,7 +165,3 @@ function renderActivityLog() {
 
   c.appendChild(listDiv);
 }
-
-// Обратная совместимость
-window.renderDiary = renderActivityLog;
-window.renderActivityLog = renderActivityLog;

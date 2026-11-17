@@ -11,7 +11,7 @@ const ASSETS = [
   './js/chart.js',
   './js/menu.js',
   './js/calendar.js',
-  './js/activity.js',
+  './js/sessions.js',
   './js/app.js',
   './js/safe.js',
   './manifest.webmanifest',

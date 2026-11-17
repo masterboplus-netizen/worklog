@@ -106,7 +106,7 @@ async function updateTag(id, name, color, category) {
   if (error) throw error;
 }
 async function deleteTag(id) {
-  if (!confirm('Удалить тег? Он отвяжется от всех активностей.')) return;
+  if (!confirm('Удалить тег? Он отвяжется от всех сессий.')) return;
   const { error } = await window.supabaseClient.from('worklog_tags').delete().eq('id', id);
   if (error) return alert('Ошибка: ' + error.message);
   await loadTags();
