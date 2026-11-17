@@ -1,5 +1,22 @@
 // МОДУЛЬ: СПИСОК СЕССИЙ
 
+function msgIcon(style) {
+  return `<svg style="${style}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
+}
+function screenIcon(style) {
+  return `<svg style="${style}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`;
+}
+function taskIcon(style) {
+  return `<svg style="${style}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+}
+function bugIcon(style) {
+  return `<svg style="${style}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-9"></path><path d="M9 9l-3-3"></path><path d="M15 9l3-3"></path><path d="M9 16H4"></path><path d="M20 16h-5"></path><path d="M12 20a4 4 0 0 0 4-4V9a4 4 0 0 0-8 0v7a4 4 0 0 0 4 4z"></path></svg>`;
+}
+function incidentIcon(style) {
+  return `<svg style="${style}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+}
+
+
 
 // === РЕНДЕР ОДНОЙ КАРТОЧКИ СЕССИИ ===
 function renderSessionCard(s, projName) {
@@ -7,12 +24,14 @@ function renderSessionCard(s, projName) {
   item.className = 'diary-item';
 
   let countersHTML = '';
-  if (s.events || s.screens || s.tasks_done || s.errors_count) {
-    countersHTML = '<div class="diary-counters">';
-    if (s.events) countersHTML += `📨 ${s.events} `;
-    if (s.screens) countersHTML += `📸 ${s.screens} `;
-    if (s.tasks_done) countersHTML += `✅ ${s.tasks_done} `;
-    if (s.errors_count) countersHTML += `🐛 ${s.errors_count}`;
+  if (s.events || s.screens || s.tasks_done || s.errors_count || s.incidents_count) {
+    const svgStyle = 'width:14px;height:14px;vertical-align:middle;margin-right:4px;';
+    countersHTML = '<div class="diary-counters" style="display:flex;gap:12px;align-items:center;">';
+    if (s.events) countersHTML += `<span style="display:flex;align-items:center;">${msgIcon(svgStyle)} ${s.events}</span>`;
+    if (s.screens) countersHTML += `<span style="display:flex;align-items:center;">${screenIcon(svgStyle)} ${s.screens}</span>`;
+    if (s.tasks_done) countersHTML += `<span style="display:flex;align-items:center;">${taskIcon(svgStyle)} ${s.tasks_done}</span>`;
+    if (s.errors_count) countersHTML += `<span style="display:flex;align-items:center;">${bugIcon(svgStyle)} ${s.errors_count}</span>`;
+    if (s.incidents_count) countersHTML += `<span style="display:flex;align-items:center;">${incidentIcon(svgStyle)} ${s.incidents_count}</span>`;
     countersHTML += '</div>';
   }
 

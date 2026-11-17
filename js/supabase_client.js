@@ -29,6 +29,9 @@ async function loadDataFromSupabase() {
         const { data: sessions, error: e4 } = await supabase.from('worklog_sessions').select('*').order('date', { ascending: false }).order('start_time', { ascending: false });
         if (e4) throw e4;
 
+        const { data: incidents, error: e5 } = await supabase.from('worklog_incidents').select('id, session_id');
+        if (e5) throw e5;
+
         // Приводим данные из базы к формату старого JSON
         const tasksBySession = {};
         (subtasks || []).forEach(st => {
@@ -53,6 +56,13 @@ async function loadDataFromSupabase() {
             }
         });
 
+        const incidentsBySession = {};
+        (incidents || []).forEach(inc => {
+            if (inc.session_id) {
+                incidentsBySession[inc.session_id] = (incidentsBySession[inc.session_id] || 0) + 1;
+            }
+        });
+
         const mappedSessions = (sessions || []).map(s => ({
             id: s.id,
             date: s.date,
@@ -65,6 +75,7 @@ async function loadDataFromSupabase() {
             tasks_done: s.tasks_done || 0,
             note: s.note || '',
             errors_count: s.errors_count || 0,
+            incidents_count: incidentsBySession[s.id] || 0,
             linked_tasks: tasksBySession[s.id] || []
         }));
 
