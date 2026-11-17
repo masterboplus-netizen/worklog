@@ -7,7 +7,7 @@ async function init() {
   alert("ШАГ 1: init() запущен");
 
   const btnHeart = $('#btn-heart');
-  if (btnHeart) btnHeart.addEventListener('click', showCreators);
+  if (btnHeart) btnHeart.addEventListener('click', () => switchTab('settings'));
 
   const btnProfile = document.querySelector("#btn-profile");
   if (btnProfile) btnProfile.addEventListener("click", showJoke);
@@ -85,7 +85,7 @@ function switchTab(name) {
 
 
 
-  const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity'];
+  const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity', 'content-settings', 'content-tags'];
   scrollContainers.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.scrollTop = 0;
@@ -97,7 +97,7 @@ function switchTab(name) {
       el.classList.add('hidden');
   });
 
-  ['content', 'content-diary', 'content-projects', 'content-activity'].forEach(id => {
+  ['content', 'content-diary', 'content-projects', 'content-activity', 'content-settings', 'content-tags'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.classList.add('hidden'); if (id === 'content-activity') el.innerHTML = ''; }
   });
@@ -115,8 +115,14 @@ function switchTab(name) {
       const t = document.getElementById('tab-projects'); if (t) t.classList.add('tab-active');
     } else if (name === 'activity') {
       const c = document.getElementById('content-activity');
-      if (c) { c.classList.remove('hidden'); if (typeof renderActivityPageV2 === 'function') { renderActivityPageV2(); } else { renderActivityPage(); } }
+      if (c) { c.classList.remove('hidden'); }
       const t = document.getElementById('tab-activity'); if (t) t.classList.add('tab-active');
+    } else if (name === 'settings') {
+      const c = document.getElementById('content-settings');
+      if (c) { c.classList.remove('hidden'); c.innerHTML = ''; if (typeof renderSettingsScreen === 'function') renderSettingsScreen(); }
+    } else if (name === 'tags') {
+      const c = document.getElementById('content-tags');
+      if (c) { c.classList.remove('hidden'); c.innerHTML = ''; if (typeof renderTagsScreen === 'function') renderTagsScreen(); }
     } else {
       if (typeof HERO_MODE !== 'undefined') {
           HERO_MODE = 'today';

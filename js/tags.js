@@ -10,7 +10,7 @@ async function loadTags() {
 }
 
 function renderTagsScreen() {
-  const c = document.getElementById('content-activity');
+  const c = document.getElementById('content-tags');
   if (!c) return;
   c.innerHTML = '';
   const wrap = document.createElement('div');
@@ -111,13 +111,5 @@ async function deleteTag(id) {
   renderTagsList();
 }
 
-// Рендер вкладки Активность
-window.renderActivityPageV2 = function() {
-  if (!window.DATA || !window.DATA.tags) {
-    loadTags().then(() => renderTagsScreen()).catch(e => {
-      document.getElementById('content-activity').innerHTML = '<div style="padding:20px;color:red;">Ошибка загрузки тегов: ' + e.message + '</div>';
-    });
-  } else {
-    renderTagsScreen();
-  }
-};
+// Экспорт для switchTab
+window.renderTagsScreen = renderTagsScreen;
