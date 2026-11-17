@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bottomPanel.style.display = 'none';
 
   window.updateBottomPanel = function(tabName) {
-    if (tabName === 'diary') {
+    if (tabName === 'diary' || tabName === 'activity') {
       bottomPanel.style.display = 'flex';
     } else {
       bottomPanel.style.display = 'none';
