@@ -67,11 +67,11 @@ if (document.readyState === 'loading') {
 
 function setupTabs() {
   const tabDash = document.getElementById('tab-dashboard');
-  const tabDiary = document.getElementById('tab-diary');
+  const tabDiary = document.getElementById('tab-activity-log');
   const tabProjects = document.getElementById('tab-projects');
   const tabActivity = document.getElementById('tab-activity');
   if (tabDash) tabDash.addEventListener('click', () => switchTab('dashboard'));
-  if (tabDiary) tabDiary.addEventListener('click', () => switchTab('diary'));
+  if (tabDiary) tabDiary.addEventListener('click', () => switchTab('activity-log'));
   if (tabProjects) tabProjects.addEventListener('click', () => switchTab('projects'));
   if (tabActivity) tabActivity.addEventListener('click', () => switchTab('activity'));
   const tabProfile = document.getElementById('tab-profile');
@@ -105,10 +105,10 @@ function switchTab(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab-active'));
 
   try {
-    if (name === 'diary') {
-      const c = document.getElementById('content-diary');
-      if (c) { c.classList.remove('hidden'); renderDiary(); }
-      const t = document.getElementById('tab-diary'); if (t) t.classList.add('tab-active');
+    if (name === 'activity-log') {
+      const c = document.getElementById('content-activity-log');
+      if (c) { c.classList.remove('hidden'); renderActivityLog(); }
+      const t = document.getElementById('tab-activity-log'); if (t) t.classList.add('tab-active');
     } else if (name === 'projects') {
       const c = document.getElementById('content-projects');
       if (c) { c.classList.remove('hidden'); c.innerHTML = ''; c.appendChild(renderProjects()); }
@@ -242,13 +242,13 @@ document.addEventListener('DOMContentLoaded', () => {
         btnSessions.classList.add('active');
         btn24h.classList.remove('active');
         window.DIARY_MODE = 'sessions';
-        if (typeof renderDiary === 'function') renderDiary();
+        if (typeof renderDiary === 'function') renderActivityLog();
       });
       btn24h.addEventListener('click', () => {
         btn24h.classList.add('active');
         btnSessions.classList.remove('active');
         window.DIARY_MODE = '24h';
-        if (typeof renderDiary === 'function') renderDiary();
+        if (typeof renderDiary === 'function') renderActivityLog();
       });
     }
   }, 100);

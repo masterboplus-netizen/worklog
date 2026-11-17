@@ -16,7 +16,7 @@ function renderSettingsScreen() {
     <div id="settings-tags-row" style="display:flex;align-items:center;justify-content:space-between;padding:16px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.05);cursor:pointer;margin-bottom:12px;">
       <div>
         <div style="font-size:16px;color:var(--fg);">Теги</div>
-        <div style="font-size:12px;color:var(--fg-dim);">Управление тегами сессий</div>
+        <div style="font-size:12px;color:var(--fg-dim);">Управление тегами активностей</div>
       </div>
       <div style="color:var(--fg-dim);font-size:20px;">›</div>
     </div>
