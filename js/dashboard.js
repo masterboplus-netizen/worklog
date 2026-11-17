@@ -52,7 +52,7 @@ function renderHeroRings() {
   let heroLabel = 'Сегодня';
   let heroSub = 'Среднее ' + fmtH(t.avgPerDay);
 
-  if (HERO_MODE === 'last_session') {
+  if (window.HERO_MODE === 'last_session') {
       const sorted = [...(window.DATA.sessions || [])].sort((a, b) => {
           if (a.date !== b.date) return b.date.localeCompare(a.date);
           return (b.start || '').localeCompare(a.start || '');
@@ -120,7 +120,7 @@ function renderHeroRings() {
   const heroRing = document.getElementById('hero-ring');
   if (heroRing) {
     heroRing.addEventListener('click', () => {
-      HERO_MODE = (HERO_MODE === 'today') ? 'last_session' : 'today';
+      window.HERO_MODE = (window.HERO_MODE === 'today') ? 'last_session' : 'today';
       renderDashboard();
     });
   }
