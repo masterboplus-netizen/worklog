@@ -1,20 +1,5 @@
 // МОДУЛЬ: СПИСОК СЕССИЙ
 
-function msgIcon(style) {
-  return `<svg style="${style}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`;
-}
-function screenIcon(style) {
-  return `<svg style="${style}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`;
-}
-function taskIcon(style) {
-  return `<svg style="${style}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-}
-function bugIcon(style) {
-  return `<svg style="${style}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-9"></path><path d="M9 9l-3-3"></path><path d="M15 9l3-3"></path><path d="M9 16H4"></path><path d="M20 16h-5"></path><path d="M12 20a4 4 0 0 0 4-4V9a4 4 0 0 0-8 0v7a4 4 0 0 0 4 4z"></path></svg>`;
-}
-function incidentIcon(style) {
-  return `<svg style="${style}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
-}
 
 
 
@@ -23,18 +8,12 @@ function renderSessionCard(s, projName) {
   const item = document.createElement('div');
   item.className = 'diary-item';
 
-  const svgStyle = 'width:14px;height:14px;vertical-align:middle;margin-right:4px;';
-  const cEvents = s.events || 0;
-  const cScreens = s.screens || 0;
-  const cTasks = s.tasks_done || 0;
-  const cErrors = s.errors_count || 0;
-  const cIncidents = s.incidents_count || 0;
   let countersHTML = '<div class="diary-counters" style="display:flex;gap:12px;align-items:center;">';
-  countersHTML += `<span style="display:flex;align-items:center;" title="Сообщения">${msgIcon(svgStyle)} ${cEvents}</span>`;
-  countersHTML += `<span style="display:flex;align-items:center;" title="Скрины">${screenIcon(svgStyle)} ${cScreens}</span>`;
-  countersHTML += `<span style="display:flex;align-items:center;" title="Задачи">${taskIcon(svgStyle)} ${cTasks}</span>`;
-  countersHTML += `<span style="display:flex;align-items:center;" title="Ошибки">${bugIcon(svgStyle)} ${cErrors}</span>`;
-  countersHTML += `<span style="display:flex;align-items:center;" title="Инциденты">${incidentIcon(svgStyle)} ${cIncidents}</span>`;
+  countersHTML += `<span title="Сообщения">📨 ${s.events || 0}</span>`;
+  countersHTML += `<span title="Скрины">📸 ${s.screens || 0}</span>`;
+  countersHTML += `<span title="Задачи">✅ ${s.tasks_done || 0}</span>`;
+  countersHTML += `<span title="Ошибки">🐛 ${s.errors_count || 0}</span>`;
+  countersHTML += `<span title="Инциденты">🚨 ${s.incidents_count || 0}</span>`;
   countersHTML += '</div>';
 
   const tagsHTML = s.tags && s.tags.length ? `<div style="margin-top:6px; display:flex; gap:4px; flex-wrap:wrap;">${s.tags.map(t => `<span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; font-size:10px; color:var(--fg);">${t}</span>`).join('')}</div>` : '';
