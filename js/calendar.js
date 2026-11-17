@@ -85,7 +85,7 @@ function renderCalendarModal() {
       cell.addEventListener('click', () => {
         if (CALENDAR_SELECTED_DAYS.has(ds)) CALENDAR_SELECTED_DAYS.delete(ds);
         else CALENDAR_SELECTED_DAYS.add(ds);
-        renderDiary();
+        renderActivity();
         renderCalendarModal();
       });
       grid.appendChild(cell);

@@ -46,7 +46,7 @@ async function loadDataFromSupabase() {
                 const parentTask = (tasks || []).find(t => t.id === st.task_id);
                 const parentPhase = parentTask ? (phases || []).find(ph => ph.id === parentTask.phase_id) : null;
                 const parentModule = parentPhase ? (phases || []).find(ph => ph.id === parentPhase.parent_id) : null;
-                // Ищем проект. Сначала смотрим на проект фазы, если нет - на проект сессии (на всякий случай)
+                // Ищем проект. Сначала смотрим на проект фазы, если нет - на проект активности (на всякий случай)
                 const projId = parentPhase ? parentPhase.project_id : null;
                 const parentProject = projId ? (projects || []).find(p => p.id === projId) : null;
 

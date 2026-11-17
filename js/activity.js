@@ -4,11 +4,11 @@
 
 
 // === РЕНДЕР ОДНОЙ КАРТОЧКИ СЕССИИ ===
-function renderSessionCard(s, projName) {
+function renderActivityCard(s, projName) {
   const item = document.createElement('div');
-  item.className = 'diary-item';
+  item.className = 'activity-item';
 
-  let countersHTML = '<div class="diary-counters" style="display:flex;gap:12px;align-items:center;">';
+  let countersHTML = '<div class="activity-counters" style="display:flex;gap:12px;align-items:center;">';
   countersHTML += `<span title="Сообщения">📨 ${s.events || 0}</span>`;
   countersHTML += `<span title="Скрины">📸 ${s.screens || 0}</span>`;
   countersHTML += `<span title="Задачи">✅ ${s.tasks_done || 0}</span>`;
@@ -28,7 +28,7 @@ function renderSessionCard(s, projName) {
 
   let tasksHTML = '';
   if (Object.keys(uniqueTasks).length > 0) {
-    tasksHTML = '<div class="diary-tasks-list" style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">';
+    tasksHTML = '<div class="activity-tasks-list" style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">';
     Object.entries(uniqueTasks).forEach(([taskName]) => {
       tasksHTML += `<div style="font-size: 13px; color: var(--fg); font-weight: 500; display: flex; align-items: center; gap: 6px;">• ${taskName}</div>`;
     });
@@ -37,7 +37,7 @@ function renderSessionCard(s, projName) {
 
   let detailsHTML = '';
   if (Object.keys(uniqueTasks).length > 0) {
-    detailsHTML = '<div class="diary-details" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out;">';
+    detailsHTML = '<div class="activity-details" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out;">';
     detailsHTML += '<div style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">';
     Object.entries(uniqueTasks).forEach(([taskName, taskDetails]) => {
       const parentInfo = taskDetails[0];
@@ -75,7 +75,7 @@ function renderSessionCard(s, projName) {
   `;
 
   item.addEventListener('click', () => {
-    const details = item.querySelector('.diary-details');
+    const details = item.querySelector('.activity-details');
     if (details) {
       if (details.style.maxHeight === '0px' || details.style.maxHeight === '') {
         details.style.maxHeight = details.scrollHeight + 'px';
@@ -88,7 +88,7 @@ function renderSessionCard(s, projName) {
   return item;
 }
 
-function formatDiaryDate(dateStr) {
+function formatActivityDate(dateStr) {
   const d = new Date(dateStr);
   if (isNaN(d)) return dateStr;
   const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
@@ -96,7 +96,7 @@ function formatDiaryDate(dateStr) {
   return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + days[d.getDay()];
 }
 
-function mergeMidnightSessions(sessions) {
+function mergeMidnightActivities(sessions) {
   const result = [];
   const midnightMap = {};
   for (const s of sessions) {
@@ -125,15 +125,15 @@ function mergeMidnightSessions(sessions) {
 }
 
 // === СПИСОК (для вкладки) ===
-function renderDiary() {
-  const c = document.getElementById('content-diary');
+function renderActivity() {
+  const c = document.getElementById('content-activity');
   if (!c || !window.DATA) return;
   c.innerHTML = '';
 
 
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '16px';
-  let baseSessions = window.DIARY_MODE === 'sessions' ? mergeMidnightSessions(window.DATA.sessions || []) : (window.DATA.sessions || []);
+  let baseSessions = window.ACTIVITY_MODE === 'sessions' ? mergeMidnightActivities(window.DATA.sessions || []) : (window.DATA.sessions || []);
   let filtered = baseSessions;
   if (CALENDAR_SELECTED_DAYS.size > 0) {
     filtered = filtered.filter(s => CALENDAR_SELECTED_DAYS.has(s.date));
@@ -154,12 +154,12 @@ function renderDiary() {
     filtered.forEach(s => {
       if (s.date !== lastDate) {
         const dateHeader = document.createElement('div');
-        dateHeader.className = 'diary-date';
-        dateHeader.textContent = formatDiaryDate(s.date);
+        dateHeader.className = 'activity-date';
+        dateHeader.textContent = formatActivityDate(s.date);
         listDiv.appendChild(dateHeader);
         lastDate = s.date;
       }
-      listDiv.appendChild(renderSessionCard(s, projName));
+      listDiv.appendChild(renderActivityCard(s, projName));
     });
   }
 

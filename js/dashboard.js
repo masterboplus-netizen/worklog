@@ -33,9 +33,9 @@ function renderHeroRings() {
   const c = document.getElementById('content');
   if (!c || !window.DATA) return;
 
-  // 1. Данные из calcTotals и склеенные сессии
+  // 1. Данные из calcTotals и склеенные активности
   const t = calcTotals();
-  const sessions = mergeMidnightSessions(window.DATA.sessions || []);
+  const sessions = mergeMidnightActivities(window.DATA.sessions || []);
   const _sessions = window.DATA.sessions || [];
 
   // 2. Считаем время за сегодня ТАК ЖЕ, КАК В КАЛЕНДАРЕ

@@ -67,13 +67,13 @@ if (document.readyState === 'loading') {
 
 function setupTabs() {
   const tabDash = document.getElementById('tab-dashboard');
-  const tabDiary = document.getElementById('tab-diary');
+  const tabDiary = document.getElementById('tab-chart');
   const tabProjects = document.getElementById('tab-projects');
-  const tabActivity = document.getElementById('tab-activity');
+  const tabActivity = document.getElementById('tab-chart');
   if (tabDash) tabDash.addEventListener('click', () => switchTab('dashboard'));
-  if (tabDiary) tabDiary.addEventListener('click', () => switchTab('diary'));
+  if (tabDiary) tabDiary.addEventListener('click', () => switchTab('chart'));
   if (tabProjects) tabProjects.addEventListener('click', () => switchTab('projects'));
-  if (tabActivity) tabActivity.addEventListener('click', () => switchTab('activity'));
+  if (tabActivity) tabActivity.addEventListener('click', () => switchTab('chart'));
   const tabProfile = document.getElementById('tab-profile');
   if (tabProfile) tabProfile.addEventListener('click', showJoke);
 }
@@ -85,7 +85,7 @@ function switchTab(name) {
 
 
 
-  const scrollContainers = ['content', 'content-diary', 'content-projects', 'content-activity', 'content-settings', 'content-tags'];
+  const scrollContainers = ['content', 'content-activity', 'content-projects', 'content-chart', 'content-settings', 'content-tags'];
   scrollContainers.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.scrollTop = 0;
@@ -97,26 +97,26 @@ function switchTab(name) {
       el.classList.add('hidden');
   });
 
-  ['content', 'content-diary', 'content-projects', 'content-activity', 'content-settings', 'content-tags'].forEach(id => {
+  ['content', 'content-activity', 'content-projects', 'content-chart', 'content-settings', 'content-tags'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) { el.classList.add('hidden'); if (id === 'content-activity') el.innerHTML = ''; }
+    if (el) { el.classList.add('hidden'); if (id === 'content-chart') el.innerHTML = ''; }
   });
 
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab-active'));
 
   try {
-    if (name === 'diary') {
-      const c = document.getElementById('content-diary');
-      if (c) { c.classList.remove('hidden'); renderDiary(); }
-      const t = document.getElementById('tab-diary'); if (t) t.classList.add('tab-active');
+    if (name === 'chart') {
+      const c = document.getElementById('content-activity');
+      if (c) { c.classList.remove('hidden'); renderActivity(); }
+      const t = document.getElementById('tab-chart'); if (t) t.classList.add('tab-active');
     } else if (name === 'projects') {
       const c = document.getElementById('content-projects');
       if (c) { c.classList.remove('hidden'); c.innerHTML = ''; c.appendChild(renderProjects()); }
       const t = document.getElementById('tab-projects'); if (t) t.classList.add('tab-active');
-    } else if (name === 'activity') {
-      const c = document.getElementById('content-activity');
+    } else if (name === 'chart') {
+      const c = document.getElementById('content-chart');
       if (c) { c.classList.remove('hidden'); if (typeof renderActivityPageV2 === 'function') { renderActivityPageV2(); } else { renderActivityPage(); } }
-      const t = document.getElementById('tab-activity'); if (t) t.classList.add('tab-active');
+      const t = document.getElementById('tab-chart'); if (t) t.classList.add('tab-active');
     } else if (name === 'settings') {
       const c = document.getElementById('content-settings');
       if (c) { c.classList.remove('hidden'); c.innerHTML = ''; if (typeof renderSettingsScreen === 'function') renderSettingsScreen(); }
@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnFilter = document.getElementById('btn-filter');
     const btnCalendar = document.getElementById('btn-calendar');
     const modal = document.getElementById('calendar-modal');
-    const btnSessions = document.getElementById('mode-sessions');
+    const btnSessions = document.getElementById('mode-activities');
     const btn24h = document.getElementById('mode-24h');
 
     // Фильтр
@@ -236,19 +236,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Переключатель Сессии / 24ч
+    // Переключатель Активность / 24ч
     if (btnSessions && btn24h) {
       btnSessions.addEventListener('click', () => {
         btnSessions.classList.add('active');
         btn24h.classList.remove('active');
-        window.DIARY_MODE = 'sessions';
-        if (typeof renderDiary === 'function') renderDiary();
+        window.ACTIVITY_MODE = 'sessions';
+        if (typeof renderActivity === 'function') renderActivity();
       });
       btn24h.addEventListener('click', () => {
         btn24h.classList.add('active');
         btnSessions.classList.remove('active');
-        window.DIARY_MODE = '24h';
-        if (typeof renderDiary === 'function') renderDiary();
+        window.ACTIVITY_MODE = '24h';
+        if (typeof renderActivity === 'function') renderActivity();
       });
     }
   }, 100);

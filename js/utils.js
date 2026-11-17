@@ -15,7 +15,7 @@ const MINI_LABELS = {day: 'День', week: 'Неделя', month: 'Месяц',
 
 
 
-window.DIARY_MODE = 'sessions';
+window.ACTIVITY_MODE = 'sessions';
 let CALENDAR_VIEW = 'month';
 let CALENDAR_CURSOR = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 let CALENDAR_SELECTED_DAYS = new Set();

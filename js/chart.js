@@ -134,7 +134,7 @@ function openYearPicker() {
 let CHART_STATE_V2 = { metric: 'duration', selectedDay: null, currentMonth: null, currentYear: null };
 
 function renderActivityPageV2() {
-    const c = document.getElementById('content-activity');
+    const c = document.getElementById('content-chart');
     if (!c || !window.DATA) return;
     c.innerHTML = '';
 
@@ -249,7 +249,7 @@ function renderActivityPageV2() {
 
     // 6. ЛОГИКА ОБНОВЛЕНИЯ
     const updateChart = () => {
-        const mergedSessions = mergeMidnightSessions(window.DATA.sessions || []);
+        const mergedSessions = mergeMidnightActivities(window.DATA.sessions || []);
         const scrollLeft = scrollContainer.scrollLeft;
         const containerWidth = scrollContainer.clientWidth;
         const colWidth = 40;
@@ -266,7 +266,7 @@ function renderActivityPageV2() {
         }
 
         let maxVal = 0;
-        // Берем только уникальные сессии, чтобы не было дублей
+        // Берем только уникальные активности, чтобы не было дублей
         const uniqueSessions = [];
         const seenIds = new Set();
         for (const sess of window.DATA.sessions || []) {
