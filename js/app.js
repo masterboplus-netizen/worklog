@@ -32,7 +32,6 @@ async function init() {
 
   setupTabs();
 
-
   const loadingEl = document.getElementById('loading');
   if (loadingEl) loadingEl.classList.add('hidden');
 
@@ -65,17 +64,9 @@ if (document.readyState === 'loading') {
   init();
 }
 
+// Функция оставлена пустой, так как нижние табы убраны
 function setupTabs() {
-  const tabDash = document.getElementById('tab-dashboard');
-  const tabDiary = document.getElementById('tab-chart');
-  const tabProjects = document.getElementById('tab-projects');
-  const tabActivity = document.getElementById('tab-chart');
-  if (tabDash) tabDash.addEventListener('click', () => switchTab('dashboard'));
-  if (tabDiary) tabDiary.addEventListener('click', () => switchTab('chart'));
-  if (tabProjects) tabProjects.addEventListener('click', () => switchTab('projects'));
-  if (tabActivity) tabActivity.addEventListener('click', () => switchTab('chart'));
-  const tabProfile = document.getElementById('tab-profile');
-  if (tabProfile) tabProfile.addEventListener('click', showJoke);
+  // Вкладок в нижней панели больше нет, навигация через капсулу
 }
 
 function switchTab(name) {
@@ -83,12 +74,16 @@ function switchTab(name) {
   const _t = document.getElementById('global-chart-tooltip');
   if (_t) _t.remove();
 
-
-
-  const scrollContainers = ['content', 'content-activity', 'content-projects', 'content-chart', 'content-settings', 'content-tags'];
-  scrollContainers.forEach(id => {
+  // Список всех контейнеров контента
+  const containers = ['content', 'content-activity', 'content-projects', 'content-chart', 'content-settings', 'content-tags'];
+  
+  containers.forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.scrollTop = 0;
+    if (el) { 
+      el.scrollTop = 0; 
+      el.classList.add('hidden'); 
+      if (id === 'content-chart') el.innerHTML = ''; // Очищаем график при скрытии
+    }
   });
   window.scrollTo(0, 0);
 
@@ -97,39 +92,34 @@ function switchTab(name) {
       el.classList.add('hidden');
   });
 
-  ['content', 'content-activity', 'content-projects', 'content-chart', 'content-settings', 'content-tags'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.classList.add('hidden'); if (id === 'content-chart') el.innerHTML = ''; }
-  });
-
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab-active'));
 
   try {
-    if (name === 'chart') {
+    if (name === 'activity') {
       const c = document.getElementById('content-activity');
-      if (c) { c.classList.remove('hidden'); renderActivity(); }
-      const t = document.getElementById('tab-chart'); if (t) t.classList.add('tab-active');
-    } else if (name === 'projects') {
+      if (c) { c.classList.remove('hidden'); if (typeof renderActivity === 'function') renderActivity(); }
+    } 
+    else if (name === 'projects') {
       const c = document.getElementById('content-projects');
-      if (c) { c.classList.remove('hidden'); c.innerHTML = ''; c.appendChild(renderProjects()); }
-      const t = document.getElementById('tab-projects'); if (t) t.classList.add('tab-active');
-    } else if (name === 'chart') {
+      if (c) { c.classList.remove('hidden'); c.innerHTML = ''; if (typeof renderProjects === 'function') c.appendChild(renderProjects()); }
+    } 
+    else if (name === 'chart') {
       const c = document.getElementById('content-chart');
-      if (c) { c.classList.remove('hidden'); if (typeof renderActivityPageV2 === 'function') { renderActivityPageV2(); } else { renderActivityPage(); } }
-      const t = document.getElementById('tab-chart'); if (t) t.classList.add('tab-active');
-    } else if (name === 'settings') {
+      if (c) { c.classList.remove('hidden'); if (typeof renderActivityPageV2 === 'function') { renderActivityPageV2(); } else if (typeof renderActivityPage === 'function') { renderActivityPage(); } }
+    } 
+    else if (name === 'settings') {
       const c = document.getElementById('content-settings');
       if (c) { c.classList.remove('hidden'); c.innerHTML = ''; if (typeof renderSettingsScreen === 'function') renderSettingsScreen(); }
-    } else if (name === 'tags') {
+    } 
+    else if (name === 'tags') {
       const c = document.getElementById('content-tags');
       if (c) { c.classList.remove('hidden'); c.innerHTML = ''; if (typeof renderTagsScreen === 'function') renderTagsScreen(); }
-    } else {
-      if (typeof HERO_MODE !== 'undefined') {
-          HERO_MODE = 'today';
-      }
+    } 
+    else {
+      // Дашборд по умолчанию
+      if (typeof HERO_MODE !== 'undefined') HERO_MODE = 'today';
       const c = document.getElementById('content');
-      if (c) { c.classList.remove('hidden'); renderDashboard(); }
-      const t = document.getElementById('tab-dashboard'); if (t) t.classList.add('tab-active');
+      if (c) { c.classList.remove('hidden'); if (typeof renderDashboard === 'function') renderDashboard(); }
     }
   } catch (e) {
     console.error('Ошибка при переключении вкладки:', e);
