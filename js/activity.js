@@ -1,21 +1,17 @@
 // МОДУЛЬ: СПИСОК АКТИВНОСТИ
 
-// Глобальная переменная для режима отображения (по умолчанию - как записывались)
 if (typeof window.ACTIVITY_MODE === 'undefined') {
-  window.ACTIVITY_MODE = 'raw'; // 'raw', 'sessions', 'total_06', 'sessions_24', 'total_24'
+  window.ACTIVITY_MODE = 'raw';
 }
 
 function renderActivityCard(s, projName) {
   const item = document.createElement('div');
   item.className = 'activity-row';
-
-  // Для сырых сессий выводим время
   item.innerHTML = `
     <div class="activity-row-time">${(s.start || '?').substring(0, 5)} → ${(s.end || '?').substring(0, 5)}</div>
     <div class="activity-row-dur">${fmtH(s.duration_min || 0)}</div>
     <div class="activity-row-proj">${projName[s.project] || s.project || '–'}</div>
   `;
-
   item.addEventListener('click', () => openActivityModal(s, projName));
   return item;
 }
@@ -84,13 +80,11 @@ function formatActivityDate(dateStr) {
   return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear() + ', ' + days[d.getDay()];
 }
 
-// --- НОВАЯ ЛОГИКА: Получаем данные из готовой таблицы ---
 async function renderActivity() {
   const c = document.getElementById('content-activity');
   if (!c || !window.DATA) return;
   c.innerHTML = '';
 
-  // 1. Отрисовка кнопок-переключателей
   const controls = document.createElement('div');
   controls.style.cssText = 'display:flex; gap:8px; overflow-x:auto; padding: 8px 0; margin-bottom: 16px;';
   
@@ -122,11 +116,9 @@ async function renderActivity() {
   const projName = {};
   for (const p of window.DATA.projects || []) projName[p.id] = p.name;
 
-  // Если выбран сырой режим — берем из сессий, иначе из новой таблицы
   if (window.ACTIVITY_MODE === 'raw') {
     filtered = window.DATA.sessions || [];
   } else {
-    // Загружаем данные из новой таблицы worklog_session_days
     const boundary = (window.ACTIVITY_MODE === 'total_06' || window.ACTIVITY_MODE === 'sessions') ? '06:00' : '00:00';
     
     const { data, error } = await window.supabaseClient
@@ -142,10 +134,8 @@ async function renderActivity() {
       return;
     }
 
-    // Преобразуем sessions_data в плоский список
     data.forEach(day => {
       if (window.ACTIVITY_MODE === 'total_06' || window.ACTIVITY_MODE === 'total_24') {
-        // Выводим итоговую карточку за день
         filtered.push({
           date: day.date,
           start: '00:00',
@@ -156,15 +146,14 @@ async function renderActivity() {
           count: day.session_count
         });
       } else {
-        // Выводим список склеенных сессий
         if (day.sessions_data) {
           day.sessions_data.forEach(s => {
             filtered.push({
               date: day.date,
-              start: s.start.substring(0, 5), // Убираем секунды
-              end: s.end.substring(0, 5),     // Убираем секунды
+              start: s.start.substring(0, 5),
+              end: s.end.substring(0, 5),
               duration_min: s.dur,
-              project: 'Склейка',
+              projects: s.projects || [],
               is_merged: true
             });
           });
@@ -195,7 +184,6 @@ async function renderActivity() {
         lastDate = s.date;
       }
       
-      // Для итоговых карточек или склеенных используем кастомный рендер
       if (s.is_total) {
         const item = document.createElement('div');
         item.className = 'activity-row';
@@ -209,10 +197,9 @@ async function renderActivity() {
         const item = document.createElement('div');
         item.className = 'activity-row';
         
-        // Формируем строку с проектами
         let projNames = '—';
-        if (Array.isArray(s.project) && s.project.length > 0) {
-          projNames = s.project.map(pid => projName[pid] || pid).join(', ');
+        if (s.projects && s.projects.length > 0) {
+          projNames = s.projects.map(pid => projName[pid] || pid).join(', ');
         }
 
         item.innerHTML = `
