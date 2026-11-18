@@ -4,6 +4,51 @@ if (typeof window.ACTIVITY_MODE === 'undefined') {
   window.ACTIVITY_MODE = 'raw';
 }
 
+// Шторка выбора режима
+window.openActivityModeSheet = function() {
+  const old = document.getElementById('activity-mode-sheet');
+  if (old) old.remove();
+
+  const modes = [
+    { id: 'raw', label: 'Как записывались (Сырые)' },
+    { id: 'sessions', label: 'Сессии (склейка 15м)' },
+    { id: 'total_06', label: 'Сессии итого' },
+    { id: 'sessions_24', label: 'Сессии 24ч' },
+    { id: 'total_24', label: '24ч итого' }
+  ];
+
+  const overlay = document.createElement('div');
+  overlay.id = 'activity-mode-sheet';
+  overlay.className = 'goal-sheet-overlay';
+  
+  let html = '<div class="goal-sheet">' +
+    '<button class="goal-sheet-close">✕</button>' +
+    '<h2 class="goal-sheet-title">Режим</h2>' +
+    '<div class="goal-picker" style="max-height: 50vh; overflow-y: auto;">' +
+    '<div class="goal-picker-spacer"></div>';
+    
+  modes.forEach(m => {
+    const isActive = window.ACTIVITY_MODE === m.id;
+    html += `<div class="goal-picker-item ${isActive ? 'active' : ''}" data-mode="${m.id}" style="padding: 16px; font-size: 16px; border-bottom: 1px solid var(--border);">${m.label}</div>`;
+  });
+  
+  html += '<div class="goal-picker-spacer"></div></div></div>';
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay);
+
+  const close = () => overlay.remove();
+  overlay.querySelector('.goal-sheet-close').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+
+  overlay.querySelectorAll('.goal-picker-item').forEach(item => {
+    item.addEventListener('click', () => {
+      window.ACTIVITY_MODE = item.dataset.mode;
+      close();
+      if (typeof renderActivity === 'function') renderActivity();
+    });
+  });
+};
+
 function renderActivityCard(s, projName) {
   const item = document.createElement('div');
   item.className = 'activity-row';
@@ -84,30 +129,6 @@ async function renderActivity() {
   const c = document.getElementById('content-activity');
   if (!c || !window.DATA) return;
   c.innerHTML = '';
-
-  const controls = document.createElement('div');
-  controls.style.cssText = 'display:flex; gap:8px; overflow-x:auto; padding: 8px 0; margin-bottom: 16px;';
-  
-  const modes = [
-    { id: 'raw', label: 'Как записывались' },
-    { id: 'sessions', label: 'Сессии' },
-    { id: 'total_06', label: 'Сессии итого' },
-    { id: 'sessions_24', label: 'Сессии 24ч' },
-    { id: 'total_24', label: '24ч итого' }
-  ];
-
-  modes.forEach(m => {
-    const btn = document.createElement('button');
-    btn.className = `cal-btn ${window.ACTIVITY_MODE === m.id ? 'active' : ''}`;
-    btn.textContent = m.label;
-    btn.style.cssText = 'padding: 6px 12px; border-radius: 16px; font-size: 12px; white-space: nowrap;';
-    btn.onclick = () => {
-      window.ACTIVITY_MODE = m.id;
-      renderActivity();
-    };
-    controls.appendChild(btn);
-  });
-  c.appendChild(controls);
 
   const listDiv = document.createElement('div');
   listDiv.style.marginTop = '16px';
