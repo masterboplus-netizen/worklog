@@ -6,43 +6,44 @@ if (typeof window.ACTIVITY_MODE === 'undefined') {
 
 // Шторка выбора режима
 window.openActivityModeSheet = function() {
-  const old = document.getElementById('activity-mode-sheet');
+  const old = document.getElementById('activity-mode-modal');
   if (old) old.remove();
 
   const modes = [
-    { id: 'raw', label: 'Как записывались (Сырые)' },
-    { id: 'sessions', label: 'Сессии (склейка 15м)' },
-    { id: 'total_06', label: 'Сессии итого' },
-    { id: 'sessions_24', label: 'Сессии 24ч' },
-    { id: 'total_24', label: '24ч итого' }
+    { id: 'raw', label: 'Сырые сессии' },
+    { id: 'sessions', label: 'Склейка (Смены)' },
+    { id: 'total_06', label: 'Итого (с 06:00)' },
+    { id: 'sessions_24', label: 'Смены (24ч)' },
+    { id: 'total_24', label: 'Итого (с 00:00)' }
   ];
 
   const overlay = document.createElement('div');
-  overlay.id = 'activity-mode-sheet';
-  overlay.className = 'goal-sheet-overlay';
+  overlay.id = 'activity-mode-modal';
+  overlay.className = 'activity-modal-overlay';
   
-  let html = '<div class="goal-sheet">' +
-    '<button class="goal-sheet-close">✕</button>' +
-    '<h2 class="goal-sheet-title">Режим</h2>' +
-    '<div class="goal-picker" style="max-height: 50vh; overflow-y: auto;">' +
-    '<div class="goal-picker-spacer"></div>';
+  let html = '<div class="activity-modal" style="padding: 20px; max-height: 80vh; overflow-y: auto;">';
+  html += '<button class="modal-close" onclick="document.getElementById(\'activity-mode-modal\').remove()">✕</button>';
+  html += '<h2 style="margin-bottom: 16px; font-size: 18px;">Режим отображения</h2>';
+  html += '<div style="display: flex; flex-direction: column; gap: 8px;">';
     
   modes.forEach(m => {
     const isActive = window.ACTIVITY_MODE === m.id;
-    html += `<div class="goal-picker-item ${isActive ? 'active' : ''}" data-mode="${m.id}" style="padding: 16px; font-size: 16px; border-bottom: 1px solid var(--border);">${m.label}</div>`;
+    const bg = isActive ? 'var(--accent)' : 'var(--bg2)';
+    const color = isActive ? '#fff' : 'var(--fg)';
+    html += `<button class="mode-select-btn" data-mode="${m.id}" style="background: ${bg}; color: ${color}; border: 1px solid var(--border); padding: 12px; border-radius: 8px; text-align: left; font-size: 14px;">${m.label}</button>`;
   });
   
-  html += '<div class="goal-picker-spacer"></div></div></div>';
+  html += '</div></div>';
   overlay.innerHTML = html;
   document.body.appendChild(overlay);
 
   const close = () => overlay.remove();
-  overlay.querySelector('.goal-sheet-close').addEventListener('click', close);
+  overlay.querySelector('.modal-close').addEventListener('click', close);
   overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
 
-  overlay.querySelectorAll('.goal-picker-item').forEach(item => {
-    item.addEventListener('click', () => {
-      window.ACTIVITY_MODE = item.dataset.mode;
+  overlay.querySelectorAll('.mode-select-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.ACTIVITY_MODE = btn.dataset.mode;
       
       const modeNames = {
         'raw': 'Сырые сессии',
