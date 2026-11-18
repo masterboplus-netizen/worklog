@@ -169,37 +169,3 @@ function showCreators() {
   document.body.appendChild(modal);
   setTimeout(() => { modal.style.opacity = '1'; }, 10);
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const btnFilter = document.getElementById('btn-filter');
-    const btnCalendar = document.getElementById('btn-calendar');
-    const modal = document.getElementById('calendar-modal');
-    const btnSessions = document.getElementById('mode-activities');
-    const btn24h = document.getElementById('mode-24h');
-
-    if (btnFilter) btnFilter.addEventListener('click', () => alert('Фильтры в разработке'));
-
-    if (btnCalendar && modal) {
-      btnCalendar.addEventListener('click', () => {
-        modal.classList.remove('hidden');
-        if (typeof renderCalendarModal === 'function') renderCalendarModal();
-      });
-    }
-
-    if (btnSessions && btn24h) {
-      btnSessions.addEventListener('click', () => {
-        btnSessions.classList.add('active');
-        btn24h.classList.remove('active');
-        window.ACTIVITY_MODE = 'sessions';
-        if (typeof renderActivity === 'function') renderActivity();
-      });
-      btn24h.addEventListener('click', () => {
-        btn24h.classList.add('active');
-        btnSessions.classList.remove('active');
-        window.ACTIVITY_MODE = '24h';
-        if (typeof renderActivity === 'function') renderActivity();
-      });
-    }
-  }, 100);
-});
