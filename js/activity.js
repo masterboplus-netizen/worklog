@@ -11,7 +11,7 @@ function renderActivityCard(s, projName) {
 
   // Для сырых сессий выводим время
   item.innerHTML = `
-    <div class="activity-row-time">${s.start || '?'} → ${s.end || '?'}</div>
+    <div class="activity-row-time">${(s.start || '?').substring(0, 5)} → ${(s.end || '?').substring(0, 5)}</div>
     <div class="activity-row-dur">${fmtH(s.duration_min || 0)}</div>
     <div class="activity-row-proj">${projName[s.project] || s.project || '–'}</div>
   `;
@@ -161,8 +161,8 @@ async function renderActivity() {
           day.sessions_data.forEach(s => {
             filtered.push({
               date: day.date,
-              start: s.start,
-              end: s.end,
+              start: s.start.substring(0, 5), // Убираем секунды
+              end: s.end.substring(0, 5),     // Убираем секунды
               duration_min: s.dur,
               project: 'Склейка',
               is_merged: true
