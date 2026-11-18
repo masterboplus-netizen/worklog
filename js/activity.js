@@ -45,11 +45,11 @@ window.openActivityModeSheet = function() {
       window.ACTIVITY_MODE = item.dataset.mode;
       
       const modeNames = {
-        'raw': 'Сырые',
-        'sessions': 'Сессии',
-        'total_06': 'Итого',
-        'sessions_24': '24ч',
-        'total_24': '24ч Итог'
+        'raw': 'Сырые сессии',
+        'sessions': 'Склейка',
+        'total_06': 'Итого 06',
+        'sessions_24': 'Смены 24ч',
+        'total_24': 'Итого 24ч'
       };
       const label = document.getElementById('btn-modes-label');
       if (label) label.textContent = modeNames[window.ACTIVITY_MODE] || 'Режим';
@@ -145,7 +145,7 @@ async function renderActivity() {
     'total_24': '24ч Итог'
   };
   const label = document.getElementById('btn-modes-label');
-  if (label) label.textContent = modeNames[window.ACTIVITY_MODE] || 'Режим';
+  if (label) label.textContent = modeNames[window.ACTIVITY_MODE] || 'Сырые сессии';
 
   const c = document.getElementById('content-activity');
   if (!c || !window.DATA) return;
