@@ -208,10 +208,17 @@ async function renderActivity() {
       } else if (s.is_merged) {
         const item = document.createElement('div');
         item.className = 'activity-row';
+        
+        // Формируем строку с проектами
+        let projNames = '—';
+        if (Array.isArray(s.project) && s.project.length > 0) {
+          projNames = s.project.map(pid => projName[pid] || pid).join(', ');
+        }
+
         item.innerHTML = `
           <div class="activity-row-time">${s.start} → ${s.end}</div>
           <div class="activity-row-dur">${fmtH(s.duration_min)}</div>
-          <div class="activity-row-proj">🧩 Склейка</div>
+          <div class="activity-row-proj">${projNames}</div>
         `;
         listDiv.appendChild(item);
       } else {
