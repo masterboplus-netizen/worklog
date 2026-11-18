@@ -43,6 +43,17 @@ window.openActivityModeSheet = function() {
   overlay.querySelectorAll('.goal-picker-item').forEach(item => {
     item.addEventListener('click', () => {
       window.ACTIVITY_MODE = item.dataset.mode;
+      
+      const modeNames = {
+        'raw': 'Сырые',
+        'sessions': 'Сессии',
+        'total_06': 'Итого',
+        'sessions_24': '24ч',
+        'total_24': '24ч Итог'
+      };
+      const label = document.getElementById('btn-modes-label');
+      if (label) label.textContent = modeNames[window.ACTIVITY_MODE] || 'Режим';
+      
       close();
       if (typeof renderActivity === 'function') renderActivity();
     });
@@ -126,6 +137,16 @@ function formatActivityDate(dateStr) {
 }
 
 async function renderActivity() {
+  const modeNames = {
+    'raw': 'Сырые',
+    'sessions': 'Сессии',
+    'total_06': 'Итого',
+    'sessions_24': '24ч',
+    'total_24': '24ч Итог'
+  };
+  const label = document.getElementById('btn-modes-label');
+  if (label) label.textContent = modeNames[window.ACTIVITY_MODE] || 'Режим';
+
   const c = document.getElementById('content-activity');
   if (!c || !window.DATA) return;
   c.innerHTML = '';
