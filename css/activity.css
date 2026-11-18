@@ -236,7 +236,7 @@
   cursor: pointer;
 }
 .activity-row:active { background: var(--bg3); }
-.activity-row-time { font-size: 13px; color: var(--fg-dim); width: 80px; }
+.activity-row-time { font-size: 13px; color: var(--fg-dim); min-width: 100px; white-space: nowrap; }
 .activity-row-dur { font-size: 13px; color: var(--accent); font-weight: 600; width: 60px; text-align: right; }
 .activity-row-proj { font-size: 15px; color: var(--fg); font-weight: 600; flex: 1; text-align: right; }
 
