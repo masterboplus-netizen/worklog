@@ -121,6 +121,35 @@ window.onerror = function(msg, url, line, col, error) {
   document.addEventListener("DOMContentLoaded", function() { if (typeof window.initFloatingMenu === "function") window.initFloatingMenu(); });
 </script>
 
+<script>
+  // Отладчик загрузки
+  window.addEventListener('load', () => {
+    console.log("=== СТРАНИЦА ЗАГРУЖЕНА ===");
+    
+    // 1. Проверяем, загрузились ли основные данные из Supabase
+    if (typeof window.DATA === 'undefined') {
+      alert("ОШИБКА: window.DATA не загрузился! Проблема в supabase_client.js или app.js (функция loadDataFromSupabase).");
+    } else {
+      console.log("✅ window.DATA загружен. Проектов:", (window.DATA.projects || []).length, "Сессий:", (window.DATA.sessions || []).length);
+    }
+
+    // 2. Проверяем, загрузился ли модуль activity.js
+    if (typeof renderActivity === 'undefined') {
+      alert("ОШИБКА: функция renderActivity не найдена! Модуль activity.js не загрузился или в нем синтаксическая ошибка.");
+    } else {
+      console.log("✅ activity.js загружен.");
+    }
+
+    // 3. Проверяем, отрисовался ли дашборд
+    const content = document.getElementById('content');
+    if (content && content.innerHTML.trim() === '') {
+      alert("ВНИМАНИЕ: Экран пуст! Функция renderDashboard() не смогла отрисовать данные. Смотри консоль.");
+    } else {
+      console.log("✅ Дашборд отрисован.");
+    }
+  });
+</script>
+
 <div id="calendar-modal" class="hidden"></div>
 </body>
 </html>
