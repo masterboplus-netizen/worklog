@@ -35,7 +35,7 @@ function renderHeroRings() {
 
   // 1. Данные из calcTotals и склеенные активности
   const t = calcTotals();
-  const sessions = mergeMidnightActivities(window.DATA.sessions || []);
+  const sessions = window.DATA.sessions || [];
   const _sessions = window.DATA.sessions || [];
 
   // 2. Считаем время за сегодня ТАК ЖЕ, КАК В КАЛЕНДАРЕ

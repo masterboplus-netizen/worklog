@@ -249,7 +249,7 @@ function renderActivityPageV2() {
 
     // 6. ЛОГИКА ОБНОВЛЕНИЯ
     const updateChart = () => {
-        const mergedSessions = mergeMidnightActivities(window.DATA.sessions || []);
+        const mergedSessions = window.DATA.sessions || [];
         const scrollLeft = scrollContainer.scrollLeft;
         const containerWidth = scrollContainer.clientWidth;
         const colWidth = 40;
