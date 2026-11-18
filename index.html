@@ -121,6 +121,17 @@ window.onerror = function(msg, url, line, col, error) {
   document.addEventListener("DOMContentLoaded", function() { if (typeof window.initFloatingMenu === "function") window.initFloatingMenu(); });
 </script>
 
+<script>
+  setTimeout(() => {
+    console.log("=== ПРОВЕРКА ЧЕРЕЗ 3 СЕКУНДЫ ===");
+    if (!window.DATA) {
+      alert("window.DATA все еще null! Supabase не ответил.");
+    } else {
+      console.log("✅ window.DATA загружен:", window.DATA.projects.length, "проектов");
+    }
+  }, 3000);
+</script>
+
 <div id="calendar-modal" class="hidden"></div>
 </body>
 </html>
