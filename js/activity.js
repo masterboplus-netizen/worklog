@@ -90,6 +90,11 @@ async function renderActivity() {
   if (!c || !window.DATA) return;
   c.innerHTML = '';
 
+  async function renderActivity() {
+  const c = document.getElementById('content-activity');
+  if (!c || !window.DATA) return;
+  c.innerHTML = '';
+
   // 1. Отрисовка кнопок-переключателей
   const controls = document.createElement('div');
   controls.style.cssText = 'display:flex; gap:8px; overflow-x:auto; padding: 8px 0; margin-bottom: 16px;';
@@ -164,7 +169,7 @@ async function renderActivity() {
               start: s.start.substring(0, 5), // Убираем секунды
               end: s.end.substring(0, 5),     // Убираем секунды
               duration_min: s.dur,
-              project: 'Склейка',
+              projects: s.projects || [], // <--- ПЕРЕДАЕМ МАССИВ ПРОЕКТОВ
               is_merged: true
             });
           });
@@ -195,7 +200,6 @@ async function renderActivity() {
         lastDate = s.date;
       }
       
-      // Для итоговых карточек или склеенных используем кастомный рендер
       if (s.is_total) {
         const item = document.createElement('div');
         item.className = 'activity-row';
@@ -211,8 +215,8 @@ async function renderActivity() {
         
         // Формируем строку с проектами
         let projNames = '—';
-        if (Array.isArray(s.project) && s.project.length > 0) {
-          projNames = s.project.map(pid => projName[pid] || pid).join(', ');
+        if (s.projects && s.projects.length > 0) {
+          projNames = s.projects.map(pid => projName[pid] || pid).join(', ');
         }
 
         item.innerHTML = `
