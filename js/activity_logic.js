@@ -147,13 +147,28 @@ async function renderActivity() {
         `;
         
         item.addEventListener('click', async () => {
-          // Проверяем, загружены ли сырые сессии
-          if (!window.DATA || !window.DATA.sessions || window.DATA.sessions.length === 0) {
-            alert('Данные сессий еще не загружены. Подождите секунду и попробуйте снова.');
-            return;
+          // Запрашиваем сырые сессии за этот день прямо из базы
+          let rawSessions = (window.DATA.sessions || []).filter(rs => rs.date === s.date);
+          
+          if (rawSessions.length === 0) {
+            // Если в памяти нет — грузим из Supabase
+            const { data, error } = await window.supabaseClient
+              .from('worklog_sessions')
+              .select('*')
+              .eq('date', s.date);
+            
+            if (error || !data || data.length === 0) {
+              alert('Нет детальных данных за этот день в базе');
+              return;
+            }
+            
+            rawSessions = data.map(rs => ({
+              start: rs.start_time,
+              end: rs.end_time,
+              duration_min: rs.duration_min,
+              project: rs.project_id
+            }));
           }
-          const rawSessions = window.DATA.sessions.filter(rs => rs.date === s.date);
-          if (rawSessions.length === 0) { alert('Нет детальных данных за этот день'); return; }
 
           const overlay = document.createElement('div');
           overlay.className = 'activity-modal-overlay';
