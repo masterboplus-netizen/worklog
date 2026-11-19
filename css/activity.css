@@ -270,3 +270,23 @@
 .modal-task-head span { color: var(--accent); font-size: 13px; font-weight: normal; }
 .modal-subtasks { padding-left: 12px; border-left: 2px solid var(--bg3); }
 .modal-subtask { font-size: 13px; color: var(--fg-dim); padding: 3px 0; }
+
+/* === ШТОРКА ФИЛЬТРА ТЕГОВ === */
+.tag-sheet-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7); z-index: 10000;
+  display: flex; align-items: flex-end;
+}
+.tag-sheet {
+  background: var(--bg2); width: 100%; max-height: 80vh;
+  border-top-left-radius: 20px; border-top-right-radius: 20px;
+  padding: 24px; overflow-y: auto; box-sizing: border-box;
+  border-top: 1px solid var(--border);
+}
+.tag-sheet-list { display: flex; flex-direction: column; gap: 4px; }
+.tag-sheet-item {
+  display: flex; align-items: center; padding: 12px;
+  background: rgba(255,255,255,0.03); border-radius: 8px;
+  cursor: pointer; color: var(--fg); font-size: 15px;
+}
+.tag-sheet-item input { width: 18px; height: 18px; margin-right: 12px; accent-color: var(--accent); }

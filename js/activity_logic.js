@@ -1,6 +1,9 @@
 if (typeof window.ACTIVITY_MODE === 'undefined') {
   window.ACTIVITY_MODE = 'raw';
 }
+if (typeof window.ACTIVITY_TAG_FILTER === 'undefined') {
+  window.ACTIVITY_TAG_FILTER = [];
+}
 
 window.openActivityModeSheet = function() {
   const old = document.getElementById('activity-mode-popover');
@@ -73,6 +76,65 @@ window.openActivityModeSheet = function() {
   setTimeout(() => document.addEventListener('click', closePopover), 10);
 };
 
+
+window.openTagFilterSheet = function() {
+  const old = document.getElementById('tag-filter-overlay');
+  if (old) { old.remove(); return; }
+
+  const tags = window.DATA && window.DATA.tags ? window.DATA.tags : [];
+  if (!tags.length) { alert('Тегов пока нет'); return; }
+
+  const overlay = document.createElement('div');
+  overlay.id = 'tag-filter-overlay';
+  overlay.className = 'tag-sheet-overlay';
+
+  let listHTML = '<div class="tag-sheet-list">';
+  tags.forEach(t => {
+    const isActive = window.ACTIVITY_TAG_FILTER.includes(t.name);
+    listHTML += `
+      <label class="tag-sheet-item">
+        <input type="checkbox" value="${t.name}" ${isActive ? 'checked' : ''}>
+        <span style="width:12px;height:12px;border-radius:50%;background:${t.color||'#7c8cff'};display:inline-block;margin-right:8px;"></span>
+        ${t.name}
+      </label>
+    `;
+  });
+  listHTML += '</div>';
+
+  overlay.innerHTML = `
+    <div class="tag-sheet">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div style="font-size:18px;font-weight:600;color:var(--fg);">Фильтр по тегам</div>
+        <button id="tag-filter-close" style="background:transparent;border:0;color:var(--fg-dim);font-size:20px;">✕</button>
+      </div>
+      ${listHTML}
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button id="tag-filter-reset" style="flex:1;padding:12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--fg);cursor:pointer;">Сбросить</button>
+        <button id="tag-filter-apply" style="flex:1;padding:12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer;font-weight:600;">Применить</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const close = () => overlay.remove();
+  document.getElementById('tag-filter-close').onclick = close;
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+
+  document.getElementById('tag-filter-reset').onclick = () => {
+    window.ACTIVITY_TAG_FILTER = [];
+    close();
+    if (typeof renderActivity === 'function') renderActivity();
+  };
+
+  document.getElementById('tag-filter-apply').onclick = () => {
+    const checked = Array.from(overlay.querySelectorAll('input:checked')).map(cb => cb.value);
+    window.ACTIVITY_TAG_FILTER = checked;
+    close();
+    if (typeof renderActivity === 'function') renderActivity();
+  };
+};
+
 async function renderActivity() {
   const modeNames = { 'raw': 'Сырые сессии', 'sessions': 'Сессии', 'total_06': 'Итого 06', 'sessions_24': 'Смены 24ч', 'total_24': 'Итого 24ч' };
   const label = document.getElementById('btn-modes-label');
@@ -117,6 +179,10 @@ async function renderActivity() {
 
   if (CALENDAR_SELECTED_DAYS.size > 0) {
     filtered = filtered.filter(s => CALENDAR_SELECTED_DAYS.has(s.date));
+  }
+
+  if (window.ACTIVITY_MODE === 'raw' && window.ACTIVITY_TAG_FILTER && window.ACTIVITY_TAG_FILTER.length > 0) {
+    filtered = filtered.filter(s => s.tags && s.tags.some(t => window.ACTIVITY_TAG_FILTER.includes(t)));
   }
 
   filtered.sort((a, b) => {

@@ -40,7 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnFilter = document.getElementById('btn-filter');
   if (btnFilter) {
     btnFilter.addEventListener('click', () => {
-      alert('Фильтры в разработке (скоро будет фильтр по тегам)');
+      if (typeof window.openTagFilterSheet === 'function') {
+        window.openTagFilterSheet();
+      }
     });
   }
 });
