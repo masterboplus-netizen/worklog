@@ -141,9 +141,9 @@ async function renderActivity() {
         const item = document.createElement('div');
         item.className = 'activity-row';
         item.innerHTML = `
-          <div class="activity-row-time">🏆 ИТОГО за день</div>
+          <div class="activity-row-time">За день</div>
           <div class="activity-row-dur" style="color:var(--accent); font-weight:bold;">${fmtH(s.duration_min)}</div>
-          <div class="activity-row-proj">${s.count} сессий</div>
+          <div class="activity-row-proj" style="text-align:right; opacity:0.7;">${s.count} сессий</div>
         `;
         
         item.addEventListener('click', async () => {
@@ -192,7 +192,7 @@ async function renderActivity() {
             <div class="activity-modal">
               <button class="modal-close" onclick="this.closest('.activity-modal-overlay').remove()">✕</button>
               <div class="modal-header">
-                <div class="modal-time">🏆 ИТОГО за ${formatActivityDate(s.date)}</div>
+                <div class="modal-time">Итого за ${formatActivityDate(s.date)}</div>
                 <div class="modal-proj" style="color:var(--accent); font-size:20px; margin-top:8px;">${fmtH(s.duration_min)}</div>
               </div>
               <div style="font-size:13px; color:var(--fg-dim);">Всего сессий: ${s.count}</div>
