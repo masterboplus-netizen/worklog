@@ -5,6 +5,14 @@ if (typeof window.ACTIVITY_TAG_FILTER === 'undefined') {
   window.ACTIVITY_TAG_FILTER = [];
 }
 
+function getWeekday(dateStr) {
+  const d = new Date(dateStr);
+  if (isNaN(d)) return '';
+  const days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+  return days[d.getDay()];
+}
+
+
 window.openActivityModeSheet = function() {
   const old = document.getElementById('activity-mode-popover');
   if (old) { old.remove(); return; }
@@ -207,7 +215,7 @@ async function renderActivity() {
         const item = document.createElement('div');
         item.className = 'activity-row';
         item.innerHTML = `
-          <div class="activity-row-time">За день</div>
+          <div class="activity-row-time">${getWeekday(s.date)}</div>
           <div class="activity-row-dur" style="color:var(--accent); font-weight:bold;">${fmtH(s.duration_min)}</div>
           <div class="activity-row-proj" style="text-align:right; opacity:0.7;">${s.count} сессий</div>
         `;
