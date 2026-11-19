@@ -108,7 +108,7 @@ window.openTagFilterSheet = function() {
         <button id="tag-filter-close" style="background:transparent;border:0;color:var(--fg-dim);font-size:20px;">✕</button>
       </div>
       ${listHTML}
-      <div style="display:flex;gap:8px;margin-top:16px;">
+      <div class="tag-sheet-footer">
         <button id="tag-filter-reset" style="flex:1;padding:12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--fg);cursor:pointer;">Сбросить</button>
         <button id="tag-filter-apply" style="flex:1;padding:12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer;font-weight:600;">Применить</button>
       </div>

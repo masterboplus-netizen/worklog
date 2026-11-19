@@ -280,10 +280,17 @@
 .tag-sheet {
   background: var(--bg2); width: 100%; max-height: 80vh;
   border-top-left-radius: 20px; border-top-right-radius: 20px;
-  padding: 24px; overflow-y: auto; box-sizing: border-box;
+  padding: 24px; box-sizing: border-box;
   border-top: 1px solid var(--border);
+  display: flex; flex-direction: column;
 }
-.tag-sheet-list { display: flex; flex-direction: column; gap: 4px; }
+.tag-sheet-list { 
+  display: flex; flex-direction: column; gap: 4px; 
+  flex: 1; overflow-y: auto; margin-bottom: 16px;
+}
+.tag-sheet-footer {
+  display: flex; gap: 8px; flex-shrink: 0;
+}
 .tag-sheet-item {
   display: flex; align-items: center; padding: 12px;
   background: rgba(255,255,255,0.03); border-radius: 8px;
