@@ -278,6 +278,57 @@ async function renderActivity() {
           <div class="activity-row-dur" style="color:var(--accent); font-weight:bold;">${fmtH(s.duration_min)}</div>
           <div class="activity-row-proj">${s.count} сессий</div>
         `;
+        
+        // Добавляем клик для открытия деталей
+        item.addEventListener('click', async () => {
+          // Получаем все сырые сессии за этот день
+          const rawSessions = (window.DATA.sessions || []).filter(rs => rs.date === s.date);
+          
+          if (rawSessions.length === 0) {
+            alert('Нет детальных данных за этот день');
+            return;
+          }
+
+          // Создаем модальное окно
+          const overlay = document.createElement('div');
+          overlay.className = 'activity-modal-overlay';
+
+          let listHTML = '<div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">';
+          
+          // Сортируем по времени
+          rawSessions.sort((a, b) => (a.start || '').localeCompare(b.start || ''));
+
+          rawSessions.forEach(rs => {
+            const proj = projName[rs.project] || rs.project || '–';
+            listHTML += `
+              <div style="background:var(--bg3); padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:14px; font-weight:500;">${(rs.start || '?').substring(0, 5)} → ${(rs.end || '?').substring(0, 5)}</div>
+                  <div style="font-size:12px; color:var(--fg-dim); margin-top:4px;">${proj}</div>
+                </div>
+                <div style="color:var(--accent); font-weight:bold;">${fmtH(rs.duration_min || 0)}</div>
+              </div>
+            `;
+          });
+          
+          listHTML += '</div>';
+
+          overlay.innerHTML = `
+            <div class="activity-modal">
+              <button class="modal-close" onclick="this.closest('.activity-modal-overlay').remove()">✕</button>
+              <div class="modal-header">
+                <div class="modal-time">🏆 ИТОГО за ${formatActivityDate(s.date)}</div>
+                <div class="modal-proj" style="color:var(--accent); font-size:20px; margin-top:8px;">${fmtH(s.duration_min)}</div>
+              </div>
+              <div style="font-size:13px; color:var(--fg-dim);">Всего сессий: ${s.count}</div>
+              ${listHTML}
+            </div>
+          `;
+
+          overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+          document.body.appendChild(overlay);
+        });
+
         listDiv.appendChild(item);
       } else if (s.is_merged) {
         const item = document.createElement('div');
