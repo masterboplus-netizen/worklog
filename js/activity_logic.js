@@ -282,6 +282,52 @@ async function renderActivity() {
           <div class="activity-row-dur">${fmtH(s.duration_min)}</div>
           <div class="activity-row-proj">${projNames}</div>
         `;
+        
+        // Добавляем обработчик клика
+        item.addEventListener('click', async () => {
+          let rawSessions = (window.DATA.sessions || []).filter(rs => rs.date === s.date);
+          if (rawSessions.length === 0) {
+            const { data, error } = await window.supabaseClient
+              .from('worklog_sessions')
+              .select('*')
+              .eq('date', s.date);
+            if (error || !data) { alert('Нет данных'); return; }
+            rawSessions = data.map(rs => ({
+              start: rs.start_time, end: rs.end_time, duration_min: rs.duration_min, project: rs.project_id
+            }));
+          }
+
+          const overlay = document.createElement('div');
+          overlay.className = 'activity-modal-overlay';
+          let listHTML = '<div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">';
+          rawSessions.sort((a, b) => (a.start || '').localeCompare(b.start || '')).forEach(rs => {
+            const proj = projName[rs.project] || rs.project || '–';
+            listHTML += `
+              <div style="background:var(--bg3); padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:14px; font-weight:500;">${(rs.start || '?').substring(0, 5)} → ${(rs.end || '?').substring(0, 5)}</div>
+                  <div style="font-size:12px; color:var(--fg-dim); margin-top:4px;">${proj}</div>
+                </div>
+                <div style="color:var(--accent); font-weight:bold;">${fmtH(rs.duration_min || 0)}</div>
+              </div>
+            `;
+          });
+          listHTML += '</div>';
+
+          overlay.innerHTML = `
+            <div class="activity-modal">
+              <button class="modal-close" onclick="this.closest('.activity-modal-overlay').remove()">✕</button>
+              <div class="modal-header">
+                <div class="modal-time">Сессии за ${formatActivityDate(s.date)}</div>
+                <div class="modal-proj" style="color:var(--accent); font-size:20px; margin-top:8px;">${fmtH(s.duration_min)}</div>
+              </div>
+              ${listHTML}
+            </div>
+          `;
+          overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+          document.body.appendChild(overlay);
+        });
+        
         listDiv.appendChild(item);
       } else {
         listDiv.appendChild(renderActivityCard(s, projName));
