@@ -6,8 +6,8 @@ if (typeof window.ACTIVITY_MODE === 'undefined') {
 
 // Шторка выбора режима
 window.openActivityModeSheet = function() {
-  const old = document.getElementById('activity-mode-modal');
-  if (old) old.remove();
+  const old = document.getElementById('activity-mode-popover');
+  if (old) { old.remove(); return; } // Если открыт - закрываем
 
   const modes = [
     { id: 'raw', label: 'Сырые сессии' },
@@ -17,33 +17,63 @@ window.openActivityModeSheet = function() {
     { id: 'total_24', label: 'Итого (с 00:00)' }
   ];
 
-  const overlay = document.createElement('div');
-  overlay.id = 'activity-mode-modal';
-  overlay.className = 'activity-modal-overlay';
+  const btn = document.getElementById('btn-modes');
+  if (!btn) return;
+
+  // Создаем контейнер для меню
+  const popover = document.createElement('div');
+  popover.id = 'activity-mode-popover';
   
-  let html = '<div class="activity-modal" style="padding: 20px; max-height: 80vh; overflow-y: auto;">';
-  html += '<button class="modal-close" onclick="document.getElementById(\'activity-mode-modal\').remove()">✕</button>';
-  html += '<h2 style="margin-bottom: 16px; font-size: 18px;">Режим отображения</h2>';
-  html += '<div style="display: flex; flex-direction: column; gap: 8px;">';
-    
+  // Стили для поповера (абсолютное позиционирование над кнопкой)
+  popover.style.cssText = `
+    position: fixed;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 200px;
+    animation: fadeIn 0.2s ease;
+  `;
+
+  // Вычисляем позицию (над кнопкой)
+  const rect = btn.getBoundingClientRect();
+  popover.style.bottom = (window.innerHeight - rect.top + 8) + 'px'; // Отступ сверху от кнопки
+  popover.style.right = (window.innerWidth - rect.right) + 'px'; // Прижимаем к правому краю кнопки
+
+  // Добавляем CSS для анимации, если нет
+  if (!document.getElementById('popover-style')) {
+    const style = document.createElement('style');
+    style.id = 'popover-style';
+    style.textContent = '@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }';
+    document.head.appendChild(style);
+  }
+
   modes.forEach(m => {
     const isActive = window.ACTIVITY_MODE === m.id;
-    const bg = isActive ? 'var(--accent)' : 'var(--bg2)';
-    const color = isActive ? '#fff' : 'var(--fg)';
-    html += `<button class="mode-select-btn" data-mode="${m.id}" style="background: ${bg}; color: ${color}; border: 1px solid var(--border); padding: 12px; border-radius: 8px; text-align: left; font-size: 14px;">${m.label}</button>`;
-  });
-  
-  html += '</div></div>';
-  overlay.innerHTML = html;
-  document.body.appendChild(overlay);
+    const btnMode = document.createElement('button');
+    btnMode.className = 'mode-select-btn';
+    btnMode.dataset.mode = m.id;
+    btnMode.textContent = m.label;
+    
+    btnMode.style.cssText = `
+      background: ${isActive ? 'var(--accent)' : 'transparent'};
+      color: ${isActive ? '#fff' : 'var(--fg)'};
+      border: none;
+      padding: 10px 12px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+    `;
 
-  const close = () => overlay.remove();
-  overlay.querySelector('.modal-close').addEventListener('click', close);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
-
-  overlay.querySelectorAll('.mode-select-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      window.ACTIVITY_MODE = btn.dataset.mode;
+    btnMode.addEventListener('click', () => {
+      window.ACTIVITY_MODE = m.id;
       
       const modeNames = {
         'raw': 'Сырые сессии',
@@ -53,12 +83,25 @@ window.openActivityModeSheet = function() {
         'total_24': 'Итого 24ч'
       };
       const label = document.getElementById('btn-modes-label');
-      if (label) label.textContent = modeNames[window.ACTIVITY_MODE] || 'Режим';
+      if (label) label.textContent = modeNames[m.id] || 'Режим';
       
-      close();
+      popover.remove();
       if (typeof renderActivity === 'function') renderActivity();
     });
+
+    popover.appendChild(btnMode);
   });
+
+  document.body.appendChild(popover);
+
+  // Закрытие при клике вне поповера
+  const closePopover = (e) => {
+    if (!popover.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+      popover.remove();
+      document.removeEventListener('click', closePopover);
+    }
+  };
+  setTimeout(() => document.addEventListener('click', closePopover), 10);
 };
 
 function renderActivityCard(s, projName) {
