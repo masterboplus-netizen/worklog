@@ -13,8 +13,8 @@ window.openActivityModeSheet = function() {
     { id: 'raw', label: 'Хронология' },
     { id: 'sessions', label: 'Сессии' },
     { id: 'sessions_24', label: 'День' },
-    { id: 'total_06', label: 'Итог: Сессии' },
-    { id: 'total_24', label: 'Итог: День' }
+    { id: 'total_06', label: 'Итого за сессию' },
+    { id: 'total_24', label: 'Итого за день' }
   ];
 
   const btn = document.getElementById('btn-modes');
@@ -55,7 +55,7 @@ window.openActivityModeSheet = function() {
 
     btnMode.addEventListener('click', () => {
       window.ACTIVITY_MODE = m.id;
-      const modeNames = { 'raw': 'Хронология', 'sessions': 'Сессии', 'sessions_24': 'День', 'total_06': 'Итог: Сессии', 'total_24': 'Итог: День' };
+      const modeNames = { 'raw': 'Хронология', 'sessions': 'Сессии', 'sessions_24': 'День', 'total_06': 'Итого за сессию', 'total_24': 'Итого за день' };
       const label = document.getElementById('btn-modes-label');
       if (label) label.textContent = modeNames[m.id] || 'Режим';
       
@@ -136,7 +136,7 @@ window.openTagFilterSheet = function() {
 };
 
 async function renderActivity() {
-  const modeNames = { 'raw': 'Хронология', 'sessions': 'Сессии', 'sessions_24': 'День', 'total_06': 'Итог: Сессии', 'total_24': 'Итог: День' };
+  const modeNames = { 'raw': 'Хронология', 'sessions': 'Сессии', 'sessions_24': 'День', 'total_06': 'Итого за сессию', 'total_24': 'Итого за день' };
   const label = document.getElementById('btn-modes-label');
   if (label) label.textContent = modeNames[window.ACTIVITY_MODE] || 'Режим';
 
