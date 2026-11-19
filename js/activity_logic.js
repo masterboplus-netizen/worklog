@@ -8,7 +8,7 @@ window.openActivityModeSheet = function() {
 
   const modes = [
     { id: 'raw', label: 'Сырые сессии' },
-    { id: 'sessions', label: 'Склейка (Смены)' },
+    { id: 'sessions', label: 'Сессии' },
     { id: 'total_06', label: 'Итого (с 06:00)' },
     { id: 'sessions_24', label: 'Смены (24ч)' },
     { id: 'total_24', label: 'Итого (с 00:00)' }
@@ -52,7 +52,7 @@ window.openActivityModeSheet = function() {
 
     btnMode.addEventListener('click', () => {
       window.ACTIVITY_MODE = m.id;
-      const modeNames = { 'raw': 'Сырые сессии', 'sessions': 'Склейка', 'total_06': 'Итого 06', 'sessions_24': 'Смены 24ч', 'total_24': 'Итого 24ч' };
+      const modeNames = { 'raw': 'Сырые сессии', 'sessions': 'Сессии', 'total_06': 'Итого 06', 'sessions_24': 'Смены 24ч', 'total_24': 'Итого 24ч' };
       const label = document.getElementById('btn-modes-label');
       if (label) label.textContent = modeNames[m.id] || 'Режим';
       
@@ -74,7 +74,7 @@ window.openActivityModeSheet = function() {
 };
 
 async function renderActivity() {
-  const modeNames = { 'raw': 'Сырые сессии', 'sessions': 'Склейка', 'total_06': 'Итого 06', 'sessions_24': 'Смены 24ч', 'total_24': 'Итого 24ч' };
+  const modeNames = { 'raw': 'Сырые сессии', 'sessions': 'Сессии', 'total_06': 'Итого 06', 'sessions_24': 'Смены 24ч', 'total_24': 'Итого 24ч' };
   const label = document.getElementById('btn-modes-label');
   if (label) label.textContent = modeNames[window.ACTIVITY_MODE] || 'Режим';
 
@@ -147,7 +147,12 @@ async function renderActivity() {
         `;
         
         item.addEventListener('click', async () => {
-          const rawSessions = (window.DATA.sessions || []).filter(rs => rs.date === s.date);
+          // Проверяем, загружены ли сырые сессии
+          if (!window.DATA || !window.DATA.sessions || window.DATA.sessions.length === 0) {
+            alert('Данные сессий еще не загружены. Подождите секунду и попробуйте снова.');
+            return;
+          }
+          const rawSessions = window.DATA.sessions.filter(rs => rs.date === s.date);
           if (rawSessions.length === 0) { alert('Нет детальных данных за этот день'); return; }
 
           const overlay = document.createElement('div');
