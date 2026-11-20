@@ -131,8 +131,7 @@ window.openTagFilterSheet = function() {
 
   document.getElementById('tag-filter-reset').onclick = () => {
     window.ACTIVITY_TAG_FILTER = [];
-    close();
-    if (typeof renderActivity === 'function') renderActivity();
+    overlay.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
   };
 
   document.getElementById('tag-filter-apply').onclick = () => {
